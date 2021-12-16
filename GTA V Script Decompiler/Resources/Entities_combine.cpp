@@ -33,7 +33,8 @@ int main()
 		"Entities_stats.txt",
 		"Entities_tunables.txt",
 
-		"Entities_original_and_scraped.txt",
+		//"Entities_codewalker.txt",
+		"Entities_dumpster.txt",
 	};
 	std::unordered_set<std::int32_t> included_hashes = {};
 	for(const auto& in_file : in_files)
