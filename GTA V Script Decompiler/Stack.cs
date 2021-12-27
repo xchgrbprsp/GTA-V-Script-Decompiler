@@ -82,9 +82,9 @@ namespace Decompiler
 
 		public void PushVar(string value, Vars_Info.Var Variable)
 		{
-			if (Variable.Immediatesize == 3)
+			if (Variable.Immediatesize > 1)
 			{
-				value += ".x";
+				value += ".f_0";
 			}
 			_stack.Add(new StackValue(StackValue.Type.Literal, value, Variable));
 		}
@@ -1319,9 +1319,9 @@ namespace Decompiler
 
 		public string Op_Set(string location, Vars_Info.Var Variable)
 		{
-			if (Variable.Immediatesize == 3)
+			if (Variable.Immediatesize > 1)
 			{
-				location += ".x";
+				location += ".f_0";
 			}
 			return Op_Set(location);
 		}
