@@ -450,6 +450,7 @@ namespace Decompiler
 		fPush_4, //123
 		fPush_5, //124
 		fPush_6, //125
-		fPush_7 //126
+		fPush_7, //126
+		Bittest
 	}
 }
