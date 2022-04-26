@@ -671,6 +671,13 @@ namespace Decompiler
 
 		#region Opcodes
 
+		public void Op_BitTest()
+        {
+			string bit = PopLit();
+			string lit = PopLit();
+			Push("BitTest(" + lit + ", " + bit + ")");
+        }
+
 		public void Op_Add()
 		{
 			StackValue s1, s2;
