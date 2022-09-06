@@ -542,16 +542,12 @@ namespace Decompiler
 				{
 					case StackValue.Type.Literal:
 						if (val.Variable != null)
-							if (Types.gettype(val.Variable.DataType).precedence <
-								Types.gettype(ScriptFile.X64npi.getparamtype(hash, count)).precedence)
+						{
+							if (ScriptFile.X64npi.getparamtype(hash, count) != DataType.Unk)
 							{
 								val.Variable.DataType = ScriptFile.X64npi.getparamtype(hash, count);
 							}
-							else if (Types.gettype(val.Variable.DataType).precedence >
-									Types.gettype(ScriptFile.X64npi.getparamtype(hash, count)).precedence)
-							{
-								ScriptFile.X64npi.updateparam(hash, val.Variable.DataType, count);
-							}
+						}
 						if (val.Datatype == DataType.Bool || ScriptFile.X64npi.getparamtype(hash, count) == DataType.Bool)
 						{
 							if (val.Value == "0")
