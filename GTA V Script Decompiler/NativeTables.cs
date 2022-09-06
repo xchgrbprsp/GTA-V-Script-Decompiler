@@ -125,13 +125,7 @@ namespace Decompiler
 		}
 		public string[] GetNativeHeader()
 		{
-			List<string> NativesHeader = new List<string>();
-			foreach (ulong hash in _nativehash)
-			{
-				NativesHeader.Add(ScriptFile.X64npi.getnativeinfo(hash));
-			}
-
-			return NativesHeader.ToArray();
+			return _natives.ToArray();
 		}
 		public string GetNativeFromIndex(int index)
 		{

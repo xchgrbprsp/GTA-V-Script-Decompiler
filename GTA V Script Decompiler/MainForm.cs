@@ -136,7 +136,7 @@ namespace Decompiler
 				if (ext != ".ysc")
 					ScriptFile.npi.savefile();
 				else
-					ScriptFile.X64npi.savefile();
+					return;
 
 			}
 		}
@@ -200,7 +200,7 @@ namespace Decompiler
 				if (console)
 					ScriptFile.npi.savefile();
 				if (pc)
-					ScriptFile.X64npi.savefile();
+					return;
 			}
 			this.Show();
 		}
@@ -247,7 +247,7 @@ namespace Decompiler
 					if ((Path.GetExtension(ofd.FileName) != ".ysc"))
 						ScriptFile.npi.savefile();
 					else
-						ScriptFile.X64npi.savefile();
+						return;
 					updatestatus("File Saved, Time taken: " + (DateTime.Now - Start).ToString());
 				}
 #if !DEBUG
@@ -740,7 +740,8 @@ namespace Decompiler
 
 		private void fullPCNativeInfoToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			ScriptFile.X64npi.exportnativeinfo();
+			// ScriptFile.X64npi.exportnativeinfo();
+			updatestatus("Not implemented");
 		}
 
 

@@ -474,8 +474,8 @@ namespace Decompiler
 							functionline += "&(" + val.Value + "), ";
 						else
 							functionline += "&" + val.Value + ", ";
-						if (Types.hasptr(val.Datatype))
-							_params.Add(Types.getpointerver(val.Datatype));
+						if (Types.HasPointerVersion(val.Datatype))
+							_params.Add(Types.GetPointerVersion(val.Datatype));
 						else
 							_params.Add(val.Datatype);
 						count++;
@@ -531,24 +531,24 @@ namespace Decompiler
 
 		public string NativeCallTest(ulong hash, string name, int pcount, int rcount)
 		{
-
 			string functionline = name + "(";
 			List<DataType> _params = new List<DataType>();
 			int count = 0;
-			foreach (StackValue val in PopTest(pcount))
+			var dbEntry = Program.nativeDB.GetEntry(hash);
+            foreach (StackValue val in PopTest(pcount))
 			{
-
-				switch (val.ItemType)
+				var paramType = dbEntry?.GetParamType(count) ?? DataType.Unk;
+                switch (val.ItemType)
 				{
 					case StackValue.Type.Literal:
 						if (val.Variable != null)
 						{
-							if (ScriptFile.X64npi.getparamtype(hash, count) != DataType.Unk)
+							if (paramType != DataType.Unk)
 							{
-								val.Variable.DataType = ScriptFile.X64npi.getparamtype(hash, count);
-							}
+								val.Variable.DataType = paramType;
+                            }
 						}
-						if (val.Datatype == DataType.Bool || ScriptFile.X64npi.getparamtype(hash, count) == DataType.Bool)
+						if (paramType == DataType.Bool)
 						{
 							if (val.Value == "0")
 								functionline += "false, ";
@@ -557,7 +557,7 @@ namespace Decompiler
 							else
 								functionline += val.Value + ", ";
 						}
-						else if (val.Datatype == DataType.Int && ScriptFile.X64npi.getparamtype(hash, count) == DataType.Float)
+						else if (val.Datatype == DataType.Int && paramType == DataType.Float)
 						{
 							switch (Program.getIntType)
 							{
@@ -610,8 +610,8 @@ namespace Decompiler
 							functionline += "&(" + val.Value + "), ";
 						else
 							functionline += "&" + val.Value + ", ";
-						if (Types.hasptr(val.Datatype))
-							_params.Add(Types.getpointerver(val.Datatype));
+						if (Types.HasPointerVersion(val.Datatype))
+							_params.Add(Types.GetPointerVersion(val.Datatype));
 						else
 							_params.Add(val.Datatype);
 						count++;
@@ -642,23 +642,15 @@ namespace Decompiler
 				functionline += ")";
 			if (rcount == 0)
 			{
-				ScriptFile.X64npi.updatenative(hash, DataType.None, _params.ToArray());
 				return functionline + ";";
 			}
 			else if (rcount == 1)
 			{
-				ScriptFile.X64npi.updatenative(hash, ScriptFile.X64npi.getrettype(hash), _params.ToArray());
-				PushNative(functionline, hash, ScriptFile.X64npi.getrettype(hash));
+				PushNative(functionline, hash, dbEntry?.GetReturnType() ?? DataType.Unk);
 			}
 			else if (rcount > 1)
 			{
-				if (rcount == 2)
-					ScriptFile.X64npi.updatenative(hash, DataType.Unk, _params.ToArray());
-				else if (rcount == 3)
-					ScriptFile.X64npi.updatenative(hash, DataType.Vector3, _params.ToArray());
-				else
-					throw new Exception("Error in return items count");
-				PushStructNative(functionline, hash, rcount, ScriptFile.X64npi.getrettype(hash));
+				PushStructNative(functionline, hash, rcount, dbEntry?.GetReturnType() ?? DataType.Unk);
 			}
 			else
 				throw new Exception("Error in return items count");
@@ -1428,6 +1420,36 @@ namespace Decompiler
 			None, //For Empty returns
 			Vector3,
 
+			BoolPtr,
+			Any,
+			AnyPtr,
+			Blip,
+			BlipPtr,
+			Cam,
+			CamPtr,
+			Entity,
+			EntityPtr,
+			FireId,
+			FireIdPtr,
+			Hash,
+			HashPtr,
+			Interior,
+			InteriorPtr,
+			ItemSet,
+			ItemSetPtr,
+			Object,
+			ObjectPtr,
+			Ped,
+			PedPtr,
+			Pickup,
+			PickupPtr,
+			Player,
+			PlayerPtr,
+			ScrHandle,
+			ScrHandlePtr,
+			Vector3Ptr,
+			Vehicle,
+			VehiclePtr
 		}
 
 		private class StackValue
@@ -1614,117 +1636,5 @@ namespace Decompiler
 		}
 
 		#endregion
-	}
-
-	public static class Types
-	{
-		public static DataTypes[] _types = new DataTypes[]
-		{
-			/*  0 */ new DataTypes(Stack.DataType.Bool, 4, "bool", "b"), //needs fixing up a bit
-			/*  1 */ new DataTypes(Stack.DataType.Float, 3, "float", "f"),
-			/*  2 */ new DataTypes(Stack.DataType.Int, 3, "int", "i"),
-			/*  3 */ new DataTypes(Stack.DataType.String, 3, "char[]", "c"),
-			/*  4 */ new DataTypes(Stack.DataType.StringPtr, 3, "char*", "s"),
-			/*  5 */ new DataTypes(Stack.DataType.Unk, 0, "var", "u"),
-			/*  6 */ new DataTypes(Stack.DataType.Unsure, 1, "var", "u"),
-			/*  7 */ new DataTypes(Stack.DataType.IntPtr, 3, "int*", "i"),
-			/*  8 */ new DataTypes(Stack.DataType.UnkPtr, 1, "var*", "u"),
-			/*  9 */ new DataTypes(Stack.DataType.FloatPtr, 3, "float*", "f"),
-			/* 10 */ new DataTypes(Stack.DataType.Vector3, 2, "Vector3", "v"),
-			/* 11 */ new DataTypes(Stack.DataType.None, 4, "void", "f"),
-		};
-
-		public static DataTypes gettype(Stack.DataType type)
-		{
-			foreach (DataTypes d in _types)
-			{
-				if (d.type == type)
-					return d;
-			}
-			throw new Exception("Unknown return type");
-		}
-
-		public static byte indexof(Stack.DataType type)
-		{
-			for (byte i = 0; i < _types.Length; i++)
-			{
-				if (_types[i].type == type)
-					return i;
-			}
-			return 255;
-		}
-
-		public static Stack.DataType getatindex(byte index)
-		{
-			return _types[index].type;
-		}
-
-		public static Stack.DataType getpointerver(Stack.DataType type)
-		{
-			switch (type)
-			{
-				case Stack.DataType.Int:
-					return Stack.DataType.IntPtr;
-				case Stack.DataType.Unk:
-					return Stack.DataType.UnkPtr;
-				case Stack.DataType.Float:
-					return Stack.DataType.FloatPtr;
-				default:
-					return type;
-			}
-		}
-
-		public static bool hasptr(Stack.DataType type)
-		{
-			switch (type)
-			{
-				case Stack.DataType.Int:
-				case Stack.DataType.Unk:
-				case Stack.DataType.Unsure:
-				case Stack.DataType.Float:
-					return true;
-				default:
-					return false;
-			}
-		}
-
-		public struct DataTypes
-		{
-			public Stack.DataType type;
-			public int precedence;
-			public string singlename;
-			public string varletter;
-
-			public DataTypes(Stack.DataType type, int precedence, string singlename, string varletter)
-			{
-				this.type = type;
-				this.precedence = precedence;
-				this.singlename = singlename;
-				this.varletter = varletter;
-			}
-
-			public string returntype
-			{
-				get { return singlename + " "; }
-			}
-
-			public string vardec
-			{
-				get { return singlename + " " + varletter; }
-			}
-
-			public string vararraydec
-			{
-				get { return singlename + "[] " + varletter; }
-			}
-
-			public void check(DataTypes Second)
-			{
-				if (this.precedence < Second.precedence)
-				{
-					this = Second;
-				}
-			}
-		}
 	}
 }

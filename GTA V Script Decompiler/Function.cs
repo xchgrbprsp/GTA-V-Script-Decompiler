@@ -1357,7 +1357,7 @@ namespace Decompiler
 					if (_consoleVer)
 						ScriptFile.npi.updaterettype(Stack.PeekNat(index + i), type);
 					else
-						ScriptFile.X64npi.updaterettype(Stack.PeekNat64(index + i), type);
+						return;
 				}
 
 			}
@@ -1387,7 +1387,7 @@ namespace Decompiler
 					if (_consoleVer)
 						ScriptFile.npi.updaterettype(Stack.PeekNat(index + i), Stack.DataType.StringPtr);
 					else
-						ScriptFile.X64npi.updaterettype(Stack.PeekNat64(index + i), Stack.DataType.StringPtr);
+						return;
 				}
 			}
 		}

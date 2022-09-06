@@ -27,9 +27,6 @@ namespace Decompiler
         internal Vars_Info Statics;
         internal bool CheckNative = true;
 		internal static NativeParamInfo npi;
-		internal static x64BitNativeParamInfo X64npi = new x64BitNativeParamInfo();
-        
-
      
 
         public Dictionary<string, Tuple<int, int>> Function_loc = new Dictionary<string, Tuple<int,int>>();
