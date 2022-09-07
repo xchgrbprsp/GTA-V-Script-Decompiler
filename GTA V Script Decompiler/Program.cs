@@ -11,6 +11,7 @@ namespace Decompiler
 		internal static Ini.IniFile Config;
 		public static Object ThreadLock;
 		public static int ThreadCount;
+		public static NativeDB nativeDB;
 
 		/// <summary>
 		/// The main entry point for the application.
@@ -26,12 +27,12 @@ namespace Decompiler
 				Config.IniWriteBool("Base", "Show_Array_Size", true);
 				Config.IniWriteBool("Base", "Reverse_Hashes", true);
 				Config.IniWriteBool("Base", "Declare_Variables", true);
-				Config.IniWriteBool("Base", "Shift_Variables", true);
+				Config.IniWriteBool("Base", "Shift_Variables", false);
 				Config.IniWriteBool("View", "Show_Nat_Namespace", true);
-				Config.IniWriteBool("Base", "Show_Func_Pointer", false);
-				Config.IniWriteBool("Base", "Use_MultiThreading", false);
-				Config.IniWriteBool("Base", "Include_Function_Position", false);
-				Config.IniWriteBool("Base", "Uppercase_Natives", false);
+				Config.IniWriteBool("Base", "Show_Func_Pointer", true);
+				Config.IniWriteBool("Base", "Use_MultiThreading", true);
+				Config.IniWriteBool("Base", "Include_Function_Position", true);
+				Config.IniWriteBool("Base", "Uppercase_Natives", true);
 				Config.IniWriteBool("Base", "Hex_Index", false);
 				Config.IniWriteBool("View", "Line_Numbers", true);
 			}
@@ -64,9 +65,13 @@ namespace Decompiler
 			ScriptFile.npi = new NativeParamInfo();
 			ScriptFile.hashbank = new Hashes();
 
+			nativeDB = new NativeDB();
+			nativeDB.LoadData();
+
 			if (args.Length == 0)
 			{
 				Application.EnableVisualStyles();
+				Application.SetHighDpiMode(HighDpiMode.SystemAware);
 				Application.SetCompatibleTextRenderingDefault(false);
 				Application.Run(new MainForm());
 			}
@@ -171,7 +176,7 @@ namespace Decompiler
 
 		public static bool Find_Shift_Variables()
 		{
-			return _Shift_Variables = Program.Config.IniReadBool("Base", "Shift_Variables", true);
+			return _Shift_Variables = Program.Config.IniReadBool("Base", "Shift_Variables", false);
 		}
 
 		private static bool _Shift_Variables = false;
@@ -183,7 +188,7 @@ namespace Decompiler
 
 		public static bool Find_Use_MultiThreading()
 		{
-			return _Use_MultiThreading = Program.Config.IniReadBool("Base", "Use_MultiThreading", false);
+			return _Use_MultiThreading = Program.Config.IniReadBool("Base", "Use_MultiThreading", true);
 		}
 
 		private static bool _Use_MultiThreading = false;
@@ -196,7 +201,7 @@ namespace Decompiler
 
 		public static bool Find_IncFuncPos()
 		{
-			return _IncFuncPos = Program.Config.IniReadBool("Base", "Include_Function_Position", false);
+			return _IncFuncPos = Program.Config.IniReadBool("Base", "Include_Function_Position", true);
 		}
 
 		private static bool _IncFuncPos = false;
@@ -209,7 +214,7 @@ namespace Decompiler
 
 		public static bool Find_Show_Func_Pointer()
 		{
-			return _Show_Func_Pointer = Program.Config.IniReadBool("Base", "Show_Func_Pointer", false);
+			return _Show_Func_Pointer = Program.Config.IniReadBool("Base", "Show_Func_Pointer", true);
 		}
 
 		private static bool _Show_Func_Pointer = false;
@@ -221,7 +226,7 @@ namespace Decompiler
 
 		public static bool Find_Nat_Namespace()
 		{
-			return _Show_Nat_Namespace = Program.Config.IniReadBool("Base", "Show_Nat_Namespace", false);
+			return _Show_Nat_Namespace = Program.Config.IniReadBool("Base", "Show_Nat_Namespace", true);
 		}
 
 		private static bool _Show_Nat_Namespace = false;
@@ -245,7 +250,7 @@ namespace Decompiler
 
 		public static bool Find_Upper_Natives()
 		{
-			return _upper_Natives = Program.Config.IniReadBool("Base", "Uppercase_Natives", false);
+			return _upper_Natives = Program.Config.IniReadBool("Base", "Uppercase_Natives", true);
 		}
 
 		private static bool _upper_Natives = false;

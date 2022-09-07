@@ -855,6 +855,9 @@ namespace Decompiler
 						case 104:
 							AddInstruction(curoff, new HLInstruction(CodeBlock[Offset], GetArray(1), curoff, _consoleVer));
 							break;
+						case 127:
+							AddInstruction(curoff, new HLInstruction(CodeBlock[Offset], curoff, _consoleVer));
+							break;
 						default:
 							if (CodeBlock[Offset] <= 126) AddInstruction(curoff, new HLInstruction(CodeBlock[Offset], curoff, _consoleVer));
 							else throw new Exception("Unexpected Opcode");
@@ -1298,6 +1301,9 @@ namespace Decompiler
 				case Instruction.fPush_7:
 					Stack.Push(Instructions[Offset].GetImmFloatPush);
 					break;
+				case Instruction.Bittest:
+					Stack.Op_BitTest();
+					break;
 				default:
 					throw new Exception("Unexpected Instruction");
 					HandleJump:
@@ -1351,7 +1357,7 @@ namespace Decompiler
 					if (_consoleVer)
 						ScriptFile.npi.updaterettype(Stack.PeekNat(index + i), type);
 					else
-						ScriptFile.X64npi.updaterettype(Stack.PeekNat64(index + i), type);
+						return;
 				}
 
 			}
@@ -1381,7 +1387,7 @@ namespace Decompiler
 					if (_consoleVer)
 						ScriptFile.npi.updaterettype(Stack.PeekNat(index + i), Stack.DataType.StringPtr);
 					else
-						ScriptFile.X64npi.updaterettype(Stack.PeekNat64(index + i), Stack.DataType.StringPtr);
+						return;
 				}
 			}
 		}
@@ -2040,6 +2046,8 @@ namespace Decompiler
 					case Instruction.fPush_6:
 					case Instruction.fPush_7:
 						Stack.Push(ins.GetImmFloatPush);
+						break;
+					case Instruction.Bittest:
 						break;
 					default:
 						throw new Exception("Unexpected Instruction");
