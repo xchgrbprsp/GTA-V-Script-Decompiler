@@ -1728,7 +1728,9 @@ namespace Decompiler
 							Stack.Drop();
 							break;
 						}
-						if (Stack.TopType == Stack.DataType.Int)
+						if (Types.HasPointerVersion(Stack.PeekVar(1).DataType))
+							CheckInstruction(0, Types.GetPointerVersion(Stack.PeekVar(1).DataType));
+                        if (Stack.TopType == Stack.DataType.Int)
 						{
 							tempstring = Stack.PopLit();
 							if (Utils.IntParse(tempstring, out tempint))

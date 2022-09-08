@@ -50,7 +50,7 @@ namespace Decompiler
 					}
 				}
 				addString:
-				_dictionary.Add(index, Encoding.ASCII.GetString(Working.ToArray()));
+				_dictionary.Add(index, Encoding.ASCII.GetString(Working.ToArray()).Replace("\\", "\\\\").Replace("\"", "\\\""));
 				Working.Clear();
 			}
 			
