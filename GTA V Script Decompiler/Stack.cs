@@ -402,13 +402,13 @@ namespace Decompiler
 				{
 					case StackValue.Type.Literal:
 						if (val.Variable != null)
-							if (Types.gettype(val.Variable.DataType).precedence <
-								Types.gettype(ScriptFile.npi.getparamtype(hash, count)).precedence)
+							if (Types.GetTypeInfo(val.Variable.DataType).Precedence <
+								Types.GetTypeInfo(ScriptFile.npi.getparamtype(hash, count)).Precedence)
 							{
 								val.Variable.DataType = ScriptFile.npi.getparamtype(hash, count);
 							}
-							else if (Types.gettype(val.Variable.DataType).precedence >
-								Types.gettype(ScriptFile.npi.getparamtype(hash, count)).precedence)
+							else if (Types.GetTypeInfo(val.Variable.DataType).Precedence >
+								Types.GetTypeInfo(ScriptFile.npi.getparamtype(hash, count)).Precedence)
 							{
 								ScriptFile.npi.updateparam(hash, val.Variable.DataType, count);
 							}
@@ -543,7 +543,7 @@ namespace Decompiler
 					case StackValue.Type.Literal:
 						if (val.Variable != null)
 						{
-							if (paramType != DataType.Unk)
+							if (paramType != DataType.Unk && Types.GetTypeInfo(val.Variable.DataType).Precedence < Types.GetTypeInfo(paramType).Precedence)
 							{
 								val.Variable.DataType = paramType;
                             }
@@ -1493,7 +1493,7 @@ namespace Decompiler
 				_type = type;
 				_value = name;
 				_structSize = 0;
-				_datatype = function.ReturnType.type;
+				_datatype = function.ReturnType.Type;
 				_function = function;
 			}
 

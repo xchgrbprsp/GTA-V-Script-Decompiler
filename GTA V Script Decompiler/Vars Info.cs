@@ -68,7 +68,7 @@ namespace Decompiler
             }
             else if (var.Immediatesize == 1)
             {
-                name = Types.gettype(var.DataType).varletter;
+                name = Types.GetTypeInfo(var.DataType).Prefix;
             }
             /*else if (var.Immediatesize == 3)
             {
@@ -138,7 +138,7 @@ namespace Decompiler
 				}
 				if (var.Immediatesize == 1)
 				{
-					datatype = Types.gettype(var.DataType).vardec;
+					datatype = Types.GetTypeInfo(var.DataType).VarDec;
 					
 				}
 				/*else if (var.Immediatesize == 3)
@@ -289,7 +289,7 @@ namespace Decompiler
 						datatype = "char[" + (var.Immediatesize * 4).ToString() + "] c";
 					}
 					else if (var.Immediatesize == 1)
-						datatype = Types.gettype(var.DataType).vardec;
+						datatype = Types.GetTypeInfo(var.DataType).VarDec;
 					/*else if (var.Immediatesize == 3)
 					{
 						datatype = "vector3 v";
@@ -303,7 +303,7 @@ namespace Decompiler
 						datatype = "char[" + (var.Immediatesize * 4).ToString() + "][] c";
 					}
 					else if (var.Immediatesize == 1)
-						datatype = Types.gettype(var.DataType).vararraydec;
+						datatype = Types.GetTypeInfo(var.DataType).ArrayDec;
 					/*else if (var.Immediatesize == 3)
 					{
 						datatype = "vector3[] v";

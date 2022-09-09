@@ -23,11 +23,11 @@ namespace Decompiler
 			foreach (KeyValuePair<uint, Tuple<Stack.DataType, Stack.DataType[]>> native in Natives)
 			{
 				writer.Write(native.Key);
-				writer.Write(Types.indexof(native.Value.Item1));
+				writer.Write(Types.IndexOf(native.Value.Item1));
 				writer.Write((byte) native.Value.Item2.Length);
 				for (int i = 0; i < native.Value.Item2.Length; i++)
 				{
-					writer.Write(Types.indexof(native.Value.Item2[i]));
+					writer.Write(Types.IndexOf(native.Value.Item2[i]));
 				}
 			}
 			writer.Close();
@@ -48,13 +48,13 @@ namespace Decompiler
 			Stack.DataType curret = Natives[hash].Item1;
 			Stack.DataType[] curpar = Natives[hash].Item2;
 
-			if (Types.gettype(curret).precedence < Types.gettype(returns).precedence)
+			if (Types.GetTypeInfo(curret).Precedence < Types.GetTypeInfo(returns).Precedence)
 			{
 				curret = returns;
 			}
 			for (int i = 0; i < curpar.Length; i++)
 			{
-				if (Types.gettype(curpar[i]).precedence < Types.gettype(param[i]).precedence)
+				if (Types.GetTypeInfo(curpar[i]).Precedence < Types.GetTypeInfo(param[i]).Precedence)
 				{
 					curpar[i] = param[i];
 				}
@@ -90,7 +90,7 @@ namespace Decompiler
 		{
 			if (!Natives.ContainsKey(hash))
 				return;
-			if (Types.gettype(Natives[hash].Item1).precedence < Types.gettype(returns).precedence || over)
+			if (Types.GetTypeInfo(Natives[hash].Item1).Precedence < Types.GetTypeInfo(returns).Precedence || over)
 			{
 				Natives[hash] = new Tuple<Stack.DataType, Stack.DataType[]>(returns, Natives[hash].Item2);
 			}
@@ -108,12 +108,12 @@ namespace Decompiler
 			while (natfile.Position < natfile.Length)
 			{
 				uint native = reader.ReadUInt32();
-				Stack.DataType returntype = Types.getatindex(reader.ReadByte());
+				Stack.DataType returntype = Types.GetAtIndex(reader.ReadByte());
 				byte count = reader.ReadByte();
 				Stack.DataType[] param = new Stack.DataType[count];
 				for (byte i = 0; i < count; i++)
 				{
-					param[i] = Types.getatindex(reader.ReadByte());
+					param[i] = Types.GetAtIndex(reader.ReadByte());
 				}
 				Natives.Add(native, new Tuple<Stack.DataType, Stack.DataType[]>(returntype, param));
 			}
@@ -126,13 +126,13 @@ namespace Decompiler
 			{
 				throw new Exception("Native not found");
 			}
-			string dec = Types.gettype(Natives[hash].Item1).returntype + Program.nativefile.nativefromhash(hash) + "(";
+			string dec = Types.GetTypeInfo(Natives[hash].Item1).ReturnType + Program.nativefile.nativefromhash(hash) + "(";
 			int max = Natives[hash].Item2.Length;
 			if (max == 0)
 				return dec + ");";
 			for (int i = 0; i < max; i++)
 			{
-				dec += Types.gettype(Natives[hash].Item2[i]).vardec + i + ", ";
+				dec += Types.GetTypeInfo(Natives[hash].Item2[i]).VarDec + i + ", ";
 			}
 			return dec.Remove(dec.Length - 2) + ");";
 		}
@@ -155,7 +155,7 @@ namespace Decompiler
 
 			foreach (KeyValuePair<uint, Tuple<Stack.DataType, Stack.DataType[]>> native in Natives)
 			{
-				string type = Types.gettype(native.Value.Item1).returntype;
+				string type = Types.GetTypeInfo(native.Value.Item1).ReturnType;
 				string line = Program.nativefile.nativefromhash(native.Key) + "(";
 
 				int max = native.Value.Item2.Length;
@@ -166,7 +166,7 @@ namespace Decompiler
 				}
 				for (int i = 0; i < max; i++)
 				{
-					line += Types.gettype(native.Value.Item2[i]).vardec + i + ", ";
+					line += Types.GetTypeInfo(native.Value.Item2[i]).VarDec + i + ", ";
 				}
 				natives.Add(new Tuple<string, string>(line.Remove(line.Length - 2) + ");\n", type));
 			}
@@ -181,24 +181,24 @@ namespace Decompiler
 
 		public string TypeToString(Stack.DataType type)
 		{
-			return Types.gettype(type).singlename;
+			return Types.GetTypeInfo(type).SingleName;
 		}
 
 		public Stack.DataType StringToType(string _string)
 		{
-			foreach (Types.DataTypes type in Types._types)
+			foreach (Types.TypeInfo type in Types.typeInfos)
 			{
-				if (type.singlename == _string)
-					return type.type;
+				if (type.SingleName == _string)
+					return type.Type;
 			}
 			throw new Exception("Type not found");
 		}
 
 		public bool StringTypeExists(string _string)
 		{
-			foreach (Types.DataTypes type in Types._types)
+			foreach (Types.TypeInfo type in Types.typeInfos)
 			{
-				if (type.singlename == _string)
+				if (type.SingleName == _string)
 					return true;
 			}
 			return false;

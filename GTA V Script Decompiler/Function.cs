@@ -33,7 +33,7 @@ namespace Decompiler
 		ScriptFile Scriptfile;
 		bool writeelse = false;
 		//ReturnTypes RetType = ReturnTypes.Unkn;
-		public Types.DataTypes ReturnType { get; private set; }
+		public Types.TypeInfo ReturnType { get; private set; }
 		FunctionName fnName;
 		internal bool Decoded { get; private set; }
 		internal bool DecodeStarted = false;
@@ -105,7 +105,7 @@ namespace Decompiler
 				working = "void ";
 			else if (Rcount == 1)
 			{
-				working = ReturnType.returntype;
+				working = ReturnType.ReturnType;
 				/*switch (RetType)
 				{
 					case ReturnTypes.Bool:
@@ -122,7 +122,7 @@ namespace Decompiler
 				working = "Vector3 ";
 			else if (Rcount > 1)
 			{
-				if (ReturnType.type == Stack.DataType.String)
+				if (ReturnType.Type == Stack.DataType.String)
 				{
 					working = "char[" + (Rcount*4).ToString() + "] ";
 				}
@@ -1070,7 +1070,7 @@ namespace Decompiler
 								case Stack.DataType.Float:
 								case Stack.DataType.StringPtr:
 								case Stack.DataType.Int:
-									ReturnType = Types.gettype(DataType);
+									ReturnType = Types.GetTypeInfo(DataType);
 									break;
 								default:
 									returncheck(tempstring);
@@ -1082,7 +1082,7 @@ namespace Decompiler
 							if (Stack.TopType == Stack.DataType.String)
 							{
 								//RetType = ReturnTypes.String;
-								ReturnType = Types.gettype(Stack.DataType.String);
+								ReturnType = Types.GetTypeInfo(Stack.DataType.String);
 							}
 							writeline("return " + tempstring + ";");
 							break;
@@ -1327,7 +1327,7 @@ namespace Decompiler
 				Vars_Info.Var Var = Stack.PeekVar(index + i);
 				if (Var != null && (Stack.isLiteral(index + i) || Stack.isPointer(index + i)))
 				{
-					if (Types.gettype(type).precedence < Types.gettype(Var.DataType).precedence)
+					if (Types.GetTypeInfo(type).Precedence < Types.GetTypeInfo(Var.DataType).Precedence)
 						continue;
 					if (type == Stack.DataType.StringPtr && Stack.isPointer(index + 1))
 						Var.DataType = Stack.DataType.String;
@@ -1341,12 +1341,12 @@ namespace Decompiler
 				Function func = Stack.PeekFunc(index + i);
 				if(func != null)
 				{
-					if(Types.gettype(type).precedence < func.ReturnType.precedence)
+					if(Types.GetTypeInfo(type).Precedence < func.ReturnType.Precedence)
 						continue;
 					if(type == Stack.DataType.StringPtr && Stack.isPointer(index + 1))
-						func.ReturnType = Types.gettype(Stack.DataType.String);
+						func.ReturnType = Types.GetTypeInfo(Stack.DataType.String);
 					else
-						func.ReturnType = Types.gettype(type);
+						func.ReturnType = Types.GetTypeInfo(type);
 					if(Stack.isPointer(index + i))
 					{
 					}
@@ -1467,23 +1467,19 @@ namespace Decompiler
 		{
 			if (Rcount != 1)
 				return;
-			if (ReturnType.type == Stack.DataType.Float)
-				return;
-			if (ReturnType.type == Stack.DataType.Int)
-				return;
-			if (ReturnType.type == Stack.DataType.Bool)
+			if (ReturnType.Type != Stack.DataType.Unk && ReturnType.Type != Stack.DataType.Unsure && ReturnType.Type != Stack.DataType.None)
 				return;
 			if (temp.EndsWith("f"))
-				ReturnType = Types.gettype(Stack.DataType.Float);
+				ReturnType = Types.GetTypeInfo(Stack.DataType.Float);
 			int tempint;
 			if (Utils.IntParse(temp, out tempint))
 			{
-				ReturnType = Types.gettype(Stack.DataType.Int);
+				ReturnType = Types.GetTypeInfo(Stack.DataType.Int);
 				return;
 			}
 			if (temp.StartsWith("joaat("))
 			{
-				ReturnType = Types.gettype(Stack.DataType.Int);
+				ReturnType = Types.GetTypeInfo(Stack.DataType.Int);
 				return;
 			}
 			if (temp.StartsWith("func_"))
@@ -1507,7 +1503,7 @@ namespace Decompiler
 							}
 						}
 					}
-					switch (Scriptfile.Functions[tempint].ReturnType.type)
+					switch (Scriptfile.Functions[tempint].ReturnType.Type)
 					{
 						case Stack.DataType.Float:
 						case Stack.DataType.Bool:
@@ -1520,17 +1516,17 @@ namespace Decompiler
 			}
 			if (temp.EndsWith(")") && !temp.StartsWith("("))
 			{
-				ReturnType = Types.gettype(Stack.DataType.Unsure);
+				ReturnType = Types.GetTypeInfo(Stack.DataType.Unsure);
 				return;
 			}
-			ReturnType = Types.gettype(Stack.DataType.Unsure);
+			ReturnType = Types.GetTypeInfo(Stack.DataType.Unsure);
 
 		}
 
 		public void decodeinsructionsforvarinfo()
 		{
 			Stack = new Stack();
-			ReturnType = Types.gettype(Stack.DataType.Unk);
+			ReturnType = Types.GetTypeInfo(Stack.DataType.Unk);
 			int tempint;
 			string tempstring;
 			for (int i = 0; i < Instructions.Count; i++)
@@ -1728,8 +1724,10 @@ namespace Decompiler
 							Stack.Drop();
 							break;
 						}
-						if (Types.HasPointerVersion(Stack.PeekVar(1).DataType))
-							CheckInstruction(0, Types.GetPointerVersion(Stack.PeekVar(1).DataType));
+						if (Types.HasPointerVersion(Stack.TopType))
+						{
+							CheckInstruction(1, Types.GetPointerVersion(Stack.TopType));
+						}
                         if (Stack.TopType == Stack.DataType.Int)
 						{
 							tempstring = Stack.PopLit();
@@ -1828,8 +1826,8 @@ namespace Decompiler
 					case Instruction.SetFrame2:
 						if (Stack.TopType != Stack.DataType.Unk)
 						{
-							if (Types.gettype(Stack.TopType).precedence >
-							    Types.gettype(GetFrameVar(ins.GetOperandsAsUInt).DataType).precedence)
+							if (Types.GetTypeInfo(Stack.TopType).Precedence >
+							    Types.GetTypeInfo(GetFrameVar(ins.GetOperandsAsUInt).DataType).Precedence)
 							{
 								GetFrameVar(ins.GetOperandsAsUInt).DataType = Stack.TopType;
 							}
@@ -1971,8 +1969,8 @@ namespace Decompiler
 								//CheckInstruction(func.Pcount - j - 1, func.Params.GetTypeAtIndex((uint)j));
 								if (Stack.ItemType(func.Pcount - j - 1) != Stack.DataType.Unk)
 								{
-									if (Types.gettype(Stack.ItemType(func.Pcount - j - 1)).precedence >
-									    Types.gettype(func.Params.GetTypeAtIndex((uint) j)).precedence)
+									if (Types.GetTypeInfo(Stack.ItemType(func.Pcount - j - 1)).Precedence >
+									    Types.GetTypeInfo(func.Params.GetTypeAtIndex((uint) j)).Precedence)
 									{
 										func.Params.SetTypeAtIndex((uint) j, Stack.ItemType(func.Pcount - j - 1));
 									}
@@ -2069,7 +2067,7 @@ namespace Decompiler
 		string name;
 		int pcount, rcount, minloc; //, maxloc;
 		//ReturnTypes _retType;
-		Types.DataTypes _RetType;
+		Types.TypeInfo _RetType;
 
 		internal FunctionName(string Name, int Pcount, int Rcount, int MinLoc, int MaxLoc)
 		{
@@ -2079,7 +2077,7 @@ namespace Decompiler
 			//maxloc = MaxLoc;
 			name = Name;
 			//_retType = ReturnTypes.Unkn;
-			_RetType = Types.gettype(Stack.DataType.Unk);
+			_RetType = Types.GetTypeInfo(Stack.DataType.Unk);
 		}
 
 		public string Name
@@ -2104,7 +2102,7 @@ namespace Decompiler
 
 		//internal int MaxLoc { get { return maxloc; } }
 		//public ReturnTypes RetType { get { return _retType; } set { _retType = value; } }
-		public Types.DataTypes retType
+		public Types.TypeInfo retType
 		{
 			get { return _RetType; }
 			set { _RetType = value; }

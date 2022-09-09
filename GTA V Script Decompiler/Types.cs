@@ -4,85 +4,85 @@ namespace Decompiler
 {
     public static class Types
 	{
-		public static DataTypes[] _types = new DataTypes[]
+		public static TypeInfo[] typeInfos = new TypeInfo[]
 		{
-			new DataTypes(Stack.DataType.Bool, 4, "BOOL", "b"),
-			new DataTypes(Stack.DataType.BoolPtr, 4, "BOOL*", "pb"),
-            new DataTypes(Stack.DataType.Float, 3, "float", "f"),
-			new DataTypes(Stack.DataType.Int, 3, "int", "i"),
-			new DataTypes(Stack.DataType.String, 3, "char[]", "c"),
-			new DataTypes(Stack.DataType.StringPtr, 3, "char*", "s"),
-			new DataTypes(Stack.DataType.StringPtr, 3, "const char*", "s"),
-            new DataTypes(Stack.DataType.Unk, 0, "var", "u"),
-			new DataTypes(Stack.DataType.Unsure, 1, "var", "u"),
-			new DataTypes(Stack.DataType.IntPtr, 3, "int*", "pi"),
-			new DataTypes(Stack.DataType.UnkPtr, 1, "var*", "pu"),
-			new DataTypes(Stack.DataType.FloatPtr, 3, "float*", "pf"),
-			new DataTypes(Stack.DataType.Vector3, 2, "Vector3", "v"),
-			new DataTypes(Stack.DataType.None, 4, "void", "f"),
+			new TypeInfo(Stack.DataType.Bool, 4, "BOOL", "b"),
+			new TypeInfo(Stack.DataType.BoolPtr, 4, "BOOL*", "pb"),
+            new TypeInfo(Stack.DataType.Float, 3, "float", "f"),
+			new TypeInfo(Stack.DataType.Int, 3, "int", "i"),
+			new TypeInfo(Stack.DataType.String, 3, "char[]", "c"),
+			new TypeInfo(Stack.DataType.StringPtr, 3, "char*", "s"),
+			new TypeInfo(Stack.DataType.StringPtr, 3, "const char*", "s"),
+            new TypeInfo(Stack.DataType.Unk, 0, "var", "u"),
+			new TypeInfo(Stack.DataType.Unsure, 1, "var", "u"),
+			new TypeInfo(Stack.DataType.IntPtr, 3, "int*", "pi"),
+			new TypeInfo(Stack.DataType.UnkPtr, 1, "var*", "pu"),
+			new TypeInfo(Stack.DataType.FloatPtr, 4, "float*", "pf"),
+			new TypeInfo(Stack.DataType.Vector3, 2, "Vector3", "v"),
+			new TypeInfo(Stack.DataType.None, 4, "void", "f"),
 
-            new DataTypes(Stack.DataType.Any, 4, "Any", "an"),
-            new DataTypes(Stack.DataType.AnyPtr, 4, "Any*", "pan"),
-            new DataTypes(Stack.DataType.Blip, 4, "Blip", "bl"),
-            new DataTypes(Stack.DataType.BlipPtr, 4, "Blip*", "pbl"),
-            new DataTypes(Stack.DataType.Cam, 4, "Cam", "ca"),
-            new DataTypes(Stack.DataType.CamPtr, 4, "Cam*", "pca"),
-            new DataTypes(Stack.DataType.Entity, 4, "Entity", "e"),
-            new DataTypes(Stack.DataType.EntityPtr, 4, "Entity*", "pe"),
-            new DataTypes(Stack.DataType.FireId, 4, "FireId", "fi"),
-            new DataTypes(Stack.DataType.FireIdPtr, 4, "FireId*", "pfi"),
-            new DataTypes(Stack.DataType.Hash, 4, "Hash", "h"),
-            new DataTypes(Stack.DataType.HashPtr, 4, "Hash*", "ph"),
-            new DataTypes(Stack.DataType.Interior, 4, "Interior", "in"),
-            new DataTypes(Stack.DataType.InteriorPtr, 4, "Interior*", "pin"),
-            new DataTypes(Stack.DataType.ItemSet, 4, "ItemSet", "is"),
-            new DataTypes(Stack.DataType.ItemSetPtr, 4, "ItemSet*", "pis"),
-            new DataTypes(Stack.DataType.Object, 5, "Object", "o"),
-            new DataTypes(Stack.DataType.ObjectPtr, 5, "Object*", "po"),
-            new DataTypes(Stack.DataType.Ped, 5, "Ped", "ped"), // find a better prefix for this
-            new DataTypes(Stack.DataType.PedPtr, 5, "Ped*", "pped"),
-            new DataTypes(Stack.DataType.Pickup, 5, "Pickup", "pi"),
-            new DataTypes(Stack.DataType.PickupPtr, 5, "Pickup*", "ppi"),
-            new DataTypes(Stack.DataType.Player, 4, "Player", "pl"),
-            new DataTypes(Stack.DataType.PlayerPtr, 4, "Player", "ppl"),
-            new DataTypes(Stack.DataType.ScrHandle, 4, "ScrHandle", "sh"),
-            new DataTypes(Stack.DataType.ScrHandlePtr, 4, "ScrHandle*", "psh"),
-            new DataTypes(Stack.DataType.Vector3Ptr, 4, "Vector3*", "pv"),
-            new DataTypes(Stack.DataType.Vehicle, 5, "Vehicle", "ve"),
-            new DataTypes(Stack.DataType.VehiclePtr, 5, "Vehicle*", "pve"),
+            new TypeInfo(Stack.DataType.Any, 4, "Any", "an"),
+            new TypeInfo(Stack.DataType.AnyPtr, 4, "Any*", "pan"),
+            new TypeInfo(Stack.DataType.Blip, 4, "Blip", "bl"),
+            new TypeInfo(Stack.DataType.BlipPtr, 4, "Blip*", "pbl"),
+            new TypeInfo(Stack.DataType.Cam, 4, "Cam", "ca"),
+            new TypeInfo(Stack.DataType.CamPtr, 4, "Cam*", "pca"),
+            new TypeInfo(Stack.DataType.Entity, 4, "Entity", "e"),
+            new TypeInfo(Stack.DataType.EntityPtr, 4, "Entity*", "pe"),
+            new TypeInfo(Stack.DataType.FireId, 4, "FireId", "fi"),
+            new TypeInfo(Stack.DataType.FireIdPtr, 4, "FireId*", "pfi"),
+            new TypeInfo(Stack.DataType.Hash, 4, "Hash", "h"),
+            new TypeInfo(Stack.DataType.HashPtr, 4, "Hash*", "ph"),
+            new TypeInfo(Stack.DataType.Interior, 4, "Interior", "in"),
+            new TypeInfo(Stack.DataType.InteriorPtr, 4, "Interior*", "pin"),
+            new TypeInfo(Stack.DataType.ItemSet, 4, "ItemSet", "is"),
+            new TypeInfo(Stack.DataType.ItemSetPtr, 4, "ItemSet*", "pis"),
+            new TypeInfo(Stack.DataType.Object, 5, "Object", "o"),
+            new TypeInfo(Stack.DataType.ObjectPtr, 5, "Object*", "po"),
+            new TypeInfo(Stack.DataType.Ped, 5, "Ped", "ped"), // find a better prefix for this
+            new TypeInfo(Stack.DataType.PedPtr, 5, "Ped*", "pped"),
+            new TypeInfo(Stack.DataType.Pickup, 5, "Pickup", "pk"),
+            new TypeInfo(Stack.DataType.PickupPtr, 5, "Pickup*", "pki"),
+            new TypeInfo(Stack.DataType.Player, 4, "Player", "pl"),
+            new TypeInfo(Stack.DataType.PlayerPtr, 4, "Player", "ppl"),
+            new TypeInfo(Stack.DataType.ScrHandle, 4, "ScrHandle", "sh"),
+            new TypeInfo(Stack.DataType.ScrHandlePtr, 4, "ScrHandle*", "psh"),
+            new TypeInfo(Stack.DataType.Vector3Ptr, 4, "Vector3*", "pv"),
+            new TypeInfo(Stack.DataType.Vehicle, 5, "Vehicle", "ve"),
+            new TypeInfo(Stack.DataType.VehiclePtr, 5, "Vehicle*", "pve"),
         };
 
-		public static DataTypes gettype(Stack.DataType type)
+		public static TypeInfo GetTypeInfo(Stack.DataType type)
 		{
-			foreach (DataTypes d in _types)
+			foreach (TypeInfo d in typeInfos)
 			{
-				if (d.type == type)
+				if (d.Type == type)
 					return d;
 			}
 			throw new Exception("Unknown type");
 		}
 
-		public static byte indexof(Stack.DataType type)
+		public static byte IndexOf(Stack.DataType type)
 		{
-			for (byte i = 0; i < _types.Length; i++)
+			for (byte i = 0; i < typeInfos.Length; i++)
 			{
-				if (_types[i].type == type)
+				if (typeInfos[i].Type == type)
 					return i;
 			}
 			return 255;
 		}
 
-		public static Stack.DataType getatindex(byte index)
+		public static Stack.DataType GetAtIndex(byte index)
 		{
-			return _types[index].type;
+			return typeInfos[index].Type;
 		}
 
 		public static Stack.DataType GetFromName(string name)
 		{
-            foreach (DataTypes d in _types)
+            foreach (TypeInfo d in typeInfos)
             {
-                if (d.singlename == name)
-                    return d.type;
+                if (d.SingleName == name)
+                    return d.Type;
             }
             throw new Exception("Unknown type");
         }
@@ -95,6 +95,8 @@ namespace Decompiler
 					return Stack.DataType.IntPtr;
 				case Stack.DataType.Unk:
 					return Stack.DataType.UnkPtr;
+				case Stack.DataType.Bool:
+					return Stack.DataType.BoolPtr;
 				case Stack.DataType.Float:
 					return Stack.DataType.FloatPtr;
 				case Stack.DataType.Vector3:
@@ -138,7 +140,8 @@ namespace Decompiler
 			{
 				case Stack.DataType.Int:
 				case Stack.DataType.Unk:
-				case Stack.DataType.Unsure:
+                case Stack.DataType.Bool:
+                case Stack.DataType.Unsure:
 				case Stack.DataType.Float:
                 case Stack.DataType.Vector3:
                 case Stack.DataType.Any:
@@ -161,43 +164,45 @@ namespace Decompiler
 			}
 		}
 
-		public struct DataTypes
+		public struct TypeInfo
 		{
-			public Stack.DataType type;
-			public int precedence;
-			public string singlename;
-			public string varletter;
+			public Stack.DataType Type;
+			public int Precedence;
+			public string SingleName;
+			public string Prefix;
 
-			public DataTypes(Stack.DataType type, int precedence, string singlename, string varletter)
+			public TypeInfo(Stack.DataType type, int precedence, string singlename, string varletter)
 			{
-				this.type = type;
-				this.precedence = precedence;
-				this.singlename = singlename;
-				this.varletter = varletter;
+				this.Type = type;
+				this.Precedence = precedence;
+				this.SingleName = singlename;
+				this.Prefix = varletter;
 			}
 
-			public string returntype
+			public string ReturnType
 			{
-				get { return singlename + " "; }
+				get { return SingleName + " "; }
 			}
 
-			public string vardec
+			public string VarDec
 			{
-				get { return singlename + " " + varletter; }
+				get { return SingleName + " " + Prefix; }
 			}
 
-			public string vararraydec
+			public string ArrayDec
 			{
-				get { return singlename + "[] " + varletter; }
+				get { return SingleName + "[] " + Prefix; }
 			}
 
-			public void check(DataTypes Second)
-			{
-				if (this.precedence < Second.precedence)
-				{
-					this = Second;
-				}
-			}
-		}
+            public static bool operator >(TypeInfo a, TypeInfo b)
+            {
+				return a.Precedence > b.Precedence;
+            }
+
+            public static bool operator <(TypeInfo a, TypeInfo b)
+            {
+                return a.Precedence < b.Precedence;
+            }
+        }
 	}
 }
