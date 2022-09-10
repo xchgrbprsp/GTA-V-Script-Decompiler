@@ -13,6 +13,7 @@ using System.Runtime.InteropServices;
 using FastColoredTextBoxNS;
 using System.Text.RegularExpressions;
 using System.Threading;
+using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace Decompiler
 {
@@ -145,32 +146,33 @@ namespace Decompiler
 		{
 			CompileList = new Queue<Tuple<string, bool>>();
 			Program.ThreadCount = 0;
-			FolderSelectDialog fsd = new FolderSelectDialog();
-			if (fsd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            CommonOpenFileDialog fsd = new CommonOpenFileDialog();
+			fsd.IsFolderPicker = true;
+			if (fsd.ShowDialog() == CommonFileDialogResult.Ok)
 			{
 				DateTime Start = DateTime.Now;
-				SaveDirectory = Path.Combine(fsd.SelectedPath, "exported");
+				SaveDirectory = Path.Combine(fsd.FileName, "exported");
 				if (!Directory.Exists(SaveDirectory))
 					Directory.CreateDirectory(SaveDirectory);
 				this.Hide();
 				bool console = false, pc = false;
 
-				foreach (string file in Directory.GetFiles(fsd.SelectedPath, "*.xsc"))
+				foreach (string file in Directory.GetFiles(fsd.FileName, "*.xsc"))
 				{
 					console = true;
 					CompileList.Enqueue(new Tuple<string, bool>(file, true));
 				}
-				foreach (string file in Directory.GetFiles(fsd.SelectedPath, "*.csc"))
+				foreach (string file in Directory.GetFiles(fsd.FileName, "*.csc"))
 				{
 					console = true;
 					CompileList.Enqueue(new Tuple<string, bool>(file, true));
 				}
-				foreach (string file in Directory.GetFiles(fsd.SelectedPath, "*.ysc"))
+				foreach (string file in Directory.GetFiles(fsd.FileName, "*.ysc"))
 				{
 					pc = true;
 					CompileList.Enqueue(new Tuple<string, bool>(file, false));
 				}
-				foreach (string file in Directory.GetFiles(fsd.SelectedPath, "*.ysc.full"))
+				foreach (string file in Directory.GetFiles(fsd.FileName, "*.ysc.full"))
 				{
 					pc = true;
 					CompileList.Enqueue(new Tuple<string, bool>(file, false));
@@ -904,25 +906,25 @@ namespace Decompiler
 			CompileList = new Queue<Tuple<string, bool>>();
 			FoundStrings = new List<Tuple<uint, string>>();
 			Program.ThreadCount = 0;
-			FolderSelectDialog fsd = new FolderSelectDialog();
-			if (fsd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            CommonOpenFileDialog fsd = new CommonOpenFileDialog();
+			if (fsd.ShowDialog() == CommonFileDialogResult.Ok)
 			{
 				DateTime Start = DateTime.Now;
 				this.Hide();
 
-				foreach (string file in Directory.GetFiles(fsd.SelectedPath, "*.xsc"))
+				foreach (string file in Directory.GetFiles(fsd.FileName, "*.xsc"))
 				{
 					CompileList.Enqueue(new Tuple<string, bool>(file, true));
 				}
-				foreach (string file in Directory.GetFiles(fsd.SelectedPath, "*.csc"))
+				foreach (string file in Directory.GetFiles(fsd.FileName, "*.csc"))
 				{
 					CompileList.Enqueue(new Tuple<string, bool>(file, true));
 				}
-				foreach (string file in Directory.GetFiles(fsd.SelectedPath, "*.ysc"))
+				foreach (string file in Directory.GetFiles(fsd.FileName, "*.ysc"))
 				{
 					CompileList.Enqueue(new Tuple<string, bool>(file, false));
 				}
-				foreach (string file in Directory.GetFiles(fsd.SelectedPath, "*.ysc.full"))
+				foreach (string file in Directory.GetFiles(fsd.FileName, "*.ysc.full"))
 				{
 					CompileList.Enqueue(new Tuple<string, bool>(file, false));
 				}
@@ -953,7 +955,7 @@ namespace Decompiler
 				{
 					updatestatus($"Found {FoundStrings.Count} strings, Time taken: {DateTime.Now - Start}");
 					FoundStrings.Sort((x, y) => x.Item1.CompareTo(y.Item1));
-					using (StreamWriter oFile = File.CreateText(Path.Combine(fsd.SelectedPath, "STRINGS.txt")))
+					using (StreamWriter oFile = File.CreateText(Path.Combine(fsd.FileName, "STRINGS.txt")))
 					{
 						foreach (Tuple<uint, string> Item in FoundStrings)
 						{
