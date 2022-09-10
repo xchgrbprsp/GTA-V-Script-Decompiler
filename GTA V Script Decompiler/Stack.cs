@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Decompiler
 {
@@ -123,7 +124,10 @@ namespace Decompiler
 		{
 			int index = _stack.Count - 1;
 			if (index < 0)
+			{
+				Function.HandleStackUnderflow();
 				return new StackValue(StackValue.Type.Literal, "StackVal");
+			}
 			StackValue val = _stack[index];
 			_stack.RemoveAt(index);
 			return val;
@@ -1199,7 +1203,7 @@ namespace Decompiler
 			return _stack[_stack.Count - newIndex - 1].X64NatHash;
 		}
 
-		public bool isnat(int index)
+		public bool IsNativeReturn(int index)
 		{
 			int newIndex = GetIndex(index);
 			if (newIndex == -1)
@@ -1365,16 +1369,14 @@ namespace Decompiler
 			return "MemCopy(" + pointer + ", " + "{" + PopListForCall(amount) + "}, " + value + ");";
 		}
 
-		public string[] pcall()
+		public string CallIndirect(int returnCount = 0)
 		{
-			List<string> temp = new List<string>();
-			string loc = PopLit();
-			foreach (string s in EmptyStack())
+            string loc = PopLit();
+			if (returnCount != 0 && returnCount != 1 && returnCount != 3)
 			{
-				temp.Add("Stack.Push(" + s + ");");
-			}
-			temp.Add("Call_Loc(" + loc + ");");
-			return temp.ToArray();
+                return FunctionCall(loc, _stack.Count, 0);
+            }
+            return FunctionCall(loc, _stack.Count, returnCount);
 		}
 
 		/// <summary>
@@ -1449,7 +1451,9 @@ namespace Decompiler
 			ScrHandlePtr,
 			Vector3Ptr,
 			Vehicle,
-			VehiclePtr
+			VehiclePtr,
+
+			Function
 		}
 
 		private class StackValue

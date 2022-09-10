@@ -50,6 +50,8 @@ namespace Decompiler
             new TypeInfo(Stack.DataType.Vector3Ptr, 4, "Vector3*", "pv"),
             new TypeInfo(Stack.DataType.Vehicle, 5, "Vehicle", "ve"),
             new TypeInfo(Stack.DataType.VehiclePtr, 5, "Vehicle*", "pve"),
+
+            new TypeInfo(Stack.DataType.Function, 4, "function", "func"),
         };
 
 		public static TypeInfo GetTypeInfo(Stack.DataType type)

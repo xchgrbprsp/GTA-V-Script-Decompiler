@@ -10,6 +10,7 @@ namespace Decompiler
 		Instruction instruction;
 		byte[] operands;
 		private bool _consoleVer;
+		public int ReturnCount { get; set; }
 
 		public HLInstruction(Instruction Instruction, IEnumerable<byte> Operands, int Offset, bool consoleVer)
 		{
@@ -17,6 +18,7 @@ namespace Decompiler
 			operands = Operands.ToArray();
 			offset = Offset;
 			_consoleVer = consoleVer;
+			ReturnCount = 0;
 		}
 
 		public HLInstruction(byte Instruction, IEnumerable<byte> Operands, int Offset, bool consoleVer)
