@@ -39,14 +39,14 @@ namespace Decompiler
 		FunctionName fnName;
 		internal bool Decoded { get; private set; }
 		internal bool DecodeStarted = false;
-		internal bool predecoded = false;
-		internal bool predecodeStarted = false;
+		internal bool PreDecoded = false;
+		internal bool PreDecodeStarted = false;
 		public Vars_Info Vars { get; private set; }
 		public Vars_Info Params { get; private set; }
 		public int LineCount = 0;
 		private readonly bool _consoleVer;
 		HLInstruction? lastUsedIndirCall = null;
-		public static Function? currentPredecodeFunc = null;
+		public Comments comments = new();
 
 		public Function(ScriptFile Owner, string name, int pcount, int vcount, int rcount, int location, int locmax = -1)
 		{
@@ -74,88 +74,75 @@ namespace Decompiler
 		/// <returns>The whole function high level code</returns>
 		public override string ToString()
 		{
+			int numComments = comments.Count;
 			// Visual Studio tends to call ToString during debugging sessions causing the function to self-destruct ahead of time
 			if (!Debugger.IsAttached)
 			{
 				InstructionMap.Clear();
 				Instructions.Clear();
 				CodeBlock.Clear();
-				Stack.Dispose();
+                comments.Clear();
+                Stack.Dispose();
 			}
 
 			try
 			{
-					return FirstLine() + "\r\n" + sb.ToString();
-
-				/*if (RetType == ReturnTypes.Bool || RetType == ReturnTypes.BoolUnk)
-					return FirstLine + "\r\n" + sb.ToString().Replace("return 0;", "return false;").Replace("return 1;", "return true;");
-				else
-					return FirstLine + "\r\n" + sb.ToString();*/
+				return FunctionHeader() + "\r\n" + sb.ToString();
 			}
 			finally
 			{
 				if (!Debugger.IsAttached)
 				{
 					sb.Clear();
-					LineCount += 2;
 				}
-			}
-		}
+                LineCount += 2 + numComments;
+            }
+        }
 
 		/// <summary>
 		/// Gets the first line of the function Declaration
 		/// return type + name + params
 		/// </summary>
-		public string FirstLine()
+		public string FunctionHeader()
 		{
-			string name;
-			string working = "";
+			StringBuilder working = new();
 
 			//extract return type of function
+			foreach (var comment in comments)
+			{
+				working.AppendLine("// " + comment);
+			}
+
 			if (Rcount == 0)
-				working = "void ";
+				working.Append("void ");
 			else if (Rcount == 1)
 			{
-				working = ReturnType.ReturnType;
-				/*switch (RetType)
-				{
-					case ReturnTypes.Bool:
-					case ReturnTypes.BoolUnk:
-						working = "bool "; break;
-					case ReturnTypes.Float:
-						working = "float "; break;
-					case ReturnTypes.Int: working = "int "; break;
-					case ReturnTypes.StringPtr: working = "*string "; break;
-					default: working = "var "; break;
-				}*/
+				working.Append(ReturnType.ReturnType);
 			}
+
 			else if (Rcount == 3)
-				working = "Vector3 ";
+				working.Append("Vector3 ");
+
 			else if (Rcount > 1)
 			{
 				if (ReturnType.Type == Stack.DataType.String)
 				{
-					working = "char[" + (Rcount*4).ToString() + "] ";
+					working.Append("char[" +(Rcount * 4).ToString() + "] ");
 				}
 				else
 				{
-					working = "struct<" + Rcount.ToString() + "> ";
+					working.Append("struct<" + Rcount.ToString() + "> ");
 				}
-				/*if (RetType == ReturnTypes.String)
-				{
-					working = "char[" + (Rcount * 4).ToString() + "] ";
-				}
-				else
-				{
-					working = "struct<" + Rcount.ToString() + "> ";
-				}*/
 			}
-			else throw new DecompilingException("Unexpected return count");
+			else 
+				throw new DecompilingException("Unexpected return count");
 
-			name = working + Name;
-			working = "(" + Params.GetPDec() + ")";
+			working.Append(Name);
+			working.Append("(" + Params.GetPDec() + ")");
+			if (Program.IncFuncPos)
+				working.Append(" // Position - 0x" + Location.ToString("X"));
 
-			return name + working + (Program.IncFuncPos ? ("//Position - 0x" + Location.ToString("X")) : "");
+			return working.ToString();
 		}
 
 		/// <summary>
@@ -257,14 +244,11 @@ namespace Decompiler
 		/// </summary>
 		public void PreDecode()
 		{
-			if (predecoded || predecodeStarted) return;
-			predecodeStarted = true;
-			var oldFunc = currentPredecodeFunc;
-            currentPredecodeFunc = this;
-            getinstructions();
+			if (PreDecoded || PreDecodeStarted) return;
+			PreDecodeStarted = true;
+            BuildInstructions();
 			decodeinsructionsforvarinfo();
-            currentPredecodeFunc = oldFunc;
-            predecoded = true;
+            PreDecoded = true;
 		}
 
 		/// <summary>
@@ -278,7 +262,7 @@ namespace Decompiler
 				if (Decoded) return;
 			}
 			//Set up a stack
-			Stack = new Stack();
+			Stack = new Stack(this);
 
 			//Get The Instructions in the function along with their operands
 			//getinstructions();
@@ -765,7 +749,7 @@ namespace Decompiler
 		/// <summary>
 		/// Turns the raw code into a list of instructions
 		/// </summary>
-		public void getinstructions()
+		public void BuildInstructions()
 		{
 			Offset = CodeBlock[4] + 5;
 			Instructions = new List<HLInstruction>();
@@ -1538,7 +1522,7 @@ namespace Decompiler
 
 		public void decodeinsructionsforvarinfo()
 		{
-			Stack = new Stack();
+			Stack = new Stack(this);
 			ReturnType = Types.GetTypeInfo(Stack.DataType.Unk);
 			int tempint;
 			string tempstring;
@@ -1966,11 +1950,11 @@ namespace Decompiler
 
 					case Instruction.Call:			
 						Function func = GetFunctionFromOffset(ins.GetOperandsAsInt);
-						if (!func.predecodeStarted)
+						if (!func.PreDecodeStarted)
 						{
 							func.PreDecode();
 						}
-						if (func.predecoded)
+						if (func.PreDecoded)
 						{
 							for (int j = 0; j < func.Pcount; j++)
 							{
@@ -2068,18 +2052,14 @@ namespace Decompiler
 			Params.checkvars();
 		}
 
-		public static void HandleStackUnderflow()
+		public void HandleStackUnderflow()
 		{
-			if (Function.currentPredecodeFunc != null)
+			if (!PreDecoded)
 			{
-				if (Function.currentPredecodeFunc.lastUsedIndirCall != null)
+				if (lastUsedIndirCall != null)
 				{
-					Function.currentPredecodeFunc.lastUsedIndirCall.ReturnCount++;
-					if (Function.currentPredecodeFunc.lastUsedIndirCall.ReturnCount == 2)
-					{
-						return;
-					}	
-                }
+					lastUsedIndirCall.ReturnCount++;
+				}
 			}
 		}
 

@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using static Decompiler.Vars_Info;
 
 namespace Decompiler
 {
 	public class Stack
 	{
 		List<StackValue> _stack;
+		Function function;
 
 		public DataType TopType
 		{
@@ -18,9 +20,10 @@ namespace Decompiler
 			}
 		}
 
-		public Stack()
+		public Stack(Function func)
 		{
 			_stack = new List<StackValue>();
+			function = func;
 		}
 
 		public void Dispose()
@@ -125,7 +128,7 @@ namespace Decompiler
 			int index = _stack.Count - 1;
 			if (index < 0)
 			{
-				Function.HandleStackUnderflow();
+				function.HandleStackUnderflow();
 				return new StackValue(StackValue.Type.Literal, "StackVal");
 			}
 			StackValue val = _stack[index];
@@ -255,8 +258,11 @@ namespace Decompiler
 					return "&" + val.Value;
 				}
 				else
-					throw new Exception("Not a literal item recieved");
-			}
+				{
+					function.comments.AddComment(new("WARNING: PopLit(): Popped item is not a literal: " + val.Value));
+					return "StackVal";
+				}
+            }
 				
 			return val.Value;
 		}
@@ -266,12 +272,15 @@ namespace Decompiler
 			StackValue val = Peek();
 			if (val.ItemType != StackValue.Type.Literal)
 			{
-				if(val.ItemType == StackValue.Type.Pointer)
+				if (val.ItemType == StackValue.Type.Pointer)
 				{
 					return "&" + val.Value;
 				}
 				else
-					throw new Exception("Not a literal item recieved");
+				{
+                    function.comments.AddComment(new("WARNING: PeekLit(): Peeked item is not a literal: " + val.Value));
+					return "StackVal";
+                }
 			}
 			return val.Value;
 		}
@@ -931,7 +940,10 @@ namespace Decompiler
 			StackValue s2 = Pop();
 			int temp;
 			if (s1.ItemType != StackValue.Type.Literal && s1.ItemType != StackValue.Type.Literal)
-				throw new Exception("Not a literal item recieved");
+			{
+                function.comments.AddComment(new("WARNING: Op_And(): Both operands are not literals"));
+			}
+
 			if (s1.Datatype == DataType.Bool || s2.Datatype == DataType.Bool)
 				PushCond("(" + s2.Value + " && " + s1.Value + ")");
 			else if (Utils.IntParse(s1.Value, out temp) || Utils.IntParse(s2.Value, out temp))
@@ -946,7 +958,10 @@ namespace Decompiler
 			StackValue s2 = Pop();
 			int temp;
 			if (s1.ItemType != StackValue.Type.Literal && s1.ItemType != StackValue.Type.Literal)
-				throw new Exception("Not a literal item recieved");
+			{
+                function.comments.AddComment(new("WARNING: Op_Or(): Both operands are not literals"));
+            }
+
 			if (s1.Datatype == DataType.Bool || s2.Datatype == DataType.Bool)
 				PushCond("(" + s2.Value + " || " + s1.Value + ")");
 			else if (Utils.IntParse(s1.Value, out temp) || Utils.IntParse(s2.Value, out temp))
@@ -1372,11 +1387,7 @@ namespace Decompiler
 		public string CallIndirect(int returnCount = 0)
 		{
             string loc = PopLit();
-			if (returnCount != 0 && returnCount != 1 && returnCount != 3)
-			{
-                return FunctionCall(loc, _stack.Count, 0);
-            }
-            return FunctionCall(loc, _stack.Count, returnCount);
+            return FunctionCall(loc, _stack.Count, (returnCount <= 1 || returnCount == 3) ? returnCount : 0);
 		}
 
 		/// <summary>
