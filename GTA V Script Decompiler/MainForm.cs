@@ -25,7 +25,7 @@ namespace Decompiler
 		private bool scriptopen = false;
 		ScriptFile fileopen;
 		Style highlight;
-		Queue<Tuple<string, bool>> CompileList;
+		Queue<string> CompileList;
 		List<Tuple<uint, string>> FoundStrings;
 		uint[] HashToFind;
 		string SaveDirectory;
@@ -43,19 +43,20 @@ namespace Decompiler
 
 			panel1.Size = new Size(0, panel1.Height);
 			
-			showArraySizeToolStripMenuItem.Checked = Program.Find_Show_Array_Size();
-			reverseHashesToolStripMenuItem.Checked = Program.Find_Reverse_Hashes();
-			declareVariablesToolStripMenuItem.Checked = Program.Find_Declare_Variables();
-			shiftVariablesToolStripMenuItem.Checked = Program.Find_Shift_Variables();
-			showFuncPointerToolStripMenuItem.Checked = Program.Find_Show_Func_Pointer();
-			useMultiThreadingToolStripMenuItem.Checked = Program.Find_Use_MultiThreading();
-			includeFunctionPositionToolStripMenuItem.Checked = Program.Find_IncFuncPos();
-			includeNativeNamespaceToolStripMenuItem.Checked = Program.Find_Nat_Namespace();
-			globalAndStructHexIndexingToolStripMenuItem.Checked = Program.Find_Hex_Index();
-			uppercaseNativesToolStripMenuItem.Checked = Program.Find_Upper_Natives();
+			showArraySizeToolStripMenuItem.Checked = Properties.Settings.Default.ShowArraySize;
+			reverseHashesToolStripMenuItem.Checked = Properties.Settings.Default.ReverseHashes;
+			declareVariablesToolStripMenuItem.Checked = Properties.Settings.Default.DeclareVariables;
+			shiftVariablesToolStripMenuItem.Checked = Properties.Settings.Default.ShiftVariables;
+			showFuncPointerToolStripMenuItem.Checked = Properties.Settings.Default.ShowFunctionPointers;
+			useMultiThreadingToolStripMenuItem.Checked = Properties.Settings.Default.UseMultithreading;
+			includeFunctionPositionToolStripMenuItem.Checked = Properties.Settings.Default.IncludeFunctionPosition;
+			includeNativeNamespaceToolStripMenuItem.Checked = Properties.Settings.Default.ShowNativeNamespace;
+			globalAndStructHexIndexingToolStripMenuItem.Checked = Properties.Settings.Default.HexIndex;
+			uppercaseNativesToolStripMenuItem.Checked = Properties.Settings.Default.UppercaseNatives;
 
-			showLineNumbersToolStripMenuItem.Checked = fctb1.ShowLineNumbers = Program.Config.IniReadBool("View", "Line_Numbers");
-			ToolStripMenuItem t = null;
+			showLineNumbersToolStripMenuItem.Checked = fctb1.ShowLineNumbers = Properties.Settings.Default.LineNumbers;
+
+            ToolStripMenuItem t = null;
 			switch (Program.Find_getINTType())
 			{
 				case Program.IntType._int:
@@ -89,7 +90,7 @@ namespace Decompiler
 		private void openToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			OpenFileDialog ofd = new OpenFileDialog();
-			ofd.Filter = "GTA V Script Files|*.xsc;*.csc;*.ysc;*.ysc.full";
+			ofd.Filter = "GTA V Script Files|*.ysc;*.ysc.full";
 			if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
 			{
 				DateTime Start = DateTime.Now;
@@ -107,7 +108,7 @@ namespace Decompiler
 				try
 				{
 #endif
-					fileopen = new ScriptFile(ofd.OpenFile(), ext != ".ysc");
+					fileopen = new ScriptFile(ofd.OpenFile());
 #if !DEBUG
 				}
 				catch (Exception ex)
@@ -134,17 +135,14 @@ namespace Decompiler
 				SetFileName(filename);
 				ScriptOpen = true;
 				updatestatus("Ready, Time taken: " + (DateTime.Now - Start).ToString());
-				if (ext != ".ysc")
-					ScriptFile.npi.savefile();
-				else
-					return;
+				//
 
 			}
 		}
 
 		private void directoryToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			CompileList = new Queue<Tuple<string, bool>>();
+			CompileList = new Queue<string>();
 			Program.ThreadCount = 0;
             CommonOpenFileDialog fsd = new CommonOpenFileDialog();
 			fsd.IsFolderPicker = true;
@@ -155,41 +153,27 @@ namespace Decompiler
 				if (!Directory.Exists(SaveDirectory))
 					Directory.CreateDirectory(SaveDirectory);
 				this.Hide();
-				bool console = false, pc = false;
 
-				foreach (string file in Directory.GetFiles(fsd.FileName, "*.xsc"))
-				{
-					console = true;
-					CompileList.Enqueue(new Tuple<string, bool>(file, true));
-				}
-				foreach (string file in Directory.GetFiles(fsd.FileName, "*.csc"))
-				{
-					console = true;
-					CompileList.Enqueue(new Tuple<string, bool>(file, true));
-				}
 				foreach (string file in Directory.GetFiles(fsd.FileName, "*.ysc"))
 				{
-					pc = true;
-					CompileList.Enqueue(new Tuple<string, bool>(file, false));
+					CompileList.Enqueue(file);
 				}
 				foreach (string file in Directory.GetFiles(fsd.FileName, "*.ysc.full"))
 				{
-					pc = true;
-					CompileList.Enqueue(new Tuple<string, bool>(file, false));
+					CompileList.Enqueue(file);
 				}
-				if (Program.Use_MultiThreading)
+				if (Properties.Settings.Default.UseMultithreading)
 				{
 					for (int i = 0; i < Environment.ProcessorCount - 1; i++)
 					{
 						Program.ThreadCount++;
-						new System.Threading.Thread(Decompile).Start();
-						//System.Threading.Thread.Sleep(0);
+						new Thread(Decompile).Start();
 					}
 					Program.ThreadCount++;
 					Decompile();
 					while (Program.ThreadCount > 0)
 					{
-						System.Threading.Thread.Sleep(10);
+						Thread.Sleep(10);
 					}
 				}
 				else
@@ -199,10 +183,6 @@ namespace Decompiler
 				}
 
 				updatestatus("Directory Extracted, Time taken: " + (DateTime.Now - Start).ToString());
-				if (console)
-					ScriptFile.npi.savefile();
-				if (pc)
-					return;
 			}
 			this.Show();
 		}
@@ -211,20 +191,20 @@ namespace Decompiler
 		{
 			while (CompileList.Count > 0)
 			{
-				Tuple<string, bool> scriptToDecode;
+				string scriptToDecode;
 				lock (Program.ThreadLock)
 				{
 					scriptToDecode = CompileList.Dequeue();
 				}
 				try
 				{
-					ScriptFile scriptFile = new ScriptFile((Stream) File.OpenRead(scriptToDecode.Item1), scriptToDecode.Item2);
-					scriptFile.Save(Path.Combine(SaveDirectory, Path.GetFileNameWithoutExtension(scriptToDecode.Item1) + ".c"));
+					ScriptFile scriptFile = new ScriptFile((Stream) File.OpenRead(scriptToDecode));
+					scriptFile.Save(Path.Combine(SaveDirectory, Path.GetFileNameWithoutExtension(scriptToDecode) + ".c"));
 					scriptFile.Close();
 				}
 				catch (Exception ex)
 				{
-					MessageBox.Show("Error decompiling script " + Path.GetFileNameWithoutExtension(scriptToDecode.Item1) + " - " + ex.Message);
+					MessageBox.Show("Error decompiling script " + Path.GetFileNameWithoutExtension(scriptToDecode) + " - " + ex.Message);
 				}
 			}
 			Program.ThreadCount--;
@@ -242,14 +222,10 @@ namespace Decompiler
 				{
 
 					DateTime Start = DateTime.Now;
-					ScriptFile file = new ScriptFile(ofd.OpenFile(), (Path.GetExtension(ofd.FileName) != ".ysc"));
+					ScriptFile file = new ScriptFile(ofd.OpenFile());
 					file.Save(Path.Combine(Path.GetDirectoryName(ofd.FileName),
 						Path.GetFileNameWithoutExtension(ofd.FileName) + ".c"));
 					file.Close();
-					if ((Path.GetExtension(ofd.FileName) != ".ysc"))
-						ScriptFile.npi.savefile();
-					else
-						return;
 					updatestatus("File Saved, Time taken: " + (DateTime.Now - Start).ToString());
 				}
 #if !DEBUG
@@ -273,110 +249,97 @@ namespace Decompiler
 			}
 			clicked.Checked = true;
 			clicked.Enabled = false;
-			Program.Config.IniWriteValue("Base", "IntStyle", clicked.Text.ToLower());
+			Properties.Settings.Default.IntStyle = clicked.Text.ToLower();
 			Program.Find_getINTType();
 		}
 
 		private void showArraySizeToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			showArraySizeToolStripMenuItem.Checked = !showArraySizeToolStripMenuItem.Checked;
-			Program.Config.IniWriteBool("Base", "Show_Array_Size", showArraySizeToolStripMenuItem.Checked);
-			Program.Find_Show_Array_Size();
-		}
+			Properties.Settings.Default.ShowArraySize = showArraySizeToolStripMenuItem.Checked;
+			Properties.Settings.Default.Save();
+        }
 
 		private void reverseHashesToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			reverseHashesToolStripMenuItem.Checked = !reverseHashesToolStripMenuItem.Checked;
-			Program.Config.IniWriteBool("Base", "Reverse_Hashes", reverseHashesToolStripMenuItem.Checked);
-			Program.Find_Reverse_Hashes();
-		}
+            Properties.Settings.Default.ReverseHashes = reverseHashesToolStripMenuItem.Checked;
+            Properties.Settings.Default.Save();
+        }
 
-		private void declareVariablesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void declareVariablesToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			declareVariablesToolStripMenuItem.Checked = !declareVariablesToolStripMenuItem.Checked;
-			Program.Config.IniWriteBool("Base", "Declare_Variables", declareVariablesToolStripMenuItem.Checked);
-			Program.Find_Declare_Variables();
-		}
+            Properties.Settings.Default.DeclareVariables = declareVariablesToolStripMenuItem.Checked;
+            Properties.Settings.Default.Save();
+        }
 
-		private void shiftVariablesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void shiftVariablesToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			shiftVariablesToolStripMenuItem.Checked = !shiftVariablesToolStripMenuItem.Checked;
-			Program.Config.IniWriteBool("Base", "Shift_Variables", shiftVariablesToolStripMenuItem.Checked);
-			Program.Find_Shift_Variables();
-		}
+			Properties.Settings.Default.ShiftVariables = shiftVariablesToolStripMenuItem.Checked;
+            Properties.Settings.Default.Save();
+        }
 
-		private void showLineNumbersToolStripMenuItem_Click(object sender, EventArgs e)
+        private void showLineNumbersToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			showLineNumbersToolStripMenuItem.Checked = !showLineNumbersToolStripMenuItem.Checked;
-			Program.Config.IniWriteBool("View", "Line_Numbers", showLineNumbersToolStripMenuItem.Checked);
+            Properties.Settings.Default.LineNumbers = showLineNumbersToolStripMenuItem.Checked;
 			fctb1.ShowLineNumbers = showLineNumbersToolStripMenuItem.Checked;
-		}
+            Properties.Settings.Default.Save();
+        }
 
-		private void showFuncPointerToolStripMenuItem_Click(object sender, EventArgs e)
+        private void showFuncPointerToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			showFuncPointerToolStripMenuItem.Checked = !showFuncPointerToolStripMenuItem.Checked;
-			Program.Config.IniWriteBool("Base", "Show_Func_Pointer", showFuncPointerToolStripMenuItem.Checked);
-			Program.Find_Show_Func_Pointer();
-		}
+            Properties.Settings.Default.ShowFunctionPointers = showFuncPointerToolStripMenuItem.Checked;
+            Properties.Settings.Default.Save();
+        }
 
 		private void RebuildNativeFiles()
 		{
-			if(Program.nativefile != null)
-			{
-				string path = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location),
-				"natives.dat");
-				if(File.Exists(path))
-					Program.nativefile = new NativeFile(File.OpenRead(path));
-				else
-					Program.nativefile = new NativeFile(new MemoryStream(Properties.Resources.natives));
-			}
 			if (Program.x64nativefile != null)
 			{
-				string path = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location),
-					"x64natives.dat");
-				if(File.Exists(path))
-					Program.x64nativefile = new x64NativeFile(File.OpenRead(path));
-				else
-					Program.x64nativefile = new x64NativeFile(new MemoryStream(Properties.Resources.x64natives));
+				Program.x64nativefile = new x64NativeFile();
 			}
 		}
 
 		private void includeNativeNamespaceToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			includeNativeNamespaceToolStripMenuItem.Checked = !includeNativeNamespaceToolStripMenuItem.Checked;
-			Program.Config.IniWriteBool("Base", "Show_Nat_Namespace", includeNativeNamespaceToolStripMenuItem.Checked);
-			Program.Find_Nat_Namespace();
+            Properties.Settings.Default.ShowNativeNamespace = includeNativeNamespaceToolStripMenuItem.Checked;
 			RebuildNativeFiles();
-		}
+			Properties.Settings.Default.Save();
+        }
 
 		private void globalAndStructHexIndexingToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			globalAndStructHexIndexingToolStripMenuItem.Checked = !globalAndStructHexIndexingToolStripMenuItem.Checked;
-			Program.Config.IniWriteBool("Base", "Hex_Index", globalAndStructHexIndexingToolStripMenuItem.Checked);
-			Program.Find_Hex_Index();
-		}
+			Properties.Settings.Default.HexIndex = globalAndStructHexIndexingToolStripMenuItem.Checked;
+            Properties.Settings.Default.Save();
+        }
 
 		private void useMultiThreadingToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			useMultiThreadingToolStripMenuItem.Checked = !useMultiThreadingToolStripMenuItem.Checked;
-			Program.Config.IniWriteBool("Base", "Use_MultiThreading", useMultiThreadingToolStripMenuItem.Checked);
-			Program.Find_Use_MultiThreading();
-		}
+			Properties.Settings.Default.UseMultithreading = useMultiThreadingToolStripMenuItem.Checked;
+            Properties.Settings.Default.Save();
+        }
 
 		private void includeFunctionPositionToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			includeFunctionPositionToolStripMenuItem.Checked = !includeFunctionPositionToolStripMenuItem.Checked;
-			Program.Config.IniWriteBool("Base", "Include_Function_Position", includeFunctionPositionToolStripMenuItem.Checked);
-			Program.Find_IncFuncPos();
-		}
+			Properties.Settings.Default.IncludeFunctionPosition = includeFunctionPositionToolStripMenuItem.Checked;
+            Properties.Settings.Default.Save();
+        }
 
 		private void uppercaseNativesToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			uppercaseNativesToolStripMenuItem.Checked = !uppercaseNativesToolStripMenuItem.Checked;
-			Program.Config.IniWriteBool("Base", "Uppercase_Natives", uppercaseNativesToolStripMenuItem.Checked);
-			Program.Find_Upper_Natives();
+			Properties.Settings.Default.UppercaseNatives = uppercaseNativesToolStripMenuItem.Checked;
 			RebuildNativeFiles();
-		}
+            Properties.Settings.Default.Save();
+        }
 
 		#endregion
 
@@ -461,7 +424,7 @@ namespace Decompiler
 
 		private void entitiesToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			ScriptFile.hashbank.Export_Entities();
+			ScriptFile.HashBank.Export_Entities();
 		}
 
 		private void nativesToolStripMenuItem_Click(object sender, EventArgs e)
@@ -737,7 +700,7 @@ namespace Decompiler
 
 		private void fullNativeInfoToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			ScriptFile.npi.exportnativeinfo();
+			
 		}
 
 		private void fullPCNativeInfoToolStripMenuItem_Click(object sender, EventArgs e)
@@ -903,7 +866,7 @@ namespace Decompiler
 				return;
 			}
 			HashToFind = Hashes.ToArray();
-			CompileList = new Queue<Tuple<string, bool>>();
+			CompileList = new Queue<string>();
 			FoundStrings = new List<Tuple<uint, string>>();
 			Program.ThreadCount = 0;
             CommonOpenFileDialog fsd = new CommonOpenFileDialog();
@@ -912,23 +875,15 @@ namespace Decompiler
 				DateTime Start = DateTime.Now;
 				this.Hide();
 
-				foreach (string file in Directory.GetFiles(fsd.FileName, "*.xsc"))
-				{
-					CompileList.Enqueue(new Tuple<string, bool>(file, true));
-				}
-				foreach (string file in Directory.GetFiles(fsd.FileName, "*.csc"))
-				{
-					CompileList.Enqueue(new Tuple<string, bool>(file, true));
-				}
 				foreach (string file in Directory.GetFiles(fsd.FileName, "*.ysc"))
 				{
-					CompileList.Enqueue(new Tuple<string, bool>(file, false));
+					CompileList.Enqueue(file);
 				}
 				foreach (string file in Directory.GetFiles(fsd.FileName, "*.ysc.full"))
 				{
-					CompileList.Enqueue(new Tuple<string, bool>(file, false));
-				}
-				if (Program.Use_MultiThreading)
+                    CompileList.Enqueue(file);
+                }
+                if (Properties.Settings.Default.UseMultithreading)
 				{
 					for (int i = 0; i < Environment.ProcessorCount - 1; i++)
 					{
@@ -974,14 +929,14 @@ namespace Decompiler
 		{
 			while (CompileList.Count > 0)
 			{
-				Tuple<string, bool> scriptToSearch;
+				string scriptToSearch;
 				lock (Program.ThreadLock)
 				{
 					scriptToSearch = CompileList.Dequeue();
 				}
-				using (Stream ScriptFile = File.OpenRead(scriptToSearch.Item1))
+				using (Stream ScriptFile = File.OpenRead(scriptToSearch))
 				{
-					ScriptHeader header = ScriptHeader.Generate(ScriptFile, scriptToSearch.Item2);
+					ScriptHeader header = ScriptHeader.Generate(ScriptFile);
 					StringTable table = new StringTable(ScriptFile, header.StringTableOffsets, header.StringBlocks, header.StringsSize);
 					foreach (string str in table.Values)
 					{

@@ -25,6 +25,8 @@ namespace Decompiler
         public string[]? old_names { get; set; }
         public bool? unused { get; set; }
 
+        public string @namespace;
+
         public Stack.DataType GetParamType(int index)
         {
             if (index > @params.Count - 1)
@@ -58,7 +60,9 @@ namespace Decompiler
             {
                 foreach (var native in ns.Value)
                 {
-                    entries[Convert.ToUInt64(native.Key, 16)] = native.Value;
+                    NativeDBEntry entry = native.Value;
+                    entry.@namespace = ns.Key;
+                    entries[Convert.ToUInt64(native.Key, 16)] = entry;
                 }
             }
         }

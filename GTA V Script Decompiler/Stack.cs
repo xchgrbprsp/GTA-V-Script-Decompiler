@@ -402,147 +402,7 @@ namespace Decompiler
 			return "";
 		}
 
-		public string NativeCallTest(uint hash, string name, int pcount, int rcount)
-		{
-
-			string functionline = name + "(";
-			List<DataType> _params = new List<DataType>();
-			int count = 0;
-			foreach (StackValue val in PopTest(pcount))
-			{
-
-				switch (val.ItemType)
-				{
-					case StackValue.Type.Literal:
-						if (val.Variable != null)
-							if (Types.GetTypeInfo(val.Variable.DataType).Precedence <
-								Types.GetTypeInfo(ScriptFile.npi.getparamtype(hash, count)).Precedence)
-							{
-								val.Variable.DataType = ScriptFile.npi.getparamtype(hash, count);
-							}
-							else if (Types.GetTypeInfo(val.Variable.DataType).Precedence >
-								Types.GetTypeInfo(ScriptFile.npi.getparamtype(hash, count)).Precedence)
-							{
-								ScriptFile.npi.updateparam(hash, val.Variable.DataType, count);
-							}
-						if (val.Datatype == DataType.Bool || ScriptFile.npi.getparamtype(hash, count) == DataType.Bool)
-						{
-							if (val.Value == "0")
-								functionline += "false, ";
-							else if (val.Value == "1")
-								functionline += "true, ";
-							else
-								functionline += val.Value + ", ";
-						}
-						else if (val.Datatype == DataType.Int && ScriptFile.npi.getparamtype(hash, count) == DataType.Float)
-						{
-							switch (Program.getIntType)
-							{
-								case Program.IntType._int:
-									int temp;
-									if (int.TryParse(val.Value, out temp))
-									{
-										temp = Utils.SwapEndian(temp);
-										float floatval = Utils.SwapEndian(BitConverter.ToSingle(BitConverter.GetBytes(temp), 0));
-										functionline += floatval.ToString() + "f, ";
-									}
-									else
-										functionline += val.Value + ", ";
-									break;
-								case Program.IntType._uint:
-									uint tempu;
-									if (uint.TryParse(val.Value, out tempu))
-									{
-										tempu = Utils.SwapEndian(tempu);
-										float floatval = Utils.SwapEndian(BitConverter.ToSingle(BitConverter.GetBytes(tempu), 0));
-										functionline += floatval.ToString() + "f, ";
-									}
-									else
-										functionline += val.Value + ", ";
-									break;
-								case Program.IntType._hex:
-									string temps = val.Value;
-									if (temps.StartsWith("0x"))
-										temps = temps.Substring(2);
-									if (int.TryParse(temps, System.Globalization.NumberStyles.HexNumber,
-										System.Globalization.CultureInfo.InvariantCulture, out temp))
-									{
-										temp = Utils.SwapEndian(temp);
-										float floatval = Utils.SwapEndian(BitConverter.ToSingle(BitConverter.GetBytes(temp), 0));
-										functionline += floatval.ToString() + "f, ";
-									}
-									else
-										functionline += val.Value + ", ";
-									break;
-							}
-
-						}
-						else
-							functionline += val.Value + ", ";
-						_params.Add(val.Datatype);
-						count++;
-						break;
-					case StackValue.Type.Pointer:
-						if (val.isNotVar)
-							functionline += "&(" + val.Value + "), ";
-						else
-							functionline += "&" + val.Value + ", ";
-						if (Types.HasPointerVersion(val.Datatype))
-							_params.Add(Types.GetPointerVersion(val.Datatype));
-						else
-							_params.Add(val.Datatype);
-						count++;
-						break;
-					case StackValue.Type.Struct:
-						functionline += val.Value + ", ";
-						if (val.StructSize == 3 && val.Datatype == DataType.Vector3)
-						{
-							_params.AddRange(new DataType[] {DataType.Float, DataType.Float, DataType.Float});
-							count += 3;
-						}
-						else
-						{
-							for (int i = 0; i < val.StructSize; i++)
-							{
-								_params.Add(DataType.Unk);
-								count++;
-							}
-						}
-						break;
-					default:
-						throw new Exception("Unexpeced Stack Type\n" + val.ItemType.ToString());
-				}
-			}
-			if (pcount > 0)
-				functionline = functionline.Remove(functionline.Length - 2) + ")";
-			else
-				functionline += ")";
-			if (rcount == 0)
-			{
-				ScriptFile.npi.updatenative(hash, DataType.None, _params.ToArray());
-				return functionline + ";";
-			}
-			else if (rcount == 1)
-			{
-				ScriptFile.npi.updatenative(hash, ScriptFile.npi.getrettype(hash), _params.ToArray());
-				PushNative(functionline, hash, ScriptFile.npi.getrettype(hash));
-			}
-			else if (rcount > 1)
-			{
-				if (rcount == 2)
-					ScriptFile.npi.updatenative(hash, DataType.Unk, _params.ToArray());
-				else if (rcount == 3)
-					ScriptFile.npi.updatenative(hash, DataType.Vector3, _params.ToArray());
-				else
-					throw new Exception("Error in return items count");
-				PushStructNative(functionline, hash, rcount, ScriptFile.npi.getrettype(hash));
-			}
-			else
-				throw new Exception("Error in return items count");
-			return "";
-		}
-
-		public string NativeCallTest(ulong hash, string name, int pcount, int rcount)
+		public string NativeCall(ulong hash, string name, int pcount, int rcount)
 		{
 			string functionline = name + "(";
 			List<DataType> _params = new List<DataType>();
@@ -1003,12 +863,12 @@ namespace Decompiler
 			//	}
 			//}
 			Push(new StackValue(StackValue.Type.Literal,
-				PopStructAccess() + "f_" + (Program.Hex_Index ? immediate.ToString("X") : immediate.ToString())));
+				PopStructAccess() + "f_" + (Properties.Settings.Default.HexIndex ? immediate.ToString("X") : immediate.ToString())));
 		}
 
 		public string Op_SetImm(uint immediate)
 		{
-			string imm = "f_" + (Program.Hex_Index ? immediate.ToString("X") : immediate.ToString());
+			string imm = "f_" + (Properties.Settings.Default.HexIndex ? immediate.ToString("X") : immediate.ToString());
 			//if (PeekVar(0) != null)
 			//{
 			//	if (PeekVar(0).Immediatesize == 3)
@@ -1031,7 +891,7 @@ namespace Decompiler
 
 		public void Op_GetImmP(uint immediate)
 		{
-			Push(new StackValue(StackValue.Type.Pointer,PopStructAccess() + "f_" + (Program.Hex_Index ? immediate.ToString("X") : immediate.ToString())));
+			Push(new StackValue(StackValue.Type.Pointer,PopStructAccess() + "f_" + (Properties.Settings.Default.HexIndex ? immediate.ToString("X") : immediate.ToString())));
 		}
 
 		public void Op_GetImmP()
@@ -1040,7 +900,7 @@ namespace Decompiler
 			int temp;
 			if (Utils.IntParse(immediate, out temp))
 			{
-				Push(new StackValue(StackValue.Type.Pointer, PopStructAccess() + "f_" + (Program.Hex_Index ? temp.ToString("X") : temp.ToString())));
+				Push(new StackValue(StackValue.Type.Pointer, PopStructAccess() + "f_" + (Properties.Settings.Default.HexIndex ? temp.ToString("X") : temp.ToString())));
 			}
 			else
 			{
@@ -1056,7 +916,7 @@ namespace Decompiler
 		/// <returns></returns>
 		private string getarray(uint immediate)
 		{
-			if (!Program.Show_Array_Size)
+			if (!Properties.Settings.Default.ShowArraySize)
 				return "";
 			if (immediate == 1)
 				return "";

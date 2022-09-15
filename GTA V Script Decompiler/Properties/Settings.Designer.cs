@@ -22,5 +22,149 @@ namespace Decompiler.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("int")]
+        public string IntStyle {
+            get {
+                return ((string)(this["IntStyle"]));
+            }
+            set {
+                this["IntStyle"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowArraySize {
+            get {
+                return ((bool)(this["ShowArraySize"]));
+            }
+            set {
+                this["ShowArraySize"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ReverseHashes {
+            get {
+                return ((bool)(this["ReverseHashes"]));
+            }
+            set {
+                this["ReverseHashes"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool DeclareVariables {
+            get {
+                return ((bool)(this["DeclareVariables"]));
+            }
+            set {
+                this["DeclareVariables"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ShiftVariables {
+            get {
+                return ((bool)(this["ShiftVariables"]));
+            }
+            set {
+                this["ShiftVariables"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowFunctionPointers {
+            get {
+                return ((bool)(this["ShowFunctionPointers"]));
+            }
+            set {
+                this["ShowFunctionPointers"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool UseMultithreading {
+            get {
+                return ((bool)(this["UseMultithreading"]));
+            }
+            set {
+                this["UseMultithreading"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool IncludeFunctionPosition {
+            get {
+                return ((bool)(this["IncludeFunctionPosition"]));
+            }
+            set {
+                this["IncludeFunctionPosition"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool UppercaseNatives {
+            get {
+                return ((bool)(this["UppercaseNatives"]));
+            }
+            set {
+                this["UppercaseNatives"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowNativeNamespace {
+            get {
+                return ((bool)(this["ShowNativeNamespace"]));
+            }
+            set {
+                this["ShowNativeNamespace"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool LineNumbers {
+            get {
+                return ((bool)(this["LineNumbers"]));
+            }
+            set {
+                this["LineNumbers"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool HexIndex {
+            get {
+                return ((bool)(this["HexIndex"]));
+            }
+            set {
+                this["HexIndex"] = value;
+            }
+        }
     }
 }

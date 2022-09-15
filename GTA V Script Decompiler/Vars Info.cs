@@ -84,7 +84,7 @@ namespace Decompiler
 
             try
             {
-                if (Program.Shift_Variables) return name + VarRemapper[(int)index].ToString();
+                if (Properties.Settings.Default.ShiftVariables) return name + VarRemapper[(int)index].ToString();
                 else
                 {
                     return name + (Listtype == ListType.Statics && index >= scriptParamStart ? index - scriptParamStart : index).ToString();
@@ -102,7 +102,7 @@ namespace Decompiler
 				scriptParamCount = count;
 			}
 		}
-		public string[] GetDeclaration(bool console)
+		public string[] GetDeclaration()
 		{
 			List<string> Working = new List<string>();
 			string varlocation = "";
@@ -126,13 +126,13 @@ namespace Decompiler
 				j++;
 				if (!var.Is_Used)
 				{
-					if (!Program.Shift_Variables)
+					if (!Properties.Settings.Default.ShiftVariables)
 						i++;
 					continue;
 				}
 				if (Listtype == ListType.Vars && !var.Is_Called)
 				{
-					if (!Program.Shift_Variables)
+					if (!Properties.Settings.Default.ShiftVariables)
 						i++;
 					continue;
 				}
@@ -217,14 +217,7 @@ namespace Decompiler
 								List<byte> data = new List<byte>();
 								for (int l = 0; l < var.Immediatesize; l++)
 								{
-									if (console)
-									{
-										data.AddRange(BitConverter.GetBytes((int)Vars[j + 1 + var.Immediatesize * k + l].Value));
-									}
-									else
-									{
-										data.AddRange(BitConverter.GetBytes(Vars[j + 1 + var.Immediatesize * k + l].Value));
-									}
+									data.AddRange(BitConverter.GetBytes(Vars[j + 1 + var.Immediatesize * k + l].Value));
 								}
 								value += "\"" + Encoding.ASCII.GetString(data.ToArray()) + "\", ";
 							}
@@ -258,7 +251,7 @@ namespace Decompiler
 				}
 				if (var.DataType == Stack.DataType.String)
 				{
-					decl += "[" + (var.Immediatesize*(console ? 4 : 8)).ToString() + "]";
+					decl += "[" + (var.Immediatesize*(8)).ToString() + "]";
 				}
 				Working.Add(decl + value + ";");
 				i++;
@@ -275,7 +268,7 @@ namespace Decompiler
 			{
 				if (!var.Is_Used)
 				{
-					if (!Program.Shift_Variables)
+					if (!Properties.Settings.Default.ShiftVariables)
 					{
 						i++;	 
 					}
