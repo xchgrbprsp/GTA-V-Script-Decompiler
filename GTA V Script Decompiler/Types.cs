@@ -166,6 +166,14 @@ namespace Decompiler
 			}
 		}
 
+		public static Stack.DataType GetPrecise(Stack.DataType t1, Stack.DataType t2)
+		{
+			var t1info = GetTypeInfo(t1);
+			var t2info = GetTypeInfo(t2);
+
+			return t1info > t2info ? t1 : t2;
+        }
+
 		public struct TypeInfo
 		{
 			public Stack.DataType Type;
