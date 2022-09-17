@@ -24,7 +24,7 @@ namespace Decompiler.Ast
 
         public override string ToString()
         {
-            return "*" + Pointer + " = " + Value + ";";
+            return "*" + Pointer.ToString() + " = " + Value.ToString() + ";";
         }
     }
 }

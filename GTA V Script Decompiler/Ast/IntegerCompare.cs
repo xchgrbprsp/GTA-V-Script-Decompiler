@@ -23,7 +23,7 @@ namespace Decompiler.Ast
 
         public override string ToString()
         {
-            return Lhs + " == " + Rhs;
+            return Lhs.ToString() + " == " + Rhs.ToString();
         }
     }
 
@@ -44,7 +44,7 @@ namespace Decompiler.Ast
 
         public override string ToString()
         {
-            return Lhs + " != " + Rhs;
+            return Lhs.ToString() + " != " + Rhs.ToString();
         }
     }
 
@@ -65,7 +65,7 @@ namespace Decompiler.Ast
 
         public override string ToString()
         {
-            return Lhs + " < " + Rhs;
+            return Lhs.ToString() + " < " + Rhs.ToString();
         }
     }
 
@@ -86,7 +86,7 @@ namespace Decompiler.Ast
 
         public override string ToString()
         {
-            return Lhs + " <= " + Rhs;
+            return Lhs.ToString() + " <= " + Rhs.ToString();
         }
     }
 
@@ -107,7 +107,7 @@ namespace Decompiler.Ast
 
         public override string ToString()
         {
-            return Lhs + " > " + Rhs;
+            return Lhs.ToString() + " > " + Rhs.ToString();
         }
     }
 
@@ -128,7 +128,7 @@ namespace Decompiler.Ast
 
         public override string ToString()
         {
-            return Lhs + " > " + Rhs;
+            return Lhs.ToString() + " > " + Rhs.ToString();
         }
     }
 }

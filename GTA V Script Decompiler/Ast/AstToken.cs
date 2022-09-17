@@ -43,5 +43,15 @@ namespace Decompiler.Ast
         {
             return "StackVal";
         }
+
+        public virtual string ToLiteralString()
+        {
+            return ToString();
+        }
+
+        public virtual string ToPointerString()
+        {
+            return ToString();
+        }
     }
 }

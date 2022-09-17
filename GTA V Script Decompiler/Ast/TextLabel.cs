@@ -1,0 +1,129 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Decompiler.Ast
+{
+    internal class TextLabelAssignString : AstToken
+    {
+        public readonly AstToken Dst;
+        public readonly AstToken Src;
+        public readonly int Size;
+        public TextLabelAssignString(Function func, AstToken dst, AstToken src, int size) : base(func)
+        {
+            Dst = dst;
+            Src = src;
+            Size = size;
+        }
+
+        public override bool IsStatement()
+        {
+            return true;
+        }
+
+        public override string ToString()
+        {
+            return "StringCopy(" + Dst.ToString() + ", " + Src.ToString() + ", " + Size + ");" ;
+        }
+    }
+
+    internal class TextLabelAppendString : AstToken
+    {
+        public readonly AstToken Dst;
+        public readonly AstToken Src;
+        public readonly int Size;
+        public TextLabelAppendString(Function func, AstToken dst, AstToken src, int size) : base(func)
+        {
+            Dst = dst;
+            Src = src;
+            Size = size;
+        }
+
+        public override bool IsStatement()
+        {
+            return true;
+        }
+
+        public override string ToString()
+        {
+            return "StringConCat(" + Dst.ToString() + ", " + Src.ToString() + ", " + Size + ");";
+        }
+    }
+
+    internal class TextLabelAssignInt : AstToken
+    {
+        public readonly AstToken Dst;
+        public readonly AstToken Integer;
+        public readonly int Size;
+        public TextLabelAssignInt(Function func, AstToken dst, AstToken integer, int size) : base(func)
+        {
+            Dst = dst;
+            Integer = integer;
+            Size = size;
+        }
+
+        public override bool IsStatement()
+        {
+            return true;
+        }
+
+        public override string ToString()
+        {
+            return "IntToString(" + Dst.ToString() + ", " + Integer.ToString() + ", " + Size + ");";
+        }
+    }
+
+    internal class TextLabelAppendInt : AstToken
+    {
+        public readonly AstToken Dst;
+        public readonly AstToken Integer;
+        public readonly int Size;
+        public TextLabelAppendInt(Function func, AstToken dst, AstToken integer, int size) : base(func)
+        {
+            Dst = dst;
+            Integer = integer;
+            Size = size;
+        }
+
+        public override bool IsStatement()
+        {
+            return true;
+        }
+
+        public override string ToString()
+        {
+            return "StringIntConCat(" + Dst.ToString() + ", " + Integer.ToString() + ", " + Size + ");";
+        }
+    }
+
+    internal class TextLabelCopy : AstToken
+    {
+        public readonly AstToken Dst;
+        public readonly List<AstToken> Values;
+        public readonly AstToken Value;
+
+        public TextLabelCopy(Function func, AstToken dst, List<AstToken> values, AstToken value) : base(func)
+        {
+            Dst = dst;
+            Values = values;
+            Value = value;
+        }
+
+        public override bool IsStatement()
+        {
+            return true;
+        }
+
+        public override string ToString()
+        {
+            string res = "{ ";
+            foreach (var value in Values)
+                res += value + ", ";
+            res = res.Remove(res.Length - 2) + " }";
+            return "MemCopy(" + Dst.ToString() + ", " + res + ", " + Value.ToString() + ");";
+        }
+    }
+}

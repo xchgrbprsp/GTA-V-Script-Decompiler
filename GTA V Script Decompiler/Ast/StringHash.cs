@@ -6,12 +6,16 @@ using System.Threading.Tasks;
 
 namespace Decompiler.Ast
 {
-    internal class FloatToInt : AstToken
+    /// <summary>
+    /// Unused by game scripts
+    /// </summary>
+    internal class StringHash : AstToken
     {
-        AstToken Float;
-        public FloatToInt(Function func, AstToken @float) : base(func)
+        public readonly String @string;
+
+        public StringHash(Function func, String @string) : base(func)
         {
-            Float = @float;
+            this.@string = @string;
         }
 
         public override Stack.DataType GetType()
@@ -21,7 +25,7 @@ namespace Decompiler.Ast
 
         public override string ToString()
         {
-            return "(int)" + Float.ToString();
+            return "joaat(" + @string.ToString() + ")";
         }
     }
 }

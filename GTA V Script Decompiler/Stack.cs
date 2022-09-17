@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using static Decompiler.Vars_Info;
+using static Decompiler.VariableStorage;
 
 namespace Decompiler
 {
@@ -84,16 +84,16 @@ namespace Decompiler
 			_stack.Add(new StackValue(StackValue.Type.Literal, Utils.FormatHexHash(value), DataType.Int));
 		}
 
-		public void PushVar(string value, Vars_Info.Var Variable)
+		public void PushVar(string value, Variable Variable)
 		{
-			if (Variable.Immediatesize > 1)
+			if (Variable.ImmediateSize > 1)
 			{
 				value += ".f_0";
 			}
 			_stack.Add(new StackValue(StackValue.Type.Literal, value, Variable));
 		}
 
-		public void PushPVar(string value, Vars_Info.Var Variable)
+		public void PushPVar(string value, Variable Variable)
 		{
 			_stack.Add(new StackValue(StackValue.Type.Pointer, value, Variable));
 		}
@@ -914,7 +914,7 @@ namespace Decompiler
 		/// </summary>
 		/// <param name="immediate"></param>
 		/// <returns></returns>
-		private string getarray(uint immediate)
+		public static string GetArraySizeCmt(uint immediate)
 		{
 			if (!Properties.Settings.Default.ShowArraySize)
 				return "";
@@ -937,7 +937,7 @@ namespace Decompiler
 		{
 			string arrayloc = PopArrayAccess();
 			string index = PopLit();
-			Push(new StackValue(StackValue.Type.Literal, arrayloc + "[" + index + getarray(immediate) + "]"));
+			Push(new StackValue(StackValue.Type.Literal, arrayloc + "[" + index + GetArraySizeCmt(immediate) + "]"));
 		}
 
 		public string Op_ArraySet(uint immediate)
@@ -945,7 +945,7 @@ namespace Decompiler
 			string arrayloc = PopArrayAccess();
 			string index = PopLit();
 			string value = PopLit();
-			return setcheck(arrayloc + "[" + index + getarray(immediate) + "]", value);
+			return setcheck(arrayloc + "[" + index + GetArraySizeCmt(immediate) + "]", value);
 		}
 
 		public void Op_ArrayGetP(uint immediate)
@@ -956,13 +956,13 @@ namespace Decompiler
 			{
 				arrayloc = PopArrayAccess();
 				index = PopLit();
-				Push(new StackValue(StackValue.Type.Pointer, arrayloc + "[" + index + getarray(immediate) + "]"));
+				Push(new StackValue(StackValue.Type.Pointer, arrayloc + "[" + index + GetArraySizeCmt(immediate) + "]"));
 			}
 			else if (Peek().ItemType == StackValue.Type.Literal)
 			{
 				arrayloc = PopLit();
 				index = PopLit();
-				Push(new StackValue(StackValue.Type.Literal, arrayloc + "[" + index + getarray(immediate) + "]"));
+				Push(new StackValue(StackValue.Type.Literal, arrayloc + "[" + index + GetArraySizeCmt(immediate) + "]"));
 			}
 			else throw new Exception("Unexpected Stack Value :" + Peek().ItemType.ToString());
 
@@ -1039,7 +1039,7 @@ namespace Decompiler
 			return val.Value;
 		}
 
-		public Vars_Info.Var PeekVar(int index)
+		public Variable PeekVar(int index)
 		{
 			int newIndex = GetIndex(index);
 			if (newIndex == -1)
@@ -1191,9 +1191,9 @@ namespace Decompiler
 			return setcheck(location, PopLit());
 		}
 
-		public string Op_Set(string location, Vars_Info.Var Variable)
+		public string Op_Set(string location, Variable Variable)
 		{
-			if (Variable.Immediatesize > 1)
+			if (Variable.ImmediateSize > 1)
 			{
 				location += ".f_0";
 			}
@@ -1340,7 +1340,7 @@ namespace Decompiler
 			Type _type;
 			int _structSize;
 			DataType _datatype;
-			Vars_Info.Var _var = null;
+			Variable _var = null;
 			uint _hash = 0;
 			ulong _xhash = 0;
 			bool global = false;
@@ -1354,7 +1354,7 @@ namespace Decompiler
 				_datatype = DataType.Unk;
 			}
 
-			public StackValue(Type type, string name, Vars_Info.Var var)
+			public StackValue(Type type, string name, Variable var)
 			{
 				_type = type;
 				_value = name;
@@ -1460,7 +1460,7 @@ namespace Decompiler
 				get { return _datatype; }
 			}
 
-			public Vars_Info.Var Variable
+			public Variable Variable
 			{
 				get { return _var; }
 			}

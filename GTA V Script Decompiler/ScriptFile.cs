@@ -22,7 +22,7 @@ namespace Decompiler
         private Stream file;
 		public ScriptHeader Header;
         public string name;
-        internal Vars_Info Statics;
+        internal VariableStorage Statics;
         internal bool CheckNative = true;
      
 
@@ -310,7 +310,7 @@ namespace Decompiler
         }
         private void GetStaticInfo()
         {
-            Statics = new Vars_Info(Vars_Info.ListType.Statics);
+            Statics = new VariableStorage(VariableStorage.ListType.Statics);
 			Statics.SetScriptParamCount(Header.ParameterCount);
             IO.Reader reader = new IO.Reader(file);
             reader.BaseStream.Position = Header.StaticsOffset + Header.RSC7Offset;

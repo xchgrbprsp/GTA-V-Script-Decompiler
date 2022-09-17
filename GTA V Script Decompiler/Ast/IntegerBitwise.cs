@@ -29,9 +29,9 @@ namespace Decompiler.Ast
         public override string ToString()
         {
             if (IsLogicalOperation())
-                return Lhs + " && " + Rhs;
+                return Lhs.ToString() + " && " + Rhs.ToString();
             else
-                return Lhs + " & " + Rhs;
+                return Lhs.ToString() + " & " + Rhs.ToString();
         }
     }
 
@@ -58,9 +58,9 @@ namespace Decompiler.Ast
         public override string ToString()
         {
             if (IsLogicalOperation())
-                return Lhs + " || " + Rhs;
+                return Lhs.ToString() + " || " + Rhs.ToString();
             else
-                return Lhs + " | " + Rhs;
+                return Lhs.ToString() + " | " + Rhs.ToString();
         }
     }
 
@@ -81,7 +81,7 @@ namespace Decompiler.Ast
 
         public override string ToString()
         {
-            return Lhs + " ^ " + Rhs;
+            return Lhs.ToString() + " ^ " + Rhs.ToString();
         }
     }
 }

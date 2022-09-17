@@ -21,7 +21,7 @@ namespace Decompiler.Ast
 
         public override string ToString()
         {
-            return "(float)" + Integer;
+            return "(float)" + Integer.ToString();
         }
     }
 }

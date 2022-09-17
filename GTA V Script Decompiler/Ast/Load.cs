@@ -16,7 +16,7 @@ namespace Decompiler.Ast
 
         public override string ToString()
         {
-            return "*" + Pointer;
+            return "*" + Pointer.ToString();
         }
     }
 }

@@ -30,7 +30,7 @@ namespace Decompiler.Ast
 
         public override string ToString()
         {
-            return "{ " + x + ", " + y + ", " + z + " }";
+            return "{ " + x.ToString() + ", " + y.ToString() + ", " + z.ToString() + " }";
         }
     }
 }

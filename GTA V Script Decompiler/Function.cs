@@ -32,7 +32,7 @@ namespace Decompiler
 		string tabs = "";
 		CodePath Outerpath;
 		SwitchStatement OuterSwitch;
-		ScriptFile Scriptfile;
+		public ScriptFile Scriptfile;
 		bool writeelse = false;
 		//ReturnTypes RetType = ReturnTypes.Unkn;
 		public Types.TypeInfo ReturnType { get; private set; }
@@ -41,8 +41,8 @@ namespace Decompiler
 		internal bool DecodeStarted = false;
 		internal bool PreDecoded = false;
 		internal bool PreDecodeStarted = false;
-		public Vars_Info Vars { get; private set; }
-		public Vars_Info Params { get; private set; }
+		public VariableStorage Vars { get; private set; }
+		public VariableStorage Params { get; private set; }
 		public int LineCount = 0;
 		HLInstruction? lastUsedIndirCall = null;
 		public Comments comments = new();
@@ -62,8 +62,8 @@ namespace Decompiler
 			fnName = new FunctionName(Name, Pcount, Rcount, Location, MaxLocation);
 			this.Scriptfile.FunctionLoc.Add(location, fnName);
 			Decoded = false;
-			Vars = new Vars_Info(Vars_Info.ListType.Vars, vcount - 2);
-			Params = new Vars_Info(Vars_Info.ListType.Params, pcount);
+			Vars = new VariableStorage(VariableStorage.ListType.Vars, vcount - 2);
+			Params = new VariableStorage(VariableStorage.ListType.Params, pcount);
 		}
 
 		/// <summary>
@@ -162,7 +162,7 @@ namespace Decompiler
 		/// </summary>
 		/// <param name="index">the frame variable index</param>
 		/// <returns>The variable</returns>
-		public Vars_Info.Var GetFrameVar(uint index)
+		public Variable GetFrameVar(uint index)
 		{
 			if (index < Pcount)
 				return Params.GetVarAtIndex(index);
@@ -1313,7 +1313,7 @@ namespace Decompiler
 				return;
 			for (int i = 0; i < count; i++)
 			{
-				Vars_Info.Var Var = Stack.PeekVar(index + i);
+				Variable Var = Stack.PeekVar(index + i);
 				if (Var != null && (Stack.isLiteral(index + i) || Stack.isPointer(index + i)))
 				{
 					if (Types.GetTypeInfo(type).Precedence < Types.GetTypeInfo(Var.DataType).Precedence)
@@ -1353,15 +1353,15 @@ namespace Decompiler
 		{
 			for (int i = 0; i < count; i++)
 			{
-				Vars_Info.Var Var = Stack.PeekVar(index + i);
+				Variable Var = Stack.PeekVar(index + i);
 				if (Var != null && (Stack.isLiteral(index + i) || Stack.isPointer(index + i)))
 				{
 					if (Stack.isPointer(index + i))
 					{
-						if (Var.Immediatesize == 1 || Var.Immediatesize == strsize / 4)
+						if (Var.ImmediateSize == 1 || Var.ImmediateSize == strsize / 4)
 						{
 							Var.DataType = Stack.DataType.String;
-							Var.Immediatesize = strsize / 8;
+							Var.ImmediateSize = strsize / 8;
 						}
 					}
 					else
@@ -1380,45 +1380,45 @@ namespace Decompiler
 			if (size == 15)
 			{
 			}
-			Vars_Info.Var Var = Stack.PeekVar(0);
+			Variable Var = Stack.PeekVar(0);
 			if (Var != null && Stack.isPointer(0))
 			{
 				if (Var.DataType == Stack.DataType.String)
 				{
-					if (Var.Immediatesize != size)
+					if (Var.ImmediateSize != size)
 					{
-						Var.Immediatesize = size;
-						Var.makestruct();
+						Var.ImmediateSize = size;
+						Var.SetStruct();
 					}
 				}
 				else
 				{
-					Var.Immediatesize = size;
-					Var.makestruct();
+					Var.ImmediateSize = size;
+					Var.SetStruct();
 				}
 			}
 		}
 
 		public void CheckImmediate(int size)
 		{
-			Vars_Info.Var Var = Stack.PeekVar(0);
+			Variable Var = Stack.PeekVar(0);
 			if (Var != null && Stack.isPointer(0))
 			{
-				if (Var.Immediatesize < size)
-					Var.Immediatesize = size;
-				Var.makestruct();
+				if (Var.ImmediateSize < size)
+					Var.ImmediateSize = size;
+				Var.SetStruct();
 			}
 		}
 
 		public void CheckArray(uint width, int size = -1)
 		{
-			Vars_Info.Var Var = Stack.PeekVar(0);
+			Variable Var = Stack.PeekVar(0);
 			if (Var != null && Stack.isPointer(0))
 			{
 				if (Var.Value < size)
 					Var.Value = size;
-				Var.Immediatesize = (int) width;
-				Var.makearray();
+				Var.ImmediateSize = (int) width;
+				Var.SetArray();
 			}
 			SetStackItemType(1, Stack.DataType.Int);
 
@@ -1428,7 +1428,7 @@ namespace Decompiler
 		{
 			if (type == Stack.DataType.Unk)
 				return;
-			Vars_Info.Var Var = Stack.PeekVar(0);
+			Variable Var = Stack.PeekVar(0);
 			if (Var != null && Stack.isPointer(0)) Var.DataType = type;
 		}
 
@@ -1767,7 +1767,7 @@ namespace Decompiler
 						}
 						CheckArray(ins.GetOperandsAsUInt, tempint);
 						SetArray(Stack.ItemType(2));
-						Vars_Info.Var Var = Stack.PeekVar(0);
+						Variable Var = Stack.PeekVar(0);
 						if (Var != null && Stack.isPointer(0))
 						{
 							SetStackItemType(2, Var.DataType);
@@ -1780,12 +1780,12 @@ namespace Decompiler
 					case Instruction.pFrame1:
 					case Instruction.pFrame2:
 						Stack.PushPVar("FrameVar", GetFrameVar(ins.GetOperandsAsUInt));
-						GetFrameVar(ins.GetOperandsAsUInt).call();
+						GetFrameVar(ins.GetOperandsAsUInt).SetCalled();
 						break;
 					case Instruction.GetFrame1:
 					case Instruction.GetFrame2:
 						Stack.PushVar("FrameVar", GetFrameVar(ins.GetOperandsAsUInt));
-						GetFrameVar(ins.GetOperandsAsUInt).call();
+						GetFrameVar(ins.GetOperandsAsUInt).SetCalled();
 						break;
 					case Instruction.SetFrame1:
 					case Instruction.SetFrame2:
@@ -1810,7 +1810,7 @@ namespace Decompiler
 									GetFrameVar(ins.GetOperandsAsUInt).Value = tempint;
 								}
 						}
-						GetFrameVar(ins.GetOperandsAsUInt).call();
+						GetFrameVar(ins.GetOperandsAsUInt).SetCalled();
 						break;
 					case Instruction.pStatic1:
 					case Instruction.pStatic2:
