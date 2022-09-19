@@ -10,7 +10,7 @@ namespace Decompiler.Ast
     {
         AstToken Lhs;
         AstToken Rhs;
-        public VectorAdd(Function func, AstToken lhs, AstToken rhs) : base(func)
+        public VectorAdd(Function func, AstToken rhs, AstToken lhs) : base(func)
         {
             Lhs = lhs;
             Rhs = rhs;
@@ -36,7 +36,7 @@ namespace Decompiler.Ast
     {
         AstToken Lhs;
         AstToken Rhs;
-        public VectorDiv(Function func, AstToken lhs, AstToken rhs) : base(func)
+        public VectorDiv(Function func, AstToken rhs, AstToken lhs) : base(func)
         {
             Lhs = lhs;
             Rhs = rhs;
@@ -62,7 +62,7 @@ namespace Decompiler.Ast
     {
         AstToken Lhs;
         AstToken Rhs;
-        public VectorMul(Function func, AstToken lhs, AstToken rhs) : base(func)
+        public VectorMul(Function func, AstToken rhs, AstToken lhs) : base(func)
         {
             Lhs = lhs;
             Rhs = rhs;
@@ -112,7 +112,7 @@ namespace Decompiler.Ast
     {
         AstToken Lhs;
         AstToken Rhs;
-        public VectorSub(Function func, AstToken lhs, AstToken rhs) : base(func)
+        public VectorSub(Function func, AstToken rhs, AstToken lhs) : base(func)
         {
             Lhs = lhs;
             Rhs = rhs;

@@ -46,8 +46,8 @@
 			// btnOK
 			// 
 			this.btnOK.Anchor =
-				((System.Windows.Forms.AnchorStyles)
-					((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+
+                    (System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right);
 			this.btnOK.BackColor = System.Drawing.SystemColors.Control;
 			this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.btnOK.FlatStyle = System.Windows.Forms.FlatStyle.System;
@@ -61,8 +61,8 @@
 			// btnCancel
 			// 
 			this.btnCancel.Anchor =
-				((System.Windows.Forms.AnchorStyles)
-					((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+
+                    (System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right);
 			this.btnCancel.BackColor = System.Drawing.SystemColors.Control;
 			this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.System;
@@ -77,7 +77,7 @@
 			// 
 			this.label1.AutoSize = true;
 			this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold,
-				System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+				System.Drawing.GraphicsUnit.Point, 0);
 			this.label1.Location = new System.Drawing.Point(12, 9);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(109, 20);
@@ -87,9 +87,9 @@
 			// textBox1
 			// 
 			this.textBox1.Anchor =
-				((System.Windows.Forms.AnchorStyles)
-					(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-					  | System.Windows.Forms.AnchorStyles.Right)));
+
+                    ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                      | System.Windows.Forms.AnchorStyles.Right);
 			this.textBox1.Location = new System.Drawing.Point(15, 68);
 			this.textBox1.Multiline = true;
 			this.textBox1.Name = "textBox1";
@@ -101,9 +101,9 @@
 			// comboBox1
 			// 
 			this.comboBox1.Anchor =
-				((System.Windows.Forms.AnchorStyles)
-					(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-					  | System.Windows.Forms.AnchorStyles.Right)));
+
+                    ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                      | System.Windows.Forms.AnchorStyles.Right);
 			this.comboBox1.FormattingEnabled = true;
 			this.comboBox1.Location = new System.Drawing.Point(15, 67);
 			this.comboBox1.Name = "comboBox1";

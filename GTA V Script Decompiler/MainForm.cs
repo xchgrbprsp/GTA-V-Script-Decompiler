@@ -71,7 +71,7 @@ namespace Decompiler
 			}
 			t.Checked = true;
 			t.Enabled = false;
-			highlight = (Style) new TextStyle(Brushes.Black, Brushes.Orange, fctb1.DefaultStyle.FontStyle);
+			highlight =  new TextStyle(Brushes.Black, Brushes.Orange, fctb1.DefaultStyle.FontStyle);
 
 		}
 
@@ -167,7 +167,7 @@ namespace Decompiler
 					for (int i = 0; i < Environment.ProcessorCount - 1; i++)
 					{
 						Program.ThreadCount++;
-						new Thread(Decompile).Start();
+						new Thread(Decompile, 10000000).Start();
 					}
 					Program.ThreadCount++;
 					Decompile();
@@ -198,7 +198,7 @@ namespace Decompiler
 				}
 				try
 				{
-					ScriptFile scriptFile = new ScriptFile((Stream) File.OpenRead(scriptToDecode));
+					ScriptFile scriptFile = new ScriptFile(File.OpenRead(scriptToDecode));
 					scriptFile.Save(Path.Combine(SaveDirectory, Path.GetFileNameWithoutExtension(scriptToDecode) + ".c"));
 					scriptFile.Close();
 				}
@@ -888,14 +888,14 @@ namespace Decompiler
 					for (int i = 0; i < Environment.ProcessorCount - 1; i++)
 					{
 						Program.ThreadCount++;
-						new System.Threading.Thread(FindString).Start();
-						System.Threading.Thread.Sleep(0);
+						new Thread(FindString, 10000000).Start();
+						Thread.Sleep(0);
 					}
 					Program.ThreadCount++;
 					FindString();
 					while (Program.ThreadCount > 0)
 					{
-						System.Threading.Thread.Sleep(10);
+						Thread.Sleep(10);
 					}
 				}
 				else

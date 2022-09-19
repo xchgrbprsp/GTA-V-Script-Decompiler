@@ -196,12 +196,12 @@ namespace Decompiler
 
 			public string VarDec
 			{
-				get { return SingleName + " " + Prefix; }
+				get { return SingleName + " " ; }
 			}
 
 			public string ArrayDec
 			{
-				get { return SingleName + "[] " + Prefix; }
+				get { return SingleName + "[] "; }
 			}
 
             public static bool operator >(TypeInfo a, TypeInfo b)

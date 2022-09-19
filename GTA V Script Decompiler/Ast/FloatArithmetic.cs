@@ -10,10 +10,12 @@ namespace Decompiler.Ast
     {
         AstToken Lhs;
         AstToken Rhs;
-        public FloatAdd(Function func, AstToken lhs, AstToken rhs) : base(func)
+        public FloatAdd(Function func, AstToken rhs, AstToken lhs) : base(func)
         {
             Lhs = lhs;
             Rhs = rhs;
+            Lhs.HintType(Stack.DataType.Float);
+            Rhs.HintType(Stack.DataType.Float);
         }
 
         public override Stack.DataType GetType()
@@ -31,10 +33,12 @@ namespace Decompiler.Ast
     {
         AstToken Lhs;
         AstToken Rhs;
-        public FloatDiv(Function func, AstToken lhs, AstToken rhs) : base(func)
+        public FloatDiv(Function func, AstToken rhs, AstToken lhs) : base(func)
         {
             Lhs = lhs;
             Rhs = rhs;
+            Lhs.HintType(Stack.DataType.Float);
+            Rhs.HintType(Stack.DataType.Float);
         }
 
         public override Stack.DataType GetType()
@@ -52,10 +56,12 @@ namespace Decompiler.Ast
     {
         AstToken Lhs;
         AstToken Rhs;
-        public FloatMod(Function func, AstToken lhs, AstToken rhs) : base(func)
+        public FloatMod(Function func, AstToken rhs, AstToken lhs) : base(func)
         {
             Lhs = lhs;
             Rhs = rhs;
+            Lhs.HintType(Stack.DataType.Float);
+            Rhs.HintType(Stack.DataType.Float);
         }
 
         public override Stack.DataType GetType()
@@ -73,10 +79,13 @@ namespace Decompiler.Ast
     {
         AstToken Lhs;
         AstToken Rhs;
-        public FloatMul(Function func, AstToken lhs, AstToken rhs) : base(func)
+
+        public FloatMul(Function func, AstToken rhs, AstToken lhs) : base(func)
         {
             Lhs = lhs;
             Rhs = rhs;
+            Lhs.HintType(Stack.DataType.Float);
+            Rhs.HintType(Stack.DataType.Float);
         }
 
         public override Stack.DataType GetType()
@@ -96,6 +105,7 @@ namespace Decompiler.Ast
         public FloatNeg(Function func, AstToken value) : base(func)
         {
             this.value = value;
+            this.value.HintType(Stack.DataType.Float);
         }
 
         public override Stack.DataType GetType()
@@ -113,10 +123,12 @@ namespace Decompiler.Ast
     {
         AstToken Lhs;
         AstToken Rhs;
-        public FloatSub(Function func, AstToken lhs, AstToken rhs) : base(func)
+        public FloatSub(Function func, AstToken rhs, AstToken lhs) : base(func)
         {
             Lhs = lhs;
             Rhs = rhs;
+            Lhs.HintType(Stack.DataType.Float);
+            Rhs.HintType(Stack.DataType.Float);
         }
 
         public override Stack.DataType GetType()

@@ -265,7 +265,7 @@ namespace Decompiler
 						datatype = "char[" + (var.ImmediateSize * 4).ToString() + "] c";
 					}
 					else if (var.ImmediateSize == 1)
-						datatype = Types.GetTypeInfo(var.DataType).VarDec;
+						datatype = Types.GetTypeInfo(var.DataType).VarDec + Types.GetTypeInfo(var.DataType).Prefix;
 					/*else if (var.Immediatesize == 3)
 					{
 						datatype = "vector3 v";
@@ -286,7 +286,7 @@ namespace Decompiler
 					}*/
 					else datatype = "struct<" + var.ImmediateSize.ToString() + ">[] ";
 				}
-				decl += datatype + "Param" + i.ToString() + ", ";
+				decl += datatype + (var.Name == "" ? ("Param" + i.ToString()) : var.Name) + ", ";
 				i++;
 			}
 			if (decl.Length > 2)

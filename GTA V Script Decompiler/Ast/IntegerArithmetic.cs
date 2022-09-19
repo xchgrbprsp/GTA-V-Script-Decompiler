@@ -10,10 +10,12 @@ namespace Decompiler.Ast
     {
         AstToken Lhs;
         AstToken Rhs;
-        public IntegerAdd(Function func, AstToken lhs, AstToken rhs) : base(func)
+        public IntegerAdd(Function func, AstToken rhs, AstToken lhs) : base(func)
         {
             Lhs = lhs;
             Rhs = rhs;
+            Lhs.HintType(Stack.DataType.Int);
+            Rhs.HintType(Stack.DataType.Int);
         }
 
         public override Stack.DataType GetType()
@@ -31,10 +33,12 @@ namespace Decompiler.Ast
     {
         AstToken Lhs;
         AstToken Rhs;
-        public IntegerDiv(Function func, AstToken lhs, AstToken rhs) : base(func)
+        public IntegerDiv(Function func, AstToken rhs, AstToken lhs) : base(func)
         {
             Lhs = lhs;
             Rhs = rhs;
+            Lhs.HintType(Stack.DataType.Int);
+            Rhs.HintType(Stack.DataType.Int);
         }
 
         public override Stack.DataType GetType()
@@ -52,10 +56,12 @@ namespace Decompiler.Ast
     {
         AstToken Lhs;
         AstToken Rhs;
-        public IntegerMod(Function func, AstToken lhs, AstToken rhs) : base(func)
+        public IntegerMod(Function func, AstToken rhs, AstToken lhs) : base(func)
         {
             Lhs = lhs;
             Rhs = rhs;
+            Lhs.HintType(Stack.DataType.Int);
+            Rhs.HintType(Stack.DataType.Int);
         }
 
         public override Stack.DataType GetType()
@@ -73,10 +79,12 @@ namespace Decompiler.Ast
     {
         AstToken Lhs;
         AstToken Rhs;
-        public IntegerMul(Function func, AstToken lhs, AstToken rhs) : base(func)
+        public IntegerMul(Function func, AstToken rhs, AstToken lhs) : base(func)
         {
             Lhs = lhs;
             Rhs = rhs;
+            Lhs.HintType(Stack.DataType.Int);
+            Rhs.HintType(Stack.DataType.Int);
         }
 
         public override Stack.DataType GetType()
@@ -96,6 +104,7 @@ namespace Decompiler.Ast
         public IntegerNeg(Function func, AstToken value) : base(func)
         {
             this.value = value;
+            this.value.HintType(Stack.DataType.Int);
         }
 
         public override Stack.DataType GetType()
@@ -115,6 +124,7 @@ namespace Decompiler.Ast
         public IntegerNot(Function func, AstToken value) : base(func)
         {
             this.value = value;
+            this.value.HintType(Stack.DataType.Int);
         }
 
         public override Stack.DataType GetType()
@@ -132,10 +142,12 @@ namespace Decompiler.Ast
     {
         AstToken Lhs;
         AstToken Rhs;
-        public IntegerSub(Function func, AstToken lhs, AstToken rhs) : base(func)
+        public IntegerSub(Function func, AstToken rhs, AstToken lhs) : base(func)
         {
             Lhs = lhs;
             Rhs = rhs;
+            Lhs.HintType(Stack.DataType.Int);
+            Rhs.HintType(Stack.DataType.Int);
         }
 
         public override Stack.DataType GetType()

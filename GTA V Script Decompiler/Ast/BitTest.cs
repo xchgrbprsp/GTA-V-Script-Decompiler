@@ -10,7 +10,7 @@ namespace Decompiler.Ast
     {
         public readonly AstToken Value;
         public readonly AstToken Bit;
-        public BitTest(Function func, AstToken value, AstToken bit) : base(func)
+        public BitTest(Function func, AstToken bit, AstToken value) : base(func)
         {
             Value = value;
             Bit = bit;
@@ -23,7 +23,7 @@ namespace Decompiler.Ast
 
         public override string ToString()
         {
-            return "BitTest(" + Value.ToString() + ", " + Bit.ToString() + ");";
+            return "BitTest(" + Value.ToString() + ", " + Bit.ToString() + ")";
         }
     }
 }

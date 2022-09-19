@@ -12,6 +12,7 @@ namespace Decompiler.Ast
         public IntToFloat(Function func, AstToken integer) : base(func)
         {
             Integer = integer;
+            Integer.HintType(Stack.DataType.Int);
         }
 
         public override Stack.DataType GetType()

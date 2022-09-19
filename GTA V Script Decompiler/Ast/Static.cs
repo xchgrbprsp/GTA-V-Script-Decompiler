@@ -40,6 +40,11 @@ namespace Decompiler.Ast
             return function.Scriptfile.Statics.GetVarAtIndex(Index).DataType;
         }
 
+        public override void HintType(Stack.DataType type)
+        {
+            function.Scriptfile.Statics.GetVarAtIndex(Index).HintType(type);
+        }
+
         public override string ToString()
         {
             return function.Scriptfile.Statics.GetVarName(Index);

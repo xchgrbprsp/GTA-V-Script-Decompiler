@@ -12,6 +12,7 @@ namespace Decompiler.Ast
         public FloatToInt(Function func, AstToken @float) : base(func)
         {
             Float = @float;
+            Float.HintType(Stack.DataType.Float);
         }
 
         public override Stack.DataType GetType()

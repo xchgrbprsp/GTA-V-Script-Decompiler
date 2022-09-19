@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
@@ -41,7 +42,7 @@ namespace Decompiler.Ast
                 else if (Value == 1)
                     return "true";
             }
-            return Value.ToString(); // todo int style processing
+            return ScriptFile.HashBank.GetHash((int)Value); // todo int style processing
         }
     }
 }

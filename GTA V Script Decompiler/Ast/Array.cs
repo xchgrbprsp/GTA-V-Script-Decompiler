@@ -21,7 +21,7 @@ namespace Decompiler.Ast
 
         public override string ToString()
         {
-            return "&" + Pointer.ToString() + "[" + Index.ToString() + Stack.GetArraySizeCmt(Size) + "]";
+            return "&" + Pointer.ToPointerString() + "[" + Index.ToString() + Stack.GetArraySizeCmt(Size) + "]";
         }
 
         public override string ToPointerString()

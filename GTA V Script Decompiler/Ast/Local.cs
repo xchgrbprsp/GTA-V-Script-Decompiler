@@ -13,6 +13,7 @@ namespace Decompiler.Ast
         public Local(Function func, uint index) : base(func)
         {
             Index = index;
+            function.GetFrameVar(Index).SetCalled();
         }
 
         public override string ToString()
@@ -33,6 +34,7 @@ namespace Decompiler.Ast
         public LocalLoad(Function func, uint index) : base(func)
         {
             Index = index;
+            function.GetFrameVar(Index).SetCalled();
         }
 
         public override Stack.DataType GetType()
@@ -43,6 +45,11 @@ namespace Decompiler.Ast
         public override string ToString()
         {
             return function.GetFrameVarName(Index);
+        }
+
+        public override void HintType(Stack.DataType type)
+        {
+            function.GetFrameVar(Index).HintType(type);
         }
     }
 
@@ -55,6 +62,8 @@ namespace Decompiler.Ast
         {
             Index = index;
             Value = value;
+            function.GetFrameVar(Index).SetCalled();
+            function.GetFrameVar(Index).HintType(Value.GetType());
         }
 
         public override bool IsStatement()

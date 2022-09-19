@@ -16,6 +16,14 @@ namespace Decompiler.Ast
         {
             Name = name;
             Entry = Program.nativeDB.GetEntry(hash);
+            ReturnCount = returnCount;
+            int i = 0;
+            foreach (var arg in arguments)
+            {
+                if (arg.GetStackCount() == 1)
+                    arg.HintType(Entry?.GetParamType(i) ?? Stack.DataType.Unk);
+                i += arg.GetStackCount();
+            }
         }
 
         public override string GetName()

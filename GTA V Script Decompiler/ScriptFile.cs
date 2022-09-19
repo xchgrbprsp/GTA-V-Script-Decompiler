@@ -17,7 +17,6 @@ namespace Decompiler
 		public X64NativeTable X64NativeTable;
         private int offset = 0;
 		public List<Function> Functions;
-		public Dictionary<int, FunctionName> FunctionLoc;
 		public static Hashes HashBank;
         private Stream file;
 		public ScriptHeader Header;
@@ -46,16 +45,11 @@ namespace Decompiler
             }
             GetStaticInfo();
             Functions = new List<Function>();
-            FunctionLoc = new Dictionary<int, FunctionName>();
             GetFunctions();
-            foreach (Function func in Functions)
-            {
-                func.PreDecode();
-            }
             Statics.checkvars();
             foreach (Function func in Functions)
             {
-                func.Decode();
+                func.Decompile();
             }
         }
 
@@ -321,13 +315,4 @@ namespace Decompiler
         }
 
     }
-    
- 
-
-
-   
-
-    
-
-
 }

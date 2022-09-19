@@ -22,6 +22,11 @@ namespace Decompiler.Ast
             return GetReturnCount() == 0;
         }
 
+        public override int GetStackCount()
+        {
+            return GetReturnCount();
+        }
+
         public override bool HasSideEffects()
         {
             return true;

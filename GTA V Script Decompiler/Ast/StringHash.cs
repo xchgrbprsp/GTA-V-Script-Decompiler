@@ -11,9 +11,9 @@ namespace Decompiler.Ast
     /// </summary>
     internal class StringHash : AstToken
     {
-        public readonly String @string;
+        public readonly AstToken @string;
 
-        public StringHash(Function func, String @string) : base(func)
+        public StringHash(Function func, AstToken @string) : base(func)
         {
             this.@string = @string;
         }

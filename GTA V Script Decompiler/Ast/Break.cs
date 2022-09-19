@@ -6,15 +6,11 @@ using System.Threading.Tasks;
 
 namespace Decompiler.Ast
 {
-    internal class Store : AstToken
+    internal class Break : AstToken
     {
-        readonly AstToken Pointer;
-        readonly AstToken Value;
-
-        public Store(Function func, AstToken pointer, AstToken value) : base(func)
+        public bool Handled;
+        public Break(Function func) : base(func)
         {
-            Pointer = pointer;
-            Value = value;
         }
 
         public override bool IsStatement()
@@ -24,7 +20,7 @@ namespace Decompiler.Ast
 
         public override string ToString()
         {
-            return "*" + Pointer.ToPointerString() + " = " + Value.ToString() + ";";
+            return "break;";
         }
     }
 }

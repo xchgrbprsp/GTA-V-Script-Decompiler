@@ -10,10 +10,12 @@ namespace Decompiler.Ast
     {
         AstToken Lhs;
         AstToken Rhs;
-        public FloatEq(Function func, AstToken lhs, AstToken rhs) : base(func)
+        public FloatEq(Function func, AstToken rhs, AstToken lhs) : base(func)
         {
             Lhs = lhs;
             Rhs = rhs;
+            Lhs.HintType(Stack.DataType.Float);
+            Rhs.HintType(Stack.DataType.Float);
         }
 
         public override Stack.DataType GetType()
@@ -31,10 +33,12 @@ namespace Decompiler.Ast
     {
         AstToken Lhs;
         AstToken Rhs;
-        public FloatNe(Function func, AstToken lhs, AstToken rhs) : base(func)
+        public FloatNe(Function func, AstToken rhs, AstToken lhs) : base(func)
         {
             Lhs = lhs;
             Rhs = rhs;
+            Lhs.HintType(Stack.DataType.Float);
+            Rhs.HintType(Stack.DataType.Float);
         }
 
         public override Stack.DataType GetType()
@@ -52,10 +56,12 @@ namespace Decompiler.Ast
     {
         AstToken Lhs;
         AstToken Rhs;
-        public FloatLt(Function func, AstToken lhs, AstToken rhs) : base(func)
+        public FloatLt(Function func, AstToken rhs, AstToken lhs) : base(func)
         {
             Lhs = lhs;
             Rhs = rhs;
+            Lhs.HintType(Stack.DataType.Float);
+            Rhs.HintType(Stack.DataType.Float);
         }
 
         public override Stack.DataType GetType()
@@ -73,10 +79,13 @@ namespace Decompiler.Ast
     {
         AstToken Lhs;
         AstToken Rhs;
-        public FloatLe(Function func, AstToken lhs, AstToken rhs) : base(func)
+
+        public FloatLe(Function func, AstToken rhs, AstToken lhs) : base(func)
         {
             Lhs = lhs;
             Rhs = rhs;
+            Lhs.HintType(Stack.DataType.Float);
+            Rhs.HintType(Stack.DataType.Float);
         }
 
         public override Stack.DataType GetType()
@@ -94,10 +103,12 @@ namespace Decompiler.Ast
     {
         AstToken Lhs;
         AstToken Rhs;
-        public FloatGt(Function func, AstToken lhs, AstToken rhs) : base(func)
+        public FloatGt(Function func, AstToken rhs, AstToken lhs) : base(func)
         {
             Lhs = lhs;
             Rhs = rhs;
+            Lhs.HintType(Stack.DataType.Float);
+            Rhs.HintType(Stack.DataType.Float);
         }
 
         public override Stack.DataType GetType()
@@ -115,10 +126,12 @@ namespace Decompiler.Ast
     {
         AstToken Lhs;
         AstToken Rhs;
-        public FloatGe(Function func, AstToken lhs, AstToken rhs) : base(func)
+        public FloatGe(Function func, AstToken rhs, AstToken lhs) : base(func)
         {
             Lhs = lhs;
             Rhs = rhs;
+            Lhs.HintType(Stack.DataType.Float);
+            Rhs.HintType(Stack.DataType.Float);
         }
 
         public override Stack.DataType GetType()

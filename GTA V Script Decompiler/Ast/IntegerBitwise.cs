@@ -10,7 +10,7 @@ namespace Decompiler.Ast
     {
         AstToken Lhs;
         AstToken Rhs;
-        public IntegerAnd(Function func, AstToken lhs, AstToken rhs) : base(func)
+        public IntegerAnd(Function func, AstToken rhs, AstToken lhs) : base(func)
         {
             Lhs = lhs;
             Rhs = rhs;
@@ -39,7 +39,7 @@ namespace Decompiler.Ast
     {
         AstToken Lhs;
         AstToken Rhs;
-        public IntegerOr(Function func, AstToken lhs, AstToken rhs) : base(func)
+        public IntegerOr(Function func, AstToken rhs, AstToken lhs) : base(func)
         {
             Lhs = lhs;
             Rhs = rhs;
@@ -68,7 +68,7 @@ namespace Decompiler.Ast
     {
         AstToken Lhs;
         AstToken Rhs;
-        public IntegerXor(Function func, AstToken lhs, AstToken rhs) : base(func)
+        public IntegerXor(Function func, AstToken rhs, AstToken lhs) : base(func)
         {
             Lhs = lhs;
             Rhs = rhs;

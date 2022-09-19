@@ -10,7 +10,7 @@ namespace Decompiler.Ast
     {
         AstToken Lhs;
         AstToken Rhs;
-        public IntegerEq(Function func, AstToken lhs, AstToken rhs) : base(func)
+        public IntegerEq(Function func, AstToken rhs, AstToken lhs) : base(func)
         {
             Lhs = lhs;
             Rhs = rhs;
@@ -31,7 +31,7 @@ namespace Decompiler.Ast
     {
         AstToken Lhs;
         AstToken Rhs;
-        public IntegerNe(Function func, AstToken lhs, AstToken rhs) : base(func)
+        public IntegerNe(Function func, AstToken rhs, AstToken lhs) : base(func)
         {
             Lhs = lhs;
             Rhs = rhs;
@@ -52,7 +52,7 @@ namespace Decompiler.Ast
     {
         AstToken Lhs;
         AstToken Rhs;
-        public IntegerLt(Function func, AstToken lhs, AstToken rhs) : base(func)
+        public IntegerLt(Function func, AstToken rhs, AstToken lhs) : base(func)
         {
             Lhs = lhs;
             Rhs = rhs;
@@ -73,7 +73,7 @@ namespace Decompiler.Ast
     {
         AstToken Lhs;
         AstToken Rhs;
-        public IntegerLe(Function func, AstToken lhs, AstToken rhs) : base(func)
+        public IntegerLe(Function func, AstToken rhs, AstToken lhs) : base(func)
         {
             Lhs = lhs;
             Rhs = rhs;
@@ -94,7 +94,7 @@ namespace Decompiler.Ast
     {
         AstToken Lhs;
         AstToken Rhs;
-        public IntegerGt(Function func, AstToken lhs, AstToken rhs) : base(func)
+        public IntegerGt(Function func, AstToken rhs, AstToken lhs) : base(func)
         {
             Lhs = lhs;
             Rhs = rhs;
@@ -115,7 +115,7 @@ namespace Decompiler.Ast
     {
         AstToken Lhs;
         AstToken Rhs;
-        public IntegerGe(Function func, AstToken lhs, AstToken rhs) : base(func)
+        public IntegerGe(Function func, AstToken rhs, AstToken lhs) : base(func)
         {
             Lhs = lhs;
             Rhs = rhs;

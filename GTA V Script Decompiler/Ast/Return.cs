@@ -9,6 +9,7 @@ namespace Decompiler.Ast
     internal class Return : AstToken
     {
         public readonly List<AstToken> ReturnValues;
+        public bool Handled = false;
         public Return(Function func, List<AstToken> returnValues) : base(func)
         {
             ReturnValues = returnValues;
@@ -29,6 +30,8 @@ namespace Decompiler.Ast
             {
                 bool first = true;
                 StringBuilder sb = new();
+
+                sb.Append("return ");
 
                 foreach (var token in ReturnValues)
                 {

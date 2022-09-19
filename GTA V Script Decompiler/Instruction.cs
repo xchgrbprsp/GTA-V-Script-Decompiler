@@ -47,7 +47,7 @@ namespace Decompiler
 
 		public void NopInstruction()
 		{
-			instruction = Instruction.Nop;
+			instruction = Instruction.NOP;
 		}
 
 		public int Offset
@@ -128,7 +128,7 @@ namespace Decompiler
 		{
 			get
 			{
-				if (instruction == Instruction.Native)
+				if (instruction == Instruction.NATIVE)
 				{
 					return (byte) (operands[0] >> 2);
 				}
@@ -140,7 +140,7 @@ namespace Decompiler
 		{
 			get
 			{
-				if (instruction == Instruction.Native)
+				if (instruction == Instruction.NATIVE)
 				{
 					return (byte) (operands[0] & 0x3);
 				}
@@ -152,7 +152,7 @@ namespace Decompiler
 		{
 			get
 			{
-				if (instruction == Instruction.Native)
+				if (instruction == Instruction.NATIVE)
 				{
 					// if (_consoleVer)
 					return Utils.SwapEndian(BitConverter.ToUInt16(operands, 1));
@@ -177,7 +177,7 @@ namespace Decompiler
 
 		public string GetSwitchStringCase(int index)
 		{
-			if (instruction == Instruction.Switch)
+			if (instruction == Instruction.SWITCH)
 			{
 				int cases = GetOperand(0);
 				if (index >= cases)
@@ -192,7 +192,7 @@ namespace Decompiler
 
 		public int GetSwitchOffset(int index)
 		{
-			if (instruction == Instruction.Switch)
+			if (instruction == Instruction.SWITCH)
 			{
 				int cases = GetOperand(0);
 				if (index >= cases)
@@ -223,7 +223,7 @@ namespace Decompiler
 				int _instruction = (int) Instruction;
 				if (_instruction >= 118 && _instruction <= 126)
 				{
-					return (float) (_instruction - 119);
+					return _instruction - 119;
 				}
 				throw new Exception("Not An Immediate Float Push");
 			}
@@ -243,166 +243,146 @@ namespace Decompiler
 		{
 			get
 			{
-				if (instruction == Instruction.Jump)
+				if (instruction == Instruction.J)
 				{
-					if (GetJumpOffset <= 0) return false;
+					if (GetJumpOffset <= 0) 
+						return false;
 					return (GetOperandsAsInt < 0);
 				}
 				return false;
 			}
 		}
-
-		public string GetGlobalString
-		{
-			get
-			{
-				switch (instruction)
-				{
-					case Instruction.pGlobal2:
-					case Instruction.GlobalGet2:
-					case Instruction.GlobalSet2:
-						return "Global_" +
-								(Properties.Settings.Default.HexIndex ? GetOperandsAsUInt.ToString("X") : GetOperandsAsUInt.ToString());
-					case Instruction.pGlobal3:
-					case Instruction.GlobalGet3:
-					case Instruction.GlobalSet3:
-						return "Global_" +
-								(Properties.Settings.Default.HexIndex ? GetOperandsAsUInt.ToString("X") : GetOperandsAsUInt.ToString());
-				}
-				throw new Exception("Not a global variable");
-			}
-		}
 	}
 
-	internal enum Instruction //opcodes reversed from gta v default.xex
+	internal enum Instruction //opcodes reversed from gta v eboot.bin
 	{
-		Nop = 0,
-		iAdd, //1
-		iSub, //2
-		iMult, //3
-		iDiv, //4
-		iMod, //5
-		iNot, //6
-		iNeg, //7
-		iCmpEq, //8
-		iCmpNe, //9
-		iCmpGt, //10
-		iCmpGe, //11
-		iCmpLt, //12
-		iCmpLe, //13
-		fAdd, //14
-		fSub, //15
-		fMult, //16
-		fDiv, //17
-		fMod, //18
-		fNeg, //19
-		fCmpEq, //20
-		fCmpNe, //21
-		fCmpGt, //22
-		fCmpGe, //23
-		fCmpLt, //24
-		fCmpLe, //25
-		vAdd, //26
-		vSub, //27
-		vMult, //28
-		vDiv, //29
-		vNeg, //30
-		And, //31
-		Or, //32
-		Xor, //33
-		ItoF, //34
-		FtoI, //35
-		FtoV, //36
-		iPushByte1, //37
-		iPushByte2, //38
-		iPushByte3, //39
-		iPushInt, //40
-		fPush, //41
-		dup, //42
-		pop, //43
-		Native, //44
-		Enter, //45
-		Return, //46
-		pGet, //47
-		pSet, //48
-		pPeekSet, //49
-		ToStack, //50
-		FromStack, //51
-		pArray1, //52
-		ArrayGet1, //53
-		ArraySet1, //54
-		pFrame1, //55
-		GetFrame1, //56
-		SetFrame1, //57
-		pStatic1, //58
-		StaticGet1, //59
-		StaticSet1, //60
-		Add1, //61
-		Mult1, //62
-		pStructStack, //63
-		pStruct1, //64
-		GetStruct1, //65
-		SetStruct1, //66
-		iPushShort, //67
-		Add2, //68
-		Mult2, //69
-		pStruct2, //70
-		GetStruct2, //71
-		SetStruct2, //72
-		pArray2, //73
-		ArrayGet2, //74
-		ArraySet2, //75
-		pFrame2, //76
-		GetFrame2, //77
-		SetFrame2, //78
-		pStatic2, //79
-		StaticGet2, //80
-		StaticSet2, //81
-		pGlobal2, //82
-		GlobalGet2, //83
-		GlobalSet2, //84
-		Jump, //85
-		JumpFalse, //86
-		JumpNe, //87
-		JumpEq, //88
-		JumpLe, //89
-		JumpLt, //90
-		JumpGe, //91
-		JumpGt, //92
-		Call, //93
-		pGlobal3, //94
-		GlobalGet3, //95
-		GlobalSet3, //96
-		iPushI24, //97
-		Switch, //98
-		PushString, //99
-		GetHash, //100
-		StrCopy, //101
-		ItoS, //102
-		StrConCat, //103
-		StrConCatInt, //104
-		MemCopy, //105
-		Catch, //106	 //No handling of these as Im unsure exactly how they work
-		Throw, //107 //No script files in the game use these opcodes
-		pCall, //108
-		iPush_n1, //109
-		iPush_0, //110
-		iPush_1, //111
-		iPush_2, //112
-		iPush_3, //113
-		iPush_4, //114
-		iPush_5, //115
-		iPush_6, //116
-		iPush_7, //117
-		fPush_n1, //118
-		fPush_0, //119
-		fPush_1, //120
-		fPush_2, //121
-		fPush_3, //122
-		fPush_4, //123
-		fPush_5, //124
-		fPush_6, //125
-		fPush_7, //126
-		Bittest
-	}
+        NOP,
+        IADD,
+        ISUB,
+        IMUL,
+        IDIV,
+        IMOD,
+        INOT,
+        INEG,
+        IEQ,
+        INE,
+        IGT,
+        IGE,
+        ILT,
+        ILE,
+        FADD,
+        FSUB,
+        FMUL,
+        FDIV,
+        FMOD,
+        FNEG,
+        FEQ,
+        FNE,
+        FGT,
+        FGE,
+        FLT,
+        FLE,
+        VADD,
+        VSUB,
+        VMUL,
+        VDIV,
+        VNEG,
+        IAND,
+        IOR,
+        IXOR,
+        I2F,
+        F2I,
+        F2V,
+        PUSH_CONST_U8,
+        PUSH_CONST_U8_U8,
+        PUSH_CONST_U8_U8_U8,
+        PUSH_CONST_U32,
+        PUSH_CONST_F,
+        DUP,
+        DROP,
+        NATIVE,
+        ENTER,
+        LEAVE,
+        LOAD,
+        STORE,
+        STORE_REV,
+        LOAD_N,
+        STORE_N,
+        ARRAY_U8,
+        ARRAY_U8_LOAD,
+        ARRAY_U8_STORE,
+        LOCAL_U8,
+        LOCAL_U8_LOAD,
+        LOCAL_U8_STORE,
+        STATIC_U8,
+        STATIC_U8_LOAD,
+        STATIC_U8_STORE,
+        IADD_U8,
+        IMUL_U8,
+        IOFFSET,
+        IOFFSET_U8,
+        IOFFSET_U8_LOAD,
+        IOFFSET_U8_STORE,
+        PUSH_CONST_S16,
+        IADD_S16,
+        IMUL_S16,
+        IOFFSET_S16,
+        IOFFSET_S16_LOAD,
+        IOFFSET_S16_STORE,
+        ARRAY_U16,
+        ARRAY_U16_LOAD,
+        ARRAY_U16_STORE,
+        LOCAL_U16,
+        LOCAL_U16_LOAD,
+        LOCAL_U16_STORE,
+        STATIC_U16,
+        STATIC_U16_LOAD,
+        STATIC_U16_STORE,
+        GLOBAL_U16,
+        GLOBAL_U16_LOAD,
+        GLOBAL_U16_STORE,
+        J,
+        JZ,
+        IEQ_JZ,
+        INE_JZ,
+        IGT_JZ,
+        IGE_JZ,
+        ILT_JZ,
+        ILE_JZ,
+        CALL,
+        GLOBAL_U24,
+        GLOBAL_U24_LOAD,
+        GLOBAL_U24_STORE,
+        PUSH_CONST_U24,
+        SWITCH,
+        STRING,
+        STRINGHASH,
+        TEXT_LABEL_ASSIGN_STRING,
+        TEXT_LABEL_ASSIGN_INT,
+        TEXT_LABEL_APPEND_STRING,
+        TEXT_LABEL_APPEND_INT,
+        TEXT_LABEL_COPY,
+        CATCH,
+        THROW,
+        CALLINDIRECT,
+        PUSH_CONST_M1,
+        PUSH_CONST_0,
+        PUSH_CONST_1,
+        PUSH_CONST_2,
+        PUSH_CONST_3,
+        PUSH_CONST_4,
+        PUSH_CONST_5,
+        PUSH_CONST_6,
+        PUSH_CONST_7,
+        PUSH_CONST_FM1,
+        PUSH_CONST_F0,
+        PUSH_CONST_F1,
+        PUSH_CONST_F2,
+        PUSH_CONST_F3,
+        PUSH_CONST_F4,
+        PUSH_CONST_F5,
+        PUSH_CONST_F6,
+        PUSH_CONST_F7,
+        IS_BIT_SET
+    }
 }
