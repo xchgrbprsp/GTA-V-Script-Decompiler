@@ -17,6 +17,7 @@ namespace Decompiler.Ast
             Name = name;
             Entry = Program.nativeDB.GetEntry(hash);
             ReturnCount = returnCount;
+
             int i = 0;
             foreach (var arg in arguments)
             {

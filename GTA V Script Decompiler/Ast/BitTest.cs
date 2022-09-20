@@ -14,6 +14,9 @@ namespace Decompiler.Ast
         {
             Value = value;
             Bit = bit;
+
+            Value.HintType(Stack.DataType.Int);
+            Bit.HintType(Stack.DataType.Int);
         }
 
         public override Stack.DataType GetType()

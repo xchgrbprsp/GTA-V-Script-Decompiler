@@ -76,6 +76,13 @@ namespace Decompiler
 			ReturnType = Types.GetTypeInfo(Stack.DataType.Unk);
 		}
 
+		internal void HintReturnType(Stack.DataType type)
+		{
+			var ti = Types.GetTypeInfo(type);
+			if (ti > ReturnType)
+				ReturnType = ti;
+		}
+
 		/// <summary>
 		/// Disposes of the function and returns the function text
 		/// </summary>
@@ -1013,9 +1020,31 @@ DONE_COND:
             }
 		}
 
+		internal static bool IsForLoopPair(Ast.AstToken tk1, Ast.AstToken tk2)
+		{
+			if (tk1 is Ast.GlobalStore && tk2 is Ast.GlobalStore)
+			{
+				return (tk1 as Ast.GlobalStore).Index == (tk2 as Ast.GlobalStore).Index;
+            }
+
+            if (tk1 is Ast.LocalStore && tk2 is Ast.LocalStore)
+            {
+                return (tk1 as Ast.LocalStore).Index == (tk2 as Ast.LocalStore).Index;
+            }
+
+            if (tk1 is Ast.StaticStore && tk2 is Ast.StaticStore)
+            {
+                return (tk1 as Ast.StaticStore).Index == (tk2 as Ast.StaticStore).Index;
+            }
+
+			// TODO more stuff!
+
+            return false;
+		}
+
 		/// <summary>
 		/// 1: Collapse if into else if statements
-		/// 2: MAYBE try to create for loops
+		/// 2: Try to create for loops
 		/// </summary>
 		/// <param name="tree"></param>
 		internal void TryOptimizeTree(StatementTree tree)
@@ -1034,12 +1063,37 @@ DONE_COND:
 					{
 						var insideIf = @else.Statements[^1] as IfTree;
 						var newElseif = new ElseIfTree(this, lastIf, -1, insideIf.Condition, -1);
-						newElseif.Statements = insideIf.Statements;
+                        newElseif.Statements = insideIf.Statements;
                         lastIf.ElseIfTrees.Add(newElseif);
-						lastIf.ElseIfTrees = new(lastIf.ElseIfTrees.Concat(insideIf.ElseIfTrees));
+						foreach (var elseIf in insideIf.ElseIfTrees)
+						{
+							elseIf.Parent = lastIf;
+							lastIf.ElseIfTrees.Add(elseIf);
+						}
 						lastIf.ElseTree = insideIf.ElseTree;
-					}
+						if (lastIf.ElseTree != null)
+							lastIf.ElseTree!.Parent = lastIf;
+                    }
                 }
+			}
+			else if (lastTree is WhileTree && tree.Statements.Count > 1)
+			{
+				var lastWhile = lastTree as WhileTree;
+				var lastSet = tree.Statements[^2];
+				if (lastWhile.Statements.Count >= 1 && lastWhile.Statements[^1] is Ast.AstToken && lastSet is Ast.AstToken)
+				{
+					var lastStmtInWhile = lastWhile.Statements[^1] as Ast.AstToken;
+                    if (IsForLoopPair(lastSet as Ast.AstToken, lastStmtInWhile))
+					{
+						var @for = new ForTree(this, tree, -1, lastSet as Ast.AstToken, lastWhile.Condition, lastStmtInWhile);
+						lastWhile.Statements.Remove(lastStmtInWhile);
+						tree.Statements.Remove(lastWhile);
+						tree.Statements.Remove(lastSet);
+						@for.Statements = lastWhile.Statements;
+						tree.Statements.Add(@for);
+						// TODO add support for continue statements (fix jumps)
+                    }
+				}
 			}
 		}
 	}

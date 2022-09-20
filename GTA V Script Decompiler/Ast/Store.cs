@@ -8,13 +8,16 @@ namespace Decompiler.Ast
 {
     internal class Store : AstToken
     {
-        readonly AstToken Pointer;
-        readonly AstToken Value;
+        public readonly AstToken Pointer;
+        public readonly AstToken Value;
 
         public Store(Function func, AstToken pointer, AstToken value) : base(func)
         {
             Pointer = pointer;
             Value = value;
+
+            if (Types.HasPointerVersion(value.GetType()))
+                Pointer.HintType(Types.GetPointerVersion(value.GetType()));
         }
 
         public override bool IsStatement()

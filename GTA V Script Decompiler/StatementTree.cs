@@ -11,7 +11,7 @@ namespace Decompiler
         public readonly Function Function;
         public List<object> Statements;
         public int Offset;
-        public readonly StatementTree? Parent;
+        public StatementTree? Parent;
 
         public StatementTree(Function function, StatementTree? parent = null, int offset = 0)
         {
@@ -26,14 +26,19 @@ namespace Decompiler
             return false;
         }
 
-        public override string ToString()
+        public string ToString(bool newlines)
         {
             StringBuilder sb = new StringBuilder();
+            bool lastIsTree = false;
+            bool first = true;
 
             foreach (var statement in Statements)
             {
                 if (statement is Ast.AstToken)
                 {
+                    if (lastIsTree && (this is not CaseTree || statement is not Ast.Break))
+                        sb.AppendLine();
+
                     string repr = statement.ToString();
                     if (!string.IsNullOrEmpty(repr))
                     {
@@ -43,19 +48,35 @@ namespace Decompiler
                 }
                 else
                 {
+                    if (!first)
+                        sb.AppendLine();
+
                     var lines = statement.ToString().Split(Environment.NewLine);
                     foreach (var line in lines)
                     {
-                        if (string.IsNullOrEmpty(line))
-                            continue;
+                        //if (string.IsNullOrEmpty(line))
+                        //    continue;
 
                         sb.Append('\t');
                         sb.AppendLine(line);
                     }
                 }
+
+                lastIsTree = statement is StatementTree;
+                first = false;
             }
 
-            return sb.ToString();
+            string str = sb.ToString();
+
+            if (!newlines)
+                str = str.TrimEnd();
+
+            return str;
+        }
+
+        public override string ToString()
+        {
+            return ToString(true);
         }
     }
 
@@ -165,7 +186,7 @@ namespace Decompiler
                     sb.Append("case ");
                 sb.AppendLine(name + ":");
             }
-            sb.Append(base.ToString());
+            sb.Append(base.ToString(false));
             return sb.ToString();
         }
     }
@@ -229,9 +250,32 @@ namespace Decompiler
             return false;
         }
 
+        // TODO: wtf did i just write?
+        public bool CanSkipBraces()
+        {
+            if (Statements.Count != 1 || (Statements[0] is not Ast.AstToken && (Statements[0] is not IfTree || !(Statements[0] as IfTree).CanSkipBraces())))
+                return false;
+
+            if (ElseTree != null && (ElseTree.Statements.Count != 1 || (ElseTree.Statements[0] is not Ast.AstToken && (ElseTree.Statements[0] is not IfTree || !(ElseTree.Statements[0] as IfTree).CanSkipBraces()))))
+                return false;
+
+            foreach (var elseIf in ElseIfTrees)
+            {
+                if (elseIf.Statements.Count != 1 || (elseIf.Statements[0] is not Ast.AstToken && (elseIf.Statements[0] is not IfTree || !(elseIf.Statements[0] as IfTree).CanSkipBraces())))
+                    return false;
+            }
+
+            return true;
+        }
+
         public override string ToString()
         {
-            var str = $"if ({Condition.ToString()}){Environment.NewLine}{{{Environment.NewLine}{base.ToString()}}}";
+            string str;
+
+            if (CanSkipBraces())
+                str = $"if ({Condition.ToString()}){Environment.NewLine}{base.ToString(false)}";
+            else
+                str = $"if ({Condition.ToString()}){Environment.NewLine}{{{Environment.NewLine}{base.ToString()}}}";
 
             foreach (var elseIf in ElseIfTrees)
             {
@@ -263,8 +307,10 @@ namespace Decompiler
 
         public override string ToString()
         {
-            var str = $"else if ({Condition.ToString()}){Environment.NewLine}{{{Environment.NewLine}{base.ToString()}}}";
-            return str;
+            if ((Parent as IfTree).CanSkipBraces())
+                return $"else if ({Condition.ToString()}){Environment.NewLine}{base.ToString(false)}";
+            else
+                return $"else if ({Condition.ToString()}){Environment.NewLine}{{{Environment.NewLine}{base.ToString()}}}";
         }
     }
 
@@ -291,7 +337,36 @@ namespace Decompiler
 
         public override string ToString()
         {
-            return $"else{Environment.NewLine}{{{Environment.NewLine}{base.ToString()}}}";
+            if ((Parent as IfTree).CanSkipBraces())
+                return $"else{Environment.NewLine}{base.ToString(false)}";
+            else
+                return $"else{Environment.NewLine}{{{Environment.NewLine}{base.ToString()}}}";
+        }
+    }
+
+    internal class ForTree : StatementTree
+    {
+        public readonly Ast.AstToken Initializer;
+        public readonly Ast.AstToken Condition;
+        public readonly Ast.AstToken Increment; // well it doesn't have to be an increment but couldn't find a better name for this
+        public ForTree(Function function, StatementTree parent, int offset, Ast.AstToken initializer, Ast.AstToken condition, Ast.AstToken increment) : base(function, parent, offset)
+        {
+            Initializer = initializer;
+            Condition = condition;
+            Increment = increment;
+        }
+
+        /// <returns>Isn't going to be called anyway</returns>
+        public override bool IsTreeEnd()
+        {
+            return true;
+        }
+
+        public override string ToString()
+        {
+            string increment = Increment.ToString();
+            increment = increment.Substring(0, increment.Length - 1); // remove trailing semicolon, ugly hack
+            return $"for ({Initializer} {Condition}; {increment}){Environment.NewLine}{{{Environment.NewLine}{base.ToString()}}}";
         }
     }
 }

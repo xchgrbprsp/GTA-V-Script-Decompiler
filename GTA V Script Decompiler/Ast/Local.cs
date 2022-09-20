@@ -64,6 +64,7 @@ namespace Decompiler.Ast
             Value = value;
             function.GetFrameVar(Index).SetCalled();
             function.GetFrameVar(Index).HintType(Value.GetType());
+            Value.HintType(function.GetFrameVar(Index).DataType);
         }
 
         public override bool IsStatement()

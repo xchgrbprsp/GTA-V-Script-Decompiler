@@ -8,7 +8,6 @@ namespace Decompiler.Ast
 {
     internal class Break : AstToken
     {
-        public bool Handled;
         public Break(Function func) : base(func)
         {
         }

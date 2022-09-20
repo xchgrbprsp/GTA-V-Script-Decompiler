@@ -15,11 +15,18 @@ namespace Decompiler.Ast
         public FloatToVec(Function func, AstToken @float) : base(func)
         {
             Float = @float;
+
+            Float.HintType(Stack.DataType.Float);
         }
 
         public override int GetStackCount()
         {
             return 3;
+        }
+
+        public override Stack.DataType GetType()
+        {
+            return Stack.DataType.Vector3;
         }
 
         public override string ToString()

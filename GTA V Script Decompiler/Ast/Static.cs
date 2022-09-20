@@ -60,6 +60,9 @@ namespace Decompiler.Ast
         {
             Index = index;
             Value = value;
+
+            function.Scriptfile.Statics.GetVarAtIndex(Index).HintType(Value.GetType());
+            Value.HintType(function.Scriptfile.Statics.GetVarAtIndex(Index).DataType);
         }
 
         public override bool IsStatement()

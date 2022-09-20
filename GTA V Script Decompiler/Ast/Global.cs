@@ -35,11 +35,6 @@ namespace Decompiler.Ast
             Index = index;
         }
 
-        public override Stack.DataType GetType()
-        {
-            return function.GetFrameVar(Index).DataType;
-        }
-
         public override string ToString()
         {
             return "Global_" + Index;

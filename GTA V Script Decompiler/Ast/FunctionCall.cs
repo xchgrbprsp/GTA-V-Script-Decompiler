@@ -12,6 +12,27 @@ namespace Decompiler.Ast
         public FunctionCall(Function func, List<AstToken> arguments, Function callee) : base(func, arguments)
         {
             Callee = callee;
+
+            int i = 0;
+            foreach (var arg in arguments)
+            {
+                if (arg.GetStackCount() == 1)
+                {
+                    arg.HintType(callee.Params.GetVarAtIndex((uint)i).DataType);
+                    callee.Params.GetVarAtIndex((uint)i).HintType(arg.GetType());
+                }
+                i += arg.GetStackCount();
+            }
+        }
+
+        public override void HintType(Stack.DataType type)
+        {
+            Callee.HintReturnType(type);
+        }
+
+        public override Stack.DataType GetType()
+        {
+            return Callee.ReturnType.Type;
         }
 
         public override string GetName()

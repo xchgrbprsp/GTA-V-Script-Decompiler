@@ -17,6 +17,8 @@ namespace Decompiler.Ast
             Size = size;
             Pointer = pointer;
             Index = index;
+
+            Index.HintType(Stack.DataType.Int);
         }
 
         public override string ToString()
@@ -41,6 +43,8 @@ namespace Decompiler.Ast
             Size = size;
             Pointer = pointer;
             Index = index;
+
+            Index.HintType(Stack.DataType.Int);
         }
 
         public override string ToString()
@@ -62,6 +66,8 @@ namespace Decompiler.Ast
             Pointer = pointer;
             Index = index;
             Value = value;
+
+            Index.HintType(Stack.DataType.Int);
         }
 
         public override bool IsStatement()

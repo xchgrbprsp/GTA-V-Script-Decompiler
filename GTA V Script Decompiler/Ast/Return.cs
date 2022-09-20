@@ -13,6 +13,11 @@ namespace Decompiler.Ast
         public Return(Function func, List<AstToken> returnValues) : base(func)
         {
             ReturnValues = returnValues;
+
+            if (ReturnValues.Count == 1)
+            {
+                function.HintReturnType(ReturnValues[0].GetType());
+            }
         }
 
         public override bool IsStatement()
