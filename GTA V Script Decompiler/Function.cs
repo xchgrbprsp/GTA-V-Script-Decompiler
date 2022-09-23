@@ -679,8 +679,20 @@ namespace Decompiler
 						break;
 					case Instruction.DROP:
 						if (Stack.Peek().GetStackCount() > 1)
-							comments.Add(new("DROP: Dropped token with GetStackCount() > 1, defaulting to incorrect behaviour as I'm too lazy to do this the proper way"));
-						tree.Statements.Add(new Ast.Drop(this, Stack.Pop(true)));
+						{
+							if (Stack.Peek() is Ast.FunctionCallBase)
+							{
+								(Stack.Peek() as Ast.FunctionCallBase).DropReturn();
+								break;
+							}
+							else
+							{
+								comments.Add(new("DROP: Dropped token with GetStackCount() > 1 && Peek() is not Ast.FunctionCallBase, not sure what to do, defaulting to incorrect behavior"));
+							}
+						}
+						var dropped = Stack.Pop(true);
+						if (dropped.HasSideEffects())
+							tree.Statements.Add(new Ast.Drop(this, dropped));
 						break;
 					case Instruction.NATIVE:
 						var native = new Ast.NativeCall(this, Stack.PopCount(Instructions[tree.Offset].GetNativeParams), this.Scriptfile.X64NativeTable.GetNativeFromIndex(Instructions[tree.Offset].GetNativeIndex),
@@ -954,6 +966,8 @@ DONE:
                         goto case CONDITIONAL_JUMP;
                     case CONDITIONAL_JUMP:
 						var condition = Stack.Pop();
+						condition.HintType(Stack.DataType.Bool);
+						
 						var tr = tree;
 
 						if (Instructions[tree.Offset].GetOperandsAsUInt == 0 || CodeOffsetToFunctionOffset(Instructions[tree.Offset].GetJumpOffset) == tree.Offset + 1)
@@ -1036,8 +1050,6 @@ DONE_COND:
             {
                 return (tk1 as Ast.StaticStore).Index == (tk2 as Ast.StaticStore).Index;
             }
-
-			// TODO more stuff!
 
             return false;
 		}

@@ -27,6 +27,11 @@ namespace Decompiler.Ast
             }
         }
 
+        public override Stack.DataType GetType()
+        {
+            return Entry?.GetReturnType() ?? base.GetType();
+        }
+
         public override string GetName()
         {
             return Name;

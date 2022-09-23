@@ -27,7 +27,7 @@ namespace Decompiler.Ast
 
         public override string ToString()
         {
-            string res = Pointer + " = { ";
+            string res = Pointer.ToPointerString() + " = { ";
             foreach (var value in Values)
                 res += value + ", ";
             return res.Remove(res.Length - 2) + " };";

@@ -16,6 +16,9 @@ namespace Decompiler.Ast
             this.x = x;
             this.y = y;
             this.z = z;
+            x.HintType(Stack.DataType.Float);
+            y.HintType(Stack.DataType.Float);
+            z.HintType(Stack.DataType.Float);
         }
 
         public override int GetStackCount()

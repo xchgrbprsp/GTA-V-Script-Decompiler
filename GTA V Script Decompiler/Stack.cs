@@ -97,7 +97,12 @@ namespace Decompiler
 
 		internal int GetCount()
 		{
-			return _stack.Count;
+			int count = 0;
+
+			foreach (var val in _stack)
+				count += val.GetStackCount();
+
+			return count;
 		}
 
 		#region Opcodes

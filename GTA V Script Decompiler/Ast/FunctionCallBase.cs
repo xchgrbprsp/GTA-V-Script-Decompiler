@@ -9,9 +9,11 @@ namespace Decompiler.Ast
     internal abstract class FunctionCallBase : AstToken
     {
         readonly List<AstToken> Arguments;
+        public int DroppedReturns { get; private set; } = 0;
 
         public abstract string GetName();
         public abstract int GetReturnCount();
+
         protected FunctionCallBase(Function func, List<AstToken> arguments) : base(func)
         {
             Arguments = arguments;
@@ -19,12 +21,17 @@ namespace Decompiler.Ast
 
         public override bool IsStatement()
         {
-            return GetReturnCount() == 0;
+            return GetReturnCount() - DroppedReturns == 0;
         }
 
         public override int GetStackCount()
         {
-            return GetReturnCount();
+            return GetReturnCount() - DroppedReturns;
+        }
+
+        public void DropReturn()
+        {
+            DroppedReturns++;
         }
 
         public override bool HasSideEffects()

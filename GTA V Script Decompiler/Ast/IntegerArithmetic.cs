@@ -124,7 +124,7 @@ namespace Decompiler.Ast
         public IntegerNot(Function func, AstToken value) : base(func)
         {
             this.value = value;
-            this.value.HintType(Stack.DataType.Int);
+            this.value.HintType(Stack.DataType.Bool);
         }
 
         public override Stack.DataType GetType()

@@ -19,18 +19,26 @@ namespace Decompiler.Ast
 
         public override string ToString()
         {
+            var sep = "->";
+            if (value is Local or Global or Offset or Array)
+                sep = ".";
+
             if (offset is ConstantInt)
-                return "&(" + value.ToPointerString() + ".f_" + offset.ToString() + ")";
+                return "&(" + value.ToPointerString() + sep + "f_" + offset.ToString() + ")";
             else
-                return "&(" + value.ToPointerString() + ".f_[" + offset.ToString() + "])";
+                return "&(" + value.ToPointerString() + sep + "f_[" + offset.ToString() + "])";
         }
 
         public override string ToPointerString()
         {
+            var sep = "->";
+            if (value is Local or Global or Offset or Array)
+                sep = ".";
+
             if (offset is ConstantInt)
-                return value.ToPointerString() + ".f_" + offset.ToString();
+                return value.ToPointerString() + sep + "f_" + offset.ToString();
             else
-                return value.ToPointerString() + ".f_[" + offset.ToString() + "]";
+                return value.ToPointerString() + sep + "f_[" + offset.ToString() + "]";
         }
     }
 
@@ -47,7 +55,11 @@ namespace Decompiler.Ast
 
         public override string ToString()
         {
-            return value.ToPointerString() + ".f_" + offset.ToString();
+            var sep = "->";
+            if (value is Static or Global or Offset or Array)
+                sep = ".";
+
+            return value.ToPointerString() + sep + "f_" + offset.ToString();
         }
     }
 
@@ -71,7 +83,11 @@ namespace Decompiler.Ast
 
         public override string ToString()
         {
-            return value.ToPointerString() + ".f_" + offset.ToString() + " = " + storedValue.ToString() + ";";
+            var sep = "->";
+            if (value is Static or Global or Offset or Array)
+                sep = ".";
+
+            return value.ToPointerString() + sep + "f_" + offset.ToString() + " = " + storedValue.ToString() + ";";
         }
     }
 }
