@@ -5,6 +5,7 @@ using System.DirectoryServices.ActiveDirectory;
 using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization.Metadata;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -89,7 +90,9 @@ namespace Decompiler
 		/// <returns>The whole function high level code</returns>
 		public override string ToString()
 		{
-			return FunctionHeader() + "\r\n" + MainTree.ToString();
+			string str = FunctionHeader() + Environment.NewLine + MainTree.ToString();
+			LineCount = Regex.Matches(str, Environment.NewLine).Count + 1;
+			return str;
         }
 
 		/// <summary>
