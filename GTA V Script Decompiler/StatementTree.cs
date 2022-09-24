@@ -156,10 +156,12 @@ namespace Decompiler
     internal class CaseTree : StatementTree
     {
         public readonly int BreakOffset;
+        readonly int StartOffset;
         List<string> CaseNames;
 
         public CaseTree(Function function, StatementTree parent, int offset, List<string> caseNames, int breakOffset) : base(function, parent, offset)
         {
+            StartOffset = offset;
             BreakOffset = breakOffset;
             CaseNames = caseNames;
         }
@@ -169,9 +171,18 @@ namespace Decompiler
             if (Offset < Function.Instructions.Count && Function.Instructions[Offset].Offset >= BreakOffset)
                 return true;
 
-            if (Statements.Count > 0)
+            if (Statements.Count > 0 && (Statements[^1] is Ast.Break || Statements[^1] is Ast.Return || Statements[^1] is Ast.Jump))
             {
-                return Statements[^1] is Ast.Break || Statements[^1] is Ast.Return || Statements[^1] is Ast.Jump;
+                return true;
+            }
+
+            foreach (var p in (Parent as SwitchTree).Cases)
+            {
+                if (Function.CodeOffsetToFunctionOffset(p.Key) != StartOffset && Function.CodeOffsetToFunctionOffset(p.Key) == Offset)
+                {
+                    Statements.Add(new Ast.Attribute(Function, "fallthrough"));
+                    return true;
+                }
             }
 
             return false;
