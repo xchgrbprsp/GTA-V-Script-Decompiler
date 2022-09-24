@@ -172,7 +172,19 @@ namespace Decompiler
 			Vehicle,
 			VehiclePtr,
 
-			Function
+			Function,
+
+			// ENUMS
+			
+			eControlType,
+			eControlAction,
+			eHudComponent,
+			ePedType,
+			ePedComponentType,
+			eStackSize,
+			eDecoratorType,
+			eEventGroup,
+			eHudColour
 		}
 
 		#endregion

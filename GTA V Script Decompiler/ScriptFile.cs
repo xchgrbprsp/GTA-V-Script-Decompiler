@@ -83,7 +83,7 @@ namespace Decompiler
             {
                 string s = f.ToString();
                 savestream.WriteLine(s);
-                Function_loc.Add(f.Name, new Tuple<int,int>( i, f.Location));
+                Function_loc.Add(f.Name, new Tuple<int, int>(i, f.Location));
                 i += f.LineCount;
             }
             savestream.Flush();
@@ -143,12 +143,19 @@ namespace Decompiler
                 {
                     name += (char)CodeTable[start1 + 5 + i];
                 }
+
+                foreach (var fun in Functions)
+                    if (fun.Name == name)
+                        name += "_0";
             }
             else if (start1 == 0)
             {
                 name = "main";
             }
-            else name = "func_" + Functions.Count.ToString();
+            else
+            {
+                name = "func_" + Functions.Count.ToString();
+            }
             int pcount = CodeTable[offset + 1];
             int tmp1 = CodeTable[offset + 2], tmp2 = CodeTable[offset + 3];
             int vcount = ((tmp2 << 0x8) | tmp1) ;

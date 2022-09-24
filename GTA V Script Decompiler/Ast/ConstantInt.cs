@@ -42,6 +42,14 @@ namespace Decompiler.Ast
                 else if (Value == 1)
                     return "true";
             }
+
+            var info = Types.GetTypeInfo(GetType());
+            if (info.Enum != null)
+            {
+                if (info.Enum!.HasValue((int)Value))
+                    return info.Enum!.GetValue((int)Value);
+            }    
+
             return ScriptFile.HashBank.GetHash((int)Value); // todo int style processing
         }
     }

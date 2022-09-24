@@ -26,7 +26,7 @@ namespace Decompiler.Ast
 
         public override string ToString()
         {
-            return "BitTest(" + Value.ToString() + ", " + Bit.ToString() + ")";
+            return "IS_BIT_SET(" + Value.ToString() + ", " + Bit.ToString() + ")";
         }
     }
 }

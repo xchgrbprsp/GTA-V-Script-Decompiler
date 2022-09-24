@@ -70,7 +70,7 @@ namespace Decompiler
 
 		public string GetHash(int value, string temp = "")
 		{
-			if (!Properties.Settings.Default.ReverseHashes)
+			if (Properties.Settings.Default.ReverseHashes == false || value <= 200)
 				return inttohex(value);
 			if (hashes.ContainsKey(value))
 				return "joaat(\"" + hashes[value] + "\")";
@@ -79,7 +79,7 @@ namespace Decompiler
 
 		public string GetHash(uint value, string temp = "")
 		{
-			if (!Properties.Settings.Default.ReverseHashes)
+			if (Properties.Settings.Default.ReverseHashes == false || value <= 200)
 				return value.ToString();
 			int intvalue = (int) value;
 			if (hashes.ContainsKey(intvalue))

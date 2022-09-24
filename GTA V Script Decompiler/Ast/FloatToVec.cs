@@ -31,7 +31,7 @@ namespace Decompiler.Ast
 
         public override string ToString()
         {
-            return "FtoV(" + Float.ToString() + ")";
+            return "F2V(" + Float.ToString() + ")";
         }
     }
 }

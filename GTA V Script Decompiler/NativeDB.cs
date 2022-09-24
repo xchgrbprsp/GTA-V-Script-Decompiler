@@ -34,6 +34,13 @@ namespace Decompiler
             return Types.GetFromName(@params[index].type);
         }
 
+        public void SetParamType(int index, Stack.DataType type)
+        {
+            var param = @params[index];
+            param.type = type.ToString();
+            @params[index] = param;
+        }
+
         public Stack.DataType GetReturnType()
         {
             return Types.GetFromName(return_type);
@@ -56,11 +63,14 @@ namespace Decompiler
 
             entries = new();
 
+            NativeTypeOverride.Initialize();
+
             foreach (var ns in data)
             {
                 foreach (var native in ns.Value)
                 {
                     NativeDBEntry entry = native.Value;
+                    NativeTypeOverride.Visit(ref entry);
                     entry.@namespace = ns.Key;
                     entries[Convert.ToUInt64(native.Key, 16)] = entry;
                 }

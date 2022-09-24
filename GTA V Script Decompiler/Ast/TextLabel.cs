@@ -26,7 +26,7 @@ namespace Decompiler.Ast
 
         public override string ToString()
         {
-            return "StringCopy(" + Dst.ToString() + ", " + Src.ToString() + ", " + Size + ");" ;
+            return "TEXT_LABEL_ASSIGN_STRING(" + Dst.ToString() + ", " + Src.ToString() + ", " + Size + ");" ;
         }
     }
 
@@ -49,7 +49,7 @@ namespace Decompiler.Ast
 
         public override string ToString()
         {
-            return "StringConCat(" + Dst.ToString() + ", " + Src.ToString() + ", " + Size + ");";
+            return "TEXT_LABEL_APPEND_STRING(" + Dst.ToString() + ", " + Src.ToString() + ", " + Size + ");";
         }
     }
 
@@ -72,7 +72,7 @@ namespace Decompiler.Ast
 
         public override string ToString()
         {
-            return "IntToString(" + Dst.ToString() + ", " + Integer.ToString() + ", " + Size + ");";
+            return "TEXT_LABEL_ASSIGN_INT(" + Dst.ToString() + ", " + Integer.ToString() + ", " + Size + ");";
         }
     }
 
@@ -95,7 +95,7 @@ namespace Decompiler.Ast
 
         public override string ToString()
         {
-            return "StringIntConCat(" + Dst.ToString() + ", " + Integer.ToString() + ", " + Size + ");";
+            return "TEXT_LABEL_APPEND_INT(" + Dst.ToString() + ", " + Integer.ToString() + ", " + Size + ");";
         }
     }
 
@@ -123,7 +123,7 @@ namespace Decompiler.Ast
             foreach (var value in Values)
                 res += value + ", ";
             res = res.Remove(res.Length - 2) + " }";
-            return "MemCopy(" + Dst.ToString() + ", " + res + ", " + Value.ToString() + ");";
+            return "TEXT_LABEL_COPY(" + Dst.ToString() + ", " + res + ", " + Value.ToString() + ");";
         }
     }
 }

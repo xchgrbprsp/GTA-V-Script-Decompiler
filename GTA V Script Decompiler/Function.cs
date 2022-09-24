@@ -1008,7 +1008,11 @@ DONE:
 						else
 						{
 							if (Instructions[tree.Offset].GetJumpOffset < Instructions[tree.Offset].Offset)
-								throw new InvalidOperationException("...what?");
+							{
+								//break;
+								throw new InvalidOperationException("Do while loops are not supported");
+							}
+
 							var @if = new IfTree(this, tree, tree.Offset + 1, condition, Instructions[tree.Offset].GetJumpOffset);
                             treeStack.Push(@if);
                             tree.Statements.Add(@if);
