@@ -93,7 +93,7 @@ namespace Decompiler
 		{
             foreach (TypeInfo d in typeInfos)
             {
-                if (d.SingleName == name)
+                if (d.SingleName.ToLower() == name.ToLower())
                     return d.Type;
             }
             throw new Exception("Unknown type");

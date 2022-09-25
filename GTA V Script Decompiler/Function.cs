@@ -22,7 +22,7 @@ namespace Decompiler
 
 	public class Function
 	{
-		public string Name { get; private set; }
+		public string Name { get; set; }
 		public int Pcount { get; private set; }
 		public int Vcount { get; private set; }
 		public int Rcount { get; private set; }
@@ -58,6 +58,8 @@ namespace Decompiler
 
 		internal MainTree MainTree { get; private set; }
 
+		public uint Hash { get; private set; }
+
 		public Function(ScriptFile Owner, string name, int pcount, int vcount, int rcount, int location, int locmax = -1)
 		{
 			this.Scriptfile = Owner;
@@ -77,6 +79,65 @@ namespace Decompiler
 			MainTree = new(this);
 			ReturnType = Types.GetTypeInfo(Stack.DataType.Unk);
 		}
+
+        /// <summary>
+        /// Gets a persistent hash of the function that should not change across updates
+        /// </summary>
+        /// <remarks>
+		/// DO NOT call this after function decode as things get nopped
+        /// </remarks>
+        uint GetFunctionHash()
+		{
+			StringBuilder sb = new();
+			sb.Append(Pcount);
+			sb.Append(Rcount);
+
+			//if (Instructions.Count <= 5)
+			//	return 0; too many collisions but lets still give it a try
+
+			int i = 0;
+			HLInstruction? lastIns = null;
+
+			foreach (var ins in Instructions)
+			{
+				sb.Append(ins.Instruction.ToString());
+				i++;
+
+				if (ins.Instruction == Instruction.LOCAL_U8 || ins.Instruction == Instruction.LOCAL_U16 || ins.Instruction == Instruction.LOCAL_U8_LOAD || ins.Instruction == Instruction.LOCAL_U16_LOAD || ins.Instruction == Instruction.LOCAL_U8_STORE || ins.Instruction == Instruction.LOCAL_U16_STORE)
+					sb.Append(ins.GetOperandsAsUInt); // TODO
+
+				else if (ins.Instruction == Instruction.PUSH_CONST_U8)
+					sb.Append(ins.GetOperand(0));
+				else if (ins.Instruction == Instruction.PUSH_CONST_U8_U8)
+				{
+					sb.Append(ins.GetOperand(0));
+					sb.Append(ins.GetOperand(1));
+                }
+				else if (ins.Instruction == Instruction.PUSH_CONST_U8_U8_U8)
+				{
+                    sb.Append(ins.GetOperand(0));
+                    sb.Append(ins.GetOperand(1));
+                    sb.Append(ins.GetOperand(2));
+                }
+				else if (ins.Instruction == Instruction.NATIVE)
+				{
+					sb.Append(ins.GetNativeParams);
+					sb.Append(ins.GetNativeReturns);
+                }
+				else if (ins.Instruction == Instruction.STRING)
+				{
+					if (lastIns != null && (lastIns.Instruction == Instruction.PUSH_CONST_U8 || lastIns.Instruction == Instruction.PUSH_CONST_U24 || lastIns.Instruction == Instruction.PUSH_CONST_U32))
+						sb.Append(Scriptfile.StringTable[lastIns.GetOperandsAsInt]);
+				}
+
+                if (i > 22)
+					break;
+
+				lastIns = ins;
+			}
+
+			return Utils.Joaat(sb.ToString());
+        }
 
 		internal void HintReturnType(Stack.DataType type)
 		{
@@ -136,10 +197,16 @@ namespace Decompiler
 
 			working.Append(Name);
 			working.Append("(" + Params.GetPDec() + ")");
-			if (Properties.Settings.Default.IncludeFunctionPosition)
-				working.Append(" // Position - 0x" + Location.ToString("X"));
+			if (Properties.Settings.Default.IncludeFunctionPosition || Properties.Settings.Default.IncludeFunctionHash)
+				working.Append(" //");
 
-			return working.ToString();
+			if (Properties.Settings.Default.IncludeFunctionPosition)
+				working.Append(" Position - 0x" + Location.ToString("X"));
+
+            if (Properties.Settings.Default.IncludeFunctionHash)
+                working.Append(" Hash - 0x" + Hash.ToString("X"));
+
+            return working.ToString();
 		}
 
 		/// <summary>
@@ -276,7 +343,6 @@ skip:
 				if (Decoded) return;
 			}
 
-			BuildInstructions();
 			DecodeStatementTree(MainTree);
 			Decoded = true;
 		}
@@ -577,6 +643,8 @@ skip:
 					Offset++;
 				}
 			}
+
+			Hash = GetFunctionHash();
 		}
 
 

@@ -10,7 +10,7 @@ namespace Decompiler
 {
 	static class Utils
 	{
-		public static uint jenkins_one_at_a_time_hash(string str)
+		public static uint Joaat(string str)
 		{
 			uint hash, i;
 			char[] key = str.ToLower().ToCharArray();
@@ -108,7 +108,7 @@ namespace Decompiler
 			if (temp.StartsWith("joaat(\""))
 			{
 				temp = temp.Remove(temp.Length - 2).Substring(7);
-				uint val = jenkins_one_at_a_time_hash(temp);
+				uint val = Joaat(temp);
 				value = unchecked((int) val);
 				return true;
 			}

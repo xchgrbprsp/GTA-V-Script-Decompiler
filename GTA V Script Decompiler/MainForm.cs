@@ -50,7 +50,8 @@ namespace Decompiler
 			showFuncPointerToolStripMenuItem.Checked = Properties.Settings.Default.ShowFunctionPointers;
 			useMultiThreadingToolStripMenuItem.Checked = Properties.Settings.Default.UseMultithreading;
 			includeFunctionPositionToolStripMenuItem.Checked = Properties.Settings.Default.IncludeFunctionPosition;
-			includeNativeNamespaceToolStripMenuItem.Checked = Properties.Settings.Default.ShowNativeNamespace;
+			includeFunctionHashToolStripMenuItem.Checked = Properties.Settings.Default.IncludeFunctionHash;
+            includeNativeNamespaceToolStripMenuItem.Checked = Properties.Settings.Default.ShowNativeNamespace;
 			globalAndStructHexIndexingToolStripMenuItem.Checked = Properties.Settings.Default.HexIndex;
 			uppercaseNativesToolStripMenuItem.Checked = Properties.Settings.Default.UppercaseNatives;
 
@@ -333,7 +334,14 @@ namespace Decompiler
             Properties.Settings.Default.Save();
         }
 
-		private void uppercaseNativesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void includeFunctionHashToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            includeFunctionHashToolStripMenuItem.Checked = !includeFunctionHashToolStripMenuItem.Checked;
+            Properties.Settings.Default.IncludeFunctionHash = includeFunctionHashToolStripMenuItem.Checked;
+            Properties.Settings.Default.Save();
+        }
+
+        private void uppercaseNativesToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			uppercaseNativesToolStripMenuItem.Checked = !uppercaseNativesToolStripMenuItem.Checked;
 			Properties.Settings.Default.UppercaseNatives = uppercaseNativesToolStripMenuItem.Checked;
@@ -940,7 +948,7 @@ namespace Decompiler
 					StringTable table = new StringTable(ScriptFile, header.StringTableOffsets, header.StringBlocks, header.StringsSize);
 					foreach (string str in table.Values)
 					{
-						if (HashToFind.Contains(Utils.jenkins_one_at_a_time_hash(str)))
+						if (HashToFind.Contains(Utils.Joaat(str)))
 						{
 							if (IsLower(str))
 								continue;
@@ -948,7 +956,7 @@ namespace Decompiler
 							{
 								if (!FoundStrings.Any(item => item.Item2 == str))
 								{
-									FoundStrings.Add(new Tuple<uint, string>(Utils.jenkins_one_at_a_time_hash(str), str));
+									FoundStrings.Add(new Tuple<uint, string>(Utils.Joaat(str), str));
 								}
 							}
 						}

@@ -166,5 +166,17 @@ namespace Decompiler.Properties {
                 this["HexIndex"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IncludeFunctionHash {
+            get {
+                return ((bool)(this["IncludeFunctionHash"]));
+            }
+            set {
+                this["IncludeFunctionHash"] = value;
+            }
+        }
     }
 }

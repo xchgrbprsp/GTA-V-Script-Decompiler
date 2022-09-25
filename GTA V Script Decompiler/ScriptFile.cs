@@ -34,6 +34,7 @@ namespace Decompiler
             StringTable = new StringTable(scriptStream, Header.StringTableOffsets, Header.StringBlocks, Header.StringsSize);
             X64NativeTable = new X64NativeTable(scriptStream, Header.NativesOffset + Header.RSC7Offset, Header.NativesCount, Header.CodeLength);
             name = Header.ScriptName;
+
             CodeTable = new List<byte>();
             for (int i = 0; i < Header.CodeBlocks; i++)
             {
@@ -43,10 +44,20 @@ namespace Decompiler
                 scriptStream.Read(working, 0, tablesize);
                 CodeTable.AddRange(working);
             }
+
             GetStaticInfo();
+
             Functions = new List<Function>();
             GetFunctions();
+
             Statics.checkvars();
+
+            foreach (Function func in Functions)
+            {
+                func.BuildInstructions();
+                Program.functionDB.Visit(func);
+            }
+
             foreach (Function func in Functions)
             {
                 func.Decompile();

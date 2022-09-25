@@ -112,6 +112,7 @@ namespace Decompiler
             Overrides.Add(new("GET_NUMBER_OF_PED_TEXTURE_VARIATIONS", 1, Stack.DataType.ePedComponentType));
             Overrides.Add(new("GET_PED_PALETTE_VARIATION", 1, Stack.DataType.ePedComponentType));
             Overrides.Add(new("IS_PED_COMPONENT_VARIATION_VALID", 1, Stack.DataType.ePedComponentType));
+            Overrides.Add(new("SET_PED_PRELOAD_VARIATION_DATA", 1, Stack.DataType.ePedComponentType));
             Overrides.Add(new("SET_PED_PRELOAD_PROP_DATA", 1, Stack.DataType.ePedComponentType));
             Overrides.Add(new("GET_PED_PROP_INDEX", 1, Stack.DataType.ePedComponentType));
             Overrides.Add(new("GET_PED_PROP_TEXTURE_INDEX", 1, Stack.DataType.ePedComponentType));

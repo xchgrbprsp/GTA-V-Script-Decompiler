@@ -62,6 +62,7 @@
             this.showFuncPointerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.useMultiThreadingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.includeFunctionPositionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.includeFunctionHashToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.uppercaseNativesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.exportTablesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -127,7 +128,6 @@
             this.fctb1.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.fctb1.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.fctb1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.fctb1.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.fctb1.IsReplaceMode = false;
             this.fctb1.Language = FastColoredTextBoxNS.Language.CSharp;
             this.fctb1.LeftBracket = '(';
@@ -257,6 +257,7 @@
             this.showFuncPointerToolStripMenuItem,
             this.useMultiThreadingToolStripMenuItem,
             this.includeFunctionPositionToolStripMenuItem,
+            this.includeFunctionHashToolStripMenuItem,
             this.uppercaseNativesToolStripMenuItem,
             this.toolStripSeparator4,
             this.exportTablesToolStripMenuItem,
@@ -361,7 +362,7 @@
             // 
             this.useMultiThreadingToolStripMenuItem.Name = "useMultiThreadingToolStripMenuItem";
             this.useMultiThreadingToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
-            this.useMultiThreadingToolStripMenuItem.Text = "Use MultiThreading";
+            this.useMultiThreadingToolStripMenuItem.Text = "Use Multithreading";
             this.useMultiThreadingToolStripMenuItem.Click += new System.EventHandler(this.useMultiThreadingToolStripMenuItem_Click);
             // 
             // includeFunctionPositionToolStripMenuItem
@@ -369,7 +370,15 @@
             this.includeFunctionPositionToolStripMenuItem.Name = "includeFunctionPositionToolStripMenuItem";
             this.includeFunctionPositionToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
             this.includeFunctionPositionToolStripMenuItem.Text = "Include Function Position";
-            this.includeFunctionPositionToolStripMenuItem.Click += new System.EventHandler(this.includeFunctionPositionToolStripMenuItem_Click);
+            // 
+            // includeFunctionHashToolStripMenuItem
+            // 
+            this.includeFunctionHashToolStripMenuItem.Name = "includeFunctionHashToolStripMenuItem";
+            this.includeFunctionHashToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
+            this.includeFunctionHashToolStripMenuItem.Text = "Include Function Hash";
+            this.includeFunctionHashToolStripMenuItem.ToolTipText = "Shows the persistent hash of the function. Meant to be used for function database" +
+    " building";
+            this.includeFunctionHashToolStripMenuItem.Click += new System.EventHandler(this.includeFunctionHashToolStripMenuItem_Click);
             // 
             // uppercaseNativesToolStripMenuItem
             // 
@@ -396,7 +405,7 @@
             // entitiesToolStripMenuItem
             // 
             this.entitiesToolStripMenuItem.Name = "entitiesToolStripMenuItem";
-            this.entitiesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.entitiesToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
             this.entitiesToolStripMenuItem.Text = "Entities";
             this.entitiesToolStripMenuItem.ToolTipText = "Export The entites file (entities_exp.dat) built into the program so you can edit" +
     " it.\r\nThe program will search for entities.dat in its directory and use that for" +
@@ -406,7 +415,7 @@
             // nativesToolStripMenuItem
             // 
             this.nativesToolStripMenuItem.Name = "nativesToolStripMenuItem";
-            this.nativesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.nativesToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
             this.nativesToolStripMenuItem.Text = "Natives";
             this.nativesToolStripMenuItem.ToolTipText = "Export The natives file (natives_exp.dat) built into the program so you can edit " +
     "it.\r\nThe program will search for natives.dat in its directory and use that for r" +
@@ -418,7 +427,7 @@
             this.fullNativeInfoToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.pCToolStripMenuItem});
             this.fullNativeInfoToolStripMenuItem.Name = "fullNativeInfoToolStripMenuItem";
-            this.fullNativeInfoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.fullNativeInfoToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
             this.fullNativeInfoToolStripMenuItem.Text = "Full Native info";
             this.fullNativeInfoToolStripMenuItem.ToolTipText = "Export a file containing definitions of natives to a h file in programs directory" +
     "\r\n";
@@ -426,7 +435,7 @@
             // pCToolStripMenuItem
             // 
             this.pCToolStripMenuItem.Name = "pCToolStripMenuItem";
-            this.pCToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.pCToolStripMenuItem.Size = new System.Drawing.Size(89, 22);
             this.pCToolStripMenuItem.Text = "PC";
             this.pCToolStripMenuItem.Click += new System.EventHandler(this.fullPCNativeInfoToolStripMenuItem_Click);
             // 
@@ -738,8 +747,9 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
 		private System.Windows.Forms.ColumnHeader columnHeader3;
-		private System.Windows.Forms.ToolStripMenuItem includeFunctionPositionToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem includeFunctionHashToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem uppercaseNativesToolStripMenuItem;
-	}
+        private System.Windows.Forms.ToolStripMenuItem includeFunctionPositionToolStripMenuItem;
+    }
 }
 
