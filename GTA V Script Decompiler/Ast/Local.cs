@@ -65,6 +65,21 @@ namespace Decompiler.Ast
             function.GetFrameVar(Index).SetCalled();
             function.GetFrameVar(Index).HintType(Value.GetType());
             Value.HintType(function.GetFrameVar(Index).DataType);
+
+            // I really have to move this somewhere else
+
+            if (value is NativeCall && function.GetFrameVar(Index).Name == "")
+            {
+                var entry = (value as NativeCall).Entry;
+                if (entry != null)
+                {
+                    var name = Utils.TryGetLocalAutoName(entry?.name);
+                    if (name != null)
+                    {
+                        function.SetFrameVarAutoName(Index, name!);
+                    }
+                }
+            }    
         }
 
         public override bool IsStatement()

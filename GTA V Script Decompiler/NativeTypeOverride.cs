@@ -83,7 +83,7 @@ namespace Decompiler
             Overrides.Add(new("DISABLE_CONTROL_ACTION", 1, Stack.DataType.eControlAction));
             Overrides.Add(new("ENABLE_CONTROL_ACTION", 1, Stack.DataType.eControlAction));
 
-            // HUD hud component
+            // HUD, GRAPHICS hud component
 
             Overrides.Add(new("IS_HUD_COMPONENT_ACTIVE", 0, Stack.DataType.eHudComponent));
             Overrides.Add(new("IS_SCRIPTED_HUD_COMPONENT_ACTIVE", 0, Stack.DataType.eHudComponent));
@@ -95,6 +95,9 @@ namespace Decompiler
             Overrides.Add(new("RESET_HUD_COMPONENT_VALUES", 0, Stack.DataType.eHudComponent));
             Overrides.Add(new("SET_HUD_COMPONENT_POSITION", 0, Stack.DataType.eHudComponent));
             Overrides.Add(new("GET_HUD_COMPONENT_POSITION", 0, Stack.DataType.eHudComponent));
+            Overrides.Add(new("REQUEST_SCALEFORM_SCRIPT_HUD_MOVIE", 0, Stack.DataType.eHudComponent));
+            Overrides.Add(new("HAS_SCALEFORM_SCRIPT_HUD_MOVIE_LOADED", 0, Stack.DataType.eHudComponent));
+            Overrides.Add(new("REMOVE_SCALEFORM_SCRIPT_HUD_MOVIE", 0, Stack.DataType.eHudComponent));
 
             // PED ped type
 

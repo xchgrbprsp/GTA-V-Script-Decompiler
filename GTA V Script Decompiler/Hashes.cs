@@ -68,15 +68,6 @@ namespace Decompiler
 
 		}
 
-		public string GetHash(int value, string temp = "")
-		{
-			if (Properties.Settings.Default.ReverseHashes == false || value <= 200)
-				return inttohex(value);
-			if (hashes.ContainsKey(value))
-				return "joaat(\"" + hashes[value] + "\")";
-			return inttohex(value) + temp;
-		}
-
 		public string GetHash(uint value, string temp = "")
 		{
 			if (Properties.Settings.Default.ReverseHashes == false || value <= 200)
@@ -84,7 +75,7 @@ namespace Decompiler
 			int intvalue = (int) value;
 			if (hashes.ContainsKey(intvalue))
 				return "joaat(\"" + hashes[intvalue] + "\")";
-			return value.ToString() + temp;
+			return ((int)value).ToString() + temp;
 		}
 
 		public bool IsKnownHash(int value)

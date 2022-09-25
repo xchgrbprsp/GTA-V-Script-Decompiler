@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Decompiler
 {
@@ -118,5 +120,37 @@ namespace Decompiler
 				return int.TryParse(temp, out value);
 		}
 
+		public static string CamelCase(string[] words)
+		{
+            words[0] = words[0].ToLower();
+
+            for (int i = 1; i < words.Length; i++)
+            {
+                words[i] = words[i].ToLower();
+                words[i] = string.Concat(words[i][0].ToString().ToUpper(), words[i].AsSpan(1));
+            }
+
+            return String.Join("", words);
+        }
+
+		public static string? TryGetLocalAutoName(string nativeStr)
+		{
+			var split = nativeStr.Split("_");
+			if (split[0] == "IS" || split[0] == "HAS")
+			{
+				return CamelCase(split);
+			}
+			else if (split.Contains("GET"))
+			{
+				split = nativeStr.Split("GET_");
+
+				if (split.Length == 1)
+					return CamelCase(split[0].Split("_"));
+				else
+                    return CamelCase(split[1].Split("_"));
+            }
+
+			return null;
+        }
 	}
 }

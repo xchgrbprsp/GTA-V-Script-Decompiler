@@ -50,7 +50,7 @@ namespace Decompiler.Ast
                     return info.Enum!.GetValue((int)Value);
             }    
 
-            return ScriptFile.HashBank.GetHash((int)Value); // todo int style processing
+            return ScriptFile.HashBank.GetHash((uint)Value); // todo int style processing
         }
     }
 }

@@ -8,6 +8,7 @@ using System.Text.Json.Serialization.Metadata;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace Decompiler
 {
@@ -151,7 +152,7 @@ namespace Decompiler
 			if (index < Pcount)
 				return Params.GetVarName(index);
 			else if (index < Pcount + 2)
-				throw new Exception("Unexpecteed fvar");
+				throw new Exception("Unexpected fvar");
 			return Vars.GetVarName((uint) (index - 2 - Pcount));
 		}
 
@@ -165,14 +166,89 @@ namespace Decompiler
 			if (index < Pcount)
 				return Params.GetVarAtIndex(index);
 			else if (index < Pcount + 2)
-				throw new Exception("Unexpecteed fvar");
+				throw new Exception("Unexpected fvar");
 			return Vars.GetVarAtIndex((uint) (index - 2 - Pcount));
 		}
 
-		/// <summary>
-		/// The block of code that the function takes up
-		/// </summary>
-		public List<byte> CodeBlock { get; set; }
+        public void SetFrameVarAutoName(uint index, string name)
+        {
+			VariableStorage storage;
+			uint idx;
+
+			if (index < Pcount)
+			{
+				idx = index;
+				storage = Params;
+			}
+			else if (index < Pcount + 2)
+			{
+                throw new Exception("Unexpected fvar");
+			}
+			else
+			{
+				storage = Vars;
+                idx = (uint)(index - 2 - Pcount);
+            }
+
+            foreach (var var in storage.Vars)
+            {
+                if (var.Index != idx && var.Name == name)
+                {
+                    int num;
+
+                    if (Int32.TryParse("" + name[^1], out num))
+						name = name[0..^1] + (num + 1);
+					else
+						name += "2";
+                    break;
+                }
+            }
+
+            storage.GetVarAtIndex(idx).Name = name;
+        }
+
+		public void SetFrameVarAutoLoopIdx(uint index)
+		{
+            VariableStorage storage;
+            uint idx;
+
+            if (index < Pcount)
+            {
+                idx = index;
+                storage = Params;
+            }
+            else if (index < Pcount + 2)
+            {
+                throw new Exception("Unexpected fvar");
+            }
+            else
+            {
+                storage = Vars;
+                idx = (uint)(index - 2 - Pcount);
+            }
+
+			for (char i = 'i'; i < 'o'; i++)
+			{
+				foreach (var var in storage.Vars)
+				{
+					if (var.Index != idx && var.Name == i.ToString())
+					{
+						goto skip;
+					}
+				}
+
+                storage.GetVarAtIndex(idx).Name = i.ToString();
+                break;
+
+skip:
+				continue;
+			}
+		}
+
+        /// <summary>
+        /// The block of code that the function takes up
+        /// </summary>
+        public List<byte> CodeBlock { get; set; }
 
 		/// <summary>
 		/// Gets the function info given the offset where its called from
@@ -1111,6 +1187,11 @@ DONE_COND:
 						@for.Statements = lastWhile.Statements;
 						tree.Statements.Add(@for);
 						// TODO add support for continue statements (fix jumps)
+
+						if (lastSet is Ast.LocalStore)
+						{
+							SetFrameVarAutoLoopIdx((lastSet as Ast.LocalStore).Index);
+						}
                     }
 				}
 			}

@@ -185,7 +185,7 @@ namespace Decompiler
 
 				return Program.getIntType == Program.IntType._uint
 					? ScriptFile.HashBank.GetHash(BitConverter.ToUInt32(operands, 1 + index*6))
-					: ScriptFile.HashBank.GetHash(BitConverter.ToInt32(operands, 1 + index*6));
+					: ScriptFile.HashBank.GetHash(BitConverter.ToUInt32(operands, 1 + index*6));
 			}
 			throw new Exception("Not A Switch Statement");
 		}

@@ -11,7 +11,7 @@ namespace Decompiler
 	public class VariableStorage
     {
         ListType listType;//static/function_var/parameter
-        List<Variable> Vars;
+        public List<Variable> Vars;
         Dictionary<int, int> VarRemapper; //not necessary, just shifts variables up if variables before are bigger than 1 DWORD
 		private int count;
 		private int scriptParamCount = 0;
@@ -94,6 +94,7 @@ namespace Decompiler
                 return name + (listType == ListType.Statics && index >= scriptParamStart ? index - scriptParamStart : index).ToString();
             }
         }
+
 		public void SetScriptParamCount(int count)
 		{
 			if (listType == ListType.Statics)
