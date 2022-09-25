@@ -97,6 +97,7 @@
             this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.timer3 = new System.Windows.Forms.Timer(this.components);
+            this.showLocalizedTextsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.fctb1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -128,6 +129,7 @@
             this.fctb1.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.fctb1.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.fctb1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.fctb1.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.fctb1.IsReplaceMode = false;
             this.fctb1.Language = FastColoredTextBoxNS.Language.CSharp;
             this.fctb1.LeftBracket = '(';
@@ -250,6 +252,7 @@
             this.toolStripSeparator5,
             this.showArraySizeToolStripMenuItem,
             this.reverseHashesToolStripMenuItem,
+            this.showLocalizedTextsToolStripMenuItem,
             this.includeNativeNamespaceToolStripMenuItem,
             this.declareVariablesToolStripMenuItem,
             this.shiftVariablesToolStripMenuItem,
@@ -657,6 +660,14 @@
             this.timer3.Interval = 5000;
             this.timer3.Tick += new System.EventHandler(this.timer3_Tick);
             // 
+            // showLocalizedTextsStripMenuItem
+            // 
+            this.showLocalizedTextsToolStripMenuItem.Name = "showLocalizedTextsStripMenuItem";
+            this.showLocalizedTextsToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
+            this.showLocalizedTextsToolStripMenuItem.Text = "Show Localized Texts";
+            this.showLocalizedTextsToolStripMenuItem.ToolTipText = "Replace text labels with their localized text";
+            this.showLocalizedTextsToolStripMenuItem.Click += new System.EventHandler(this.showLocalizedTextsStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -750,6 +761,7 @@
 		private System.Windows.Forms.ToolStripMenuItem includeFunctionHashToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem uppercaseNativesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem includeFunctionPositionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem showLocalizedTextsToolStripMenuItem;
     }
 }
 

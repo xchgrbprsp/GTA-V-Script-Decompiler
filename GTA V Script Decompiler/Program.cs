@@ -11,6 +11,7 @@ namespace Decompiler
 		public static int ThreadCount;
 		public static NativeDB nativeDB;
 		public static FunctionDB functionDB;
+		public static TextDB textDB;
 
 		/// <summary>
 		/// The main entry point for the application.
@@ -28,6 +29,8 @@ namespace Decompiler
 			nativeDB.LoadData();
 
 			functionDB = new FunctionDB();
+
+			textDB = new TextDB();
 
 			if (args.Length == 0)
 			{

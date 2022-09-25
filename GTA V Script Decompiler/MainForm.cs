@@ -45,7 +45,8 @@ namespace Decompiler
 			
 			showArraySizeToolStripMenuItem.Checked = Properties.Settings.Default.ShowArraySize;
 			reverseHashesToolStripMenuItem.Checked = Properties.Settings.Default.ReverseHashes;
-			declareVariablesToolStripMenuItem.Checked = Properties.Settings.Default.DeclareVariables;
+			showLocalizedTextsToolStripMenuItem.Checked = Properties.Settings.Default.ShowLocalizedTexts;
+            declareVariablesToolStripMenuItem.Checked = Properties.Settings.Default.DeclareVariables;
 			shiftVariablesToolStripMenuItem.Checked = Properties.Settings.Default.ShiftVariables;
 			showFuncPointerToolStripMenuItem.Checked = Properties.Settings.Default.ShowFunctionPointers;
 			useMultiThreadingToolStripMenuItem.Checked = Properties.Settings.Default.UseMultithreading;
@@ -265,6 +266,13 @@ namespace Decompiler
 		{
 			reverseHashesToolStripMenuItem.Checked = !reverseHashesToolStripMenuItem.Checked;
             Properties.Settings.Default.ReverseHashes = reverseHashesToolStripMenuItem.Checked;
+            Properties.Settings.Default.Save();
+        }
+
+        private void showLocalizedTextsStripMenuItem_Click(object sender, EventArgs e)
+        {
+            showLocalizedTextsToolStripMenuItem.Checked = !showLocalizedTextsToolStripMenuItem.Checked;
+            Properties.Settings.Default.ShowLocalizedTexts = showLocalizedTextsToolStripMenuItem.Checked;
             Properties.Settings.Default.Save();
         }
 

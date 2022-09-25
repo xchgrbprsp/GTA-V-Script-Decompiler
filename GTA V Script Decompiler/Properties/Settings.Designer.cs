@@ -178,5 +178,17 @@ namespace Decompiler.Properties {
                 this["IncludeFunctionHash"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowLocalizedTexts {
+            get {
+                return ((bool)(this["ShowLocalizedTexts"]));
+            }
+            set {
+                this["ShowLocalizedTexts"] = value;
+            }
+        }
     }
 }

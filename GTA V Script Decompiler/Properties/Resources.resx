@@ -124,6 +124,9 @@
   <data name="Functions" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\functions.db;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="globalText" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\global.gxt2;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="natives" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\natives.dat;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>

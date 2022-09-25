@@ -23,9 +23,23 @@ namespace Decompiler.Ast
         public override string ToString()
         {
             if (Index is ConstantInt)
+            {
+                if (Properties.Settings.Default.ShowLocalizedTexts)
+                {
+                    uint hash = Utils.Joaat(function.Scriptfile.StringTable[(int)(Index as ConstantInt).GetValue()]);
+
+                    if (hash != 0x3acbce85 /*STRING*/ && Program.textDB.Strings.TryGetValue(hash, out string text))
+                    {
+                        return $"_(\"{text.Replace("\"", "\\\"")}\")";
+                    }    
+                }
+
                 return "\"" + function.Scriptfile.StringTable[(int)(Index as ConstantInt).GetValue()] + "\"";
+            }
             else
+            {
                 return "StringTable(" + Index.ToString() + ")";
+            }
         }
     }
 }
