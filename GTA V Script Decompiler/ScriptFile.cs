@@ -51,6 +51,7 @@ namespace Decompiler
             GetFunctions();
 
             Statics.checkvars();
+            Program.functionDB.Reset();
 
             foreach (Function func in Functions)
             {

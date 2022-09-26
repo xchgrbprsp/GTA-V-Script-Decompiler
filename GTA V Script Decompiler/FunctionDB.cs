@@ -13,6 +13,7 @@ namespace Decompiler
         public Stack.DataType? ReturnType = null;
         public Dictionary<int, string> ParamNames = new();
         public Dictionary<int, Stack.DataType> ParamTypes = new();
+        public bool Applied = false;
 
         public FunctionModEntry()
         {
@@ -79,6 +80,12 @@ namespace Decompiler
             }
         }
 
+        public void Reset()
+        {
+            foreach (var entry in Entries)
+                entry.Value.Applied = false;
+        }
+
         public void Visit(Function func)
         {
             uint hash = func.Hash;
@@ -86,6 +93,9 @@ namespace Decompiler
             if (Entries.ContainsKey(hash))
             {
                 var entry = Entries[hash];
+
+                if (entry.Applied)
+                    return;
 
                 if (entry.Name != null)
                 {
@@ -106,6 +116,8 @@ namespace Decompiler
                 {
                     func.GetFrameVar((uint)p.Key).HintType(p.Value);
                 }
+
+                entry.Applied = true;
             }
         }
     }

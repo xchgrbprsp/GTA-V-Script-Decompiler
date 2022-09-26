@@ -55,6 +55,7 @@
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.showArraySizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reverseHashesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showLocalizedTextsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.includeNativeNamespaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.declareVariablesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.shiftVariablesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -97,7 +98,6 @@
             this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.timer3 = new System.Windows.Forms.Timer(this.components);
-            this.showLocalizedTextsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.fctb1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -138,6 +138,7 @@
             this.fctb1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.fctb1.Name = "fctb1";
             this.fctb1.Paddings = new System.Windows.Forms.Padding(0);
+            this.fctb1.ReadOnly = true;
             this.fctb1.RightBracket = ')';
             this.fctb1.RightBracket2 = '}';
             this.fctb1.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
@@ -323,6 +324,14 @@
             this.reverseHashesToolStripMenuItem.ToolTipText = "Reverse known hashes into their text equivalent\r\ne.g 0xB779A091 -> joaat(\"adder\")" +
     "";
             this.reverseHashesToolStripMenuItem.Click += new System.EventHandler(this.reverseHashesToolStripMenuItem_Click);
+            // 
+            // showLocalizedTextsToolStripMenuItem
+            // 
+            this.showLocalizedTextsToolStripMenuItem.Name = "showLocalizedTextsToolStripMenuItem";
+            this.showLocalizedTextsToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
+            this.showLocalizedTextsToolStripMenuItem.Text = "Show Localized Texts";
+            this.showLocalizedTextsToolStripMenuItem.ToolTipText = "Replace text labels with their localized text";
+            this.showLocalizedTextsToolStripMenuItem.Click += new System.EventHandler(this.showLocalizedTextsStripMenuItem_Click);
             // 
             // includeNativeNamespaceToolStripMenuItem
             // 
@@ -659,14 +668,6 @@
             // 
             this.timer3.Interval = 5000;
             this.timer3.Tick += new System.EventHandler(this.timer3_Tick);
-            // 
-            // showLocalizedTextsStripMenuItem
-            // 
-            this.showLocalizedTextsToolStripMenuItem.Name = "showLocalizedTextsStripMenuItem";
-            this.showLocalizedTextsToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
-            this.showLocalizedTextsToolStripMenuItem.Text = "Show Localized Texts";
-            this.showLocalizedTextsToolStripMenuItem.ToolTipText = "Replace text labels with their localized text";
-            this.showLocalizedTextsToolStripMenuItem.Click += new System.EventHandler(this.showLocalizedTextsStripMenuItem_Click);
             // 
             // MainForm
             // 
