@@ -12,7 +12,7 @@ namespace Decompiler
 {
 	public class ScriptFile
     {
-        List<byte> CodeTable;
+        public List<byte> CodeTable;
 		public StringTable StringTable;
 		public X64NativeTable X64NativeTable;
         private int offset = 0;

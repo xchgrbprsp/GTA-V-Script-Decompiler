@@ -23,12 +23,13 @@ namespace Decompiler
 		bool loadingfile = false;
 		string filename = "";
 		private bool scriptopen = false;
-		ScriptFile fileopen;
+		ScriptFile OpenFile;
 		Style highlight;
 		Queue<string> CompileList;
 		List<Tuple<uint, string>> FoundStrings;
 		uint[] HashToFind;
 		string SaveDirectory;
+		List<Disassembly> DisassembyWindows = new();
 
 		public bool ScriptOpen
 		{
@@ -100,6 +101,12 @@ namespace Decompiler
 				loadingfile = true;
 				fctb1.Clear();
 				listView1.Items.Clear();
+				
+				foreach (var dis in DisassembyWindows)
+					dis.Dispose();
+
+				DisassembyWindows.Clear();
+
 				updatestatus("Opening Script File...");
 				string ext = Path.GetExtension(ofd.FileName);
 				if (ext == ".full") //handle openIV exporting pc scripts as *.ysc.full
@@ -110,7 +117,8 @@ namespace Decompiler
 				try
 				{
 #endif
-					fileopen = new ScriptFile(ofd.OpenFile());
+                OpenFile = new ScriptFile(ofd.OpenFile());
+				GC.Collect();
 #if !DEBUG
 				}
 				catch (Exception ex)
@@ -122,14 +130,14 @@ namespace Decompiler
 				updatestatus("Decompiled Script File, Time taken: " + (DateTime.Now - Start).ToString());
 				MemoryStream ms = new MemoryStream();
 
-				fileopen.Save(ms, false);
+				OpenFile.Save(ms, false);
 
 
-				foreach (KeyValuePair<string, Tuple<int, int>> locations in fileopen.Function_loc)
+				foreach (KeyValuePair<string, Tuple<int, int>> locations in OpenFile.Function_loc)
 				{
 					listView1.Items.Add(new ListViewItem(new string[] {locations.Key, locations.Value.Item1.ToString(), locations.Value.Item2.ToString()}));
 				}
-				fileopen.Close();
+				OpenFile.Close();
 				StreamReader sr = new StreamReader(ms);
 				ms.Position = 0;
 				updatestatus("Loading Text in Viewer...");
@@ -535,7 +543,7 @@ namespace Decompiler
 					if (!fctb1.SelectedText.Contains('\n') && !fctb1.SelectedText.Contains('\n'))
 						fctb1.Range.SetStyle(highlight, "\\b" + fctb1.Selection.Text + "\\b", RegexOptions.IgnoreCase);
 				}
-				getcontextitems();
+				GetContextItems();
 			}
 			catch
 			{
@@ -656,7 +664,7 @@ namespace Decompiler
 
 		private void cmsText_Opening(object sender, CancelEventArgs e)
 		{
-			getcontextitems();
+			GetContextItems();
 			if (cmsText.Items.Count == 0) e.Cancel = true;
 		}
 
@@ -667,7 +675,7 @@ namespace Decompiler
 
 		}
 
-		string getwordatcursor()
+		string GetWordAtCursor()
 		{
 			string line = fctb1.Lines[fctb1.Selection.Start.iLine];
 			if (line.Length == 0)
@@ -694,22 +702,37 @@ namespace Decompiler
 			return line.Substring(min, max - min);
 		}
 
-		private void getcontextitems()
+		private void GetContextItems()
 		{
-			string word = getwordatcursor();
+			string word = GetWordAtCursor();
 			cmsText.Items.Clear();
 			foreach (ListViewItem lvi in listView1.Items)
 			{
 				if (lvi.Text == word)
 				{
-					cmsText.Items.Add(new ToolStripMenuItem("Goto Declaration(" + lvi.Text + ")", null,
+					cmsText.Items.Add(new ToolStripMenuItem("Goto Declaration (" + lvi.Text + ")", null,
 						new EventHandler(delegate(object o, EventArgs a)
 						{
 							int num = Convert.ToInt32(lvi.SubItems[1].Text);
 							fctb1.Selection = new FastColoredTextBoxNS.Range(fctb1, 0, num, 0, num);
 							fctb1.DoSelectionVisible();
 						}), Keys.F12));
-				}
+
+                    cmsText.Items.Add(new ToolStripMenuItem("Disassemble (" + lvi.Text + ")", null,
+                        new EventHandler(delegate (object o, EventArgs a)
+                        {
+							foreach (var func in OpenFile.Functions)
+							{
+								if (func.Name == word)
+								{
+									var dis = new Disassembly(func);
+									dis.Show();
+									DisassembyWindows.Add(dis);
+                                    break;
+								}
+							}
+                        }), Keys.F10));
+                }
 			}
 
 		}
@@ -737,7 +760,7 @@ namespace Decompiler
 				if (sfd.ShowDialog() != System.Windows.Forms.DialogResult.OK)
 					return;
 				StreamWriter sw = File.CreateText(sfd.FileName);
-				foreach (string line in fileopen.GetStringTable())
+				foreach (string line in OpenFile.GetStringTable())
 				{
 					sw.WriteLine(line);
 				}
@@ -762,7 +785,7 @@ namespace Decompiler
 				if (sfd.ShowDialog() != System.Windows.Forms.DialogResult.OK)
 					return;
 				StreamWriter sw = File.CreateText(sfd.FileName);
-				foreach (string line in fileopen.GetNativeTable())
+				foreach (string line in OpenFile.GetNativeTable())
 				{
 					sw.WriteLine(line);
 				}
@@ -806,7 +829,7 @@ namespace Decompiler
 				sw.WriteLine("typedef uint bool;");
 				sw.WriteLine("typedef uint var;");
 				sw.WriteLine("");
-				foreach (string line in fileopen.GetNativeHeader())
+				foreach (string line in OpenFile.GetNativeHeader())
 				{
 					sw.WriteLine("extern " + line);
 				}

@@ -6,15 +6,17 @@ namespace Decompiler
 {
 	internal class HLInstruction
 	{
-		int offset;
-		Instruction instruction;
-		byte[] operands;
+        int offset;
+		public Instruction instruction;
+		public Instruction OriginalInstruction;
+        public byte[] operands;
 		public int ReturnCount { get; set; }
 
 		public HLInstruction(Instruction Instruction, IEnumerable<byte> Operands, int Offset)
 		{
 			instruction = Instruction;
-			operands = Operands.ToArray();
+            OriginalInstruction = instruction;
+            operands = Operands.ToArray();
 			offset = Offset;
 			ReturnCount = 0;
 		}
@@ -22,21 +24,24 @@ namespace Decompiler
 		public HLInstruction(byte Instruction, IEnumerable<byte> Operands, int Offset)
 		{
 			instruction = (Instruction) Instruction;
-			operands = Operands.ToArray();
+            OriginalInstruction = (Instruction) instruction;
+            operands = Operands.ToArray();
 			offset = Offset;
 		}
 
 		public HLInstruction(Instruction Instruction, int Offset)
 		{
 			instruction = Instruction;
-			operands = new byte[0];
+            OriginalInstruction = instruction;
+            operands = new byte[0];
 			offset = Offset;
 		}
 
 		public HLInstruction(byte Instruction, int Offset)
 		{
 			instruction = (Instruction) Instruction;
-			operands = new byte[0];
+			OriginalInstruction = (Instruction) Instruction;
+            operands = new byte[0];
 			offset = Offset;
 		}
 
