@@ -168,17 +168,17 @@ namespace Decompiler
 			}
 		}
 
-		/*public int GetSwitchCase(int index)
+		public int GetSwitchCase(int index)
 		{
-			if (instruction == Instruction.Switch)
+			if (instruction == Instruction.SWITCH)
 			{
 				int cases = GetOperand(0);
 				if (index >= cases)
 					throw new Exception("Out Or Range Script Case");
-				return Utils.SwapEndian(BitConverter.ToInt32(operands, 1 + index * 6));
+				return BitConverter.ToInt32(operands, 1 + index * 6);
 			}
 			throw new Exception("Not A Switch Statement");
-		}*/
+		}
 
 		public string GetSwitchStringCase(int index)
 		{

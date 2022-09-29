@@ -337,10 +337,14 @@ skip:
 		/// </summary>
 		public void Decompile()
 		{
+			if (DecodeStarted)
+				return;
+
 			lock (Program.ThreadLock)
 			{
 				DecodeStarted = true;
-				if (Decoded) return;
+				if (Decoded) 
+					return;
 			}
 
 			DecodeStatementTree(MainTree);
@@ -416,8 +420,8 @@ skip:
 		/// </summary>
 		void HandleSwitch(StatementTree tree)
 		{
-			Dictionary<int, List<string>> cases = new Dictionary<int, List<string>>();
-			string case_val;
+			Dictionary<int, List<Ast.AstToken>> cases = new Dictionary<int, List<Ast.AstToken>>();
+			Ast.AstToken case_val;
 			int offset;
 			int defaultloc;
 			int breakloc;
@@ -427,7 +431,7 @@ skip:
 			for (int i = 0; i < Instructions[tree.Offset].GetOperand(0); i++)
 			{
 				//Check if the case is a known hash
-				case_val = Instructions[tree.Offset].GetSwitchStringCase(i);
+				case_val = new Ast.ConstantInt(this, (ulong)Instructions[tree.Offset].GetSwitchCase(i));
 
 				//Get the offset to jump to
 				offset = Instructions[tree.Offset].GetSwitchOffset(i);
@@ -436,7 +440,7 @@ skip:
 				if (!cases.ContainsKey(offset))
 				{
 					//unknown offset
-					cases.Add(offset, new List<string>(new string[] {case_val}));
+					cases.Add(offset, new List<Ast.AstToken>(new Ast.AstToken[] {case_val}));
 				}
 				else
 				{
@@ -503,13 +507,13 @@ skip:
 				if (cases.ContainsKey(defaultloc))
 				{
 					//Default location shares code path with other known case
-					cases[defaultloc].Add("default");
+					cases[defaultloc].Add(new Ast.Default(this));
 				}
 				else
 				{
-					//Default location is a new code path
-					cases.Add(defaultloc, new List<string>(new string[] {"default"}));
-					sorted = cases.Keys.ToList();
+                    //Default location is a new code path
+                    cases.Add(defaultloc, new List<Ast.AstToken>(new Ast.AstToken[] { new Ast.Default(this) }));
+                    sorted = cases.Keys.ToList();
 					sorted.Sort();
 				}
 			}
@@ -951,6 +955,7 @@ skip:
 						{
 							if (function.Location == Instructions[tree.Offset].GetOperandsAsUInt)
 							{
+								function.Decompile(); // this is a very bad idea that will break everything but cam give better type inference??? TODO: find better way to propagate type info
 								var call = new Ast.FunctionCall(this, Stack.PopCount(function.Pcount), function);
 
 								if (call.IsStatement())

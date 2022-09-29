@@ -184,7 +184,12 @@ namespace Decompiler
 			eStackSize,
 			eDecoratorType,
 			eEventGroup,
-			eHudColour
+			eHudColour,
+			eBlipSprite,
+			eKnockOffVehicle,
+			eCombatMovement,
+			eCombatAttribute,
+			eCharacter
 		}
 
 		#endregion

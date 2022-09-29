@@ -45,6 +45,11 @@ namespace Decompiler
         {
             return Types.GetFromName(return_type);
         }
+
+        public void SetReturnType(Stack.DataType type)
+        {
+            return_type = type.ToString();
+        }
     }
     internal class NativeDB
     {

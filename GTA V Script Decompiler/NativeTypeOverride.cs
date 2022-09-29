@@ -147,13 +147,40 @@ namespace Decompiler
             Overrides.Add(new("REPLACE_HUD_COLOUR", 1, Stack.DataType.eHudColour));
             Overrides.Add(new("REPLACE_HUD_COLOUR_WITH_RGBA", 0, Stack.DataType.eHudColour));
             Overrides.Add(new("SET_CUSTOM_MP_HUD_COLOR", 0, Stack.DataType.eHudColour));
+            Overrides.Add(new("SET_COLOUR_OF_NEXT_TEXT_COMPONENT", 0, Stack.DataType.eHudColour));
+
+            // HUD blip sprites
+
+            Overrides.Add(new("GET_NEXT_BLIP_INFO_ID", 0, Stack.DataType.eBlipSprite));
+            Overrides.Add(new("GET_FIRST_BLIP_INFO_ID", 0, Stack.DataType.eBlipSprite));
+            Overrides.Add(new("GET_CLOSEST_BLIP_INFO_ID", 0, Stack.DataType.eBlipSprite));
+            Overrides.Add(new("SET_BLIP_SPRITE", 1, Stack.DataType.eBlipSprite));
+            Overrides.Add(new("GET_BLIP_SPRITE", -1, Stack.DataType.eBlipSprite));
+            Overrides.Add(new("CUSTOM_MINIMAP_SET_BLIP_OBJECT", 0, Stack.DataType.eBlipSprite));
+
+            // PED knockoff vehicle
+
+            Overrides.Add(new("SET_PED_CAN_BE_KNOCKED_OFF_VEHICLE", 1, Stack.DataType.eKnockOffVehicle));
+
+            // PED combat movement
+
+            Overrides.Add(new("SET_PED_COMBAT_MOVEMENT", 1, Stack.DataType.eCombatMovement));
+
+            // PED combat attribute
+
+            Overrides.Add(new("SET_PED_COMBAT_ATTRIBUTES", 1, Stack.DataType.eCombatMovement));
         }
 
         public static void Visit(ref NativeDBEntry entry)
         {
             foreach (var ovr in Overrides)
                 if (ovr.Name == entry.name)
-                    entry.SetParamType(ovr.Index, ovr.NewType);
+                {
+                    if (ovr.Index == -1)
+                        entry.SetReturnType(ovr.NewType);
+                    else
+                        entry.SetParamType(ovr.Index, ovr.NewType);
+                }
         }
     }
 }

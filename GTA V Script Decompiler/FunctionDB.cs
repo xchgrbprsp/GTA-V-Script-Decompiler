@@ -22,7 +22,7 @@ namespace Decompiler
 
     internal class FunctionDB
     {
-        Dictionary<uint, FunctionModEntry> Entries = new();
+        readonly Dictionary<uint, FunctionModEntry> Entries = new();
 
         private void EnsureEntryCreated(uint hash)
         {
@@ -90,10 +90,8 @@ namespace Decompiler
         {
             uint hash = func.Hash;
 
-            if (Entries.ContainsKey(hash))
+            if (Entries.TryGetValue(hash, out var entry))
             {
-                var entry = Entries[hash];
-
                 if (entry.Applied)
                     return;
 

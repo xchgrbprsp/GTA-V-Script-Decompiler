@@ -14,6 +14,8 @@ namespace Decompiler.Ast
         {
             Lhs = lhs;
             Rhs = rhs;
+            Lhs.HintType(Rhs.GetType());
+            Rhs.HintType(Lhs.GetType());
         }
 
         public override Stack.DataType GetType()
@@ -35,6 +37,8 @@ namespace Decompiler.Ast
         {
             Lhs = lhs;
             Rhs = rhs;
+            Lhs.HintType(Rhs.GetType());
+            Rhs.HintType(Lhs.GetType());
         }
 
         public override Stack.DataType GetType()

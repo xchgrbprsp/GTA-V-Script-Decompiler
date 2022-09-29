@@ -51,27 +51,25 @@
         '\"',
         '\'',
         '\''};
-            this.fctb1.AutoIndentCharsPatterns = "\r\n^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;]+);\r\n^\\s*(case|default)\\s*[^:]" +
-    "*(?<range>:)\\s*(?<range>[^;]+);\r\n";
+            this.fctb1.AutoIndentCharsPatterns = "";
             this.fctb1.AutoScrollMinSize = new System.Drawing.Size(27, 14);
             this.fctb1.BackBrush = null;
             this.fctb1.BracketsHighlightStrategy = FastColoredTextBoxNS.BracketsHighlightStrategy.Strategy2;
             this.fctb1.CharHeight = 14;
             this.fctb1.CharWidth = 8;
+            this.fctb1.CommentPrefix = "--";
             this.fctb1.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.fctb1.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.fctb1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.fctb1.IsReplaceMode = false;
-            this.fctb1.Language = FastColoredTextBoxNS.Language.CSharp;
+            this.fctb1.Language = FastColoredTextBoxNS.Language.VB;
             this.fctb1.LeftBracket = '(';
-            this.fctb1.LeftBracket2 = '{';
             this.fctb1.Location = new System.Drawing.Point(0, 24);
             this.fctb1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.fctb1.Name = "fctb1";
             this.fctb1.Paddings = new System.Windows.Forms.Padding(0);
             this.fctb1.ReadOnly = true;
             this.fctb1.RightBracket = ')';
-            this.fctb1.RightBracket2 = '}';
             this.fctb1.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.fctb1.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("fctb1.ServiceColors")));
             this.fctb1.Size = new System.Drawing.Size(978, 679);

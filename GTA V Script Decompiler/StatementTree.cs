@@ -125,11 +125,11 @@ namespace Decompiler
 
     internal class SwitchTree : StatementTree
     {
-        public readonly Dictionary<int, List<string>> Cases;
+        public readonly Dictionary<int, List<Ast.AstToken>> Cases;
         public readonly int BreakOffset;
         public readonly Ast.AstToken SwitchVal;
 
-        public SwitchTree(Function function, StatementTree parent, int offset, Dictionary<int, List<string>> cases, int breakOffset, Ast.AstToken switchVal) : base(function, parent, offset)
+        public SwitchTree(Function function, StatementTree parent, int offset, Dictionary<int, List<Ast.AstToken>> cases, int breakOffset, Ast.AstToken switchVal) : base(function, parent, offset)
         {
             this.Cases = cases;
             this.BreakOffset = breakOffset;
@@ -137,6 +137,11 @@ namespace Decompiler
 
             foreach (var p in cases)
             {
+                foreach (var @case in p.Value)
+                {
+                    @case.HintType(SwitchVal.GetType());
+                }
+    
                 Statements.Add(new CaseTree(Function, this, Function.CodeOffsetToFunctionOffset(p.Key), p.Value, breakOffset));
             }
         }
@@ -157,13 +162,13 @@ namespace Decompiler
     {
         public readonly int BreakOffset;
         readonly int StartOffset;
-        List<string> CaseNames;
+        List<Ast.AstToken> Cases;
 
-        public CaseTree(Function function, StatementTree parent, int offset, List<string> caseNames, int breakOffset) : base(function, parent, offset)
+        public CaseTree(Function function, StatementTree parent, int offset, List<Ast.AstToken> cases, int breakOffset) : base(function, parent, offset)
         {
             StartOffset = offset;
             BreakOffset = breakOffset;
-            CaseNames = caseNames;
+            Cases = cases;
         }
 
         public override bool IsTreeEnd()
@@ -191,11 +196,11 @@ namespace Decompiler
         public override string ToString()
         {
             StringBuilder sb = new();
-            foreach (var name in CaseNames)
+            foreach (var @case in Cases)
             {
-                if (name != "default")
+                if (@case is not Ast.Default)
                     sb.Append("case ");
-                sb.AppendLine(name + ":");
+                sb.AppendLine(@case.ToString() + ":");
             }
             sb.Append(base.ToString(false));
             return sb.ToString();

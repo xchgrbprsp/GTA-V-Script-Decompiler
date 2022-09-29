@@ -62,6 +62,11 @@ namespace Decompiler
 			new TypeInfo(Stack.DataType.eDecoratorType, 6, "eDecoratorType", "edt", new(typeof(Enums.DecoratorType))),
 			new TypeInfo(Stack.DataType.eEventGroup, 6, "eEventGroup", "eeg", new(typeof(Enums.EventGroup))),
 			new TypeInfo(Stack.DataType.eHudColour, 6, "eHudColour", "ehcol", new(typeof(Enums.HudColour))),
+			new TypeInfo(Stack.DataType.eBlipSprite, 6, "eBlipSprite", "ebs", new(typeof(Enums.BlipSprite))),
+			new TypeInfo(Stack.DataType.eKnockOffVehicle, 6, "eKnockOffVehicle", "ekv", new(typeof(Enums.KnockOffVehicle))),
+			new TypeInfo(Stack.DataType.eCombatMovement, 6, "eCombatMovement", "ecm", new(typeof(Enums.CombatMovement))),
+			new TypeInfo(Stack.DataType.eCombatAttribute, 6, "eCombatAttribute", "ecat", new(typeof(Enums.CombatAttribute))),
+			new TypeInfo(Stack.DataType.eCharacter, 6, "eCharacter", "ech", new(typeof(Enums.Character))),
         };
 
 		public static TypeInfo GetTypeInfo(Stack.DataType type)
