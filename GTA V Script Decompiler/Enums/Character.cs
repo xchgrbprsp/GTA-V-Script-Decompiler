@@ -138,7 +138,7 @@ namespace Decompiler.Enums
         CHAR_PROPERTY_SONAR_COLLECTIONS,
         _CHAR_DETONATEBOMB_2,
         _CHAR_DETONATEBOMB_JAY_NORRIS,
-        CHAR_TAXI,IS,
+        _CHAR_TAXI_IS,
         CHAR_CALL911,
         CHAR_CHAT_CALL,
         _CHAR_SPACE_MONKEY,
