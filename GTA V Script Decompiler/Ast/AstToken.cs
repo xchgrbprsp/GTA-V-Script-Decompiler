@@ -32,11 +32,18 @@ namespace Decompiler.Ast
 
         public new virtual Stack.DataType GetType()
         {
+            // TODO move this somewhere else
+
+            if (CanGetGlobalIndex())
+                return Program.globalTypeMgr.GetGlobalType(GetGlobalIndex());
+
             return Stack.DataType.Unk;
         }
 
         public virtual void HintType(Stack.DataType type)
         {
+            if (CanGetGlobalIndex())
+                Program.globalTypeMgr.HintGlobalType(GetGlobalIndex(), type);
         }
 
         public override string ToString()
@@ -52,6 +59,16 @@ namespace Decompiler.Ast
         public virtual string ToPointerString()
         {
             return ToString();
+        }
+        
+        public virtual bool CanGetGlobalIndex()
+        {
+            return false;
+        }
+
+        public virtual int GetGlobalIndex()
+        {
+            return 0;
         }
     }
 }

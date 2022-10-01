@@ -955,10 +955,10 @@ skip:
 						{
 							if (function.Location == Instructions[tree.Offset].GetOperandsAsUInt)
 							{
-								function.Decompile(); // this is a very bad idea that will break everything but cam give better type inference??? TODO: find better way to propagate type info
 								var call = new Ast.FunctionCall(this, Stack.PopCount(function.Pcount), function);
+                                function.Decompile(); // this is a very bad idea that will break everything but cam give better type inference??? TODO: find better way to propagate type info
 
-								if (call.IsStatement())
+                                if (call.IsStatement())
 									tree.Statements.Add(call);
 								else
 									Stack.Push(call);

@@ -24,6 +24,16 @@ namespace Decompiler.Ast
         {
             return "Global_" + Index;
         }
+
+        public override bool CanGetGlobalIndex()
+        {
+            return true;
+        }
+
+        public override int GetGlobalIndex()
+        {
+            return (int)Index;
+        }
     }
 
     internal class GlobalLoad : AstToken
@@ -39,6 +49,16 @@ namespace Decompiler.Ast
         {
             return "Global_" + Index;
         }
+
+        public override bool CanGetGlobalIndex()
+        {
+            return true;
+        }
+
+        public override int GetGlobalIndex()
+        {
+            return (int)Index;
+        }
     }
 
     internal class GlobalStore : AstToken
@@ -50,6 +70,9 @@ namespace Decompiler.Ast
         {
             Index = index;
             Value = value;
+
+            HintType(value.GetType());
+            value.HintType(GetType());
         }
 
         public override bool IsStatement()
@@ -60,6 +83,16 @@ namespace Decompiler.Ast
         public override string ToString()
         {
             return "Global_" + Index + " = " + Value.ToString() + ";";
+        }
+
+        public override bool CanGetGlobalIndex()
+        {
+            return true;
+        }
+
+        public override int GetGlobalIndex()
+        {
+            return (int)Index;
         }
     }
 }

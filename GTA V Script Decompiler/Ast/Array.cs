@@ -30,6 +30,16 @@ namespace Decompiler.Ast
         {
             return Pointer.ToPointerString() + "[" + Index.ToString() + Stack.GetArraySizeCmt(Size) + "]";
         }
+
+        public override bool CanGetGlobalIndex()
+        {
+            return Pointer.CanGetGlobalIndex();
+        }
+
+        public override int GetGlobalIndex()
+        {
+            return Pointer.GetGlobalIndex() + 1;
+        }
     }
 
     internal class ArrayLoad : AstToken
@@ -51,6 +61,16 @@ namespace Decompiler.Ast
         {
             return Pointer.ToPointerString() + "[" + Index.ToString() + Stack.GetArraySizeCmt(Size) + "]";
         }
+
+        public override bool CanGetGlobalIndex()
+        {
+            return Pointer.CanGetGlobalIndex();
+        }
+
+        public override int GetGlobalIndex()
+        {
+            return Pointer.GetGlobalIndex() + 1;
+        }
     }
 
     internal class ArrayStore : AstToken
@@ -68,6 +88,9 @@ namespace Decompiler.Ast
             Value = value;
 
             Index.HintType(Stack.DataType.Int);
+
+            HintType(value.GetType());
+            value.HintType(GetType());
         }
 
         public override bool IsStatement()
@@ -78,6 +101,16 @@ namespace Decompiler.Ast
         public override string ToString()
         {
             return Pointer.ToPointerString() + "[" + Index.ToString() + Stack.GetArraySizeCmt(Size) + "] = " + Value.ToString() + ";";
+        }
+
+        public override bool CanGetGlobalIndex()
+        {
+            return Pointer.CanGetGlobalIndex();
+        }
+
+        public override int GetGlobalIndex()
+        {
+            return Pointer.GetGlobalIndex() + 1;
         }
     }
 }

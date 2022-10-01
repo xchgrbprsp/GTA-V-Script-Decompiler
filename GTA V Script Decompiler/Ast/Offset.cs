@@ -36,9 +36,19 @@ namespace Decompiler.Ast
                 sep = ".";
 
             if (offset is ConstantInt)
-                return value.ToPointerString() + sep + "f_" + offset.ToString();
+                return value.ToPointerString() + sep + "f_" + (offset as ConstantInt).GetValue();
             else
                 return value.ToPointerString() + sep + "f_[" + offset.ToString() + "]";
+        }
+
+        public override bool CanGetGlobalIndex()
+        {
+            return value.CanGetGlobalIndex() && offset is ConstantInt;
+        }
+
+        public override int GetGlobalIndex()
+        {
+            return value.GetGlobalIndex() + (int)((offset as ConstantInt).GetValue());
         }
     }
 
@@ -61,6 +71,16 @@ namespace Decompiler.Ast
 
             return value.ToPointerString() + sep + "f_" + offset.ToString();
         }
+
+        public override bool CanGetGlobalIndex()
+        {
+            return value.CanGetGlobalIndex();
+        }
+
+        public override int GetGlobalIndex()
+        {
+            return value.GetGlobalIndex() + offset;
+        }
     }
 
     internal class OffsetStore : AstToken
@@ -74,6 +94,9 @@ namespace Decompiler.Ast
             this.value = value;
             this.offset = offset;
             this.storedValue = storedValue;
+
+            HintType(storedValue.GetType());
+            storedValue.HintType(GetType());
         }
 
         public override bool IsStatement()

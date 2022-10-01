@@ -444,9 +444,14 @@ namespace Decompiler
 			columnHeader2.Width = 76;
 		}
 
-		#endregion
+        #endregion
 
-		private void entitiesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void resetGlobalTypesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Program.globalTypeMgr.Reset();
+        }
+
+        private void entitiesToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			ScriptFile.HashBank.Export_Entities();
 		}

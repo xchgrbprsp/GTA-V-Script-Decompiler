@@ -12,6 +12,7 @@ namespace Decompiler
 		public static NativeDB nativeDB;
 		public static FunctionDB functionDB;
 		public static TextDB textDB;
+		public static GlobalTypeMgr globalTypeMgr;
 
 		/// <summary>
 		/// The main entry point for the application.
@@ -31,6 +32,8 @@ namespace Decompiler
 			functionDB = new FunctionDB();
 
 			textDB = new TextDB();
+
+			globalTypeMgr = new GlobalTypeMgr();
 
 			if (args.Length == 0)
 			{

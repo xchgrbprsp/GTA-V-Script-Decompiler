@@ -189,7 +189,8 @@ namespace Decompiler
 			eKnockOffVehicle,
 			eCombatMovement,
 			eCombatAttribute,
-			eCharacter
+			eCharacter,
+			eTransitionState
 		}
 
 		#endregion
