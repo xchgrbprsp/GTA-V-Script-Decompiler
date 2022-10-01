@@ -17,9 +17,9 @@
 			{
 				components.Dispose();
 			}
-			if (disposing && (highlight != null))
+			if (disposing && (Highlight != null))
 			{
-				highlight.Dispose();
+				Highlight.Dispose();
 			}
 			base.Dispose(disposing);
 		}
@@ -141,7 +141,6 @@
             this.fctb1.Size = new System.Drawing.Size(659, 679);
             this.fctb1.TabIndex = 1;
             this.fctb1.Zoom = 100;
-            this.fctb1.SelectionChanged += new System.EventHandler(this.fctb1_SelectionChanged);
             this.fctb1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.fctb1_MouseClick);
             // 
             // cmsText

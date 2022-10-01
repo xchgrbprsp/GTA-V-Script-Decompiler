@@ -18,7 +18,7 @@ namespace Decompiler
 	{
 		string filename = "";
 		ScriptFile OpenFile;
-		Style highlight;
+		Style Highlight;
 		Queue<string> CompileList;
 		string SaveDirectory;
 		readonly List<Disassembly> DisassembyWindows = new();
@@ -59,7 +59,7 @@ namespace Decompiler
 			}
 			t.Checked = true;
 			t.Enabled = false;
-			highlight =  new TextStyle(Brushes.Black, Brushes.Orange, fctb1.DefaultStyle.FontStyle);
+			Highlight =  new TextStyle(Brushes.Black, Brushes.Orange, fctb1.DefaultStyle.FontStyle);
 
 		}
 
@@ -477,59 +477,6 @@ namespace Decompiler
 					fctb1.SelectionStart = fctb1.PointToPosition(fctb1.PointToClient(Cursor.Position));
 				}
 				cmsText.Show();
-			}
-		}
-
-		public string getfunctionfromline(int line)
-		{
-			if (listView1.Items.Count == 0)
-				return "";
-
-			int temp;
-			if (int.TryParse(listView1.Items[0].SubItems[1].Text, out temp))
-			{
-				if (line < temp - 1)
-					return "Local Vars";
-			}
-			else return "";
-			int max = listView1.Items.Count - 1;
-			for (int i = 0; i < max; i++)
-			{
-				if (!int.TryParse(listView1.Items[i].SubItems[1].Text, out temp))
-					continue;
-				if (line >= temp)
-				{
-					if (!int.TryParse(listView1.Items[i + 1].SubItems[1].Text, out temp))
-						continue;
-					if (line < temp - 1)
-					{
-						return listView1.Items[i].SubItems[0].Text;
-					}
-				}
-			}
-			if (int.TryParse(listView1.Items[max].SubItems[1].Text, out temp))
-			{
-				if (line >= temp)
-					return listView1.Items[max].SubItems[0].Text;
-			}
-			return "";
-		}
-
-		private void fctb1_SelectionChanged(object sender, EventArgs e)
-		{
-			try
-			{
-				toolStripStatusLabel3.Text = getfunctionfromline(fctb1.Selection.Start.iLine + 1);
-				fctb1.Range.ClearStyle(highlight);
-				if (fctb1.SelectionLength > 0)
-				{
-					if (!fctb1.SelectedText.Contains('\n') && !fctb1.SelectedText.Contains('\n'))
-						fctb1.Range.SetStyle(highlight, "\\b" + fctb1.Selection.Text + "\\b", RegexOptions.IgnoreCase);
-				}
-				GetContextItems();
-			}
-			catch
-			{
 			}
 		}
 

@@ -349,12 +349,9 @@ skip:
 			if (DecodeStarted)
 				return;
 
-			lock (Program.ThreadLock)
-			{
-				DecodeStarted = true;
-				if (Decoded) 
-					return;
-			}
+			DecodeStarted = true;
+			if (Decoded) 
+				return;
 
 			DecodeStatementTree(MainTree);
 			Decoded = true;
