@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
-using System.Reflection;
-using System.Runtime.InteropServices;
 using FastColoredTextBoxNS;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -20,23 +16,12 @@ namespace Decompiler
 
 	public partial class MainForm : Form
 	{
-		bool loadingfile = false;
 		string filename = "";
-		private bool scriptopen = false;
 		ScriptFile OpenFile;
 		Style highlight;
 		Queue<string> CompileList;
-		List<Tuple<uint, string>> FoundStrings;
-		uint[] HashToFind;
 		string SaveDirectory;
-		List<Disassembly> DisassembyWindows = new();
-
-		public bool ScriptOpen
-		{
-			get { return scriptopen; }
-			set { extractToolStripMenuItem.Visible = extractToolStripMenuItem.Enabled = scriptopen = value; }
-		}
-
+		readonly List<Disassembly> DisassembyWindows = new();
 
 		public MainForm()
 		{
@@ -78,173 +63,166 @@ namespace Decompiler
 
 		}
 
-		void updatestatus(string text)
+		void UpdateStatus(string text)
 		{
 			toolStripStatusLabel1.Text = text;
 			Application.DoEvents();
 		}
 
-		void ready()
+		void ResetLoadedFile()
 		{
-			updatestatus("Ready");
-			loadingfile = false;
-		}
+            fctb1.Clear();
+            listView1.Items.Clear();
+
+            foreach (var dis in DisassembyWindows)
+                dis.Dispose();
+
+            DisassembyWindows.Clear();
+
+			OpenFile = null;
+            GC.Collect();
+        }
 
 		private void openToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			OpenFileDialog ofd = new OpenFileDialog();
 			ofd.Filter = "GTA V Script Files|*.ysc;*.ysc.full";
-			if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+
+			if (ofd.ShowDialog() == DialogResult.OK)
 			{
 				DateTime Start = DateTime.Now;
 				filename = Path.GetFileNameWithoutExtension(ofd.FileName);
-				loadingfile = true;
-				fctb1.Clear();
-				listView1.Items.Clear();
-				
-				foreach (var dis in DisassembyWindows)
-					dis.Dispose();
 
-				DisassembyWindows.Clear();
+				ResetLoadedFile();
 
-				updatestatus("Opening Script File...");
+				UpdateStatus("Opening script file...");
 				string ext = Path.GetExtension(ofd.FileName);
-				if (ext == ".full") //handle openIV exporting pc scripts as *.ysc.full
+				if (ext == ".full") // Handle openIV exporting pc scripts as *.ysc.full
 				{
 					ext = Path.GetExtension(Path.GetFileNameWithoutExtension(ofd.FileName));
 				}
-#if !DEBUG
-				try
-				{
-#endif
+
                 OpenFile = new ScriptFile(ofd.OpenFile());
-				GC.Collect();
-#if !DEBUG
-				}
-				catch (Exception ex)
-				{
-					updatestatus("Error decompiling script " + ex.Message);
-					return;
-				}
-#endif
-				updatestatus("Decompiled Script File, Time taken: " + (DateTime.Now - Start).ToString());
+
+				UpdateStatus("Decompiled script file. Time taken: " + (DateTime.Now - Start).ToString());
 				MemoryStream ms = new MemoryStream();
 
 				OpenFile.Save(ms, false);
-
 
 				foreach (KeyValuePair<string, Tuple<int, int>> locations in OpenFile.Function_loc)
 				{
 					listView1.Items.Add(new ListViewItem(new string[] {locations.Key, locations.Value.Item1.ToString(), locations.Value.Item2.ToString()}));
 				}
+
 				OpenFile.Close();
+
 				StreamReader sr = new StreamReader(ms);
 				ms.Position = 0;
-				updatestatus("Loading Text in Viewer...");
+
+				UpdateStatus("Loading text in viewer...");
+
 				fctb1.Text = sr.ReadToEnd();
 				SetFileName(filename);
-				ScriptOpen = true;
-				updatestatus("Ready, Time taken: " + (DateTime.Now - Start).ToString());
-				//
-
+				UpdateStatus("Ready. Time taken: " + (DateTime.Now - Start).ToString());
 			}
 		}
 
-		private void directoryToolStripMenuItem_Click(object sender, EventArgs e)
+		private async void directoryToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			CompileList = new Queue<string>();
-			Program.ThreadCount = 0;
             CommonOpenFileDialog fsd = new CommonOpenFileDialog();
-			fsd.IsFolderPicker = true;
+            fsd.IsFolderPicker = true;
 			if (fsd.ShowDialog() == CommonFileDialogResult.Ok)
 			{
-				DateTime Start = DateTime.Now;
-				SaveDirectory = Path.Combine(fsd.FileName, "exported");
-				if (!Directory.Exists(SaveDirectory))
-					Directory.CreateDirectory(SaveDirectory);
-				this.Hide();
-
-				foreach (string file in Directory.GetFiles(fsd.FileName, "*.ysc"))
-				{
-					CompileList.Enqueue(file);
-				}
-				foreach (string file in Directory.GetFiles(fsd.FileName, "*.ysc.full"))
-				{
-					CompileList.Enqueue(file);
-				}
-				if (Properties.Settings.Default.UseMultithreading)
-				{
-					for (int i = 0; i < Environment.ProcessorCount - 1; i++)
-					{
-						Program.ThreadCount++;
-						new Thread(Decompile, 10000000).Start();
-					}
-					Program.ThreadCount++;
-					Decompile();
-					while (Program.ThreadCount > 0)
-					{
-						Thread.Sleep(10);
-					}
-				}
-				else
-				{
-					Program.ThreadCount++;
-					Decompile();
-				}
-
-				updatestatus("Directory Extracted, Time taken: " + (DateTime.Now - Start).ToString());
+				await BatchDecompile(fsd.FileName);
 			}
-			this.Show();
-		}
+        }
 
-		private void Decompile()
+		private async Task BatchDecompile(string dirPath)
+		{
+            CompileList = new Queue<string>();
+			var tasks = new List<Task>();
+
+            DateTime Start = DateTime.Now;
+            SaveDirectory = Path.Combine(dirPath, "exported");
+            if (!Directory.Exists(SaveDirectory))
+                Directory.CreateDirectory(SaveDirectory);
+
+            foreach (string file in Directory.GetFiles(dirPath, "*.ysc"))
+            {
+                CompileList.Enqueue(file);
+            }
+
+            foreach (string file in Directory.GetFiles(dirPath, "*.ysc.full"))
+            {
+                CompileList.Enqueue(file);
+            }
+
+			Enabled = false;
+
+            var progressBar = new ProgressBar("Directory Export", 1, CompileList.Count);
+            progressBar.Show();
+
+            if (Properties.Settings.Default.UseMultithreading)
+            {
+                for (int i = 0; i < Environment.ProcessorCount; i++)
+                {
+					tasks.Add(Decompile(progressBar));
+                }
+
+				await Task.WhenAll(tasks);
+            }
+            else
+            {
+                await Decompile(progressBar);
+            }
+
+			Enabled = true;
+            UpdateStatus("Directory Extracted, Time taken: " + (DateTime.Now - Start).ToString());
+        }
+
+		private async Task Decompile(ProgressBar progressBar)
 		{
 			while (CompileList.Count > 0)
 			{
 				string scriptToDecode;
+
 				lock (Program.ThreadLock)
 				{
 					scriptToDecode = CompileList.Dequeue();
 				}
+
 				try
 				{
-					ScriptFile scriptFile = new ScriptFile(File.OpenRead(scriptToDecode));
-					scriptFile.Save(Path.Combine(SaveDirectory, Path.GetFileNameWithoutExtension(scriptToDecode) + ".c"));
-					scriptFile.Close();
+					await Task.Run(() =>
+					{
+						ScriptFile scriptFile = new ScriptFile(File.OpenRead(scriptToDecode));
+						scriptFile.Save(Path.Combine(SaveDirectory, Path.GetFileNameWithoutExtension(scriptToDecode) + ".c"));
+						scriptFile.Close();
+					});
 				}
 				catch (Exception ex)
 				{
 					MessageBox.Show("Error decompiling script " + Path.GetFileNameWithoutExtension(scriptToDecode) + " - " + ex.Message);
 				}
-			}
-			Program.ThreadCount--;
+
+                progressBar.IncrementValue();
+            }
 		}
 
 		private void fileToolStripMenuItem1_Click(object sender, EventArgs e)
 		{
 			OpenFileDialog ofd = new OpenFileDialog();
-			ofd.Filter = "GTA V Script Files|*.xsc;*.csc;*.ysc";
-#if !DEBUG
-			try
-			{
-#endif
-				if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-				{
+			ofd.Filter = "GTA V Script Files|*.ysc;*.ysc.full";
 
-					DateTime Start = DateTime.Now;
-					ScriptFile file = new ScriptFile(ofd.OpenFile());
-					file.Save(Path.Combine(Path.GetDirectoryName(ofd.FileName),
-						Path.GetFileNameWithoutExtension(ofd.FileName) + ".c"));
-					file.Close();
-					updatestatus("File Saved, Time taken: " + (DateTime.Now - Start).ToString());
-				}
-#if !DEBUG
-			}
-			catch (Exception ex)
+			if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
 			{
-				updatestatus("Error decompiling script " + ex.Message);
+				DateTime Start = DateTime.Now;
+				ScriptFile file = new ScriptFile(ofd.OpenFile());
+				file.Save(Path.Combine(Path.GetDirectoryName(ofd.FileName),
+				Path.GetFileNameWithoutExtension(ofd.FileName) + ".c"));
+				file.Close();
+				UpdateStatus("File Saved, Time taken: " + (DateTime.Now - Start).ToString());
 			}
-#endif
 		}
 
 		#region Config Options
@@ -474,17 +452,17 @@ namespace Decompiler
 
 		private void expandAllBlocksToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			updatestatus("Expanding all blocks...");
+			UpdateStatus("Expanding all blocks...");
 			fctb1.ExpandAllFoldingBlocks();
-			ready();
-		}
+            UpdateStatus("Ready");
+        }
 
 		private void collaspeAllBlocksToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			updatestatus("Collasping all blocks...");
+			UpdateStatus("Collasping all blocks...");
 			fctb1.CollapseAllFoldingBlocks();
-			ready();
-		}
+            UpdateStatus("Ready");
+        }
 
 		private void fctb1_MouseClick(object sender, MouseEventArgs e)
 		{
@@ -492,7 +470,7 @@ namespace Decompiler
 			forceclose = true;
 			timer2.Start();
 			timer1.Stop();
-			if (e.Button == System.Windows.Forms.MouseButtons.Right)
+			if (e.Button == MouseButtons.Right)
 			{
 				if (fctb1.SelectionLength == 0)
 				{
@@ -555,92 +533,6 @@ namespace Decompiler
 			}
 		}
 
-		public void fill_function_table()
-		{
-			try
-			{
-				loadingfile = true;
-				Dictionary<string, int> functionloc = new Dictionary<string, int>();
-				for (int i = 0; i < fctb1.LinesCount; i++)
-				{
-					if (fctb1.Lines[i].Length == 0)
-						continue;
-					if (fctb1.Lines[i].Contains(' '))
-					{
-						if (!fctb1.Lines[i].Contains('('))
-							continue;
-						string type = fctb1.Lines[i].Remove(fctb1.Lines[i].IndexOf(' '));
-						switch (type.ToLower())
-						{
-							case "void":
-							case "var":
-							case "float":
-							case "bool":
-							case "int":
-							case "vector3":
-							case "*string":
-								string name = fctb1.Lines[i].Remove(fctb1.Lines[i].IndexOf('(')).Substring(fctb1.Lines[i].IndexOf(' ') + 1);
-								functionloc.Add(name, i + 1);
-								continue;
-							default:
-								if (type.ToLower().StartsWith("struct<"))
-									goto case "var";
-								break;
-
-						}
-					}
-				}
-				listView1.Items.Clear();
-				foreach (KeyValuePair<string, int> locations in functionloc)
-				{
-					listView1.Items.Add(new ListViewItem(new string[] {locations.Key, locations.Value.ToString()}));
-				}
-				loadingfile = false;
-			}
-			catch
-			{
-				loadingfile = false;
-			}
-		}
-
-		private void timer3_Tick(object sender, EventArgs e)
-		{
-			timer3.Stop();
-			fill_function_table();
-		}
-
-		private void fctb1_LineInserted(object sender, FastColoredTextBoxNS.LineInsertedEventArgs e)
-		{
-			if (!loadingfile)
-				timer3.Start();
-		}
-
-		private void fctb1_LineRemoved(object sender, FastColoredTextBoxNS.LineRemovedEventArgs e)
-		{
-			if (!loadingfile)
-				timer3.Start();
-		}
-
-		private void openCFileToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			OpenFileDialog ofd = new OpenFileDialog();
-			ofd.Filter = "C Source files *.c|*.c";
-			if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-			{
-				loadingfile = true;
-				filename = Path.GetFileNameWithoutExtension(ofd.FileName);
-				fctb1.Clear();
-				listView1.Items.Clear();
-				updatestatus("Loading Text in Viewer...");
-				fctb1.OpenFile(ofd.FileName);
-				updatestatus("Loading Functions...");
-				fill_function_table();
-				SetFileName(filename);
-				ready();
-				ScriptOpen = false;
-			}
-		}
-
 		private void SetFileName(string name)
 		{
 			if (name == null)
@@ -658,7 +550,7 @@ namespace Decompiler
 		private void saveCFileToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			SaveFileDialog sfd = new SaveFileDialog();
-			sfd.Filter = "C Source files *.c|*.c";
+			sfd.Filter = "Decompiled Script Files|*.c;*.c4;*.sc;*.sch\"";
 			sfd.FileName = filename + ".c";
 			if (sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
 			{
@@ -742,109 +634,38 @@ namespace Decompiler
 
 		}
 
-		private void fullNativeInfoToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			
-		}
-
-		private void fullPCNativeInfoToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			// ScriptFile.X64npi.exportnativeinfo();
-			updatestatus("Not implemented");
-		}
-
-
 		private void stringsTableToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			if (ScriptOpen)
+			SaveFileDialog sfd = new SaveFileDialog();
+			sfd.Title = "Select location to save string table";
+			sfd.Filter = "Text files|*.txt|All Files|*.*";
+			sfd.FileName = ((filename.Contains('.')) ? filename.Remove(filename.IndexOf('.')) : filename) + "(Strings).txt";
+			if (sfd.ShowDialog() != DialogResult.OK)
+				return;
+			StreamWriter sw = File.CreateText(sfd.FileName);
+			foreach (string line in OpenFile.GetStringTable())
 			{
-				SaveFileDialog sfd = new SaveFileDialog();
-				sfd.Title = "Select location to save string table";
-				sfd.Filter = "Text files|*.txt|All Files|*.*";
-				sfd.FileName = ((filename.Contains('.')) ? filename.Remove(filename.IndexOf('.')) : filename) + "(Strings).txt";
-				if (sfd.ShowDialog() != System.Windows.Forms.DialogResult.OK)
-					return;
-				StreamWriter sw = File.CreateText(sfd.FileName);
-				foreach (string line in OpenFile.GetStringTable())
-				{
-					sw.WriteLine(line);
-				}
-				sw.Close();
-				MessageBox.Show("File Saved");
+				sw.WriteLine(line);
 			}
-			else
-			{
-				MessageBox.Show("No script file is open");
-			}
-
+			sw.Close();
+			MessageBox.Show("File Saved");
 		}
 
 		private void nativeTableToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			if (ScriptOpen)
+			SaveFileDialog sfd = new SaveFileDialog();
+			sfd.Title = "Select location to save native table";
+			sfd.Filter = "Text files|*.txt|All Files|*.*";
+			sfd.FileName = ((filename.Contains('.')) ? filename.Remove(filename.IndexOf('.')) : filename) + "(natives).txt";
+			if (sfd.ShowDialog() != DialogResult.OK)
+				return;
+			StreamWriter sw = File.CreateText(sfd.FileName);
+			foreach (string line in OpenFile.GetNativeTable())
 			{
-				SaveFileDialog sfd = new SaveFileDialog();
-				sfd.Title = "Select location to save native table";
-				sfd.Filter = "Text files|*.txt|All Files|*.*";
-				sfd.FileName = ((filename.Contains('.')) ? filename.Remove(filename.IndexOf('.')) : filename) + "(natives).txt";
-				if (sfd.ShowDialog() != System.Windows.Forms.DialogResult.OK)
-					return;
-				StreamWriter sw = File.CreateText(sfd.FileName);
-				foreach (string line in OpenFile.GetNativeTable())
-				{
-					sw.WriteLine(line);
-				}
-				sw.Close();
-				MessageBox.Show("File Saved");
+				sw.WriteLine(line);
 			}
-			else
-			{
-				MessageBox.Show("No script file is open");
-			}
-		}
-
-		/// <summary>
-		/// Generates a c like header for all the natives. made it back when i was first trying to recompile the files back to *.*sc
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void nativehFileToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			if (ScriptOpen)
-			{
-				SaveFileDialog sfd = new SaveFileDialog();
-				sfd.Title = "Select location to save native table";
-				sfd.Filter = "C header files|*.h|All Files|*.*";
-				sfd.FileName = ((filename.Contains('.')) ? filename.Remove(filename.IndexOf('.')) : filename) + ".h";
-				if (sfd.ShowDialog() != System.Windows.Forms.DialogResult.OK)
-					return;
-				StreamWriter sw = File.CreateText(sfd.FileName);
-				sw.WriteLine("/*************************************************************");
-				sw.WriteLine("******* Header file generated for " + filename + " *******");
-				sw.WriteLine("*************************************************************/\n");
-				sw.WriteLine(
-					"#region Vectors\ntypedef struct Vector3{\n\tfloat x;\n\tfloat y;\n\tfloat z;\n} Vector3, *PVector3;\n\n");
-				sw.WriteLine("extern Vector3 VectorAdd(Vector3 v0, Vector3 v1);");
-				sw.WriteLine("extern Vector3 VectorSub(Vector3 v0, Vector3 v1);");
-				sw.WriteLine("extern Vector3 VectorMult(Vector3 v0, Vector3 v1);");
-				sw.WriteLine("extern Vector3 VectorDiv(Vector3 v0, Vector3 v1);");
-				sw.WriteLine("extern Vector3 VectorNeg(Vector3 v0);\n#endregion\n\n");
-				sw.WriteLine("#define TRUE 1\n#define FALSE 0\n#define true 1\n#define false 0\n");
-				sw.WriteLine("typedef unsigned int uint;");
-				sw.WriteLine("typedef uint bool;");
-				sw.WriteLine("typedef uint var;");
-				sw.WriteLine("");
-				foreach (string line in OpenFile.GetNativeHeader())
-				{
-					sw.WriteLine("extern " + line);
-				}
-				sw.Close();
-				MessageBox.Show("File Saved");
-			}
-			else
-			{
-				MessageBox.Show("No script file is open");
-			}
+			sw.Close();
+			MessageBox.Show("File Saved");
 		}
 
 		private void navigateForwardToolStripMenuItem_Click(object sender, EventArgs e)
@@ -861,155 +682,6 @@ namespace Decompiler
 			{
 				MessageBox.Show("Error, cannont navigate backwards anymore");
 			}
-		}
-
-
-		/// <summary>
-		/// The games language files store items as hashes. This function will grab all strings in a all scripts in a directory
-		/// and hash each string and them compare with a list of hashes supplied in the input box. Any matches get saved to a file STRINGS.txt in the directory
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void findHashFromStringsToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			InputBox IB = new InputBox();
-			if (!IB.ShowList("Input Hash", "Input hash to find", this))
-				return;
-			uint hash;
-			List<uint> Hashes = new List<uint>();
-			foreach (string result in IB.ListValue)
-			{
-
-				if (result.StartsWith("0x"))
-				{
-					if (uint.TryParse(result.Substring(2), System.Globalization.NumberStyles.HexNumber,
-						new System.Globalization.CultureInfo("en-gb"), out hash))
-					{
-						Hashes.Add(hash);
-					}
-					else
-					{
-						MessageBox.Show($"Error converting {result} to hash value");
-					}
-				}
-				else
-				{
-					if (uint.TryParse(result, out hash))
-					{
-						Hashes.Add(hash);
-					}
-					else
-					{
-						MessageBox.Show($"Error converting {result} to hash value");
-					}
-				}
-			}
-			if (Hashes.Count == 0)
-			{
-				MessageBox.Show($"Error, no hashes inputted, please try again");
-				return;
-			}
-			HashToFind = Hashes.ToArray();
-			CompileList = new Queue<string>();
-			FoundStrings = new List<Tuple<uint, string>>();
-			Program.ThreadCount = 0;
-            CommonOpenFileDialog fsd = new CommonOpenFileDialog();
-			if (fsd.ShowDialog() == CommonFileDialogResult.Ok)
-			{
-				DateTime Start = DateTime.Now;
-				this.Hide();
-
-				foreach (string file in Directory.GetFiles(fsd.FileName, "*.ysc"))
-				{
-					CompileList.Enqueue(file);
-				}
-				foreach (string file in Directory.GetFiles(fsd.FileName, "*.ysc.full"))
-				{
-                    CompileList.Enqueue(file);
-                }
-                if (Properties.Settings.Default.UseMultithreading)
-				{
-					for (int i = 0; i < Environment.ProcessorCount - 1; i++)
-					{
-						Program.ThreadCount++;
-						new Thread(FindString, 10000000).Start();
-						Thread.Sleep(0);
-					}
-					Program.ThreadCount++;
-					FindString();
-					while (Program.ThreadCount > 0)
-					{
-						Thread.Sleep(10);
-					}
-				}
-				else
-				{
-					Program.ThreadCount++;
-					FindString();
-				}
-
-				if (FoundStrings.Count == 0)
-					updatestatus($"No Strings Found, Time taken: {DateTime.Now - Start}");
-				else
-				{
-					updatestatus($"Found {FoundStrings.Count} strings, Time taken: {DateTime.Now - Start}");
-					FoundStrings.Sort((x, y) => x.Item1.CompareTo(y.Item1));
-					using (StreamWriter oFile = File.CreateText(Path.Combine(fsd.FileName, "STRINGS.txt")))
-					{
-						foreach (Tuple<uint, string> Item in FoundStrings)
-						{
-							oFile.WriteLine($"0x{Utils.FormatHexHash(Item.Item1)} : \"{Item.Item2}\"");
-						}
-					}
-				}
-			}
-			this.Show();
-		}
-
-		/// <summary>
-		/// This does the actual searching of the hashes from the above function. Designed to run on multiple threads
-		/// </summary>
-		private void FindString()
-		{
-			while (CompileList.Count > 0)
-			{
-				string scriptToSearch;
-				lock (Program.ThreadLock)
-				{
-					scriptToSearch = CompileList.Dequeue();
-				}
-				using (Stream ScriptFile = File.OpenRead(scriptToSearch))
-				{
-					ScriptHeader header = ScriptHeader.Generate(ScriptFile);
-					StringTable table = new StringTable(ScriptFile, header.StringTableOffsets, header.StringBlocks, header.StringsSize);
-					foreach (string str in table.Values)
-					{
-						if (HashToFind.Contains(Utils.Joaat(str)))
-						{
-							if (IsLower(str))
-								continue;
-							lock (Program.ThreadLock)
-							{
-								if (!FoundStrings.Any(item => item.Item2 == str))
-								{
-									FoundStrings.Add(new Tuple<uint, string>(Utils.Joaat(str), str));
-								}
-							}
-						}
-					}
-				}
-			}
-			Program.ThreadCount--;
-		}
-
-		private static bool IsLower(string s)
-		{
-			foreach (char c in s)
-				if (char.IsLower(c))
-				{
-					return true;
-				}
-			return false;
 		}
 	}
 }

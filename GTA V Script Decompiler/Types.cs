@@ -68,6 +68,8 @@ namespace Decompiler
 			new TypeInfo(Stack.DataType.eCombatAttribute, 6, "eCombatAttribute", "ecat", new(typeof(Enums.CombatAttribute))),
 			new TypeInfo(Stack.DataType.eCharacter, 6, "eCharacter", "ech", new(typeof(Enums.Character))),
 			new TypeInfo(Stack.DataType.eTransitionState, 6, "eTransitionState", "ets", new(typeof(Enums.TransitionState))),
+			new TypeInfo(Stack.DataType.eDispatchType, 6, "eDispatchType", "edt", new(typeof(Enums.DispatchType))),
+			new TypeInfo(Stack.DataType.eLevelIndex, 6, "eLevelIndex", "eli", new(typeof(Enums.LevelIndex))),
         };
 
 		public static TypeInfo GetTypeInfo(Stack.DataType type)

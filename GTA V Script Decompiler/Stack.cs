@@ -190,7 +190,9 @@ namespace Decompiler
 			eCombatMovement,
 			eCombatAttribute,
 			eCharacter,
-			eTransitionState
+			eTransitionState,
+			eDispatchType,
+			eLevelIndex
 		}
 
 		#endregion

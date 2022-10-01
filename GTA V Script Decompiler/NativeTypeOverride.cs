@@ -168,7 +168,20 @@ namespace Decompiler
 
             // PED combat attribute
 
-            Overrides.Add(new("SET_PED_COMBAT_ATTRIBUTES", 1, Stack.DataType.eCombatMovement));
+            Overrides.Add(new("SET_PED_COMBAT_ATTRIBUTES", 1, Stack.DataType.eCombatAttribute));
+
+            // MISC dispatch type
+
+            Overrides.Add(new("ENABLE_DISPATCH_SERVICE", 0, Stack.DataType.eDispatchType));
+            Overrides.Add(new("BLOCK_DISPATCH_SERVICE_RESOURCE_CREATION", 0, Stack.DataType.eDispatchType));
+            Overrides.Add(new("GET_NUMBER_RESOURCES_ALLOCATED_TO_WANTED_LEVEL", 0, Stack.DataType.eDispatchType));
+            Overrides.Add(new("CREATE_INCIDENT", 0, Stack.DataType.eDispatchType));
+            Overrides.Add(new("CREATE_INCIDENT_WITH_ENTITY", 0, Stack.DataType.eDispatchType));
+            Overrides.Add(new("SET_INCIDENT_REQUESTED_UNITS", 1, Stack.DataType.eDispatchType));
+
+            // MISC level index
+
+            Overrides.Add(new("GET_INDEX_OF_CURRENT_LEVEL", -1, Stack.DataType.eLevelIndex));
         }
 
         public static void Visit(ref NativeDBEntry entry)

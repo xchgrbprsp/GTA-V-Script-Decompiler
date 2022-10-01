@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.DirectoryServices.ActiveDirectory;
@@ -263,11 +264,10 @@ namespace Decompiler
                 {
                     int num;
 
-                    if (Int32.TryParse("" + name[^1], out num))
+                    if (Int32.TryParse(name[^1].ToString(), out num))
 						name = name[0..^1] + (num + 1);
 					else
 						name += "2";
-                    break;
                 }
             }
 
@@ -310,6 +310,15 @@ namespace Decompiler
 skip:
 				continue;
 			}
+		}
+
+		public void SetName(string name)
+		{
+			foreach (var func in Scriptfile.Functions)
+				if (func.Name == name)
+					return;
+
+			Name = name;
 		}
 
         /// <summary>
@@ -430,8 +439,11 @@ skip:
 
 			for (int i = 0; i < Instructions[tree.Offset].GetOperand(0); i++)
 			{
-				//Check if the case is a known hash
-				case_val = new Ast.ConstantInt(this, (ulong)Instructions[tree.Offset].GetSwitchCase(i));
+                if (CodeOffsetToFunctionOffset(Instructions[tree.Offset].GetSwitchOffset(i)) <= tree.Offset)
+                    throw new InvalidOperationException("Switch case offset goes backwards???");
+
+                //Check if the case is a known hash
+                case_val = new Ast.ConstantInt(this, (ulong)Instructions[tree.Offset].GetSwitchCase(i));
 
 				//Get the offset to jump to
 				offset = Instructions[tree.Offset].GetSwitchOffset(i);
@@ -517,6 +529,9 @@ skip:
 					sorted.Sort();
 				}
 			}
+
+			if (CodeOffsetToFunctionOffset(breakloc) <= tree.Offset)
+				throw new InvalidOperationException("Switch break offset goes backwards???");
 
 			var @switch = new SwitchTree(this, tree, tree.Offset, cases, breakloc, Stack.Pop());
 
@@ -1147,6 +1162,9 @@ DONE:
 						var jumpLoc = Instructions[CodeOffsetToFunctionOffset(Instructions[tree.Offset].GetJumpOffset) - 1];
                         if (jumpLoc.IsWhileJump && jumpLoc.GetJumpOffset < Instructions[tree.Offset].Offset)
                         {
+							if (CodeOffsetToFunctionOffset(Instructions[tree.Offset].GetJumpOffset) <= tree.Offset)
+								throw new InvalidOperationException("Break offset <= Current offset");
+
 							Instructions[CodeOffsetToFunctionOffset(Instructions[tree.Offset].GetJumpOffset) - 1].NopInstruction(); // is this really required?
                             var @while = new WhileTree(this, tree, tree.Offset + 1, condition, Instructions[tree.Offset].GetJumpOffset);
                             treeStack.Push(@while);
@@ -1156,7 +1174,7 @@ DONE:
                         }
 						else
 						{
-							if (Instructions[tree.Offset].GetJumpOffset < Instructions[tree.Offset].Offset)
+							if (Instructions[tree.Offset].GetJumpOffset <= Instructions[tree.Offset].Offset)
 							{
 								//break;
 								throw new InvalidOperationException("Do while loops are not supported");

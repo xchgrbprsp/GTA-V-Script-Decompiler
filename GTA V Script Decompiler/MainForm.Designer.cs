@@ -39,12 +39,10 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openCFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.saveCFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.directoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fileToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.directoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -69,9 +67,7 @@
             this.exportTablesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.entitiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nativesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.fullNativeInfoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.pCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.findHashFromStringsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.resetGlobalTypesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.expandAllBlocksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.collaspeAllBlocksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -82,7 +78,6 @@
             this.extractToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stringsTableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nativeTableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.nativehFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
             this.listView1 = new System.Windows.Forms.ListView();
             this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
@@ -98,7 +93,6 @@
             this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.timer3 = new System.Windows.Forms.Timer(this.components);
-            this.resetGlobalTypesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.fctb1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -130,6 +124,7 @@
             this.fctb1.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.fctb1.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.fctb1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.fctb1.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.fctb1.IsReplaceMode = false;
             this.fctb1.Language = FastColoredTextBoxNS.Language.CSharp;
             this.fctb1.LeftBracket = '(';
@@ -147,8 +142,6 @@
             this.fctb1.TabIndex = 1;
             this.fctb1.Zoom = 100;
             this.fctb1.SelectionChanged += new System.EventHandler(this.fctb1_SelectionChanged);
-            this.fctb1.LineInserted += new System.EventHandler<FastColoredTextBoxNS.LineInsertedEventArgs>(this.fctb1_LineInserted);
-            this.fctb1.LineRemoved += new System.EventHandler<FastColoredTextBoxNS.LineRemovedEventArgs>(this.fctb1_LineRemoved);
             this.fctb1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.fctb1_MouseClick);
             // 
             // cmsText
@@ -175,8 +168,6 @@
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openToolStripMenuItem,
-            this.openCFileToolStripMenuItem,
-            this.toolStripSeparator3,
             this.saveCFileToolStripMenuItem,
             this.exportToolStripMenuItem,
             this.toolStripSeparator2,
@@ -188,61 +179,50 @@
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
             this.openToolStripMenuItem.Text = "Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
-            // 
-            // openCFileToolStripMenuItem
-            // 
-            this.openCFileToolStripMenuItem.Name = "openCFileToolStripMenuItem";
-            this.openCFileToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
-            this.openCFileToolStripMenuItem.Text = "Open C File";
-            this.openCFileToolStripMenuItem.Click += new System.EventHandler(this.openCFileToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(132, 6);
             // 
             // saveCFileToolStripMenuItem
             // 
             this.saveCFileToolStripMenuItem.Name = "saveCFileToolStripMenuItem";
-            this.saveCFileToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
-            this.saveCFileToolStripMenuItem.Text = "Save C File";
+            this.saveCFileToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
+            this.saveCFileToolStripMenuItem.Text = "Save";
+            this.saveCFileToolStripMenuItem.TextAlign = System.Drawing.ContentAlignment.TopLeft;
             this.saveCFileToolStripMenuItem.Click += new System.EventHandler(this.saveCFileToolStripMenuItem_Click);
             // 
             // exportToolStripMenuItem
             // 
             this.exportToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.directoryToolStripMenuItem,
-            this.fileToolStripMenuItem1});
+            this.fileToolStripMenuItem1,
+            this.directoryToolStripMenuItem});
             this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
-            this.exportToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
             this.exportToolStripMenuItem.Text = "Export";
-            // 
-            // directoryToolStripMenuItem
-            // 
-            this.directoryToolStripMenuItem.Name = "directoryToolStripMenuItem";
-            this.directoryToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
-            this.directoryToolStripMenuItem.Text = "Directory";
-            this.directoryToolStripMenuItem.Click += new System.EventHandler(this.directoryToolStripMenuItem_Click);
             // 
             // fileToolStripMenuItem1
             // 
             this.fileToolStripMenuItem1.Name = "fileToolStripMenuItem1";
-            this.fileToolStripMenuItem1.Size = new System.Drawing.Size(122, 22);
-            this.fileToolStripMenuItem1.Text = "File";
+            this.fileToolStripMenuItem1.Size = new System.Drawing.Size(127, 22);
+            this.fileToolStripMenuItem1.Text = "Single File";
             this.fileToolStripMenuItem1.Click += new System.EventHandler(this.fileToolStripMenuItem1_Click);
+            // 
+            // directoryToolStripMenuItem
+            // 
+            this.directoryToolStripMenuItem.Name = "directoryToolStripMenuItem";
+            this.directoryToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
+            this.directoryToolStripMenuItem.Text = "Directory";
+            this.directoryToolStripMenuItem.Click += new System.EventHandler(this.directoryToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(132, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(105, 6);
             // 
             // closeToolStripMenuItem
             // 
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
-            this.closeToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
+            this.closeToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
             this.closeToolStripMenuItem.Text = "Close";
             this.closeToolStripMenuItem.Click += new System.EventHandler(this.closeToolStripMenuItem_Click);
             // 
@@ -265,7 +245,6 @@
             this.uppercaseNativesToolStripMenuItem,
             this.toolStripSeparator4,
             this.exportTablesToolStripMenuItem,
-            this.findHashFromStringsToolStripMenuItem,
             this.resetGlobalTypesToolStripMenuItem});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
@@ -409,8 +388,7 @@
             // 
             this.exportTablesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.entitiesToolStripMenuItem,
-            this.nativesToolStripMenuItem,
-            this.fullNativeInfoToolStripMenuItem});
+            this.nativesToolStripMenuItem});
             this.exportTablesToolStripMenuItem.Name = "exportTablesToolStripMenuItem";
             this.exportTablesToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
             this.exportTablesToolStripMenuItem.Text = "Export Tables";
@@ -418,7 +396,7 @@
             // entitiesToolStripMenuItem
             // 
             this.entitiesToolStripMenuItem.Name = "entitiesToolStripMenuItem";
-            this.entitiesToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.entitiesToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
             this.entitiesToolStripMenuItem.Text = "Entities";
             this.entitiesToolStripMenuItem.ToolTipText = "Export The entites file (entities_exp.dat) built into the program so you can edit" +
     " it.\r\nThe program will search for entities.dat in its directory and use that for" +
@@ -428,36 +406,19 @@
             // nativesToolStripMenuItem
             // 
             this.nativesToolStripMenuItem.Name = "nativesToolStripMenuItem";
-            this.nativesToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.nativesToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
             this.nativesToolStripMenuItem.Text = "Natives";
             this.nativesToolStripMenuItem.ToolTipText = "Export The natives file (natives_exp.dat) built into the program so you can edit " +
     "it.\r\nThe program will search for natives.dat in its directory and use that for r" +
     "eversing natives";
             this.nativesToolStripMenuItem.Click += new System.EventHandler(this.nativesToolStripMenuItem_Click);
             // 
-            // fullNativeInfoToolStripMenuItem
+            // resetGlobalTypesToolStripMenuItem
             // 
-            this.fullNativeInfoToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.pCToolStripMenuItem});
-            this.fullNativeInfoToolStripMenuItem.Name = "fullNativeInfoToolStripMenuItem";
-            this.fullNativeInfoToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
-            this.fullNativeInfoToolStripMenuItem.Text = "Full Native info";
-            this.fullNativeInfoToolStripMenuItem.ToolTipText = "Export a file containing definitions of natives to a h file in programs directory" +
-    "\r\n";
-            // 
-            // pCToolStripMenuItem
-            // 
-            this.pCToolStripMenuItem.Name = "pCToolStripMenuItem";
-            this.pCToolStripMenuItem.Size = new System.Drawing.Size(89, 22);
-            this.pCToolStripMenuItem.Text = "PC";
-            this.pCToolStripMenuItem.Click += new System.EventHandler(this.fullPCNativeInfoToolStripMenuItem_Click);
-            // 
-            // findHashFromStringsToolStripMenuItem
-            // 
-            this.findHashFromStringsToolStripMenuItem.Name = "findHashFromStringsToolStripMenuItem";
-            this.findHashFromStringsToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
-            this.findHashFromStringsToolStripMenuItem.Text = "Reverse Hashes From Strings";
-            this.findHashFromStringsToolStripMenuItem.Click += new System.EventHandler(this.findHashFromStringsToolStripMenuItem_Click);
+            this.resetGlobalTypesToolStripMenuItem.Name = "resetGlobalTypesToolStripMenuItem";
+            this.resetGlobalTypesToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
+            this.resetGlobalTypesToolStripMenuItem.Text = "Reset Global Types";
+            this.resetGlobalTypesToolStripMenuItem.Click += new System.EventHandler(this.resetGlobalTypesToolStripMenuItem_Click);
             // 
             // viewToolStripMenuItem
             // 
@@ -518,8 +479,7 @@
             // 
             this.extractToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.stringsTableToolStripMenuItem,
-            this.nativeTableToolStripMenuItem,
-            this.nativehFileToolStripMenuItem});
+            this.nativeTableToolStripMenuItem});
             this.extractToolStripMenuItem.Enabled = false;
             this.extractToolStripMenuItem.Name = "extractToolStripMenuItem";
             this.extractToolStripMenuItem.Size = new System.Drawing.Size(55, 20);
@@ -529,23 +489,16 @@
             // stringsTableToolStripMenuItem
             // 
             this.stringsTableToolStripMenuItem.Name = "stringsTableToolStripMenuItem";
-            this.stringsTableToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
+            this.stringsTableToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.stringsTableToolStripMenuItem.Text = "Strings table";
             this.stringsTableToolStripMenuItem.Click += new System.EventHandler(this.stringsTableToolStripMenuItem_Click);
             // 
             // nativeTableToolStripMenuItem
             // 
             this.nativeTableToolStripMenuItem.Name = "nativeTableToolStripMenuItem";
-            this.nativeTableToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
+            this.nativeTableToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.nativeTableToolStripMenuItem.Text = "Native table";
             this.nativeTableToolStripMenuItem.Click += new System.EventHandler(this.nativeTableToolStripMenuItem_Click);
-            // 
-            // nativehFileToolStripMenuItem
-            // 
-            this.nativehFileToolStripMenuItem.Name = "nativehFileToolStripMenuItem";
-            this.nativehFileToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
-            this.nativehFileToolStripMenuItem.Text = "Native.h file";
-            this.nativehFileToolStripMenuItem.Click += new System.EventHandler(this.nativehFileToolStripMenuItem_Click);
             // 
             // panel1
             // 
@@ -668,14 +621,6 @@
             // timer3
             // 
             this.timer3.Interval = 5000;
-            this.timer3.Tick += new System.EventHandler(this.timer3_Tick);
-            // 
-            // resetGlobalTypesToolStripMenuItem
-            // 
-            this.resetGlobalTypesToolStripMenuItem.Name = "resetGlobalTypesToolStripMenuItem";
-            this.resetGlobalTypesToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
-            this.resetGlobalTypesToolStripMenuItem.Text = "Reset Global Types";
-            this.resetGlobalTypesToolStripMenuItem.Click += new System.EventHandler(this.resetGlobalTypesToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -746,22 +691,16 @@
 		private System.Windows.Forms.ToolStripMenuItem showLineNumbersToolStripMenuItem;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel3;
 		private System.Windows.Forms.Timer timer3;
-		private System.Windows.Forms.ToolStripMenuItem openCFileToolStripMenuItem;
-		private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
 		private System.Windows.Forms.ToolStripMenuItem saveCFileToolStripMenuItem;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
 		private System.Windows.Forms.ContextMenuStrip cmsText;
-		private System.Windows.Forms.ToolStripMenuItem fullNativeInfoToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem extractToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem stringsTableToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem nativeTableToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem nativehFileToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem navigateForwardToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem navigateBackwardsToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem useMultiThreadingToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem showFuncPointerToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem pCToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem findHashFromStringsToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem includeNativeNamespaceToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem globalAndStructHexIndexingToolStripMenuItem;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
