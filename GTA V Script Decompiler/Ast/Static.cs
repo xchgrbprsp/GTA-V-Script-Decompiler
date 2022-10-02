@@ -24,6 +24,11 @@ namespace Decompiler.Ast
         {
             return function.Scriptfile.Statics.GetVarName(Index);
         }
+
+        public override bool IsPointer()
+        {
+            return true;
+        }
     }
     
     internal class StaticLoad : AstToken

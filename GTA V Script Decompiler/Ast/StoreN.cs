@@ -18,6 +18,18 @@ namespace Decompiler.Ast
             Pointer = pointer;
             Count = count;
             Values = values;
+
+            if (pointer is Local && values.Count == 1 && values[0] is NativeCall && count is ConstantInt && (count as ConstantInt).GetValue() == 3)
+            {
+                pointer.HintType(Stack.DataType.Vector3); // almost always true
+
+                var entry = (values[0] as NativeCall).Entry;
+                if (entry != null)
+                {
+                    if (NativeReturnAutoName.CanApply(entry.Value))
+                        function.SetFrameVarAutoName((pointer as Local).Index, new NativeReturnAutoName(entry.Value));
+                }
+            }
         }
 
         public override bool IsStatement()

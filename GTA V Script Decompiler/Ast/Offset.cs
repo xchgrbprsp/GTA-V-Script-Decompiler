@@ -20,7 +20,7 @@ namespace Decompiler.Ast
         public override string ToString()
         {
             var sep = "->";
-            if (value is Local or Global or Offset or Array)
+            if (value.IsPointer())
                 sep = ".";
 
             if (offset is ConstantInt)
@@ -32,7 +32,7 @@ namespace Decompiler.Ast
         public override string ToPointerString()
         {
             var sep = "->";
-            if (value is Local or Global or Offset or Array)
+            if (value.IsPointer())
                 sep = ".";
 
             if (offset is ConstantInt)
@@ -50,6 +50,11 @@ namespace Decompiler.Ast
         {
             return value.GetGlobalIndex() + (int)((offset as ConstantInt).GetValue());
         }
+
+        public override bool IsPointer()
+        {
+            return true;
+        }
     }
 
     internal class OffsetLoad : AstToken
@@ -66,7 +71,7 @@ namespace Decompiler.Ast
         public override string ToString()
         {
             var sep = "->";
-            if (value is Static or Global or Offset or Array)
+            if (value.IsPointer())
                 sep = ".";
 
             return value.ToPointerString() + sep + "f_" + offset.ToString();
@@ -107,7 +112,7 @@ namespace Decompiler.Ast
         public override string ToString()
         {
             var sep = "->";
-            if (value is Static or Global or Offset or Array)
+            if (value.IsPointer())
                 sep = ".";
 
             return value.ToPointerString() + sep + "f_" + offset.ToString() + " = " + storedValue.ToString() + ";";

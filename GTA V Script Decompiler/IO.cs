@@ -18,18 +18,11 @@ namespace Decompiler.IO
 			base.BaseStream.Position += size;
 		}
 
-		public Int32 SReadInt32()
-		{
-			return Utils.SwapEndian(ReadInt32());
-		}
 		public Int32 ReadPointer()
 		{
 			return (ReadInt32() & 0xFFFFFF);
 		}
-		public Int32 SReadPointer()
-		{
-			return (SReadInt32() & 0xFFFFFF);
-		}
+
 		public override string ReadString()
 		{
 			string temp = "";

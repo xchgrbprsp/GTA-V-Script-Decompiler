@@ -8,8 +8,8 @@ namespace Decompiler.Ast
 {
     internal class LoadN : AstToken
     {
-        readonly AstToken Pointer;
-        readonly AstToken Count;
+        public readonly AstToken Pointer;
+        public readonly AstToken Count;
 
         public LoadN(Function func, AstToken pointer, AstToken count) : base(func)
         {

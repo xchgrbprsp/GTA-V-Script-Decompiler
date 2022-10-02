@@ -238,77 +238,48 @@ namespace Decompiler
 			return Vars.GetVarAtIndex((uint) (index - 2 - Pcount));
 		}
 
-        public void SetFrameVarAutoName(uint index, string name)
-        {
-			VariableStorage storage;
-			uint idx;
-
+		internal void SetFrameVarAutoName(uint index, AutoName name)
+		{
 			if (index < Pcount)
-			{
-				idx = index;
-				storage = Params;
-			}
+				return; // don't apply autonames to parameters
 			else if (index < Pcount + 2)
-			{
-                throw new Exception("Unexpected fvar");
-			}
+				throw new Exception("Unexpected fvar");
 			else
-			{
-				storage = Vars;
-                idx = (uint)(index - 2 - Pcount);
-            }
-
-            foreach (var var in storage.Vars)
-            {
-                if (var.Index != idx && var.Name == name)
-                {
-                    int num;
-
-                    if (Int32.TryParse(name[^1].ToString(), out num))
-						name = name[0..^1] + (num + 1);
-					else
-						name += "2";
-                }
-            }
-
-            storage.GetVarAtIndex(idx).Name = name;
+				Vars.GetVarAtIndex((uint)(index - 2 - Pcount)).SetAutoName(name);
         }
 
-		public void SetFrameVarAutoLoopIdx(uint index)
+		public void ApplyVarAutoNames(VariableStorage storage, string prefix = "")
 		{
-            VariableStorage storage;
-            uint idx;
+			Dictionary<string, int> setNames = new();
 
-            if (index < Pcount)
-            {
-                idx = index;
-                storage = Params;
-            }
-            else if (index < Pcount + 2)
-            {
-                throw new Exception("Unexpected fvar");
-            }
-            else
-            {
-                storage = Vars;
-                idx = (uint)(index - 2 - Pcount);
-            }
-
-			for (char i = 'i'; i < 'o'; i++)
+			foreach (var local in storage.Vars)
 			{
-				foreach (var var in storage.Vars)
+				if (local.Name.Length != 0)
+					continue;
+
+				string name = prefix + local.AutoName.GetName();
+
+				if (setNames.ContainsKey(name))
 				{
-					if (var.Index != idx && var.Name == i.ToString())
+					if (local.AutoName.GetNameCollisionBehavior() == AutoName.NameCollisionBehavior.AddNumberSuffix)
 					{
-						goto skip;
+						setNames[name]++;
+						name += setNames[name];
+					}
+					else if (local.AutoName.GetNameCollisionBehavior() == AutoName.NameCollisionBehavior.IncrementCharacter)
+					{
+						setNames[name]++;
+						char chr = name[^1];
+						chr += (char)(setNames[name] - 1);
+						name = chr.ToString(); // TODO
 					}
 				}
+				else
+				{
+					setNames[name] = 1;
+				}
 
-                storage.GetVarAtIndex(idx).Name = i.ToString();
-                break;
-
-skip:
-				continue;
+				local.Name = name;
 			}
 		}
 
@@ -354,7 +325,10 @@ skip:
 				return;
 
 			DecodeStatementTree(MainTree);
-			Decoded = true;
+			ApplyVarAutoNames(Vars);
+			ApplyVarAutoNames(Params, "a_");
+
+            Decoded = true;
 		}
 
 		/// <summary>
@@ -1278,7 +1252,7 @@ DONE_COND:
 
 						if (lastSet is Ast.LocalStore)
 						{
-							SetFrameVarAutoLoopIdx((lastSet as Ast.LocalStore).Index);
+							SetFrameVarAutoName((lastSet as Ast.LocalStore).Index, new LoopIndexAutoName());
 						}
                     }
 				}

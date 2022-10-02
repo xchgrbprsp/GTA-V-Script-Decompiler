@@ -9,11 +9,13 @@ using System.Security.Policy;
 
 namespace Decompiler
 {
-    internal struct NativeDBParam
+    internal class NativeDBParam
     {
         public string type { get; set; }
         public string name { get; set; }
+        public bool autoname;
     }
+
     internal struct NativeDBEntry
     {
         public string name { get; set; }
@@ -51,10 +53,32 @@ namespace Decompiler
             return_type = type.ToString();
         }
     }
+
     internal class NativeDB
     {
         Dictionary<string, Dictionary<string, NativeDBEntry>> data;
         Dictionary<UInt64, NativeDBEntry> entries;
+
+        public static bool CanBeUsedAsAutoName(string param)
+        {
+            if (param.StartsWith("p") && param.Length < 3)
+                return false;
+
+            if (param.Contains("unk"))
+                return false;
+
+            //if (param == "toggle" || param == "enable")
+            //    return false; // TODO
+
+            if (param == "string")
+                return false;
+
+            foreach (var type in Types.typeInfos)
+                if (type.AutoName == param)
+                    return false;
+
+            return true;
+        }
 
         public void LoadData()
         {
@@ -77,6 +101,12 @@ namespace Decompiler
                     NativeDBEntry entry = native.Value;
                     NativeTypeOverride.Visit(ref entry);
                     entry.@namespace = ns.Key;
+
+                    foreach (var param in entry.@params)
+                    {
+                        param.autoname = CanBeUsedAsAutoName(param.name);
+                    }
+
                     entries[Convert.ToUInt64(native.Key, 16)] = entry;
                 }
             }

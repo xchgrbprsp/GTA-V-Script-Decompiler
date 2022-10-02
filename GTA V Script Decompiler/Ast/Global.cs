@@ -34,6 +34,11 @@ namespace Decompiler.Ast
         {
             return (int)Index;
         }
+
+        public override bool IsPointer()
+        {
+            return true;
+        }
     }
 
     internal class GlobalLoad : AstToken

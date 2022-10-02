@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -65,13 +66,14 @@ namespace Decompiler
 				return var.Name;
 
 			string name = "";
+
             if (var.DataType == Stack.DataType.String)
             {
                 name = "c";
             }
             else if (var.ImmediateSize == 1)
             {
-                name = Types.GetTypeInfo(var.DataType).Prefix;
+				name = Types.GetTypeInfo(Vars[(int)index].DataType).Prefix;
             }
 
             switch (listType)
@@ -102,6 +104,7 @@ namespace Decompiler
 				scriptParamCount = count;
 			}
 		}
+
 		public string[] GetDeclaration()
 		{
 			List<string> Working = new List<string>();
@@ -136,6 +139,10 @@ namespace Decompiler
 				else if (var.DataType == Stack.DataType.String)
 				{
 					dataType = "char ";
+				}
+				else if (var.DataType == Stack.DataType.Vector3)
+				{
+					dataType = "Vector3 ";
 				}
 				else
 				{
@@ -242,6 +249,7 @@ namespace Decompiler
 			}
 			return Working.ToArray();
 		}
+
 		public string GetPDec()
 		{
 			if (listType != ListType.Params)
@@ -266,11 +274,11 @@ namespace Decompiler
 						datatype = "char[" + (var.ImmediateSize * 4).ToString() + "] c";
 					}
 					else if (var.ImmediateSize == 1)
-						datatype = Types.GetTypeInfo(var.DataType).VarDec + Types.GetTypeInfo(var.DataType).Prefix;
-					/*else if (var.Immediatesize == 3)
+						datatype = Types.GetTypeInfo(var.DataType).VarDec + (var.Name.Length == 0 ? Types.GetTypeInfo(var.DataType).Prefix : "");
+					else if (var.DataType == Stack.DataType.Vector3)
 					{
-						datatype = "vector3 v";
-					}*/
+						datatype = "Vector3 " + (var.Name.Length == 0 ? Types.GetTypeInfo(var.DataType).Prefix : "");
+					}
 					else datatype = "struct<" + var.ImmediateSize.ToString() + "> ";
 				}
 				else
@@ -294,6 +302,7 @@ namespace Decompiler
 				decl = decl.Remove(decl.Length - 2);
 			return decl;
 		}
+
         /// <summary>
         /// Remove unused vars from declaration, and shift var indexes down
         /// </summary>

@@ -40,6 +40,11 @@ namespace Decompiler.Ast
         {
             return Pointer.GetGlobalIndex() + 1;
         }
+
+        public override bool IsPointer()
+        {
+            return true;
+        }
     }
 
     internal class ArrayLoad : AstToken

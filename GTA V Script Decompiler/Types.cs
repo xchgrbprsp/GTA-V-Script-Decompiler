@@ -6,70 +6,70 @@ namespace Decompiler
 	{
 		public static TypeInfo[] typeInfos = new TypeInfo[]
 		{
-			new TypeInfo(Stack.DataType.Bool, 4, "BOOL", "b"),
-			new TypeInfo(Stack.DataType.BoolPtr, 4, "BOOL*", "pb"),
-			new TypeInfo(Stack.DataType.Float, 3, "float", "f"),
-			new TypeInfo(Stack.DataType.Int, 3, "int", "i"),
-			new TypeInfo(Stack.DataType.String, 3, "char[]", "c"),
-			new TypeInfo(Stack.DataType.StringPtr, 3, "char*", "s"),
-			new TypeInfo(Stack.DataType.StringPtr, 3, "const char*", "s"),
-			new TypeInfo(Stack.DataType.Unk, 0, "var", "u"),
-			new TypeInfo(Stack.DataType.Unsure, 1, "var", "u"),
-			new TypeInfo(Stack.DataType.IntPtr, 3, "int*", "pi"),
-			new TypeInfo(Stack.DataType.UnkPtr, 1, "var*", "pu"),
-			new TypeInfo(Stack.DataType.FloatPtr, 4, "float*", "pf"),
-			new TypeInfo(Stack.DataType.Vector3, 2, "Vector3", "v"),
-			new TypeInfo(Stack.DataType.None, 4, "void", "f"),
+			new TypeInfo(Stack.DataType.Bool, 4, "BOOL", "flag", "b"),
+			new TypeInfo(Stack.DataType.BoolPtr, 4, "BOOL*", "p_bool", "pb"),
+			new TypeInfo(Stack.DataType.Float, 3, "float", "num", "f"),
+			new TypeInfo(Stack.DataType.Int, 3, "int", "num", "i"),
+			new TypeInfo(Stack.DataType.String, 4, "char[]", "str", "c"),
+			new TypeInfo(Stack.DataType.StringPtr, 4, "char*", "str", "s"),
+			new TypeInfo(Stack.DataType.StringPtr, 4, "const char*", "str", "s"),
+			new TypeInfo(Stack.DataType.Unk, 0, "var", "unk", "u"),
+			new TypeInfo(Stack.DataType.Unsure, 1, "var", "unk", "u"),
+			new TypeInfo(Stack.DataType.IntPtr, 3, "int*", "p_int", "pi"),
+			new TypeInfo(Stack.DataType.UnkPtr, 1, "var*", "ptr", "p"),
+			new TypeInfo(Stack.DataType.FloatPtr, 4, "float*", "p_float", "pf"),
+			new TypeInfo(Stack.DataType.Vector3, 2, "Vector3", "vector", "v"),
+			new TypeInfo(Stack.DataType.None, 4, "void", "???", "???"),
 
-			new TypeInfo(Stack.DataType.Any, 4, "Any", "an"),
-			new TypeInfo(Stack.DataType.AnyPtr, 4, "Any*", "pan"),
-			new TypeInfo(Stack.DataType.Blip, 4, "Blip", "bl"),
-			new TypeInfo(Stack.DataType.BlipPtr, 4, "Blip*", "pbl"),
-			new TypeInfo(Stack.DataType.Cam, 4, "Cam", "ca"),
-			new TypeInfo(Stack.DataType.CamPtr, 4, "Cam*", "pca"),
-			new TypeInfo(Stack.DataType.Entity, 4, "Entity", "e"),
-			new TypeInfo(Stack.DataType.EntityPtr, 4, "Entity*", "pe"),
-			new TypeInfo(Stack.DataType.FireId, 4, "FireId", "fi"),
-			new TypeInfo(Stack.DataType.FireIdPtr, 4, "FireId*", "pfi"),
-			new TypeInfo(Stack.DataType.Hash, 4, "Hash", "h"),
-			new TypeInfo(Stack.DataType.HashPtr, 4, "Hash*", "ph"),
-			new TypeInfo(Stack.DataType.Interior, 4, "Interior", "in"),
-			new TypeInfo(Stack.DataType.InteriorPtr, 4, "Interior*", "pin"),
-			new TypeInfo(Stack.DataType.ItemSet, 4, "ItemSet", "is"),
-			new TypeInfo(Stack.DataType.ItemSetPtr, 4, "ItemSet*", "pis"),
-			new TypeInfo(Stack.DataType.Object, 5, "Object", "o"),
-			new TypeInfo(Stack.DataType.ObjectPtr, 5, "Object*", "po"),
-			new TypeInfo(Stack.DataType.Ped, 5, "Ped", "ped"), // find a better prefix for this
-            new TypeInfo(Stack.DataType.PedPtr, 5, "Ped*", "pped"),
-			new TypeInfo(Stack.DataType.Pickup, 5, "Pickup", "pk"),
-			new TypeInfo(Stack.DataType.PickupPtr, 5, "Pickup*", "pki"),
-			new TypeInfo(Stack.DataType.Player, 4, "Player", "pl"),
-			new TypeInfo(Stack.DataType.PlayerPtr, 4, "Player", "ppl"),
-			new TypeInfo(Stack.DataType.ScrHandle, 4, "ScrHandle", "sh"),
-			new TypeInfo(Stack.DataType.ScrHandlePtr, 4, "ScrHandle*", "psh"),
-			new TypeInfo(Stack.DataType.Vector3Ptr, 4, "Vector3*", "pv"),
-			new TypeInfo(Stack.DataType.Vehicle, 5, "Vehicle", "ve"),
-			new TypeInfo(Stack.DataType.VehiclePtr, 5, "Vehicle*", "pve"),
+			new TypeInfo(Stack.DataType.Any, 2, "Any", "any", "an"),
+			new TypeInfo(Stack.DataType.AnyPtr, 4, "Any*", "p_any", "pan"),
+			new TypeInfo(Stack.DataType.Blip, 4, "Blip", "blip", "bl"),
+			new TypeInfo(Stack.DataType.BlipPtr, 4, "Blip*", "p_blip", "pbl"),
+			new TypeInfo(Stack.DataType.Cam, 4, "Cam", "cam", "ca"),
+			new TypeInfo(Stack.DataType.CamPtr, 4, "Cam*", "p_cam", "pca"),
+			new TypeInfo(Stack.DataType.Entity, 4, "Entity", "entity", "e"),
+			new TypeInfo(Stack.DataType.EntityPtr, 4, "Entity*", "p_entity", "pe"),
+			new TypeInfo(Stack.DataType.FireId, 4, "FireId", "id", "fi"),
+			new TypeInfo(Stack.DataType.FireIdPtr, 4, "FireId*", "p_fireid", "pfi"),
+			new TypeInfo(Stack.DataType.Hash, 4, "Hash", "hash", "h"),
+			new TypeInfo(Stack.DataType.HashPtr, 4, "Hash*", "p_hash", "ph"),
+			new TypeInfo(Stack.DataType.Interior, 4, "Interior", "interior", "in"),
+			new TypeInfo(Stack.DataType.InteriorPtr, 4, "Interior*", "p_interior", "pin"),
+			new TypeInfo(Stack.DataType.ItemSet, 4, "ItemSet", "itemset", "is"),
+			new TypeInfo(Stack.DataType.ItemSetPtr, 4, "ItemSet*", "p_itemset", "pis"),
+			new TypeInfo(Stack.DataType.Object, 5, "Object", "object", "ob"),
+			new TypeInfo(Stack.DataType.ObjectPtr, 5, "Object*", "p_object", "pob"),
+			new TypeInfo(Stack.DataType.Ped, 5, "Ped", "ped", "ped"),
+            new TypeInfo(Stack.DataType.PedPtr, 5, "Ped*", "p_ped", "pped"),
+			new TypeInfo(Stack.DataType.Pickup, 5, "Pickup", "pickup", "pk"),
+			new TypeInfo(Stack.DataType.PickupPtr, 5, "Pickup*", "p_pickup", "pki"),
+			new TypeInfo(Stack.DataType.Player, 4, "Player", "player", "pl"),
+			new TypeInfo(Stack.DataType.PlayerPtr, 4, "Player", "p_player", "ppl"),
+			new TypeInfo(Stack.DataType.ScrHandle, 4, "ScrHandle", "handle", "sh"),
+			new TypeInfo(Stack.DataType.ScrHandlePtr, 4, "ScrHandle*", "p_handle", "psh"),
+			new TypeInfo(Stack.DataType.Vector3Ptr, 4, "Vector3*", "p_vector", "pv"),
+			new TypeInfo(Stack.DataType.Vehicle, 5, "Vehicle", "vehicle", "ve"),
+			new TypeInfo(Stack.DataType.VehiclePtr, 5, "Vehicle*", "p_vehicle", "pve"),
 
-			new TypeInfo(Stack.DataType.Function, 4, "function", "func"),
+			new TypeInfo(Stack.DataType.Function, 4, "function", "func", "func"),
 
-			new TypeInfo(Stack.DataType.eControlType, 6, "eControlType", "ect", new(typeof(Enums.PadControlType))),
-			new TypeInfo(Stack.DataType.eControlAction, 6, "eControlAction", "eca", new(typeof(Enums.PadControlAction))),
-			new TypeInfo(Stack.DataType.eHudComponent, 6, "eHudComponent", "ehcom", new(typeof(Enums.HudComponent))),
-			new TypeInfo(Stack.DataType.ePedType, 6, "ePedType", "ept", new(typeof(Enums.PedType))),
-			new TypeInfo(Stack.DataType.ePedComponentType, 6, "ePedComponentType", "epct", new(typeof(Enums.PedComponentType))),
-			new TypeInfo(Stack.DataType.eStackSize, 6, "eStackSize", "ess", new(typeof(Enums.StackSize))),
-			new TypeInfo(Stack.DataType.eDecoratorType, 6, "eDecoratorType", "edt", new(typeof(Enums.DecoratorType))),
-			new TypeInfo(Stack.DataType.eEventGroup, 6, "eEventGroup", "eeg", new(typeof(Enums.EventGroup))),
-			new TypeInfo(Stack.DataType.eHudColour, 6, "eHudColour", "ehcol", new(typeof(Enums.HudColour))),
-			new TypeInfo(Stack.DataType.eBlipSprite, 6, "eBlipSprite", "ebs", new(typeof(Enums.BlipSprite))),
-			new TypeInfo(Stack.DataType.eKnockOffVehicle, 6, "eKnockOffVehicle", "ekv", new(typeof(Enums.KnockOffVehicle))),
-			new TypeInfo(Stack.DataType.eCombatMovement, 6, "eCombatMovement", "ecm", new(typeof(Enums.CombatMovement))),
-			new TypeInfo(Stack.DataType.eCombatAttribute, 6, "eCombatAttribute", "ecat", new(typeof(Enums.CombatAttribute))),
-			new TypeInfo(Stack.DataType.eCharacter, 6, "eCharacter", "ech", new(typeof(Enums.Character))),
-			new TypeInfo(Stack.DataType.eTransitionState, 6, "eTransitionState", "ets", new(typeof(Enums.TransitionState))),
-			new TypeInfo(Stack.DataType.eDispatchType, 6, "eDispatchType", "edt", new(typeof(Enums.DispatchType))),
-			new TypeInfo(Stack.DataType.eLevelIndex, 6, "eLevelIndex", "eli", new(typeof(Enums.LevelIndex))),
+			new TypeInfo(Stack.DataType.eControlType, 6, "eControlType", "control", "ect", new(typeof(Enums.PadControlType))),
+			new TypeInfo(Stack.DataType.eControlAction, 6, "eControlAction", "action", "eca", new(typeof(Enums.PadControlAction))),
+			new TypeInfo(Stack.DataType.eHudComponent, 6, "eHudComponent", "component", "ehc", new(typeof(Enums.HudComponent))),
+			new TypeInfo(Stack.DataType.ePedType, 6, "ePedType", "type", "ept", new(typeof(Enums.PedType))),
+			new TypeInfo(Stack.DataType.ePedComponentType, 6, "ePedComponentType", "type", "epct", new(typeof(Enums.PedComponentType))),
+			new TypeInfo(Stack.DataType.eStackSize, 6, "eStackSize", "stackSize", "ess", new(typeof(Enums.StackSize))),
+			new TypeInfo(Stack.DataType.eDecoratorType, 6, "eDecoratorType", "decorType", "edt", new(typeof(Enums.DecoratorType))),
+			new TypeInfo(Stack.DataType.eEventGroup, 6, "eEventGroup", "group", "eeg", new(typeof(Enums.EventGroup))),
+			new TypeInfo(Stack.DataType.eHudColour, 6, "eHudColour", "color", "ehc", new(typeof(Enums.HudColour))),
+			new TypeInfo(Stack.DataType.eBlipSprite, 6, "eBlipSprite", "sprite", "ebs", new(typeof(Enums.BlipSprite))),
+			new TypeInfo(Stack.DataType.eKnockOffVehicle, 6, "eKnockOffVehicle", "knockOffState", "eknv", new(typeof(Enums.KnockOffVehicle))),
+			new TypeInfo(Stack.DataType.eCombatMovement, 6, "eCombatMovement", "movement", "ecm", new(typeof(Enums.CombatMovement))),
+			new TypeInfo(Stack.DataType.eCombatAttribute, 6, "eCombatAttribute", "attribute", "ecat", new(typeof(Enums.CombatAttribute))),
+			new TypeInfo(Stack.DataType.eCharacter, 6, "eCharacter", "character", "ech", new(typeof(Enums.Character))),
+			new TypeInfo(Stack.DataType.eTransitionState, 6, "eTransitionState", "state", "ets", new(typeof(Enums.TransitionState))),
+			new TypeInfo(Stack.DataType.eDispatchType, 6, "eDispatchType", "type", "edt", new(typeof(Enums.DispatchType))),
+			new TypeInfo(Stack.DataType.eLevelIndex, 6, "eLevelIndex", "index", "eli", new(typeof(Enums.LevelIndex))),
         };
 
 		public static TypeInfo GetTypeInfo(Stack.DataType type)
@@ -197,16 +197,18 @@ namespace Decompiler
 			public Stack.DataType Type;
 			public int Precedence;
 			public string SingleName;
-			public string Prefix;
+			public string AutoName;
 			public ScriptEnum? Enum = null;
+			public string Prefix;
 
-			public TypeInfo(Stack.DataType type, int precedence, string singlename, string varletter, ScriptEnum? @enum = null)
+			public TypeInfo(Stack.DataType type, int precedence, string singlename, string autoname, string prefix, ScriptEnum? @enum = null)
 			{
 				this.Type = type;
 				this.Precedence = precedence;
 				this.SingleName = singlename;
-				this.Prefix = varletter;
+				this.AutoName = autoname;
 				this.Enum = @enum;
+				this.Prefix = prefix;
 			}
 
 			public string ReturnType

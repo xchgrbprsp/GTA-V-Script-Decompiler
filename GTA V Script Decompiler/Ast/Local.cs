@@ -25,6 +25,11 @@ namespace Decompiler.Ast
         {
             return function.GetFrameVarName(Index);
         }
+
+        public override bool IsPointer()
+        {
+            return true;
+        }
     }
 
     internal class LocalLoad : AstToken
@@ -68,16 +73,13 @@ namespace Decompiler.Ast
 
             // I really have to move this somewhere else
 
-            if (value is NativeCall && function.GetFrameVar(Index).Name == "")
+            if (value is NativeCall)
             {
                 var entry = (value as NativeCall).Entry;
                 if (entry != null)
                 {
-                    var name = Utils.TryGetLocalAutoName(entry?.name);
-                    if (name != null)
-                    {
-                        function.SetFrameVarAutoName(Index, name!);
-                    }
+                    if (NativeReturnAutoName.CanApply(entry.Value))
+                        function.SetFrameVarAutoName(index, new NativeReturnAutoName(entry.Value));
                 }
             }    
         }

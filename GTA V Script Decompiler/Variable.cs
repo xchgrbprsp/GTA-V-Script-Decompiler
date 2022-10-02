@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,7 @@ namespace Decompiler
     {
         bool IsArray;
         bool IsUsed;
-        bool IsStruct;
+        public bool IsStruct;
         bool IsCalled = false;
         Stack.DataType Type { get; set; }
         public int Index { get; private set; }
@@ -22,6 +23,8 @@ namespace Decompiler
         public bool Is_Array { get { return IsArray; } }
         public Stack.DataType DataType { get { return Type; } set { Type = value; } }
 
+        internal AutoName AutoName { get; private set; } = new DefaultAutoName(Types.GetTypeInfo(Stack.DataType.Unk));
+
         public Variable(int index)
         {
             Index = index;
@@ -31,6 +34,7 @@ namespace Decompiler
             IsUsed = true;
             Type = Stack.DataType.Unk;
         }
+
         public Variable(int index, long value)
         {
             Index = index;
@@ -47,24 +51,46 @@ namespace Decompiler
             if (!IsStruct)
                 IsArray = true;
         }
+
         public void SetCalled()
         {
             IsCalled = true;
         }
+
         public void SetStruct()
         {
             DataType = Stack.DataType.Unk;
             IsArray = false;
             IsStruct = true;
         }
+
         public void SetNotUsed()
         {
             IsUsed = false;
         }
+
+        internal void SetAutoName(AutoName autoName)
+        {
+            if (autoName.GetPrecedence() > AutoName.GetPrecedence())
+                AutoName = autoName;
+        }
+
         public void HintType(Stack.DataType type)
         {
             if (Types.GetTypeInfo(type) > Types.GetTypeInfo(DataType))
+            {
                 DataType = type;
+
+                if (AutoName is DefaultAutoName)
+                {
+                    AutoName = new DefaultAutoName(Types.GetTypeInfo(type));
+                }
+
+                if (type == Stack.DataType.Vector3)
+                {
+                    ImmediateSize = 3;
+                }
+            }
         }
     }
 }

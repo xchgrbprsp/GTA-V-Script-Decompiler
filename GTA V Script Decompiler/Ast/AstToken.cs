@@ -70,5 +70,10 @@ namespace Decompiler.Ast
         {
             return 0;
         }
+
+        public virtual bool IsPointer()
+        {
+            return false;
+        }
     }
 }
