@@ -17,6 +17,9 @@ namespace Decompiler.Ast
             Dst = dst;
             Src = src;
             Size = size;
+
+            Dst.HintType(Stack.DataType.StringPtr);
+            Src.HintType(Stack.DataType.StringPtr);
         }
 
         public override bool IsStatement()
@@ -40,6 +43,9 @@ namespace Decompiler.Ast
             Dst = dst;
             Src = src;
             Size = size;
+
+            Dst.HintType(Stack.DataType.StringPtr);
+            Src.HintType(Stack.DataType.StringPtr);
         }
 
         public override bool IsStatement()
@@ -63,6 +69,9 @@ namespace Decompiler.Ast
             Dst = dst;
             Integer = integer;
             Size = size;
+
+            Integer.HintType(Stack.DataType.Int);
+            Dst.HintType(Stack.DataType.StringPtr);
         }
 
         public override bool IsStatement()
@@ -86,6 +95,9 @@ namespace Decompiler.Ast
             Dst = dst;
             Integer = integer;
             Size = size;
+
+            Integer.HintType(Stack.DataType.Int);
+            Dst.HintType(Stack.DataType.StringPtr);
         }
 
         public override bool IsStatement()

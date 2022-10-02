@@ -17,12 +17,12 @@ namespace Decompiler.Ast
 
         public override string ToString()
         {
-            return "&" + function.Scriptfile.Statics.GetVarName(Index);
+            return "&" + function.ScriptFile.Statics.GetVarName(Index);
         }
 
         public override string ToPointerString()
         {
-            return function.Scriptfile.Statics.GetVarName(Index);
+            return function.ScriptFile.Statics.GetVarName(Index);
         }
 
         public override bool IsPointer()
@@ -42,17 +42,17 @@ namespace Decompiler.Ast
 
         public override Stack.DataType GetType()
         {
-            return function.Scriptfile.Statics.GetVarAtIndex(Index).DataType;
+            return function.ScriptFile.Statics.GetVarAtIndex(Index).DataType;
         }
 
         public override void HintType(Stack.DataType type)
         {
-            function.Scriptfile.Statics.GetVarAtIndex(Index).HintType(type);
+            function.ScriptFile.Statics.GetVarAtIndex(Index).HintType(type);
         }
 
         public override string ToString()
         {
-            return function.Scriptfile.Statics.GetVarName(Index);
+            return function.ScriptFile.Statics.GetVarName(Index);
         }
     }
 
@@ -66,8 +66,8 @@ namespace Decompiler.Ast
             Index = index;
             Value = value;
 
-            function.Scriptfile.Statics.GetVarAtIndex(Index).HintType(Value.GetType());
-            Value.HintType(function.Scriptfile.Statics.GetVarAtIndex(Index).DataType);
+            function.ScriptFile.Statics.GetVarAtIndex(Index).HintType(Value.GetType());
+            Value.HintType(function.ScriptFile.Statics.GetVarAtIndex(Index).DataType);
         }
 
         public override bool IsStatement()
@@ -77,7 +77,7 @@ namespace Decompiler.Ast
 
         public override string ToString()
         {
-            return function.Scriptfile.Statics.GetVarName(Index) + " = " + Value.ToString() + ";";
+            return function.ScriptFile.Statics.GetVarName(Index) + " = " + Value.ToString() + ";";
         }
     }
 }

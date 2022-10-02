@@ -17,10 +17,7 @@
 			{
 				components.Dispose();
 			}
-			if (disposing && (Highlight != null))
-			{
-				Highlight.Dispose();
-			}
+
 			base.Dispose(disposing);
 		}
 

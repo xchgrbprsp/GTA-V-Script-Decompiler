@@ -29,6 +29,14 @@ namespace Decompiler
 
         public string @namespace;
 
+        public NativeDBParam? GetParam(int index)
+        {
+            if (index >= @params.Count)
+                return null;
+
+            return @params[index];
+        }
+
         public Stack.DataType GetParamType(int index)
         {
             if (index > @params.Count - 1)

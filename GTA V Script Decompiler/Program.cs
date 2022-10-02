@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Decompiler
@@ -55,6 +56,8 @@ namespace Decompiler
 				try
 				{
 					fileopen = new ScriptFile(File.OpenRead(args[0]));
+					var task = fileopen.Decompile();
+					task.Wait();
 				}
 				catch (Exception ex)
 				{

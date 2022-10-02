@@ -16,11 +16,9 @@ namespace Decompiler
 
 	public partial class MainForm : Form
 	{
-		string filename = "";
+		string FileName = "";
 		ScriptFile OpenFile;
-		Style Highlight;
 		Queue<string> CompileList;
-		string SaveDirectory;
 		readonly List<Disassembly> DisassembyWindows = new();
 
 		public MainForm()
@@ -57,10 +55,9 @@ namespace Decompiler
 					t = hexToolStripMenuItem;
 					break;
 			}
+
 			t.Checked = true;
 			t.Enabled = false;
-			Highlight =  new TextStyle(Brushes.Black, Brushes.Orange, fctb1.DefaultStyle.FontStyle);
-
 		}
 
 		void UpdateStatus(string text)
@@ -83,7 +80,7 @@ namespace Decompiler
             GC.Collect();
         }
 
-		private void openToolStripMenuItem_Click(object sender, EventArgs e)
+		private async void openToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			OpenFileDialog ofd = new OpenFileDialog();
 			ofd.Filter = "GTA V Script Files|*.ysc;*.ysc.full";
@@ -91,18 +88,19 @@ namespace Decompiler
 			if (ofd.ShowDialog() == DialogResult.OK)
 			{
 				DateTime Start = DateTime.Now;
-				filename = Path.GetFileNameWithoutExtension(ofd.FileName);
+				FileName = Path.GetFileNameWithoutExtension(ofd.FileName);
 
 				ResetLoadedFile();
 
 				UpdateStatus("Opening script file...");
-				string ext = Path.GetExtension(ofd.FileName);
-				if (ext == ".full") // Handle openIV exporting pc scripts as *.ysc.full
-				{
-					ext = Path.GetExtension(Path.GetFileNameWithoutExtension(ofd.FileName));
-				}
+
+                var progressBar = new ProgressBar("Decompile File", 1, 2);
+                progressBar.Show();
+
+				Enabled = false;
 
                 OpenFile = new ScriptFile(ofd.OpenFile());
+				await OpenFile.Decompile(progressBar);
 
 				UpdateStatus("Decompiled script file. Time taken: " + (DateTime.Now - Start).ToString());
 				MemoryStream ms = new MemoryStream();
@@ -121,11 +119,19 @@ namespace Decompiler
 
 				UpdateStatus("Loading text in viewer...");
 
-				fctb1.Text = sr.ReadToEnd();
-				SetFileName(filename);
+				await Task.Run(() => fctb1.Text = sr.ReadToEnd());
+
+				sr.Close();
+
+				SetFileName(FileName);
 				UpdateStatus("Ready. Time taken: " + (DateTime.Now - Start).ToString());
-			}
-		}
+
+				progressBar.Dispose();
+
+                Enabled = true;
+				Focus();
+            }
+        }
 
 		private async void directoryToolStripMenuItem_Click(object sender, EventArgs e)
 		{
@@ -143,9 +149,9 @@ namespace Decompiler
 			var tasks = new List<Task>();
 
             DateTime Start = DateTime.Now;
-            SaveDirectory = Path.Combine(dirPath, "exported");
-            if (!Directory.Exists(SaveDirectory))
-                Directory.CreateDirectory(SaveDirectory);
+            var saveDirectory = Path.Combine(dirPath, "exported");
+            if (!Directory.Exists(saveDirectory))
+                Directory.CreateDirectory(saveDirectory);
 
             foreach (string file in Directory.GetFiles(dirPath, "*.ysc"))
             {
@@ -159,28 +165,28 @@ namespace Decompiler
 
 			Enabled = false;
 
-            var progressBar = new ProgressBar("Directory Export", 1, CompileList.Count);
+            var progressBar = new ProgressBar("Export Directory", 1, CompileList.Count);
             progressBar.Show();
 
             if (Properties.Settings.Default.UseMultithreading)
             {
                 for (int i = 0; i < Environment.ProcessorCount; i++)
                 {
-					tasks.Add(Decompile(progressBar));
+					tasks.Add(Decompile(saveDirectory, progressBar));
                 }
 
 				await Task.WhenAll(tasks);
             }
             else
             {
-                await Decompile(progressBar);
+                await Decompile(saveDirectory, progressBar);
             }
 
 			Enabled = true;
-            UpdateStatus("Directory Extracted, Time taken: " + (DateTime.Now - Start).ToString());
+            UpdateStatus("Directory exported. Time taken: " + (DateTime.Now - Start).ToString());
         }
 
-		private async Task Decompile(ProgressBar progressBar)
+		private async Task Decompile(string directory, ProgressBar progressBar)
 		{
 			while (CompileList.Count > 0)
 			{
@@ -193,10 +199,11 @@ namespace Decompiler
 
 				try
 				{
-					await Task.Run(() =>
+					await Task.Run(async () =>
 					{
 						ScriptFile scriptFile = new ScriptFile(File.OpenRead(scriptToDecode));
-						scriptFile.Save(Path.Combine(SaveDirectory, Path.GetFileNameWithoutExtension(scriptToDecode) + ".c"));
+						await scriptFile.Decompile();
+						scriptFile.Save(Path.Combine(directory, Path.GetFileNameWithoutExtension(scriptToDecode) + ".c"));
 						scriptFile.Close();
 					});
 				}
@@ -209,7 +216,7 @@ namespace Decompiler
             }
 		}
 
-		private void fileToolStripMenuItem1_Click(object sender, EventArgs e)
+		private async void fileToolStripMenuItem1_Click(object sender, EventArgs e)
 		{
 			OpenFileDialog ofd = new OpenFileDialog();
 			ofd.Filter = "GTA V Script Files|*.ysc;*.ysc.full";
@@ -217,11 +224,25 @@ namespace Decompiler
 			if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
 			{
 				DateTime Start = DateTime.Now;
-				ScriptFile file = new ScriptFile(ofd.OpenFile());
+
+                var progressBar = new ProgressBar("Export File", 1, 2);
+                progressBar.Show();
+
+				Enabled = false;
+
+                ScriptFile file = new ScriptFile(ofd.OpenFile());
+				await file.Decompile(progressBar);
+
 				file.Save(Path.Combine(Path.GetDirectoryName(ofd.FileName),
 				Path.GetFileNameWithoutExtension(ofd.FileName) + ".c"));
 				file.Close();
-				UpdateStatus("File Saved, Time taken: " + (DateTime.Now - Start).ToString());
+
+				progressBar.Dispose();
+
+                Enabled = true;
+                Focus();
+
+                UpdateStatus("File saved. Time taken: " + (DateTime.Now - Start).ToString());
 			}
 		}
 
@@ -498,7 +519,7 @@ namespace Decompiler
 		{
 			SaveFileDialog sfd = new SaveFileDialog();
 			sfd.Filter = "Decompiled Script Files|*.c;*.c4;*.sc;*.sch\"";
-			sfd.FileName = filename + ".c";
+			sfd.FileName = FileName + ".c";
 			if (sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
 			{
 				fctb1.SaveToFile(sfd.FileName, System.Text.Encoding.Default);
@@ -586,7 +607,7 @@ namespace Decompiler
 			SaveFileDialog sfd = new SaveFileDialog();
 			sfd.Title = "Select location to save string table";
 			sfd.Filter = "Text files|*.txt|All Files|*.*";
-			sfd.FileName = ((filename.Contains('.')) ? filename.Remove(filename.IndexOf('.')) : filename) + "(Strings).txt";
+			sfd.FileName = ((FileName.Contains('.')) ? FileName.Remove(FileName.IndexOf('.')) : FileName) + "(Strings).txt";
 			if (sfd.ShowDialog() != DialogResult.OK)
 				return;
 			StreamWriter sw = File.CreateText(sfd.FileName);
@@ -603,7 +624,7 @@ namespace Decompiler
 			SaveFileDialog sfd = new SaveFileDialog();
 			sfd.Title = "Select location to save native table";
 			sfd.Filter = "Text files|*.txt|All Files|*.*";
-			sfd.FileName = ((filename.Contains('.')) ? filename.Remove(filename.IndexOf('.')) : filename) + "(natives).txt";
+			sfd.FileName = ((FileName.Contains('.')) ? FileName.Remove(FileName.IndexOf('.')) : FileName) + "(natives).txt";
 			if (sfd.ShowDialog() != DialogResult.OK)
 				return;
 			StreamWriter sw = File.CreateText(sfd.FileName);

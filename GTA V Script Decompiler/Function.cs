@@ -24,9 +24,9 @@ namespace Decompiler
 	public class Function
 	{
 		public string Name { get; set; }
-		public int Pcount { get; private set; }
-		public int Vcount { get; private set; }
-		public int Rcount { get; private set; }
+		public int NumParams { get; private set; }
+		public int NumLocals { get; private set; }
+		public int NumReturns { get; private set; }
 		public int Location { get; private set; }
 		public int MaxLocation { get; private set; }
 
@@ -38,17 +38,13 @@ namespace Decompiler
 
 		int Offset = 0;
 
-		public ScriptFile Scriptfile;
+		public ScriptFile ScriptFile;
 
 		public Types.TypeInfo ReturnType { get; private set; }
 
 		internal bool Decoded { get; private set; }
 
 		internal bool DecodeStarted = false;
-
-		internal bool PreDecoded = false;
-
-		internal bool PreDecodeStarted = false;
 
 		public VariableStorage Vars { get; private set; }
 		public VariableStorage Params { get; private set; }
@@ -63,11 +59,11 @@ namespace Decompiler
 
 		public Function(ScriptFile Owner, string name, int pcount, int vcount, int rcount, int location, int locmax = -1)
 		{
-			this.Scriptfile = Owner;
+			this.ScriptFile = Owner;
 			Name = name;
-			Pcount = pcount;
-			Vcount = vcount;
-			Rcount = rcount;
+			NumParams = pcount;
+			NumLocals = vcount;
+			NumReturns = rcount;
 			Location = location;
 			if (locmax != -1)
 				MaxLocation = locmax;
@@ -90,8 +86,8 @@ namespace Decompiler
         uint GetFunctionHash()
 		{
 			StringBuilder sb = new();
-			sb.Append(Pcount);
-			sb.Append(Rcount);
+			sb.Append(NumParams);
+			sb.Append(NumReturns);
 
 			//if (Instructions.Count <= 5)
 			//	return 0; too many collisions but lets still give it a try
@@ -128,7 +124,7 @@ namespace Decompiler
 				else if (ins.Instruction == Instruction.STRING)
 				{
 					if (lastIns != null && (lastIns.Instruction == Instruction.PUSH_CONST_U8 || lastIns.Instruction == Instruction.PUSH_CONST_U24 || lastIns.Instruction == Instruction.PUSH_CONST_U32))
-						sb.Append(Scriptfile.StringTable[lastIns.GetOperandsAsInt]);
+						sb.Append(ScriptFile.StringTable[lastIns.GetOperandsAsInt]);
 				}
 
                 if (i > 22)
@@ -172,25 +168,25 @@ namespace Decompiler
 				working.AppendLine("// " + comment);
 			}
 
-			if (Rcount == 0)
+			if (NumReturns == 0)
 				working.Append("void ");
-			else if (Rcount == 1)
+			else if (NumReturns == 1)
 			{
 				working.Append(ReturnType.ReturnType);
 			}
 
-			else if (Rcount == 3)
+			else if (NumReturns == 3)
 				working.Append("Vector3 ");
 
-			else if (Rcount > 1)
+			else if (NumReturns > 1)
 			{
 				if (ReturnType.Type == Stack.DataType.String)
 				{
-					working.Append("char[" +(Rcount * 4).ToString() + "] ");
+					working.Append("char[" +(NumReturns * 4).ToString() + "] ");
 				}
 				else
 				{
-					working.Append("struct<" + Rcount.ToString() + "> ");
+					working.Append("struct<" + NumReturns.ToString() + "> ");
 				}
 			}
 			else 
@@ -217,11 +213,11 @@ namespace Decompiler
 		/// <returns>the name of the variable</returns>
 		public string GetFrameVarName(uint index)
 		{
-			if (index < Pcount)
+			if (index < NumParams)
 				return Params.GetVarName(index);
-			else if (index < Pcount + 2)
+			else if (index < NumParams + 2)
 				throw new Exception("Unexpected fvar");
-			return Vars.GetVarName((uint) (index - 2 - Pcount));
+			return Vars.GetVarName((uint) (index - 2 - NumParams));
 		}
 
 		/// <summary>
@@ -231,21 +227,21 @@ namespace Decompiler
 		/// <returns>The variable</returns>
 		public Variable GetFrameVar(uint index)
 		{
-			if (index < Pcount)
+			if (index < NumParams)
 				return Params.GetVarAtIndex(index);
-			else if (index < Pcount + 2)
+			else if (index < NumParams + 2)
 				throw new Exception("Unexpected fvar");
-			return Vars.GetVarAtIndex((uint) (index - 2 - Pcount));
+			return Vars.GetVarAtIndex((uint) (index - 2 - NumParams));
 		}
 
 		internal void SetFrameVarAutoName(uint index, AutoName name)
 		{
-			if (index < Pcount)
+			if (index < NumParams)
 				return; // don't apply autonames to parameters
-			else if (index < Pcount + 2)
+			else if (index < NumParams + 2)
 				throw new Exception("Unexpected fvar");
 			else
-				Vars.GetVarAtIndex((uint)(index - 2 - Pcount)).SetAutoName(name);
+				Vars.GetVarAtIndex((uint)(index - 2 - NumParams)).SetAutoName(name);
         }
 
 		public void ApplyVarAutoNames(VariableStorage storage, string prefix = "")
@@ -285,7 +281,7 @@ namespace Decompiler
 
 		public void SetName(string name)
 		{
-			foreach (var func in Scriptfile.Functions)
+			foreach (var func in ScriptFile.Functions)
 				if (func.Name == name)
 					return;
 
@@ -304,7 +300,7 @@ namespace Decompiler
 		/// <returns>basic information about the function at that offset</returns>
 		public Function GetFunctionFromOffset(int offset)
 		{
-			foreach (Function f in Scriptfile.Functions)
+			foreach (Function f in ScriptFile.Functions)
 			{
 				if (f.Location <= offset && offset <= f.MaxLocation)
 					return f;
@@ -329,6 +325,7 @@ namespace Decompiler
 			ApplyVarAutoNames(Params, "a_");
 
             Decoded = true;
+			ScriptFile.NotifyFunctionDecompiled();
 		}
 
 		/// <summary>
@@ -832,8 +829,8 @@ namespace Decompiler
 							tree.Statements.Add(new Ast.Drop(this, dropped));
 						break;
 					case Instruction.NATIVE:
-						var native = new Ast.NativeCall(this, Stack.PopCount(Instructions[tree.Offset].GetNativeParams), this.Scriptfile.X64NativeTable.GetNativeFromIndex(Instructions[tree.Offset].GetNativeIndex),
-							this.Scriptfile.X64NativeTable.GetNativeHashFromIndex(Instructions[tree.Offset].GetNativeIndex), Instructions[tree.Offset].GetNativeReturns);
+						var native = new Ast.NativeCall(this, Stack.PopCount(Instructions[tree.Offset].GetNativeParams), this.ScriptFile.X64NativeTable.GetNativeFromIndex(Instructions[tree.Offset].GetNativeIndex),
+							this.ScriptFile.X64NativeTable.GetNativeHashFromIndex(Instructions[tree.Offset].GetNativeIndex), Instructions[tree.Offset].GetNativeReturns);
 						if (native.IsStatement())
 							tree.Statements.Add(native);
 						else
@@ -937,12 +934,12 @@ namespace Decompiler
 						tree.Statements.Add(new Ast.GlobalStore(this, Instructions[tree.Offset].GetOperandsAsUInt, Stack.Pop()));
 						break;
 					case Instruction.CALL:
-						foreach (var function in Scriptfile.Functions)
+						foreach (var function in ScriptFile.Functions)
 						{
 							if (function.Location == Instructions[tree.Offset].GetOperandsAsUInt)
 							{
-								var call = new Ast.FunctionCall(this, Stack.PopCount(function.Pcount), function);
-                                function.Decompile(); // this is a very bad idea that will break everything but cam give better type inference??? TODO: find better way to propagate type info
+								var call = new Ast.FunctionCall(this, Stack.PopCount(function.NumParams), function);
+                                function.Decompile(); // this is a very bad idea that will break everything but can give better type inference??? TODO: find better way to propagate type info
 
                                 if (call.IsStatement())
 									tree.Statements.Add(call);

@@ -234,14 +234,14 @@ namespace Decompiler
                     compiled.Add(-1);
             }
 
-            for (int i = 0; i < (Function.Scriptfile.CodeTable.Count - compiled.Count); i++)
+            for (int i = 0; i < (Function.ScriptFile.CodeTable.Count - compiled.Count); i++)
             {
                 for (int j = 0; j < bytes.Length; j++)
                 {
                     if (compiled[j] == -1)
                         continue;
 
-                    if (compiled[j] != Function.Scriptfile.CodeTable[i+j])
+                    if (compiled[j] != Function.ScriptFile.CodeTable[i+j])
                         goto fail;
                 }
                 num++;

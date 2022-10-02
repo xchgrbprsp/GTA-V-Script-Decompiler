@@ -42,7 +42,7 @@ namespace Decompiler.Ast
 
         public override int GetReturnCount()
         {
-            return Callee.Rcount;
+            return Callee.NumReturns;
         }
     }
 }

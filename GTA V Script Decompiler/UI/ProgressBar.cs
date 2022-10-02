@@ -12,8 +12,8 @@ namespace Decompiler
 {
     public partial class ProgressBar : Form
     {
-        public readonly int Min;
-        public readonly int Max;
+        public int Min;
+        public int Max;
         int Value = 0;
 
         // TODO: there must be a better way than this
@@ -39,6 +39,13 @@ namespace Decompiler
             progressBar1.Maximum = max;
             progressBar1.Minimum = min;
             progressBar1.Value = min;
+        }
+
+        public void SetMax(int max)
+        {
+            Max = max;
+            progressBar1.Maximum = max;
+            progressBar1.Update();
         }
 
         public void SetValue(int value)

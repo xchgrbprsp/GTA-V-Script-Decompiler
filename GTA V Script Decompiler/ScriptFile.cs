@@ -10,30 +10,27 @@ using System.Threading;
 
 namespace Decompiler
 {
-	public class ScriptFile
+    public class ScriptFile
     {
         public List<byte> CodeTable;
-		public StringTable StringTable;
-		public X64NativeTable X64NativeTable;
+        public StringTable StringTable;
+        public X64NativeTable X64NativeTable;
         private int offset = 0;
-		public List<Function> Functions;
-		public static Hashes HashBank;
+        public List<Function> Functions;
+        public static Hashes HashBank;
         private Stream file;
-		public ScriptHeader Header;
-        public string name;
+        public ScriptHeader Header;
         internal VariableStorage Statics;
-        internal bool CheckNative = true;
-     
+        internal ProgressBar? ProgressBar = null;
 
-        public Dictionary<string, Tuple<int, int>> Function_loc = new Dictionary<string, Tuple<int,int>>();
-        
+        public Dictionary<string, Tuple<int, int>> Function_loc = new Dictionary<string, Tuple<int, int>>();
+
         public ScriptFile(Stream scriptStream)
         {
             file = scriptStream;
             Header = ScriptHeader.Generate(scriptStream);
             StringTable = new StringTable(scriptStream, Header.StringTableOffsets, Header.StringBlocks, Header.StringsSize);
             X64NativeTable = new X64NativeTable(scriptStream, Header.NativesOffset + Header.RSC7Offset, Header.NativesCount, Header.CodeLength);
-            name = Header.ScriptName;
 
             CodeTable = new List<byte>();
             for (int i = 0; i < Header.CodeBlocks; i++)
@@ -44,6 +41,11 @@ namespace Decompiler
                 scriptStream.Read(working, 0, tablesize);
                 CodeTable.AddRange(working);
             }
+        }
+
+        public async Task Decompile(ProgressBar bar = null)
+        {
+            ProgressBar = bar;
 
             GetStaticInfo();
 
@@ -58,18 +60,21 @@ namespace Decompiler
                 Program.functionDB.Visit(func);
             }
 
+            bar?.SetMax(Functions.Count + 1);
+
             foreach (Function func in Functions)
             {
-                func.Decompile();
+                await Task.Run(
+                    () => func.Decompile());
             }
         }
-
 
         public void Save(string filename)
         {
             Stream savefile = File.Create(filename);
             Save(savefile, true);
         }
+
         public void Save(Stream stream, bool close = false)
         {
             int i = 1;
@@ -101,6 +106,7 @@ namespace Decompiler
             if (close)
                 savestream.Close();
         }
+
         public void Close()
         {
             file.Close();
@@ -118,11 +124,7 @@ namespace Decompiler
 
         public string[] GetNativeTable()
         {
-		    return X64NativeTable.GetNativeTable();
-        }
-        public string[] GetNativeHeader()
-        {
-		    return X64NativeTable.GetNativeHeader();
+            return X64NativeTable.GetNativeTable();
         }
 
         public void GetFunctionCode()
@@ -140,10 +142,12 @@ namespace Decompiler
                     throw new Exception("Function has incorrect start/ends");
             }
         }
+
         void advpos(int pos)
         {
             offset += pos;
         }
+
         void AddFunction(int start1, int start2)
         {
             byte namelen = CodeTable[start1 + 4];
@@ -169,7 +173,7 @@ namespace Decompiler
             }
             int pcount = CodeTable[offset + 1];
             int tmp1 = CodeTable[offset + 2], tmp2 = CodeTable[offset + 3];
-            int vcount = ((tmp2 << 0x8) | tmp1) ;
+            int vcount = ((tmp2 << 0x8) | tmp1);
             if (vcount < 0)
             {
                 throw new Exception("Well this shouldnt have happened");
@@ -320,10 +324,11 @@ namespace Decompiler
             offset = 0;
             GetFunctionCode();
         }
+
         private void GetStaticInfo()
         {
             Statics = new VariableStorage(VariableStorage.ListType.Statics);
-			Statics.SetScriptParamCount(Header.ParameterCount);
+            Statics.SetScriptParamCount(Header.ParameterCount);
             IO.Reader reader = new IO.Reader(file);
             reader.BaseStream.Position = Header.StaticsOffset + Header.RSC7Offset;
             for (int count = 0; count < Header.StaticsCount; count++)
@@ -332,5 +337,9 @@ namespace Decompiler
             }
         }
 
+        public void NotifyFunctionDecompiled()
+        {
+            ProgressBar?.IncrementValue();
+        }
     }
 }

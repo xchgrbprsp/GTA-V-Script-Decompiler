@@ -26,12 +26,14 @@ namespace Decompiler.Ast
                 if (arg.GetStackCount() == 1)
                 {
                     arg.HintType(Entry?.GetParamType(i) ?? Stack.DataType.Unk);
-                    if (Entry != null && arg is LocalLoad && Entry.Value.@params[i].autoname)
-                        function.SetFrameVarAutoName((arg as LocalLoad).Index, new NativeParameterAutoName(Entry.Value.@params[i].name));
+                    if (arg is LocalLoad && (Entry?.GetParam(i)?.autoname ?? false))
+                        function.SetFrameVarAutoName((arg as LocalLoad).Index, new NativeParameterAutoName(Entry.Value.GetParam(i).name));
+                    else if (arg is Local && (Entry?.GetParam(i)?.autoname ?? false))
+                        function.SetFrameVarAutoName((arg as Local).Index, new NativeParameterAutoName(Entry.Value.GetParam(i).name));
                 }
                 else if (arg.GetStackCount() == 3)
                 {
-                    if (Entry != null && arg is LoadN && (arg as LoadN).Pointer is Local && Entry.Value.@params[i].autoname)
+                    if (arg is LoadN && (arg as LoadN).Pointer is Local && (Entry?.GetParam(i)?.autoname ?? false))
                     {
                         // function.SetFrameVarAutoName(((arg as LoadN).Pointer as Local).Index, new NativeParameterAutoName("coords"));
                         function.GetFrameVar(((arg as LoadN).Pointer as Local).Index).HintType(Stack.DataType.Vector3);

@@ -26,7 +26,7 @@ namespace Decompiler.Ast
             {
                 if (Properties.Settings.Default.ShowLocalizedTexts)
                 {
-                    uint hash = Utils.Joaat(function.Scriptfile.StringTable[(int)(Index as ConstantInt).GetValue()]);
+                    uint hash = Utils.Joaat(function.ScriptFile.StringTable[(int)(Index as ConstantInt).GetValue()]);
 
                     if (hash != 0x3acbce85 /*STRING*/ && Program.textDB.Strings.TryGetValue(hash, out string text))
                     {
@@ -34,7 +34,7 @@ namespace Decompiler.Ast
                     }    
                 }
 
-                return "\"" + function.Scriptfile.StringTable[(int)(Index as ConstantInt).GetValue()] + "\"";
+                return "\"" + function.ScriptFile.StringTable[(int)(Index as ConstantInt).GetValue()] + "\"";
             }
             else
             {
