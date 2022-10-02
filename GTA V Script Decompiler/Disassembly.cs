@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Services.Description;
 using System.Windows.Forms;
 
 namespace Decompiler
@@ -154,7 +155,7 @@ namespace Decompiler
         }
 
         // TODO: Rewrite this
-        string DisassembleInstruction(HLInstruction instruction)
+        static string DisassembleInstruction(HLInstruction instruction)
         {
             string bytes = "";
 
@@ -269,6 +270,42 @@ fail:
                 else
                     MessageBox.Show($"Pattern is not unique, {results} matches found!");
             }
+        }
+
+        private void createPatternAtCursorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string pattern = "";
+            int offset = fctb1.Selection.Start.iLine;
+
+            for (int i = offset; i < Function.Instructions.Count; i++)
+            {
+                if (Function.Instructions[i].Instruction == Instruction.SWITCH)
+                    break;
+
+                pattern += ((uint)Function.Instructions[i].OriginalInstruction).ToString("X").PadLeft(2, '0');
+
+                foreach (var _ in Function.Instructions[i].operands)
+                {
+                    pattern += " ?";
+                }
+
+                pattern += " ";
+
+                int results = GetNumPatternResults(pattern);
+
+                if (results == 0)
+                    break;
+                else if (results == 1)
+                {
+                    var option = MessageBox.Show($"The pattern is {pattern}{Environment.NewLine}Copy to clipboard?", "Pattern Found", MessageBoxButtons.YesNo);
+                    if (option == DialogResult.Yes)
+                        Clipboard.SetText(pattern);
+
+                    return;
+                }
+            }
+
+            MessageBox.Show("Cannot find pattern");
         }
     }
 }

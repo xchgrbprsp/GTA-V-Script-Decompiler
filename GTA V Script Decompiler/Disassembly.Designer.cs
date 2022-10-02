@@ -34,6 +34,7 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkPatternUniquenessToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.createPatternAtCursorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.fctb1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -51,16 +52,17 @@
         '\"',
         '\'',
         '\''};
-            this.fctb1.AutoIndentCharsPatterns = "";
+            this.fctb1.AutoIndentCharsPatterns = "\r\n^\\s*[\\w\\.\\(\\)]+\\s*(?<range>=)\\s*(?<range>.+)\r\n";
             this.fctb1.AutoScrollMinSize = new System.Drawing.Size(27, 14);
             this.fctb1.BackBrush = null;
             this.fctb1.BracketsHighlightStrategy = FastColoredTextBoxNS.BracketsHighlightStrategy.Strategy2;
             this.fctb1.CharHeight = 14;
             this.fctb1.CharWidth = 8;
-            this.fctb1.CommentPrefix = "--";
+            this.fctb1.CommentPrefix = "\'";
             this.fctb1.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.fctb1.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.fctb1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.fctb1.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.fctb1.IsReplaceMode = false;
             this.fctb1.Language = FastColoredTextBoxNS.Language.VB;
             this.fctb1.LeftBracket = '(';
@@ -89,6 +91,7 @@
             // toolsToolStripMenuItem
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.createPatternAtCursorToolStripMenuItem,
             this.checkPatternUniquenessToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
@@ -100,6 +103,13 @@
             this.checkPatternUniquenessToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
             this.checkPatternUniquenessToolStripMenuItem.Text = "Check Pattern Uniqueness";
             this.checkPatternUniquenessToolStripMenuItem.Click += new System.EventHandler(this.checkPatternUniquenessToolStripMenuItem_Click);
+            // 
+            // createPatternAtCursorToolStripMenuItem
+            // 
+            this.createPatternAtCursorToolStripMenuItem.Name = "createPatternAtCursorToolStripMenuItem";
+            this.createPatternAtCursorToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.createPatternAtCursorToolStripMenuItem.Text = "Create Pattern At Cursor";
+            this.createPatternAtCursorToolStripMenuItem.Click += new System.EventHandler(this.createPatternAtCursorToolStripMenuItem_Click);
             // 
             // Disassembly
             // 
@@ -125,5 +135,6 @@
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem checkPatternUniquenessToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem createPatternAtCursorToolStripMenuItem;
     }
 }
