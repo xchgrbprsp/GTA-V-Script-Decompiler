@@ -107,7 +107,7 @@ namespace Decompiler
 
 		public string[] GetDeclaration()
 		{
-			List<string> Working = new List<string>();
+			List<string> Working = new();
 			string varName = "";
 			string dataType = "";
 
@@ -162,7 +162,7 @@ namespace Decompiler
 						else if (var.DataType == Stack.DataType.String)
 						{
 
-							List<byte> data = new List<byte>();
+							List<byte> data = new();
 
 							for (int l = 0; l < var.ImmediateSize; l++)
 							{
@@ -213,7 +213,7 @@ namespace Decompiler
 
 							for (int k = 0; k < var.Value; k++)
 							{
-								List<byte> data = new List<byte>();
+								List<byte> data = new();
 								for (int l = 0; l < var.ImmediateSize; l++)
 								{
 									data.AddRange(BitConverter.GetBytes(Vars[j + 1 + var.ImmediateSize * k + l].Value));

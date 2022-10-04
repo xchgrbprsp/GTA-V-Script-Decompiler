@@ -39,8 +39,8 @@ namespace Decompiler
 
 		static ScriptHeader GeneratePcHeader(Stream scriptStream)
 		{
-			ScriptHeader header = new ScriptHeader();
-			IO.Reader reader = new IO.Reader(scriptStream);
+			ScriptHeader header = new();
+			IO.Reader reader = new(scriptStream);
 			scriptStream.Seek(0, SeekOrigin.Begin);
 			header.RSC7Offset = (reader.ReadUInt32() == 0x37435352) ? 0x10 : 0x0;
 			scriptStream.Seek(header.RSC7Offset, SeekOrigin.Begin);

@@ -12,7 +12,7 @@ namespace Decompiler
 
 		public X64NativeTable(Stream scriptFile, int position, int length, int codeSize)
 		{
-			IO.Reader reader = new IO.Reader(scriptFile);
+			IO.Reader reader = new(scriptFile);
 			int count = 0;
 			ulong nat;
 			reader.BaseStream.Position = position;
@@ -56,7 +56,7 @@ namespace Decompiler
 		}
 		public string[] GetNativeTable()
 		{
-			List<string> table = new List<string>();
+			List<string> table = new();
 			int i = 0;
 			foreach (string native in NativeNames)
 			{

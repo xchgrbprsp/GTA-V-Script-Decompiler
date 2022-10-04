@@ -67,7 +67,7 @@ namespace Decompiler
 				Console.WriteLine("Decompiled in " + (DateTime.Now - Start).ToString());
 				fileopen.Save(File.OpenWrite(args[0] + ".c"), true);
 				Console.WriteLine("Extracing native table...");
-				StreamWriter fw = new StreamWriter(File.OpenWrite(args[0] + " native table.txt"));
+				StreamWriter fw = new(File.OpenWrite(args[0] + " native table.txt"));
 				foreach (ulong nat in fileopen.X64NativeTable.NativeHashes)
 				{
 					string temps = nat.ToString("X");

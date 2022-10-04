@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.IO.Compression;
 using System.Threading;
+using System.Diagnostics;
 
 namespace Decompiler
 {
@@ -23,7 +24,7 @@ namespace Decompiler
         internal VariableStorage Statics;
         internal ProgressBar? ProgressBar = null;
 
-        public Dictionary<string, Tuple<int, int>> Function_loc = new Dictionary<string, Tuple<int, int>>();
+        public Dictionary<string, Tuple<int, int>> Function_loc = new();
 
         public ScriptFile(Stream scriptStream)
         {
@@ -78,7 +79,7 @@ namespace Decompiler
         public void Save(Stream stream, bool close = false)
         {
             int i = 1;
-            StreamWriter savestream = new StreamWriter(stream);
+            StreamWriter savestream = new(stream);
             if (Properties.Settings.Default.DeclareVariables)
             {
                 if (Header.StaticsCount > 0)
@@ -114,7 +115,7 @@ namespace Decompiler
 
         public string[] GetStringTable()
         {
-            List<string> table = new List<string>();
+            List<string> table = new();
             foreach (KeyValuePair<int, string> item in StringTable)
             {
                 table.Add(item.Key.ToString() + ": " + item.Value);
@@ -329,7 +330,7 @@ namespace Decompiler
         {
             Statics = new VariableStorage(VariableStorage.ListType.Statics);
             Statics.SetScriptParamCount(Header.ParameterCount);
-            IO.Reader reader = new IO.Reader(file);
+            IO.Reader reader = new(file);
             reader.BaseStream.Position = Header.StaticsOffset + Header.RSC7Offset;
             for (int count = 0; count < Header.StaticsCount; count++)
             {
@@ -339,7 +340,8 @@ namespace Decompiler
 
         public void NotifyFunctionDecompiled()
         {
-            ProgressBar?.IncrementValue();
+            if (!Debugger.IsAttached) // Cross-thread operation not valid: Control 'progressBar1' accessed from a thread other than the thread it was created on. ???
+                ProgressBar?.IncrementValue();
         }
     }
 }

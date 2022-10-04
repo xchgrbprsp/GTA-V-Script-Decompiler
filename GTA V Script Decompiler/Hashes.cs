@@ -26,7 +26,7 @@ namespace Decompiler
 			{
 				Stream Decompressed = new MemoryStream();
 				Stream Compressed = new MemoryStream(Properties.Resources.Entities);
-				DeflateStream deflate = new DeflateStream(Compressed, CompressionMode.Decompress);
+				DeflateStream deflate = new(Compressed, CompressionMode.Decompress);
 				deflate.CopyTo(Decompressed);
 				deflate.Dispose();
 				Decompressed.Position = 0;
@@ -59,7 +59,7 @@ namespace Decompiler
 				File.Create(Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location),
 					"entities_exp.dat"));
 			Stream Compressed = new MemoryStream(Properties.Resources.Entities);
-			DeflateStream deflate = new DeflateStream(Compressed, CompressionMode.Decompress);
+			DeflateStream deflate = new(Compressed, CompressionMode.Decompress);
 			deflate.CopyTo(Decompressed);
 			deflate.Dispose();
 			Decompressed.Close();

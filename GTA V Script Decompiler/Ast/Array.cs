@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.WindowsAPICodePack.Shell.PropertySystem.SystemProperties.System;
 
 namespace Decompiler.Ast
 {
@@ -23,12 +24,20 @@ namespace Decompiler.Ast
 
         public override string ToString()
         {
-            return "&" + Pointer.ToPointerString() + "[" + Index.ToString() + Stack.GetArraySizeCmt(Size) + "]";
+            var sep = "->";
+            if (Pointer.IsPointer())
+                sep = "";
+
+            return "&" + Pointer.ToPointerString() + sep + "[" + Index.ToString() + Stack.GetArraySizeCmt(Size) + "]";
         }
 
         public override string ToPointerString()
         {
-            return Pointer.ToPointerString() + "[" + Index.ToString() + Stack.GetArraySizeCmt(Size) + "]";
+            var sep = "->";
+            if (Pointer.IsPointer())
+                sep = "";
+
+            return Pointer.ToPointerString() + sep + "[" + Index.ToString() + Stack.GetArraySizeCmt(Size) + "]";
         }
 
         public override bool CanGetGlobalIndex()
@@ -64,7 +73,11 @@ namespace Decompiler.Ast
 
         public override string ToString()
         {
-            return Pointer.ToPointerString() + "[" + Index.ToString() + Stack.GetArraySizeCmt(Size) + "]";
+            var sep = "->";
+            if (Pointer.IsPointer())
+                sep = "";
+
+            return Pointer.ToPointerString() + sep + "[" + Index.ToString() + Stack.GetArraySizeCmt(Size) + "]";
         }
 
         public override bool CanGetGlobalIndex()
@@ -105,7 +118,11 @@ namespace Decompiler.Ast
 
         public override string ToString()
         {
-            return Pointer.ToPointerString() + "[" + Index.ToString() + Stack.GetArraySizeCmt(Size) + "] = " + Value.ToString() + ";";
+            var sep = "->";
+            if (Pointer.IsPointer())
+                sep = "";
+
+            return Pointer.ToPointerString() + sep + "[" + Index.ToString() + Stack.GetArraySizeCmt(Size) + "] = " + Value.ToString() + ";";
         }
 
         public override bool CanGetGlobalIndex()

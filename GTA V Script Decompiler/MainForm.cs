@@ -10,6 +10,7 @@ using FastColoredTextBoxNS;
 using System.Text.RegularExpressions;
 using System.Threading;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using System.Diagnostics;
 
 namespace Decompiler
 {
@@ -82,7 +83,7 @@ namespace Decompiler
 
 		private async void openToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			OpenFileDialog ofd = new OpenFileDialog();
+			OpenFileDialog ofd = new();
 			ofd.Filter = "GTA V Script Files|*.ysc;*.ysc.full";
 
 			if (ofd.ShowDialog() == DialogResult.OK)
@@ -103,7 +104,7 @@ namespace Decompiler
 				await OpenFile.Decompile(progressBar);
 
 				UpdateStatus("Decompiled script file. Time taken: " + (DateTime.Now - Start).ToString());
-				MemoryStream ms = new MemoryStream();
+				MemoryStream ms = new();
 
 				OpenFile.Save(ms, false);
 
@@ -114,14 +115,17 @@ namespace Decompiler
 
 				OpenFile.Close();
 
-				StreamReader sr = new StreamReader(ms);
+				StreamReader sr = new(ms);
 				ms.Position = 0;
 
 				UpdateStatus("Loading text in viewer...");
 
-				await Task.Run(() => fctb1.Text = sr.ReadToEnd());
+				if (!Debugger.IsAttached) // more weird thread bugs
+					await Task.Run(() => fctb1.Text = sr.ReadToEnd());
+				else
+					fctb1.Text = sr.ReadToEnd();
 
-				sr.Close();
+                sr.Close();
 
 				SetFileName(FileName);
 				UpdateStatus("Ready. Time taken: " + (DateTime.Now - Start).ToString());
@@ -135,7 +139,7 @@ namespace Decompiler
 
 		private async void directoryToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-            CommonOpenFileDialog fsd = new CommonOpenFileDialog();
+            CommonOpenFileDialog fsd = new();
             fsd.IsFolderPicker = true;
 			if (fsd.ShowDialog() == CommonFileDialogResult.Ok)
 			{
@@ -201,7 +205,7 @@ namespace Decompiler
 				{
 					await Task.Run(async () =>
 					{
-						ScriptFile scriptFile = new ScriptFile(File.OpenRead(scriptToDecode));
+						ScriptFile scriptFile = new(File.OpenRead(scriptToDecode));
 						await scriptFile.Decompile();
 						scriptFile.Save(Path.Combine(directory, Path.GetFileNameWithoutExtension(scriptToDecode) + ".c"));
 						scriptFile.Close();
@@ -218,7 +222,7 @@ namespace Decompiler
 
 		private async void fileToolStripMenuItem1_Click(object sender, EventArgs e)
 		{
-			OpenFileDialog ofd = new OpenFileDialog();
+			OpenFileDialog ofd = new();
 			ofd.Filter = "GTA V Script Files|*.ysc;*.ysc.full";
 
 			if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
@@ -230,7 +234,7 @@ namespace Decompiler
 
 				Enabled = false;
 
-                ScriptFile file = new ScriptFile(ofd.OpenFile());
+                ScriptFile file = new(ofd.OpenFile());
 				await file.Decompile(progressBar);
 
 				file.Save(Path.Combine(Path.GetDirectoryName(ofd.FileName),
@@ -517,7 +521,7 @@ namespace Decompiler
 
 		private void saveCFileToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			SaveFileDialog sfd = new SaveFileDialog();
+			SaveFileDialog sfd = new();
 			sfd.Filter = "Decompiled Script Files|*.c;*.c4;*.sc;*.sch\"";
 			sfd.FileName = FileName + ".c";
 			if (sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
@@ -530,7 +534,9 @@ namespace Decompiler
 		private void cmsText_Opening(object sender, CancelEventArgs e)
 		{
 			GetContextItems();
-			if (cmsText.Items.Count == 0) e.Cancel = true;
+
+			if (cmsText.Items.Count == 0) 
+				e.Cancel = true;
 		}
 
 		bool islegalchar(char c)
@@ -604,7 +610,7 @@ namespace Decompiler
 
 		private void stringsTableToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			SaveFileDialog sfd = new SaveFileDialog();
+			SaveFileDialog sfd = new();
 			sfd.Title = "Select location to save string table";
 			sfd.Filter = "Text files|*.txt|All Files|*.*";
 			sfd.FileName = ((FileName.Contains('.')) ? FileName.Remove(FileName.IndexOf('.')) : FileName) + "(Strings).txt";
@@ -621,7 +627,7 @@ namespace Decompiler
 
 		private void nativeTableToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			SaveFileDialog sfd = new SaveFileDialog();
+			SaveFileDialog sfd = new();
 			sfd.Title = "Select location to save native table";
 			sfd.Filter = "Text files|*.txt|All Files|*.*";
 			sfd.FileName = ((FileName.Contains('.')) ? FileName.Remove(FileName.IndexOf('.')) : FileName) + "(natives).txt";

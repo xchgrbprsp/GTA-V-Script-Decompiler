@@ -25,7 +25,7 @@ namespace Decompiler
 				scriptFile.Read(_table, off, tablesize);
 			}
 			_dictionary = new Dictionary<int, string>();
-			List<byte> Working = new List<byte>(100);
+			List<byte> Working = new(100);
 			for (int i = 0, index = 0, max = _table.Length;i<max;i++)
 			{
 				for (index = i; i < max; i++)
@@ -74,7 +74,7 @@ namespace Decompiler
 				{
 					throw new IndexOutOfRangeException("The index given was outside the range of the String table");
 				}
-				List<byte> Working = new List<byte>(100);
+				List<byte> Working = new(100);
 				for (int i = index, max = _table.Length; i < max; i++)
 				{
 					byte b = _table[i];

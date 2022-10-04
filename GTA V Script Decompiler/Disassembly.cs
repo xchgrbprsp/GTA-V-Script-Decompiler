@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -155,7 +156,7 @@ namespace Decompiler
         }
 
         // TODO: Rewrite this
-        static string DisassembleInstruction(HLInstruction instruction)
+        string DisassembleInstruction(HLInstruction instruction)
         {
             string bytes = "";
 
@@ -204,12 +205,145 @@ namespace Decompiler
                     break;
             }
 
+            if (instruction.OriginalInstruction == Instruction.NATIVE)
+            {
+                bytes += "; " + Function.ScriptFile.X64NativeTable.GetNativeFromIndex(instruction.GetNativeIndex) + ", " + instruction.GetNativeParams + ", " + instruction.GetNativeReturns;
+            }
+
             return bytes;
+        }
+
+        byte[] GetNopPattern(int offset, int endOffset)
+        {
+            List<byte> bytes = new();
+
+            for (int i = offset; i < endOffset; i++)
+            {
+                bytes.Add(0);
+
+                foreach (var _ in Function.Instructions[i].operands)
+                {
+                    bytes.Add(0);
+                }
+            }
+
+            return bytes.ToArray();
+        }
+
+        byte[] GetReturnFunctionPattern(uint rvalue)
+        {
+            List<byte> bytes = new();
+
+            if (Function.NumReturns != 0)
+            {
+                if (rvalue <= 7)
+                    bytes.Add((byte)(((byte)Instruction.PUSH_CONST_0) + rvalue));
+                else if (rvalue <= 65535)
+                {
+                    bytes.Add((byte)Instruction.PUSH_CONST_S16);
+                    bytes.AddRange(BitConverter.GetBytes((short)rvalue));
+                }
+                else
+                {
+                    bytes.Add((byte)Instruction.PUSH_CONST_U32);
+                    bytes.AddRange(BitConverter.GetBytes((uint)rvalue));
+                }
+            }
+
+            bytes.Add((byte)Instruction.LEAVE);
+            bytes.Add((byte)Function.NumParams);
+            bytes.Add((byte)Function.NumReturns);
+
+            return bytes.ToArray();
+        }
+
+        string? CreatePatternAtLocation(int offset)
+        {
+            string pattern = "";
+
+            for (int i = offset; i < Function.Instructions.Count; i++)
+            {
+                if (Function.Instructions[i].OriginalInstruction == Instruction.SWITCH)
+                    break;
+
+                pattern += ((uint)Function.Instructions[i].OriginalInstruction).ToString("X").PadLeft(2, '0');
+
+                foreach (var op in Function.Instructions[i].operands)
+                {
+                    if (Function.Instructions[i].OriginalInstruction == Instruction.LOCAL_U8 || Function.Instructions[i].OriginalInstruction == Instruction.LOCAL_U8_LOAD || Function.Instructions[i].OriginalInstruction == Instruction.LOCAL_U8_STORE)
+                    {
+                        pattern += " " + ((sbyte)op).ToString("X").PadLeft(2, '0');
+                    }
+                    else 
+                    {
+                        pattern += " ?";
+                    }
+
+                }
+
+                pattern += " ";
+
+                int results = GetNumPatternResults(pattern);
+
+                if (results == 0)
+                    break;
+                else if (results == 1)
+                {
+                    return pattern;
+                }
+            }
+
+            return null;
+        }
+
+        void GeneratePatch(int offset, byte[] bytes)
+        {
+            var pattern = CreatePatternAtLocation(offset);
+
+            if (pattern == null)
+            {
+                MessageBox.Show("Could not create pattern at offset");
+                return;
+            }
+
+            int length = 0;
+            for (var i = offset; i < Function.Instructions.Count; i++)
+            {
+                if (length >= bytes.Length)
+                    break;
+
+                length += Function.Instructions[i].InstructionLength;
+            }
+
+            if (length < bytes.Length)
+            {
+                MessageBox.Show("Generated patch is out of bounds");
+                return;
+            }
+
+            var patch = "{ ";
+
+            bool first = true;
+            foreach (var b in bytes)
+            {
+                if (!first)
+                    patch += ", ";
+
+                patch += "0x" + b.ToString("X").PadLeft(2, '0');
+
+                first = false;
+            }
+
+            patch += " }";
+
+            var option = MessageBox.Show($"Pattern: {pattern}{Environment.NewLine}Patch: {patch}{Environment.NewLine}Offset: 0{Environment.NewLine}Copy to clipboard?", "Patch Generated", MessageBoxButtons.YesNo);
+            if (option == DialogResult.Yes)
+                Clipboard.SetText($"\"{pattern}\", 0, {patch}");
         }
 
         string DisassembleFunction()
         {
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
 
             foreach (var ins in Function.Instructions)
             {
@@ -221,6 +355,8 @@ namespace Decompiler
 
         int GetNumPatternResults(string pat)
         {
+            pat = pat.Trim();
+
             var bytes = pat.Split(" ");
             int num = 0;
 
@@ -254,7 +390,7 @@ fail:
 
         private void checkPatternUniquenessToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            InputBox IB = new InputBox();
+            InputBox IB = new();
 
             while (true)
             {
@@ -272,40 +408,60 @@ fail:
             }
         }
 
-        private void createPatternAtCursorToolStripMenuItem_Click(object sender, EventArgs e)
+        private void fctb1_MouseClick(object sender, MouseEventArgs e)
         {
-            string pattern = "";
-            int offset = fctb1.Selection.Start.iLine;
-
-            for (int i = offset; i < Function.Instructions.Count; i++)
+            if (fctb1.SelectionLength == 0)
             {
-                if (Function.Instructions[i].Instruction == Instruction.SWITCH)
-                    break;
+                fctb1.SelectionStart = fctb1.PointToPosition(fctb1.PointToClient(Cursor.Position));
+            }
 
-                pattern += ((uint)Function.Instructions[i].OriginalInstruction).ToString("X").PadLeft(2, '0');
+            if (e.Button == MouseButtons.Right)
+                contextMenuStrip1.Show(Cursor.Position);
+        }
 
-                foreach (var _ in Function.Instructions[i].operands)
+        private void CreatePatternToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var pattern = CreatePatternAtLocation(fctb1.Selection.Start.iLine);
+
+            if (pattern != null)
+            {
+                var option = MessageBox.Show($"The pattern is {pattern}{Environment.NewLine}Copy to clipboard?", "Pattern Found", MessageBoxButtons.YesNo);
+                if (option == DialogResult.Yes)
+                    Clipboard.SetText(pattern);
+            }
+            else
+            {
+                MessageBox.Show("Cannot create pattern");
+            }
+        }
+
+        private void patchNopInstructionsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            GeneratePatch(Math.Min(fctb1.Selection.Start.iLine, fctb1.Selection.End.iLine), GetNopPattern(Math.Min(fctb1.Selection.Start.iLine, fctb1.Selection.End.iLine), Math.Max(fctb1.Selection.Start.iLine, fctb1.Selection.End.iLine) + 1));
+        }
+
+        private void patchPlaceFunctionReturnToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            uint value = 0;
+
+            if (Function.NumReturns > 1)
+            {
+                MessageBox.Show("Cannot apply patch as this function returns multiple values", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            else if (Function.NumReturns > 0)
+            {
+                InputBox box = new();
+                box.Show("Function Return", "Enter value to return", "0");
+
+                if (!uint.TryParse(box.Value, out value))
                 {
-                    pattern += " ?";
-                }
-
-                pattern += " ";
-
-                int results = GetNumPatternResults(pattern);
-
-                if (results == 0)
-                    break;
-                else if (results == 1)
-                {
-                    var option = MessageBox.Show($"The pattern is {pattern}{Environment.NewLine}Copy to clipboard?", "Pattern Found", MessageBoxButtons.YesNo);
-                    if (option == DialogResult.Yes)
-                        Clipboard.SetText(pattern);
-
+                    MessageBox.Show("Integer is invalid", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
             }
 
-            MessageBox.Show("Cannot find pattern");
+            GeneratePatch(fctb1.Selection.Start.iLine, GetReturnFunctionPattern(value));
         }
     }
 }

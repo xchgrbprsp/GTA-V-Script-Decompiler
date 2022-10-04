@@ -20,14 +20,14 @@ namespace Decompiler
 			return hash;
 		}
 
-		public Dictionary<ulong, ulong> TranslationTable = new Dictionary<ulong, ulong>();
+		public Dictionary<ulong, ulong> TranslationTable = new();
 		public x64NativeFile()
 			: base()
 		{
 			StreamReader sr;
 			Stream Decompressed = new MemoryStream();
 			Stream Compressed = new MemoryStream(Properties.Resources.native_translation);
-			DeflateStream deflate = new DeflateStream(Compressed, CompressionMode.Decompress);
+			DeflateStream deflate = new(Compressed, CompressionMode.Decompress);
 			deflate.CopyTo(Decompressed);
 			deflate.Dispose();
 			Decompressed.Position = 0;

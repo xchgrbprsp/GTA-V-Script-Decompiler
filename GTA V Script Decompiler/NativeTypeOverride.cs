@@ -12,7 +12,7 @@ namespace Decompiler
         int Index;
         Stack.DataType NewType;
 
-        static List<NativeTypeOverride> Overrides = new List<NativeTypeOverride>();
+        static List<NativeTypeOverride> Overrides = new();
 
         NativeTypeOverride(string name, int index, Stack.DataType newType)
         {

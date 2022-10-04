@@ -322,7 +322,7 @@ namespace Decompiler
 
 			DecodeStatementTree(MainTree);
 			ApplyVarAutoNames(Vars);
-			ApplyVarAutoNames(Params, "a_");
+			// ApplyVarAutoNames(Params, "a_"); currently makes code less readable
 
             Decoded = true;
 			ScriptFile.NotifyFunctionDecompiled();
@@ -335,7 +335,7 @@ namespace Decompiler
 		void IsJumpWithinFunctionBounds()
 		{
 			int cur = Offset;
-			HLInstruction temp = new HLInstruction(CodeBlock[Offset], GetArray(2), cur);
+			HLInstruction temp = new(CodeBlock[Offset], GetArray(2), cur);
 			if (temp.GetJumpOffset > 0)
 			{
 				if (temp.GetJumpOffset < CodeBlock.Count)
@@ -344,7 +344,7 @@ namespace Decompiler
 					return;
 				}
 			}
-
+			
 			//if the jump is out the function then its useless
 			//So nop this jump
 			AddInstruction(cur, new HLInstruction((byte) 0, cur));
@@ -397,7 +397,7 @@ namespace Decompiler
 		/// </summary>
 		void HandleSwitch(StatementTree tree)
 		{
-			Dictionary<int, List<Ast.AstToken>> cases = new Dictionary<int, List<Ast.AstToken>>();
+			Dictionary<int, List<Ast.AstToken>> cases = new();
 			Ast.AstToken case_val;
 			int offset;
 			int defaultloc;
@@ -663,7 +663,7 @@ namespace Decompiler
 		internal const Instruction CONDITIONAL_JUMP = (Instruction)999;
 		internal void DecodeStatementTree(StatementTree tree)
 		{
-			Stack<StatementTree> treeStack = new Stack<StatementTree>();
+			Stack<StatementTree> treeStack = new();
 			treeStack.Push(tree);
 
 			while (true)

@@ -28,7 +28,7 @@ namespace Decompiler
 
         public string ToString(bool newlines)
         {
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
             bool lastIsTree = false;
             bool first = true;
 

@@ -319,14 +319,14 @@
 
 		public static string QuickShow(string TitleMessage, string Message, string[] StandardValues, IWin32Window owner = null)
 		{
-			_InputBox ibx = new _InputBox();
+			_InputBox ibx = new();
 			ibx.Show(owner, TitleMessage, Message, StandardValues);
 			return ibx.Value;
 		}
 
 		public static string QuickShow(string TitleMessage, string Message, AutoCompleteSource acs, IWin32Window owner = null)
 		{
-			_InputBox ibx = new _InputBox();
+			_InputBox ibx = new();
 			ibx.Show(owner, TitleMessage, Message, acs);
 			return ibx.Value;
 		}
@@ -334,14 +334,14 @@
 		public static string QuickShow(string TitleMessage = null, string Message = null, string DefaultResponse = null,
 			IWin32Window owner = null)
 		{
-			_InputBox ibx = new _InputBox();
+			_InputBox ibx = new();
 			ibx.Show(owner, TitleMessage, Message, DefaultResponse);
 			return ibx.Value;
 		}
 
 		public static string[] QuickShowList(string TitleMessage = null, string Message = null, IWin32Window owner = null)
 		{
-			_InputBox ibx = new _InputBox();
+			_InputBox ibx = new();
 			ibx.ShowList(owner, TitleMessage, Message);
 			return ibx.ListValue;
 		}
