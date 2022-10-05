@@ -30,7 +30,7 @@ namespace Decompiler
 		public int Location { get; private set; }
 		public int MaxLocation { get; private set; }
 
-		internal List<HLInstruction> Instructions;
+		internal List<Instruction> Instructions;
 
 		internal Dictionary<int, int> InstructionMap;
 
@@ -53,7 +53,7 @@ namespace Decompiler
 
 		public Comments comments = new();
 
-		internal MainTree MainTree { get; private set; }
+		internal Ast.StatementTree.Main MainTree { get; private set; }
 
 		public uint Hash { get; private set; }
 
@@ -93,37 +93,40 @@ namespace Decompiler
 			//	return 0; too many collisions but lets still give it a try
 
 			int i = 0;
-			HLInstruction? lastIns = null;
+			Instruction? lastIns = null;
 
 			foreach (var ins in Instructions)
 			{
-				sb.Append(ins.Instruction.ToString());
+				if (ins.OriginalOpcode == Opcode.ENTER)
+					continue;
+
+				sb.Append(ins.Opcode.ToString());
 				i++;
 
-				if (ins.Instruction == Instruction.LOCAL_U8 || ins.Instruction == Instruction.LOCAL_U16 || ins.Instruction == Instruction.LOCAL_U8_LOAD || ins.Instruction == Instruction.LOCAL_U16_LOAD || ins.Instruction == Instruction.LOCAL_U8_STORE || ins.Instruction == Instruction.LOCAL_U16_STORE)
+				if (ins.Opcode == Opcode.LOCAL_U8 || ins.Opcode == Opcode.LOCAL_U16 || ins.Opcode == Opcode.LOCAL_U8_LOAD || ins.Opcode == Opcode.LOCAL_U16_LOAD || ins.Opcode == Opcode.LOCAL_U8_STORE || ins.Opcode == Opcode.LOCAL_U16_STORE)
 					sb.Append(ins.GetOperandsAsUInt); // TODO
 
-				else if (ins.Instruction == Instruction.PUSH_CONST_U8)
+				else if (ins.Opcode == Opcode.PUSH_CONST_U8)
 					sb.Append(ins.GetOperand(0));
-				else if (ins.Instruction == Instruction.PUSH_CONST_U8_U8)
+				else if (ins.Opcode == Opcode.PUSH_CONST_U8_U8)
 				{
 					sb.Append(ins.GetOperand(0));
 					sb.Append(ins.GetOperand(1));
                 }
-				else if (ins.Instruction == Instruction.PUSH_CONST_U8_U8_U8)
+				else if (ins.Opcode == Opcode.PUSH_CONST_U8_U8_U8)
 				{
                     sb.Append(ins.GetOperand(0));
                     sb.Append(ins.GetOperand(1));
                     sb.Append(ins.GetOperand(2));
                 }
-				else if (ins.Instruction == Instruction.NATIVE)
+				else if (ins.Opcode == Opcode.NATIVE)
 				{
 					sb.Append(ins.GetNativeParams);
 					sb.Append(ins.GetNativeReturns);
                 }
-				else if (ins.Instruction == Instruction.STRING)
+				else if (ins.Opcode == Opcode.STRING)
 				{
-					if (lastIns != null && (lastIns.Instruction == Instruction.PUSH_CONST_U8 || lastIns.Instruction == Instruction.PUSH_CONST_U24 || lastIns.Instruction == Instruction.PUSH_CONST_U32))
+					if (lastIns != null && (lastIns.Opcode == Opcode.PUSH_CONST_U8 || lastIns.Opcode == Opcode.PUSH_CONST_U24 || lastIns.Opcode == Opcode.PUSH_CONST_U32))
 						sb.Append(ScriptFile.StringTable[lastIns.GetOperandsAsInt]);
 				}
 
@@ -331,11 +334,11 @@ namespace Decompiler
 		/// <summary>
 		/// Check if a jump is jumping out of the function
 		/// if not, then add it to the list of instructions
-		/// </summary>
+		/// </summary>	
 		void IsJumpWithinFunctionBounds()
 		{
 			int cur = Offset;
-			HLInstruction temp = new(CodeBlock[Offset], GetArray(2), cur);
+			Instruction temp = new(CodeBlock[Offset], GetArray(2), cur);
 			if (temp.GetJumpOffset > 0)
 			{
 				if (temp.GetJumpOffset < CodeBlock.Count)
@@ -344,12 +347,9 @@ namespace Decompiler
 					return;
 				}
 			}
-			
-			//if the jump is out the function then its useless
-			//So nop this jump
-			AddInstruction(cur, new HLInstruction((byte) 0, cur));
-			AddInstruction(cur + 1, new HLInstruction((byte) 0, cur + 1));
-			AddInstruction(cur + 2, new HLInstruction((byte) 0, cur + 2));
+
+			temp.NopInstruction();
+			AddInstruction(cur, temp); 
 		}
 
 		/// <summary>
@@ -374,7 +374,7 @@ namespace Decompiler
 			{
 				goto Start;
 			}
-			Instructions.Add(new HLInstruction(CodeBlock[Offset], Offset));
+			Instructions.Add(new Instruction(CodeBlock[Offset], Offset));
 			return;
 		}
 
@@ -395,7 +395,7 @@ namespace Decompiler
 		/// <summary>
 		/// Create a switch statement, then set up the rest of the decompiler to handle the rest of the switch statement
 		/// </summary>
-		void HandleSwitch(StatementTree tree)
+		void HandleSwitch(Ast.StatementTree.Tree tree)
 		{
 			Dictionary<int, List<Ast.AstToken>> cases = new();
 			Ast.AstToken case_val;
@@ -403,7 +403,7 @@ namespace Decompiler
 			int defaultloc;
 			int breakloc;
 			bool usedefault;
-			HLInstruction temp;
+			Instruction temp;
 
 			for (int i = 0; i < Instructions[tree.Offset].GetOperand(0); i++)
 			{
@@ -435,7 +435,7 @@ namespace Decompiler
 
 			//Hanldle(skip past) any Nops immediately after switch statement
 			int tempoff = 0;
-			while (Instructions[tree.Offset + 1 + tempoff].Instruction == Instruction.NOP)
+			while (Instructions[tree.Offset + 1 + tempoff].Opcode == Opcode.NOP)
 				tempoff++;
 
 			//Extract the location to jump to if no cases match
@@ -462,7 +462,7 @@ namespace Decompiler
 					continue;
 				}
 				temp = Instructions[index];
-				if (temp.Instruction != Instruction.J)
+				if (temp.Opcode != Opcode.J)
 				{
 					continue;
 				}
@@ -501,11 +501,11 @@ namespace Decompiler
 			if (CodeOffsetToFunctionOffset(breakloc) <= tree.Offset)
 				throw new InvalidOperationException("Switch break offset goes backwards???");
 
-			var @switch = new SwitchTree(this, tree, tree.Offset, cases, breakloc, Stack.Pop());
+			var @switch = new Ast.StatementTree.Switch(this, tree, tree.Offset, cases, breakloc, Stack.Pop());
 
 			foreach (var statement in @switch.Statements)
 			{
-				DecodeStatementTree(statement as StatementTree);
+				DecodeStatementTree(statement as Ast.StatementTree.Tree);
 			}
 
 			tree.Statements.Add(@switch);
@@ -517,118 +517,119 @@ namespace Decompiler
 		/// </summary>
 		public void BuildInstructions()
 		{
-			Offset = CodeBlock[4] + 5;
-			Instructions = new List<HLInstruction>();
+			Offset = CodeBlock[4];
+			Instructions = new List<Instruction>();
 			InstructionMap = new Dictionary<int, int>();
 			int curoff;
 			while (Offset < CodeBlock.Count)
 			{
-				while (Offset < CodeBlock.Count)
+				curoff = Offset;
+				switch (CodeBlock[Offset])
 				{
-					curoff = Offset;
-					switch (CodeBlock[Offset])
-					{
-						//		case 0: if (addnop) AddInstruction(curoff, new HLInstruction((byte)0, curoff)); break;
-						case 37:
-							AddInstruction(curoff, new HLInstruction(CodeBlock[Offset], GetArray(1), curoff));
-							break;
-						case 38:
-							AddInstruction(curoff, new HLInstruction(CodeBlock[Offset], GetArray(2), curoff));
-							break;
-						case 39:
-							AddInstruction(curoff, new HLInstruction(CodeBlock[Offset], GetArray(3), curoff));
-							break;
-						case 40:
-						case 41:
-							AddInstruction(curoff, new HLInstruction(CodeBlock[Offset], GetArray(4), curoff));
-							break;
-						case 42: //Because of how rockstar codes and/or conditionals, its neater to detect dups
-							//and only add them if they are not used for conditionals
-							CheckDupForInstruction();
-							break;
-						case 44:
-							AddInstruction(curoff, new HLInstruction(CodeBlock[Offset], GetArray(3), curoff));
-							break;
-						case 45:
-							throw new Exception("Function not exptected");
-						case 46:
-							AddInstruction(curoff, new HLInstruction(CodeBlock[Offset], GetArray(2), curoff));
-							break;
-						case 52:
-						case 53:
-						case 54:
-						case 55:
-						case 56:
-						case 57:
-						case 58:
-						case 59:
-						case 60:
-						case 61:
-						case 62:
-						case 64:
-						case 65:
-						case 66:
-							AddInstruction(curoff, new HLInstruction(CodeBlock[Offset], GetArray(1), curoff));
-							break;
-						case 67:
-						case 68:
-						case 69:
-						case 70:
-						case 71:
-						case 72:
-						case 73:
-						case 74:
-						case 75:
-						case 76:
-						case 77:
-						case 78:
-						case 79:
-						case 80:
-						case 81:
-						case 82:
-						case 83:
-						case 84:
-							AddInstruction(curoff, new HLInstruction(CodeBlock[Offset], GetArray(2), curoff));
-							break;
-						case 85:
-							IsJumpWithinFunctionBounds();
-							break;
-						case 86:
-						case 87:
-						case 88:
-						case 89:
-						case 90:
-						case 91:
-						case 92:
-							AddInstruction(curoff, new HLInstruction(CodeBlock[Offset], GetArray(2), curoff));
-							break;
-						case 93:
-						case 94:
-						case 95:
-						case 96:
-						case 97:
-							AddInstruction(curoff, new HLInstruction(CodeBlock[Offset], GetArray(3), curoff));
-							break;
-						case 98:
-							int temp = CodeBlock[Offset + 1];
-							AddInstruction(curoff, new HLInstruction(CodeBlock[Offset], GetArray(temp*6 + 1), curoff));
-							break;
-						case 101:
-						case 102:
-						case 103:
-						case 104:
-							AddInstruction(curoff, new HLInstruction(CodeBlock[Offset], GetArray(1), curoff));
-							break;
-						case 127:
-							AddInstruction(curoff, new HLInstruction(CodeBlock[Offset], curoff));
-							break;
-						default:
-							if (CodeBlock[Offset] <= 126) AddInstruction(curoff, new HLInstruction(CodeBlock[Offset], curoff));
-							else throw new Exception("Unexpected Opcode");
-							break;
-					}
-					Offset++;
+					case 37:
+						AddInstruction(curoff, new Instruction(CodeBlock[Offset], GetArray(1), curoff));
+						break;
+					case 38:
+						AddInstruction(curoff, new Instruction(CodeBlock[Offset], GetArray(2), curoff));
+						break;
+					case 39:
+						AddInstruction(curoff, new Instruction(CodeBlock[Offset], GetArray(3), curoff));
+						break;
+					case 40:
+					case 41:
+						AddInstruction(curoff, new Instruction(CodeBlock[Offset], GetArray(4), curoff));
+						break;
+					case 42: //Because of how rockstar codes and/or conditionals, its neater to detect dups
+						//and only add them if they are not used for conditionals
+						CheckDupForInstruction();
+						break;
+					case 44:
+						AddInstruction(curoff, new Instruction(CodeBlock[Offset], GetArray(3), curoff));
+						break;
+					case 45:
+						var nameLen = CodeBlock[Offset + 4];
+						var ins = new Instruction(CodeBlock[Offset], GetArray(4 + nameLen), curoff);
+						ins.NopInstruction();
+						AddInstruction(curoff, ins);
+						// throw new Exception("Function not exptected");
+						break;
+					case 46:
+						AddInstruction(curoff, new Instruction(CodeBlock[Offset], GetArray(2), curoff));
+						break;
+					case 52:
+					case 53:
+					case 54:
+					case 55:
+					case 56:
+					case 57:
+					case 58:
+					case 59:
+					case 60:
+					case 61:
+					case 62:
+					case 64:
+					case 65:
+					case 66:
+						AddInstruction(curoff, new Instruction(CodeBlock[Offset], GetArray(1), curoff));
+						break;
+					case 67:
+					case 68:
+					case 69:
+					case 70:
+					case 71:
+					case 72:
+					case 73:
+					case 74:
+					case 75:
+					case 76:
+					case 77:
+					case 78:
+					case 79:
+					case 80:
+					case 81:
+					case 82:
+					case 83:
+					case 84:
+						AddInstruction(curoff, new Instruction(CodeBlock[Offset], GetArray(2), curoff));
+						break;
+					case 85:
+						IsJumpWithinFunctionBounds();
+						break;
+					case 86:
+					case 87:
+					case 88:
+					case 89:
+					case 90:
+					case 91:
+					case 92:
+						AddInstruction(curoff, new Instruction(CodeBlock[Offset], GetArray(2), curoff));
+						break;
+					case 93:
+					case 94:
+					case 95:
+					case 96:
+					case 97:
+						AddInstruction(curoff, new Instruction(CodeBlock[Offset], GetArray(3), curoff));
+						break;
+					case 98:
+						int temp = CodeBlock[Offset + 1];
+						AddInstruction(curoff, new Instruction(CodeBlock[Offset], GetArray(temp*6 + 1), curoff));
+						break;
+					case 101:
+					case 102:
+					case 103:
+					case 104:
+						AddInstruction(curoff, new Instruction(CodeBlock[Offset], GetArray(1), curoff));
+						break;
+					case 127:
+						AddInstruction(curoff, new Instruction(CodeBlock[Offset], curoff));
+						break;
+					default:
+						if (CodeBlock[Offset] <= 126) AddInstruction(curoff, new Instruction(CodeBlock[Offset], curoff));
+						else throw new Exception("Unexpected Opcode");
+						break;
 				}
+				Offset++;
 			}
 
 			Hash = GetFunctionHash();
@@ -641,7 +642,7 @@ namespace Decompiler
 		/// </summary>
 		/// <param name="offset">the offset in the code</param>
 		/// <param name="instruction">the instruction</param>
-		void AddInstruction(int offset, HLInstruction instruction)
+		void AddInstruction(int offset, Instruction instruction)
 		{
 			Instructions.Add(instruction);
 			InstructionMap.Add(offset, Instructions.Count - 1);
@@ -660,158 +661,158 @@ namespace Decompiler
 		/// <summary>
 		/// Decodes the instruction at the current offset
 		/// </summary>
-		internal const Instruction CONDITIONAL_JUMP = (Instruction)999;
-		internal void DecodeStatementTree(StatementTree tree)
+		internal const Opcode CONDITIONAL_JUMP = (Opcode)999;
+		internal void DecodeStatementTree(Ast.StatementTree.Tree tree)
 		{
-			Stack<StatementTree> treeStack = new();
+			Stack<Ast.StatementTree.Tree> treeStack = new();
 			treeStack.Push(tree);
 
 			while (true)
 			{
-				switch (Instructions[tree.Offset].Instruction)
+				switch (Instructions[tree.Offset].Opcode)
 				{
-					case Instruction.NOP:
+					case Opcode.NOP:
 						break;
-					case Instruction.IADD:
+					case Opcode.IADD:
 						Stack.Push(new Ast.IntegerAdd(this, Stack.Pop(), Stack.Pop()));
 						break;
-					case Instruction.ISUB:
+					case Opcode.ISUB:
 						Stack.Push(new Ast.IntegerSub(this, Stack.Pop(), Stack.Pop()));
 						break;
-					case Instruction.IMUL:
+					case Opcode.IMUL:
 						Stack.Push(new Ast.IntegerMul(this, Stack.Pop(), Stack.Pop()));
 						break;
-					case Instruction.IDIV:
+					case Opcode.IDIV:
 						Stack.Push(new Ast.IntegerDiv(this, Stack.Pop(), Stack.Pop()));
 						break;
-					case Instruction.IMOD:
+					case Opcode.IMOD:
 						Stack.Push(new Ast.IntegerMod(this, Stack.Pop(), Stack.Pop()));
 						break;
-					case Instruction.INOT:
+					case Opcode.INOT:
 						Stack.Push(new Ast.IntegerNot(this, Stack.Pop()));
 						break;
-					case Instruction.INEG:
+					case Opcode.INEG:
 						Stack.Push(new Ast.IntegerNeg(this, Stack.Pop()));
 						break;
-					case Instruction.IEQ:
+					case Opcode.IEQ:
 						Stack.Push(new Ast.IntegerEq(this, Stack.Pop(), Stack.Pop()));
 						break;
-					case Instruction.INE:
+					case Opcode.INE:
 						Stack.Push(new Ast.IntegerNe(this, Stack.Pop(), Stack.Pop()));
 						break;
-					case Instruction.IGT:
+					case Opcode.IGT:
 						Stack.Push(new Ast.IntegerGt(this, Stack.Pop(), Stack.Pop()));
 						break;
-					case Instruction.IGE:
+					case Opcode.IGE:
 						Stack.Push(new Ast.IntegerGe(this, Stack.Pop(), Stack.Pop()));
 						break;
-					case Instruction.ILT:
+					case Opcode.ILT:
 						Stack.Push(new Ast.IntegerLt(this, Stack.Pop(), Stack.Pop()));
 						break;
-					case Instruction.ILE:
+					case Opcode.ILE:
 						Stack.Push(new Ast.IntegerLe(this, Stack.Pop(), Stack.Pop()));
 						break;
-					case Instruction.FADD:
+					case Opcode.FADD:
 						Stack.Push(new Ast.FloatAdd(this, Stack.Pop(), Stack.Pop()));
 						break;
-					case Instruction.FSUB:
+					case Opcode.FSUB:
 						Stack.Push(new Ast.FloatSub(this, Stack.Pop(), Stack.Pop()));
 						break;
-					case Instruction.FMUL:
+					case Opcode.FMUL:
 						Stack.Push(new Ast.FloatMul(this, Stack.Pop(), Stack.Pop()));
 						break;
-					case Instruction.FDIV:
+					case Opcode.FDIV:
 						Stack.Push(new Ast.FloatDiv(this, Stack.Pop(), Stack.Pop()));
 						break;
-					case Instruction.FMOD:
+					case Opcode.FMOD:
 						Stack.Push(new Ast.FloatMod(this, Stack.Pop(), Stack.Pop()));
 						break;
-					case Instruction.FNEG:
+					case Opcode.FNEG:
 						Stack.Push(new Ast.FloatNeg(this, Stack.Pop()));
 						break;
-					case Instruction.FEQ:
+					case Opcode.FEQ:
 						Stack.Push(new Ast.FloatEq(this, Stack.Pop(), Stack.Pop()));
 						break;
-					case Instruction.FNE:
+					case Opcode.FNE:
 						Stack.Push(new Ast.FloatNe(this, Stack.Pop(), Stack.Pop()));
 						break;
-					case Instruction.FGT:
+					case Opcode.FGT:
 						Stack.Push(new Ast.FloatGt(this, Stack.Pop(), Stack.Pop()));
 						break;
-					case Instruction.FGE:
+					case Opcode.FGE:
 						Stack.Push(new Ast.FloatGe(this, Stack.Pop(), Stack.Pop()));
 						break;
-					case Instruction.FLT:
+					case Opcode.FLT:
 						Stack.Push(new Ast.FloatLt(this, Stack.Pop(), Stack.Pop()));
 						break;
-					case Instruction.FLE:
+					case Opcode.FLE:
 						Stack.Push(new Ast.FloatLe(this, Stack.Pop(), Stack.Pop()));
 						break;
-					case Instruction.VADD:
+					case Opcode.VADD:
 						Stack.Push(new Ast.VectorAdd(this, Stack.PopVector(), Stack.PopVector()));
 						break;
-					case Instruction.VSUB:
+					case Opcode.VSUB:
 						Stack.Push(new Ast.VectorSub(this, Stack.PopVector(), Stack.PopVector()));
 						break;
-					case Instruction.VMUL:
+					case Opcode.VMUL:
 						Stack.Push(new Ast.VectorMul(this, Stack.PopVector(), Stack.PopVector()));
 						break;
-					case Instruction.VDIV:
+					case Opcode.VDIV:
 						Stack.Push(new Ast.VectorDiv(this, Stack.PopVector(), Stack.PopVector()));
 						break;
-					case Instruction.VNEG:
+					case Opcode.VNEG:
 						Stack.Push(new Ast.VectorNeg(this, Stack.PopVector()));
 						break;
-					case Instruction.IAND:
+					case Opcode.IAND:
 						Stack.Push(new Ast.IntegerAnd(this, Stack.Pop(), Stack.Pop()));
 						break;
-					case Instruction.IOR:
+					case Opcode.IOR:
 						Stack.Push(new Ast.IntegerOr(this, Stack.Pop(), Stack.Pop()));
 						break;
-					case Instruction.IXOR:
+					case Opcode.IXOR:
 						Stack.Push(new Ast.IntegerXor(this, Stack.Pop(), Stack.Pop()));
 						break;
-					case Instruction.I2F:
+					case Opcode.I2F:
 						Stack.Push(new Ast.IntToFloat(this, Stack.Pop()));
 						break;
-					case Instruction.F2I:
+					case Opcode.F2I:
 						Stack.Push(new Ast.FloatToInt(this, Stack.Pop()));
 						break;
-					case Instruction.F2V:
+					case Opcode.F2V:
 						var val = Stack.Pop();
 						if (val.HasSideEffects())
 							Stack.Push(new Ast.FloatToVec(this, val));
 						else
 							Stack.Push(new Ast.Vector(this, val, val, val));
 						break;
-					case Instruction.PUSH_CONST_U8:
+					case Opcode.PUSH_CONST_U8:
 						Stack.Push(new Ast.ConstantInt(this, Instructions[tree.Offset].GetOperand(0)));
 						break;
-					case Instruction.PUSH_CONST_U8_U8:
+					case Opcode.PUSH_CONST_U8_U8:
 						Stack.Push(new Ast.ConstantInt(this, Instructions[tree.Offset].GetOperand(0)));
 						Stack.Push(new Ast.ConstantInt(this, Instructions[tree.Offset].GetOperand(1)));
 						break;
-					case Instruction.PUSH_CONST_U8_U8_U8:
+					case Opcode.PUSH_CONST_U8_U8_U8:
 						Stack.Push(new Ast.ConstantInt(this, Instructions[tree.Offset].GetOperand(0)));
 						Stack.Push(new Ast.ConstantInt(this, Instructions[tree.Offset].GetOperand(1)));
 						Stack.Push(new Ast.ConstantInt(this, Instructions[tree.Offset].GetOperand(2)));
 						break;
-					case Instruction.PUSH_CONST_U32:
-					case Instruction.PUSH_CONST_S16:
-					case Instruction.PUSH_CONST_U24:
+					case Opcode.PUSH_CONST_U32:
+					case Opcode.PUSH_CONST_S16:
+					case Opcode.PUSH_CONST_U24:
 						Stack.Push(new Ast.ConstantInt(this, (ulong)Instructions[tree.Offset].GetOperandsAsInt));
 						break;
-					case Instruction.PUSH_CONST_F:
+					case Opcode.PUSH_CONST_F:
 						Stack.Push(new Ast.ConstantFloat(this, Instructions[tree.Offset].GetFloat));
 						break;
-					case Instruction.DUP:
+					case Opcode.DUP:
 						var _val = Stack.Pop();
 						if (_val.HasSideEffects())
 							throw new InvalidOperationException("Cannot dup token with side effects");
 						Stack.Push(_val);
 						Stack.Push(_val);
 						break;
-					case Instruction.DROP:
+					case Opcode.DROP:
 						if (Stack.Peek().GetStackCount() > 1)
 						{
 							if (Stack.Peek() is Ast.FunctionCallBase)
@@ -828,7 +829,7 @@ namespace Decompiler
 						if (dropped.HasSideEffects())
 							tree.Statements.Add(new Ast.Drop(this, dropped));
 						break;
-					case Instruction.NATIVE:
+					case Opcode.NATIVE:
 						var native = new Ast.NativeCall(this, Stack.PopCount(Instructions[tree.Offset].GetNativeParams), this.ScriptFile.X64NativeTable.GetNativeFromIndex(Instructions[tree.Offset].GetNativeIndex),
 							this.ScriptFile.X64NativeTable.GetNativeHashFromIndex(Instructions[tree.Offset].GetNativeIndex), Instructions[tree.Offset].GetNativeReturns);
 						if (native.IsStatement())
@@ -836,104 +837,104 @@ namespace Decompiler
 						else
 							Stack.Push(native);
 						break;
-					case Instruction.ENTER:
+					case Opcode.ENTER:
 						throw new InvalidOperationException("Should not find an ENTER here");
-					case Instruction.LEAVE:
+					case Opcode.LEAVE:
 						tree.Statements.Add(new Ast.Return(this, Stack.PopCount(Instructions[tree.Offset].GetOperand(1))));
 						break;
-					case Instruction.LOAD:
+					case Opcode.LOAD:
 						Stack.Push(new Ast.Load(this, Stack.Pop()));
 						break;
-					case Instruction.STORE:
+					case Opcode.STORE:
 						tree.Statements.Add(new Ast.Store(this, Stack.Pop(), Stack.Pop()));
 						break;
-					case Instruction.STORE_REV:
+					case Opcode.STORE_REV:
 						var value = Stack.Pop();
 						tree.Statements.Add(new Ast.Store(this, Stack.Peek(), value));
 						break;
-					case Instruction.LOAD_N:
+					case Opcode.LOAD_N:
 						Stack.Push(new Ast.LoadN(this, Stack.Pop(), Stack.Pop()));
 						break;
-					case Instruction.STORE_N:
+					case Opcode.STORE_N:
 						var pointer = Stack.Pop();
 						var count = Stack.Pop();
 						if (count is not Ast.ConstantInt)
 							throw new InvalidOperationException("Cannot handle non-constant STORE_N count");
 						tree.Statements.Add(new Ast.StoreN(this, pointer, count, Stack.PopCount((int)(count as Ast.ConstantInt).GetValue())));
 						break;
-					case Instruction.ARRAY_U8:
-					case Instruction.ARRAY_U16:
+					case Opcode.ARRAY_U8:
+					case Opcode.ARRAY_U16:
 						Stack.Push(new Ast.Array(this, Instructions[tree.Offset].GetOperandsAsUInt, Stack.Pop(), Stack.Pop()));
 						break;
-					case Instruction.ARRAY_U8_LOAD:
-					case Instruction.ARRAY_U16_LOAD:
+					case Opcode.ARRAY_U8_LOAD:
+					case Opcode.ARRAY_U16_LOAD:
 						Stack.Push(new Ast.ArrayLoad(this, Instructions[tree.Offset].GetOperandsAsUInt, Stack.Pop(), Stack.Pop()));
 						break;
-					case Instruction.ARRAY_U8_STORE:
-					case Instruction.ARRAY_U16_STORE:
+					case Opcode.ARRAY_U8_STORE:
+					case Opcode.ARRAY_U16_STORE:
 						tree.Statements.Add(new Ast.ArrayStore(this, Instructions[tree.Offset].GetOperandsAsUInt, Stack.Pop(), Stack.Pop(), Stack.Pop()));
 						break;
-					case Instruction.LOCAL_U8:
-					case Instruction.LOCAL_U16:
+					case Opcode.LOCAL_U8:
+					case Opcode.LOCAL_U16:
 						Stack.Push(new Ast.Local(this, Instructions[tree.Offset].GetOperandsAsUInt));
 						break;
-					case Instruction.LOCAL_U8_LOAD:
-					case Instruction.LOCAL_U16_LOAD:
+					case Opcode.LOCAL_U8_LOAD:
+					case Opcode.LOCAL_U16_LOAD:
 						Stack.Push(new Ast.LocalLoad(this, Instructions[tree.Offset].GetOperandsAsUInt));
 						break;
-					case Instruction.LOCAL_U8_STORE:
-					case Instruction.LOCAL_U16_STORE:
+					case Opcode.LOCAL_U8_STORE:
+					case Opcode.LOCAL_U16_STORE:
                         tree.Statements.Add(new Ast.LocalStore(this, Instructions[tree.Offset].GetOperandsAsUInt, Stack.Pop()));
 						break;
-					case Instruction.STATIC_U8:
-					case Instruction.STATIC_U16:
+					case Opcode.STATIC_U8:
+					case Opcode.STATIC_U16:
 						Stack.Push(new Ast.Static(this, Instructions[tree.Offset].GetOperandsAsUInt));
 						break;
-					case Instruction.STATIC_U8_LOAD:
-					case Instruction.STATIC_U16_LOAD:
+					case Opcode.STATIC_U8_LOAD:
+					case Opcode.STATIC_U16_LOAD:
 						Stack.Push(new Ast.StaticLoad(this, Instructions[tree.Offset].GetOperandsAsUInt));
 						break;
-					case Instruction.STATIC_U8_STORE:
-					case Instruction.STATIC_U16_STORE:
+					case Opcode.STATIC_U8_STORE:
+					case Opcode.STATIC_U16_STORE:
 						tree.Statements.Add(new Ast.StaticStore(this, Instructions[tree.Offset].GetOperandsAsUInt, Stack.Pop()));
 						break;
-					case Instruction.IADD_U8:
-					case Instruction.IADD_S16:
+					case Opcode.IADD_U8:
+					case Opcode.IADD_S16:
 						Stack.Push(new Ast.IntegerAdd(this, new Ast.ConstantInt(this, (ulong)Instructions[tree.Offset].GetOperandsAsUInt), Stack.Pop()));
 						break;
-					case Instruction.IMUL_U8:
-					case Instruction.IMUL_S16:
+					case Opcode.IMUL_U8:
+					case Opcode.IMUL_S16:
 						Stack.Push(new Ast.IntegerMul(this, new Ast.ConstantInt(this, (ulong)Instructions[tree.Offset].GetOperandsAsUInt), Stack.Pop())); ;
 						break;
-					case Instruction.IOFFSET:
+					case Opcode.IOFFSET:
 						var offset = Stack.Pop();
 						Stack.Push(new Ast.Offset(this, Stack.Pop(), offset));
 						break;
-					case Instruction.IOFFSET_U8:
-					case Instruction.IOFFSET_S16:
+					case Opcode.IOFFSET_U8:
+					case Opcode.IOFFSET_S16:
 						Stack.Push(new Ast.Offset(this, Stack.Pop(), new Ast.ConstantInt(this, (ulong)Instructions[tree.Offset].GetOperandsAsUInt)));
 						break;
-					case Instruction.IOFFSET_U8_LOAD:
-					case Instruction.IOFFSET_S16_LOAD:
+					case Opcode.IOFFSET_U8_LOAD:
+					case Opcode.IOFFSET_S16_LOAD:
 						Stack.Push(new Ast.OffsetLoad(this, Stack.Pop(), (int)Instructions[tree.Offset].GetOperandsAsUInt));
 						break;
-					case Instruction.IOFFSET_U8_STORE:
-					case Instruction.IOFFSET_S16_STORE:
+					case Opcode.IOFFSET_U8_STORE:
+					case Opcode.IOFFSET_S16_STORE:
 						tree.Statements.Add(new Ast.OffsetStore(this, Stack.Pop(), (int)Instructions[tree.Offset].GetOperandsAsUInt, Stack.Pop()));
 						break;
-					case Instruction.GLOBAL_U16:
-					case Instruction.GLOBAL_U24:
+					case Opcode.GLOBAL_U16:
+					case Opcode.GLOBAL_U24:
 						Stack.Push(new Ast.Global(this, Instructions[tree.Offset].GetOperandsAsUInt));
 						break;
-					case Instruction.GLOBAL_U16_LOAD:
-					case Instruction.GLOBAL_U24_LOAD:
+					case Opcode.GLOBAL_U16_LOAD:
+					case Opcode.GLOBAL_U24_LOAD:
 						Stack.Push(new Ast.GlobalLoad(this, Instructions[tree.Offset].GetOperandsAsUInt));
 						break;
-					case Instruction.GLOBAL_U16_STORE:
-					case Instruction.GLOBAL_U24_STORE:
+					case Opcode.GLOBAL_U16_STORE:
+					case Opcode.GLOBAL_U24_STORE:
 						tree.Statements.Add(new Ast.GlobalStore(this, Instructions[tree.Offset].GetOperandsAsUInt, Stack.Pop()));
 						break;
-					case Instruction.CALL:
+					case Opcode.CALL:
 						foreach (var function in ScriptFile.Functions)
 						{
 							if (function.Location == Instructions[tree.Offset].GetOperandsAsUInt)
@@ -952,25 +953,25 @@ namespace Decompiler
 						throw new InvalidOperationException("Cannot find function");
 FUNCTION_FOUND:
 						break;
-					case Instruction.STRING:
+					case Opcode.STRING:
 						Stack.Push(new Ast.String(this, Stack.Pop()));
 						break;
-					case Instruction.STRINGHASH:
+					case Opcode.STRINGHASH:
 						Stack.Push(new Ast.StringHash(this, Stack.Pop()));
 						break;
-					case Instruction.TEXT_LABEL_ASSIGN_STRING:
+					case Opcode.TEXT_LABEL_ASSIGN_STRING:
 						tree.Statements.Add(new Ast.TextLabelAssignString(this, Stack.Pop(), Stack.Pop(), (int)Instructions[tree.Offset].GetOperandsAsUInt));
 						break;
-					case Instruction.TEXT_LABEL_ASSIGN_INT:
+					case Opcode.TEXT_LABEL_ASSIGN_INT:
 						tree.Statements.Add(new Ast.TextLabelAssignInt(this, Stack.Pop(), Stack.Pop(), (int)Instructions[tree.Offset].GetOperandsAsUInt));
 						break;
-					case Instruction.TEXT_LABEL_APPEND_STRING:
+					case Opcode.TEXT_LABEL_APPEND_STRING:
 						tree.Statements.Add(new Ast.TextLabelAppendString(this, Stack.Pop(), Stack.Pop(), (int)Instructions[tree.Offset].GetOperandsAsUInt));
 						break;
-					case Instruction.TEXT_LABEL_APPEND_INT:
+					case Opcode.TEXT_LABEL_APPEND_INT:
 						tree.Statements.Add(new Ast.TextLabelAppendInt(this, Stack.Pop(), Stack.Pop(), (int)Instructions[tree.Offset].GetOperandsAsUInt));
 						break;
-					case Instruction.TEXT_LABEL_COPY:
+					case Opcode.TEXT_LABEL_COPY:
 						var ptr = Stack.Pop();
 						var _value = Stack.Pop();
 						var _count = Stack.Pop();
@@ -980,50 +981,50 @@ FUNCTION_FOUND:
 
 						tree.Statements.Add(new Ast.TextLabelCopy(this, ptr, Stack.PopCount((int)(_count as Ast.ConstantInt).GetValue()), _value));
 						break;
-					case Instruction.CATCH:
-					case Instruction.THROW:
+					case Opcode.CATCH:
+					case Opcode.THROW:
 						throw new NotImplementedException();
-					case Instruction.CALLINDIRECT:
+					case Opcode.CALLINDIRECT:
 						var location = Stack.Pop();
 						tree.Statements.Add(new Ast.IndirectCall(this, Stack.PopCount(Stack.GetCount()), location));
 						break;
-					case Instruction.PUSH_CONST_M1:
-					case Instruction.PUSH_CONST_0:
-					case Instruction.PUSH_CONST_1:
-					case Instruction.PUSH_CONST_2:
-					case Instruction.PUSH_CONST_3:
-					case Instruction.PUSH_CONST_4:
-					case Instruction.PUSH_CONST_5:
-					case Instruction.PUSH_CONST_6:
-					case Instruction.PUSH_CONST_7:
+					case Opcode.PUSH_CONST_M1:
+					case Opcode.PUSH_CONST_0:
+					case Opcode.PUSH_CONST_1:
+					case Opcode.PUSH_CONST_2:
+					case Opcode.PUSH_CONST_3:
+					case Opcode.PUSH_CONST_4:
+					case Opcode.PUSH_CONST_5:
+					case Opcode.PUSH_CONST_6:
+					case Opcode.PUSH_CONST_7:
 						Stack.Push(new Ast.ConstantInt(this, (ulong)Instructions[tree.Offset].GetImmBytePush));
 						break;
-					case Instruction.PUSH_CONST_FM1:
-					case Instruction.PUSH_CONST_F0:
-					case Instruction.PUSH_CONST_F1:
-					case Instruction.PUSH_CONST_F2:
-					case Instruction.PUSH_CONST_F3:
-					case Instruction.PUSH_CONST_F4:
-					case Instruction.PUSH_CONST_F5:
-					case Instruction.PUSH_CONST_F6:
-					case Instruction.PUSH_CONST_F7:
+					case Opcode.PUSH_CONST_FM1:
+					case Opcode.PUSH_CONST_F0:
+					case Opcode.PUSH_CONST_F1:
+					case Opcode.PUSH_CONST_F2:
+					case Opcode.PUSH_CONST_F3:
+					case Opcode.PUSH_CONST_F4:
+					case Opcode.PUSH_CONST_F5:
+					case Opcode.PUSH_CONST_F6:
+					case Opcode.PUSH_CONST_F7:
 						Stack.Push(new Ast.ConstantFloat(this, Instructions[tree.Offset].GetImmFloatPush));
 						break;
-					case Instruction.IS_BIT_SET:
+					case Opcode.IS_BIT_SET:
 						Stack.Push(new Ast.BitTest(this, Stack.Pop(), Stack.Pop()));
 						break;
-					case Instruction.SWITCH:
+					case Opcode.SWITCH:
 						HandleSwitch(tree);
 						break;
-					case Instruction.J:
+					case Opcode.J:
 						var t = tree;
 
 						while (t != null)
 						{
 							// break from switch case
-							if (t is CaseTree)
+							if (t is Ast.StatementTree.Case)
 							{
-								if (Instructions[tree.Offset].GetJumpOffset == (t as CaseTree).BreakOffset)
+                                if (Instructions[tree.Offset].GetJumpOffset == (t as Ast.StatementTree.Case).BreakOffset)
 								{
 									tree.Statements.Add(new Ast.Break(this));
 									goto DONE;
@@ -1031,9 +1032,9 @@ FUNCTION_FOUND:
 							}
 
 							// break from while loop
-                            if (t is WhileTree)
+                            if (t is Ast.StatementTree.While)
                             {
-                                if (Instructions[tree.Offset].GetJumpOffset == (t as WhileTree).BreakOffset)
+                                if (Instructions[tree.Offset].GetJumpOffset == (t as Ast.StatementTree.While).BreakOffset)
                                 {
                                     tree.Statements.Add(new Ast.Break(this));
                                     goto DONE;
@@ -1044,10 +1045,10 @@ FUNCTION_FOUND:
 						}
 
 						// else
-                        if (tree is IfTree && Instructions[tree.Offset + 1].Offset == (tree as IfTree).EndOffset && Instructions[tree.Offset].GetJumpOffset != Instructions[tree.Offset + 1].Offset)
+                        if (tree is Ast.StatementTree.If && Instructions[tree.Offset + 1].Offset == (tree as Ast.StatementTree.If).EndOffset && Instructions[tree.Offset].GetJumpOffset != Instructions[tree.Offset + 1].Offset)
 						{
-							var @else = new ElseTree(this, tree, tree.Offset + 1, Instructions[tree.Offset].GetJumpOffset); // TODO should the parent be tree or tree.Parent?
-                            (tree as IfTree).ElseTree = @else;
+							var @else = new Ast.StatementTree.Else(this, tree, tree.Offset + 1, Instructions[tree.Offset].GetJumpOffset); // TODO should the parent be tree or tree.Parent?
+                            (tree as Ast.StatementTree.If).ElseTree = @else;
                             treeStack.Push(@else);
 							tree.Parent.Offset = CodeOffsetToFunctionOffset(@else.EndOffset);
 							break;
@@ -1059,12 +1060,12 @@ start:
 						//should be the only case for finding another jump now
                         if (Instructions[tree.Offset].GetJumpOffset != Instructions[tree.Offset + 1 + tempoff].Offset)
 						{
-							if (Instructions[tree.Offset + 1 + tempoff].Instruction == Instruction.NOP)
+							if (Instructions[tree.Offset + 1 + tempoff].Opcode == Opcode.NOP)
 							{
 								tempoff++;
 								goto start;
 							}
-							else if (Instructions[tree.Offset + 1 + tempoff].Instruction == Instruction.J)
+							else if (Instructions[tree.Offset + 1 + tempoff].Opcode == Opcode.J)
 							{
 								if (Instructions[tree.Offset + 1 + tempoff].GetOperandsAsInt == 0)
 								{
@@ -1079,24 +1080,24 @@ start:
                         }
 DONE:
                         break;
-					case Instruction.JZ:
+					case Opcode.JZ:
 						goto case CONDITIONAL_JUMP;
-					case Instruction.IEQ_JZ:
+					case Opcode.IEQ_JZ:
                         Stack.Push(new Ast.IntegerEq(this, Stack.Pop(), Stack.Pop()));
 						goto case CONDITIONAL_JUMP;
-                    case Instruction.INE_JZ:
+                    case Opcode.INE_JZ:
                         Stack.Push(new Ast.IntegerNe(this, Stack.Pop(), Stack.Pop()));
                         goto case CONDITIONAL_JUMP;
-                    case Instruction.IGT_JZ:
+                    case Opcode.IGT_JZ:
                         Stack.Push(new Ast.IntegerGt(this, Stack.Pop(), Stack.Pop()));
                         goto case CONDITIONAL_JUMP;
-                    case Instruction.IGE_JZ:
+                    case Opcode.IGE_JZ:
                         Stack.Push(new Ast.IntegerGe(this, Stack.Pop(), Stack.Pop()));
                         goto case CONDITIONAL_JUMP;
-                    case Instruction.ILT_JZ:
+                    case Opcode.ILT_JZ:
                         Stack.Push(new Ast.IntegerLt(this, Stack.Pop(), Stack.Pop()));
                         goto case CONDITIONAL_JUMP;
-                    case Instruction.ILE_JZ:
+                    case Opcode.ILE_JZ:
                         Stack.Push(new Ast.IntegerLe(this, Stack.Pop(), Stack.Pop()));
                         goto case CONDITIONAL_JUMP;
                     case CONDITIONAL_JUMP:
@@ -1113,11 +1114,11 @@ DONE:
 
                         while (tr != null)
                         {
-                            if (tr is WhileTree)
+                            if (tr is Ast.StatementTree.While)
                             {
-                                if (Instructions[tree.Offset].GetJumpOffset == (tr as WhileTree).BreakOffset)
+                                if (Instructions[tree.Offset].GetJumpOffset == (tr as Ast.StatementTree.While).BreakOffset)
                                 {
-									var condBreak = new IfTree(this, tree, -1, condition, -1);
+									var condBreak = new Ast.StatementTree.If(this, tree, -1, condition, -1);
 									condBreak.Statements.Add(new Ast.Break(this));
 									tree.Statements.Add(condBreak);
 									goto DONE_COND;
@@ -1134,7 +1135,7 @@ DONE:
 								throw new InvalidOperationException("Break offset <= Current offset");
 
 							Instructions[CodeOffsetToFunctionOffset(Instructions[tree.Offset].GetJumpOffset) - 1].NopInstruction(); // is this really required?
-                            var @while = new WhileTree(this, tree, tree.Offset + 1, condition, Instructions[tree.Offset].GetJumpOffset);
+                            var @while = new Ast.StatementTree.While(this, tree, tree.Offset + 1, condition, Instructions[tree.Offset].GetJumpOffset);
                             treeStack.Push(@while);
                             tree.Statements.Add(@while);
 							tree.Offset = CodeOffsetToFunctionOffset(@while.BreakOffset);
@@ -1148,7 +1149,7 @@ DONE:
 								throw new InvalidOperationException("Do while loops are not supported");
 							}
 
-							var @if = new IfTree(this, tree, tree.Offset + 1, condition, Instructions[tree.Offset].GetJumpOffset);
+							var @if = new Ast.StatementTree.If(this, tree, tree.Offset + 1, condition, Instructions[tree.Offset].GetJumpOffset);
                             treeStack.Push(@if);
                             tree.Statements.Add(@if);
 							tree.Offset = CodeOffsetToFunctionOffset(@if.EndOffset);
@@ -1201,22 +1202,22 @@ DONE_COND:
 		/// 2: Try to create for loops
 		/// </summary>
 		/// <param name="tree"></param>
-		internal void TryOptimizeTree(StatementTree tree)
+		internal void TryOptimizeTree(Ast.StatementTree.Tree tree)
 		{
 			if (tree.Statements.Count == 0)
 				return;
 
 			var lastTree = tree.Statements[^1];
-			if (lastTree is IfTree)
+			if (lastTree is Ast.StatementTree.If)
 			{
-				var lastIf = lastTree as IfTree;
+				var lastIf = lastTree as Ast.StatementTree.If;
 				if (lastIf.ElseTree != null)
 				{
 					var @else = lastIf.ElseTree!;
-					if (@else.Statements.Count == 1 && @else.Statements[^1] is IfTree)
+					if (@else.Statements.Count == 1 && @else.Statements[^1] is Ast.StatementTree.If)
 					{
-						var insideIf = @else.Statements[^1] as IfTree;
-						var newElseif = new ElseIfTree(this, lastIf, -1, insideIf.Condition, -1);
+						var insideIf = @else.Statements[^1] as Ast.StatementTree.If;
+						var newElseif = new Ast.StatementTree.ElseIf(this, lastIf, -1, insideIf.Condition, -1);
                         newElseif.Statements = insideIf.Statements;
                         lastIf.ElseIfTrees.Add(newElseif);
 						foreach (var elseIf in insideIf.ElseIfTrees)
@@ -1230,16 +1231,16 @@ DONE_COND:
                     }
                 }
 			}
-			else if (lastTree is WhileTree && tree.Statements.Count > 1)
+			else if (lastTree is Ast.StatementTree.While && tree.Statements.Count > 1)
 			{
-				var lastWhile = lastTree as WhileTree;
+				var lastWhile = lastTree as Ast.StatementTree.While;
 				var lastSet = tree.Statements[^2];
 				if (lastWhile.Statements.Count >= 1 && lastWhile.Statements[^1] is Ast.AstToken && lastSet is Ast.AstToken)
 				{
 					var lastStmtInWhile = lastWhile.Statements[^1] as Ast.AstToken;
                     if (IsForLoopPair(lastSet as Ast.AstToken, lastStmtInWhile))
 					{
-						var @for = new ForTree(this, tree, -1, lastSet as Ast.AstToken, lastWhile.Condition, lastStmtInWhile);
+						var @for = new Ast.StatementTree.For(this, tree, -1, lastSet as Ast.AstToken, lastWhile.Condition, lastStmtInWhile);
 						lastWhile.Statements.Remove(lastStmtInWhile);
 						tree.Statements.Remove(lastWhile);
 						tree.Statements.Remove(lastSet);

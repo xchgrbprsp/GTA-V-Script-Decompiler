@@ -4,55 +4,48 @@ using System.Linq;
 
 namespace Decompiler
 {
-	internal class HLInstruction
+	internal class Instruction
 	{
         int offset;
-		public Instruction instruction;
-		public Instruction OriginalInstruction;
-        public byte[] operands;
-		public int ReturnCount { get; set; }
+		public Opcode Opcode { get; private set; }
+		public Opcode OriginalOpcode { get; private set; }
+        public byte[] Operands { get; private set; }
 
-		public HLInstruction(Instruction Instruction, IEnumerable<byte> Operands, int Offset)
+		public Instruction(Opcode Instruction, IEnumerable<byte> Operands, int Offset)
 		{
-			instruction = Instruction;
-            OriginalInstruction = instruction;
-            operands = Operands.ToArray();
-			offset = Offset;
-			ReturnCount = 0;
-		}
-
-		public HLInstruction(byte Instruction, IEnumerable<byte> Operands, int Offset)
-		{
-			instruction = (Instruction) Instruction;
-            OriginalInstruction = (Instruction) instruction;
-            operands = Operands.ToArray();
+			Opcode = Instruction;
+            OriginalOpcode = Opcode;
+            this.Operands = Operands.ToArray();
 			offset = Offset;
 		}
 
-		public HLInstruction(Instruction Instruction, int Offset)
+		public Instruction(byte Instruction, IEnumerable<byte> Operands, int Offset)
 		{
-			instruction = Instruction;
-            OriginalInstruction = instruction;
-            operands = new byte[0];
+			Opcode = (Opcode) Instruction;
+            OriginalOpcode = (Opcode) Opcode;
+            this.Operands = Operands.ToArray();
 			offset = Offset;
 		}
 
-		public HLInstruction(byte Instruction, int Offset)
+		public Instruction(Opcode Instruction, int Offset)
 		{
-			instruction = (Instruction) Instruction;
-			OriginalInstruction = (Instruction) Instruction;
-            operands = new byte[0];
+			Opcode = Instruction;
+            OriginalOpcode = Opcode;
+            Operands = new byte[0];
 			offset = Offset;
 		}
 
-		public Instruction Instruction
+		public Instruction(byte Instruction, int Offset)
 		{
-			get { return instruction; }
+			Opcode = (Opcode)Instruction;
+			OriginalOpcode = (Opcode)Instruction;
+			Operands = new byte[0];
+			offset = Offset;
 		}
 
 		public void NopInstruction()
 		{
-			instruction = Instruction.NOP;
+			Opcode = Opcode.NOP;
 		}
 
 		public int Offset
@@ -62,25 +55,25 @@ namespace Decompiler
 
 		public int InstructionLength
 		{
-			get { return 1 + operands.Count(); }
+			get { return 1 + Operands.Count(); }
 		}
 
 		public int GetOperandsAsInt
 		{
 			get
 			{
-				switch (operands.Count())
+				switch (Operands.Count())
 				{
 					case 1:
-						return operands[0];
+						return Operands[0];
 					case 2:
-						return BitConverter.ToInt16(operands, 0);
+						return BitConverter.ToInt16(Operands, 0);
 					case 3:
-						return operands[2] << 16 | operands[1] << 8 | operands[0];
+						return Operands[2] << 16 | Operands[1] << 8 | Operands[0];
 					case 4:
-						return BitConverter.ToInt32(operands, 0);
+						return BitConverter.ToInt32(Operands, 0);
 				}
-				throw new Exception("Invalid amount of operands (" + operands.Count().ToString() + ")");
+				throw new Exception("Invalid amount of operands (" + Operands.Count().ToString() + ")");
 			}
 		}
 
@@ -88,34 +81,34 @@ namespace Decompiler
 		{
 			get
 			{
-				if (operands.Count() != 4)
+				if (Operands.Count() != 4)
 					throw new Exception("Not a Float");
 
-				return BitConverter.ToSingle(operands, 0);
+				return BitConverter.ToSingle(Operands, 0);
 			}
 		}
 
 		public byte GetOperand(int index)
 		{
-			return operands[index];
+			return Operands[index];
 		}
 
 		public uint GetOperandsAsUInt
 		{
 			get
 			{
-				switch (operands.Count())
+				switch (Operands.Count())
 				{
 					case 1:
-						return operands[0];
+						return Operands[0];
 					case 2:
-						return BitConverter.ToUInt16(operands, 0);
+						return BitConverter.ToUInt16(Operands, 0);
 					case 3:
-						return (uint) (operands[2] << 16 | operands[1] << 8 | operands[0]);
+						return (uint) (Operands[2] << 16 | Operands[1] << 8 | Operands[0]);
 					case 4:
-						return BitConverter.ToUInt32(operands, 0);
+						return BitConverter.ToUInt32(Operands, 0);
 				}
-				throw new Exception("Invalid amount of operands (" + operands.Count().ToString() + ")");
+				throw new Exception("Invalid amount of operands (" + Operands.Count().ToString() + ")");
 			}
 		}
 
@@ -124,7 +117,7 @@ namespace Decompiler
 			get
 			{
 				if (IsJumpInstruction)
-						return BitConverter.ToInt16(operands, 0) + offset + 3;
+						return BitConverter.ToInt16(Operands, 0) + offset + 3;
 				throw new Exception("Not A jump");
 			}
 		}
@@ -133,9 +126,9 @@ namespace Decompiler
 		{
 			get
 			{
-				if (instruction == Instruction.NATIVE)
+				if (Opcode == Opcode.NATIVE)
 				{
-					return (byte) (operands[0] >> 2);
+					return (byte) (Operands[0] >> 2);
 				}
 				throw new Exception("Not A Native");
 			}
@@ -145,9 +138,9 @@ namespace Decompiler
 		{
 			get
 			{
-				if (instruction == Instruction.NATIVE)
+				if (Opcode == Opcode.NATIVE)
 				{
-					return (byte) (operands[0] & 0x3);
+					return (byte) (Operands[0] & 0x3);
 				}
 				throw new Exception("Not A Native");
 			}
@@ -157,10 +150,10 @@ namespace Decompiler
 		{
 			get
 			{
-				if (instruction == Instruction.NATIVE)
+				if (Opcode == Opcode.NATIVE)
 				{
 					// if (_consoleVer)
-					return Utils.SwapEndian(BitConverter.ToUInt16(operands, 1));
+					return Utils.SwapEndian(BitConverter.ToUInt16(Operands, 1));
 					//else
 					//	return BitConverter.ToUInt16(operands, 1);
 				}
@@ -170,40 +163,40 @@ namespace Decompiler
 
 		public int GetSwitchCase(int index)
 		{
-			if (instruction == Instruction.SWITCH)
+			if (Opcode == Opcode.SWITCH)
 			{
 				int cases = GetOperand(0);
 				if (index >= cases)
-					throw new Exception("Out Or Range Script Case");
-				return BitConverter.ToInt32(operands, 1 + index * 6);
+					throw new Exception("Out of range script case");
+				return BitConverter.ToInt32(Operands, 1 + index * 6);
 			}
 			throw new Exception("Not A Switch Statement");
 		}
 
 		public string GetSwitchStringCase(int index)
 		{
-			if (instruction == Instruction.SWITCH)
+			if (Opcode == Opcode.SWITCH)
 			{
 				int cases = GetOperand(0);
 				if (index >= cases)
-					throw new Exception("Out Or Range Script Case");
+					throw new Exception("Out of range script case");
 
 				return Program.getIntType == Program.IntType._uint
-					? ScriptFile.HashBank.GetHash(BitConverter.ToUInt32(operands, 1 + index*6))
-					: ScriptFile.HashBank.GetHash(BitConverter.ToUInt32(operands, 1 + index*6));
+					? ScriptFile.HashBank.GetHash(BitConverter.ToUInt32(Operands, 1 + index*6))
+					: ScriptFile.HashBank.GetHash(BitConverter.ToUInt32(Operands, 1 + index*6));
 			}
 			throw new Exception("Not A Switch Statement");
 		}
 
 		public int GetSwitchOffset(int index)
 		{
-			if (instruction == Instruction.SWITCH)
+			if (Opcode == Opcode.SWITCH)
 			{
 				int cases = GetOperand(0);
 				if (index >= cases)
 					throw new Exception("Out of range script case");
 
-				return offset + 8 + index*6 + BitConverter.ToInt16(operands, 5 + index*6);
+				return offset + 8 + index*6 + BitConverter.ToInt16(Operands, 5 + index*6);
 			}
 			throw new Exception("Not A Switch Statement");
 		}
@@ -212,7 +205,7 @@ namespace Decompiler
 		{
 			get
 			{
-				int _instruction = (int) Instruction;
+				int _instruction = (int) Opcode;
 				if (_instruction >= 109 && _instruction <= 117)
 				{
 					return _instruction - 110;
@@ -225,7 +218,7 @@ namespace Decompiler
 		{
 			get
 			{
-				int _instruction = (int) Instruction;
+				int _instruction = (int) Opcode;
 				if (_instruction >= 118 && _instruction <= 126)
 				{
 					return _instruction - 119;
@@ -236,19 +229,19 @@ namespace Decompiler
 
 		public bool IsJumpInstruction
 		{
-			get { return (int) instruction > 84 && (int) instruction < 93; }
+			get { return (int) Opcode > 84 && (int) Opcode < 93; }
 		}
 
 		public bool IsConditionJump
 		{
-			get { return (int) instruction > 85 && (int) instruction < 93; }
+			get { return (int) Opcode > 85 && (int) Opcode < 93; }
 		}
 
 		public bool IsWhileJump
 		{
 			get
 			{
-				if (instruction == Instruction.J)
+				if (Opcode == Opcode.J)
 				{
 					if (GetJumpOffset <= 0) 
 						return false;
@@ -259,7 +252,7 @@ namespace Decompiler
 		}
 	}
 
-	internal enum Instruction //opcodes reversed from gta v eboot.bin
+	internal enum Opcode //opcodes reversed from gta v eboot.bin
 	{
         NOP,
         IADD,

@@ -35,12 +35,12 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.btnOK = new System.Windows.Forms.Button();
-			this.btnCancel = new System.Windows.Forms.Button();
-			this.label1 = new System.Windows.Forms.Label();
-			this.textBox1 = new System.Windows.Forms.TextBox();
-			this.comboBox1 = new System.Windows.Forms.ComboBox();
-			this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+			this.btnOK = new Button();
+			this.btnCancel = new Button();
+			this.label1 = new Label();
+			this.textBox1 = new TextBox();
+			this.comboBox1 = new ComboBox();
+			this.richTextBox1 = new RichTextBox();
 			this.SuspendLayout();
 			// 
 			// btnOK
@@ -51,9 +51,9 @@
 			this.btnOK.BackColor = System.Drawing.SystemColors.Control;
 			this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.btnOK.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.btnOK.Location = new System.Drawing.Point(131, 103);
+			this.btnOK.Location = new Drawing.Point(131, 103);
 			this.btnOK.Name = "btnOK";
-			this.btnOK.Size = new System.Drawing.Size(59, 29);
+			this.btnOK.Size = new Drawing.Size(59, 29);
 			this.btnOK.TabIndex = 0;
 			this.btnOK.Text = "Ok";
 			this.btnOK.UseVisualStyleBackColor = false;
@@ -66,9 +66,9 @@
 			this.btnCancel.BackColor = System.Drawing.SystemColors.Control;
 			this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.btnCancel.Location = new System.Drawing.Point(209, 103);
+			this.btnCancel.Location = new Drawing.Point(209, 103);
 			this.btnCancel.Name = "btnCancel";
-			this.btnCancel.Size = new System.Drawing.Size(59, 29);
+			this.btnCancel.Size = new Drawing.Size(59, 29);
 			this.btnCancel.TabIndex = 1;
 			this.btnCancel.Text = "Cancel";
 			this.btnCancel.UseVisualStyleBackColor = false;
@@ -76,11 +76,11 @@
 			// label1
 			// 
 			this.label1.AutoSize = true;
-			this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold,
+			this.label1.Font = new Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold,
 				System.Drawing.GraphicsUnit.Point, 0);
-			this.label1.Location = new System.Drawing.Point(12, 9);
+			this.label1.Location = new Drawing.Point(12, 9);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(109, 20);
+			this.label1.Size = new Drawing.Size(109, 20);
 			this.label1.TabIndex = 2;
 			this.label1.Text = "Enter Value:";
 			// 
@@ -90,13 +90,13 @@
 
                     ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                       | System.Windows.Forms.AnchorStyles.Right);
-			this.textBox1.Location = new System.Drawing.Point(15, 68);
+			this.textBox1.Location = new Drawing.Point(15, 68);
 			this.textBox1.Multiline = true;
 			this.textBox1.Name = "textBox1";
-			this.textBox1.Size = new System.Drawing.Size(253, 20);
+			this.textBox1.Size = new Drawing.Size(253, 20);
 			this.textBox1.TabIndex = 3;
 			this.textBox1.Visible = false;
-			this.textBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Input_KeyDown);
+			this.textBox1.KeyDown += new KeyEventHandler(this.Input_KeyDown);
 			// 
 			// comboBox1
 			// 
@@ -105,27 +105,27 @@
                     ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                       | System.Windows.Forms.AnchorStyles.Right);
 			this.comboBox1.FormattingEnabled = true;
-			this.comboBox1.Location = new System.Drawing.Point(15, 67);
+			this.comboBox1.Location = new Drawing.Point(15, 67);
 			this.comboBox1.Name = "comboBox1";
-			this.comboBox1.Size = new System.Drawing.Size(252, 21);
+			this.comboBox1.Size = new Drawing.Size(252, 21);
 			this.comboBox1.TabIndex = 4;
 			this.comboBox1.Visible = false;
-			this.comboBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Input_KeyDown);
+			this.comboBox1.KeyDown += new KeyEventHandler(this.Input_KeyDown);
 			// 
 			// richTextBox1
 			// 
-			this.richTextBox1.Location = new System.Drawing.Point(15, 68);
+			this.richTextBox1.Location = new Drawing.Point(15, 68);
 			this.richTextBox1.Name = "richTextBox1";
-			this.richTextBox1.Size = new System.Drawing.Size(252, 142);
+			this.richTextBox1.Size = new Drawing.Size(252, 142);
 			this.richTextBox1.TabIndex = 5;
 			this.richTextBox1.Text = "";
 			this.richTextBox1.Visible = false;
 			// 
 			// _InputBox
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.AutoScaleDimensions = new Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(280, 144);
+			this.ClientSize = new Drawing.Size(280, 144);
 			this.Controls.Add(this.comboBox1);
 			this.Controls.Add(this.textBox1);
 			this.Controls.Add(this.label1);
@@ -138,7 +138,7 @@
 			this.Name = "_InputBox";
 			this.ShowIcon = false;
 			this.ShowInTaskbar = false;
-			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.InputBox_FormClosing);
+			this.FormClosing += new FormClosingEventHandler(this.InputBox_FormClosing);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -146,11 +146,11 @@
 
 		#endregion
 
-		private System.Windows.Forms.Button btnOK;
-		private System.Windows.Forms.Button btnCancel;
-		private System.Windows.Forms.Label label1;
+		private Button btnOK;
+		private Button btnCancel;
+		private Label label1;
 		private ComboBox comboBox1;
-		private System.Windows.Forms.TextBox textBox1;
+		private TextBox textBox1;
 
 		#endregion
 

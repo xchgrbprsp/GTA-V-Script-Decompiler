@@ -36,8 +36,6 @@
             this.checkPatternUniquenessToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.CreatePatternToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.patchNopInstructionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.patchPlaceFunctionReturnToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.fctb1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
@@ -56,25 +54,28 @@
         '\"',
         '\'',
         '\''};
-            this.fctb1.AutoIndentCharsPatterns = "\r\n^\\s*[\\w\\.\\(\\)]+\\s*(?<range>=)\\s*(?<range>.+)\r\n";
+            this.fctb1.AutoIndentCharsPatterns = "\r\n^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;]+);\r\n^\\s*(case|default)\\s*[^:]" +
+    "*(?<range>:)\\s*(?<range>[^;]+);\r\n";
             this.fctb1.AutoScrollMinSize = new System.Drawing.Size(27, 14);
             this.fctb1.BackBrush = null;
             this.fctb1.BracketsHighlightStrategy = FastColoredTextBoxNS.BracketsHighlightStrategy.Strategy2;
             this.fctb1.CharHeight = 14;
             this.fctb1.CharWidth = 8;
-            this.fctb1.CommentPrefix = "\'";
             this.fctb1.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.fctb1.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.fctb1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.fctb1.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.fctb1.IsReplaceMode = false;
-            this.fctb1.Language = FastColoredTextBoxNS.Language.VB;
+            this.fctb1.Language = FastColoredTextBoxNS.Language.CSharp;
             this.fctb1.LeftBracket = '(';
+            this.fctb1.LeftBracket2 = '{';
             this.fctb1.Location = new System.Drawing.Point(0, 24);
             this.fctb1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.fctb1.Name = "fctb1";
             this.fctb1.Paddings = new System.Windows.Forms.Padding(0);
             this.fctb1.ReadOnly = true;
             this.fctb1.RightBracket = ')';
+            this.fctb1.RightBracket2 = '}';
             this.fctb1.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.fctb1.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("fctb1.ServiceColors")));
             this.fctb1.Size = new System.Drawing.Size(978, 679);
@@ -110,32 +111,17 @@
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.CreatePatternToolStripMenuItem,
-            this.patchNopInstructionsToolStripMenuItem,
-            this.patchPlaceFunctionReturnToolStripMenuItem});
+            this.CreatePatternToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(227, 70);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 48);
+            this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             // 
             // CreatePatternToolStripMenuItem
             // 
             this.CreatePatternToolStripMenuItem.Name = "CreatePatternToolStripMenuItem";
-            this.CreatePatternToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
+            this.CreatePatternToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.CreatePatternToolStripMenuItem.Text = "Create Pattern";
             this.CreatePatternToolStripMenuItem.Click += new System.EventHandler(this.CreatePatternToolStripMenuItem_Click);
-            // 
-            // patchNopInstructionsToolStripMenuItem
-            // 
-            this.patchNopInstructionsToolStripMenuItem.Name = "patchNopInstructionsToolStripMenuItem";
-            this.patchNopInstructionsToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
-            this.patchNopInstructionsToolStripMenuItem.Text = "Patch: Nop Instruction(s)";
-            this.patchNopInstructionsToolStripMenuItem.Click += new System.EventHandler(this.patchNopInstructionsToolStripMenuItem_Click);
-            // 
-            // patchPlaceFunctionReturnToolStripMenuItem
-            // 
-            this.patchPlaceFunctionReturnToolStripMenuItem.Name = "patchPlaceFunctionReturnToolStripMenuItem";
-            this.patchPlaceFunctionReturnToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
-            this.patchPlaceFunctionReturnToolStripMenuItem.Text = "Patch: Place Function Return";
-            this.patchPlaceFunctionReturnToolStripMenuItem.Click += new System.EventHandler(this.patchPlaceFunctionReturnToolStripMenuItem_Click);
             // 
             // Disassembly
             // 
@@ -164,7 +150,5 @@
         private System.Windows.Forms.ToolStripMenuItem checkPatternUniquenessToolStripMenuItem;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem CreatePatternToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem patchNopInstructionsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem patchPlaceFunctionReturnToolStripMenuItem;
     }
 }

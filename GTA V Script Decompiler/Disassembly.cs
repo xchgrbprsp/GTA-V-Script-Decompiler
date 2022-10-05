@@ -9,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Services.Description;
 using System.Windows.Forms;
+using System.Xml;
+using Decompiler.Patches;
 
 namespace Decompiler
 {
@@ -61,7 +63,7 @@ namespace Decompiler
             new[]{"DUP", ""},
             new[]{"DROP", ""},
             new[]{"NATIVE", "bbb"},
-            new[]{"ENTER", ""},
+            new[]{"ENTER", "bs"},
             new[]{"LEAVE", "bb"},
             new[]{"LOAD", ""},
             new[]{"STORE", ""},
@@ -147,23 +149,26 @@ namespace Decompiler
         };
 
         Function Function;
+        Patch[] patches;
 
         public Disassembly(Function func)
         {
             InitializeComponent();
+
             Function = func;
+            patches = Patch.GetPatches(func);
             fctb1.Text = DisassembleFunction();
         }
 
         // TODO: Rewrite this
-        string DisassembleInstruction(HLInstruction instruction)
+        string DisassembleInstruction(Instruction instruction)
         {
             string bytes = "";
 
-            bytes += ((uint)instruction.OriginalInstruction).ToString("X").PadLeft(2, '0');
+            bytes += ((uint)instruction.OriginalOpcode).ToString("X").PadLeft(2, '0');
 
             int i = 0;
-            foreach (var op in instruction.operands)
+            foreach (var op in instruction.Operands)
             {
                 bytes += " " + ((sbyte)op).ToString("X").PadLeft(2, '0');
 
@@ -178,9 +183,9 @@ namespace Decompiler
 
             bytes = bytes.PadRight(16);
 
-            bytes += " " + instruction.OriginalInstruction.ToString();
+            bytes += " " + instruction.OriginalOpcode.ToString();
 
-            var args = OpcodeArgs[(int)instruction.OriginalInstruction];
+            var args = OpcodeArgs[(int)instruction.OriginalOpcode];
 
             switch (args[1])
             {
@@ -192,6 +197,9 @@ namespace Decompiler
                     break;
                 case "bbb":
                     bytes += " " + (int)instruction.GetOperand(0) + ", " + (int)instruction.GetOperand(1) + ", " + (int)instruction.GetOperand(2);
+                    break;
+                case "bs":
+                    bytes += " " + (int)instruction.GetOperand(0) + ", " + BitConverter.ToInt16(new byte[]{ instruction.GetOperand(1), instruction.GetOperand(2)});
                     break;
                 case "d":
                 case "h":
@@ -205,56 +213,17 @@ namespace Decompiler
                     break;
             }
 
-            if (instruction.OriginalInstruction == Instruction.NATIVE)
+            if (instruction.OriginalOpcode == Opcode.NATIVE)
             {
-                bytes += "; " + Function.ScriptFile.X64NativeTable.GetNativeFromIndex(instruction.GetNativeIndex) + ", " + instruction.GetNativeParams + ", " + instruction.GetNativeReturns;
+                bytes += " // " + Function.ScriptFile.X64NativeTable.GetNativeFromIndex(instruction.GetNativeIndex) + ", " + instruction.GetNativeParams + ", " + instruction.GetNativeReturns;
+            }
+            else if (instruction.OriginalOpcode == Opcode.CALL)
+            {
+                var func = Function.ScriptFile.Functions.Find(f => f.Location == instruction.GetOperandsAsUInt);
+                bytes += " // " + func.Name + ", " + func.NumParams + ", " + func.NumReturns;
             }
 
             return bytes;
-        }
-
-        byte[] GetNopPattern(int offset, int endOffset)
-        {
-            List<byte> bytes = new();
-
-            for (int i = offset; i < endOffset; i++)
-            {
-                bytes.Add(0);
-
-                foreach (var _ in Function.Instructions[i].operands)
-                {
-                    bytes.Add(0);
-                }
-            }
-
-            return bytes.ToArray();
-        }
-
-        byte[] GetReturnFunctionPattern(uint rvalue)
-        {
-            List<byte> bytes = new();
-
-            if (Function.NumReturns != 0)
-            {
-                if (rvalue <= 7)
-                    bytes.Add((byte)(((byte)Instruction.PUSH_CONST_0) + rvalue));
-                else if (rvalue <= 65535)
-                {
-                    bytes.Add((byte)Instruction.PUSH_CONST_S16);
-                    bytes.AddRange(BitConverter.GetBytes((short)rvalue));
-                }
-                else
-                {
-                    bytes.Add((byte)Instruction.PUSH_CONST_U32);
-                    bytes.AddRange(BitConverter.GetBytes((uint)rvalue));
-                }
-            }
-
-            bytes.Add((byte)Instruction.LEAVE);
-            bytes.Add((byte)Function.NumParams);
-            bytes.Add((byte)Function.NumReturns);
-
-            return bytes.ToArray();
         }
 
         string? CreatePatternAtLocation(int offset)
@@ -263,14 +232,14 @@ namespace Decompiler
 
             for (int i = offset; i < Function.Instructions.Count; i++)
             {
-                if (Function.Instructions[i].OriginalInstruction == Instruction.SWITCH)
+                if (Function.Instructions[i].OriginalOpcode == Opcode.SWITCH)
                     break;
 
-                pattern += ((uint)Function.Instructions[i].OriginalInstruction).ToString("X").PadLeft(2, '0');
+                pattern += ((uint)Function.Instructions[i].OriginalOpcode).ToString("X").PadLeft(2, '0');
 
-                foreach (var op in Function.Instructions[i].operands)
+                foreach (var op in Function.Instructions[i].Operands)
                 {
-                    if (Function.Instructions[i].OriginalInstruction == Instruction.LOCAL_U8 || Function.Instructions[i].OriginalInstruction == Instruction.LOCAL_U8_LOAD || Function.Instructions[i].OriginalInstruction == Instruction.LOCAL_U8_STORE)
+                    if (Function.Instructions[i].OriginalOpcode == Opcode.LOCAL_U8 || Function.Instructions[i].OriginalOpcode == Opcode.LOCAL_U8_LOAD || Function.Instructions[i].OriginalOpcode == Opcode.LOCAL_U8_STORE || Function.Instructions[i].OriginalOpcode == Opcode.ENTER)
                     {
                         pattern += " " + ((sbyte)op).ToString("X").PadLeft(2, '0');
                     }
@@ -298,6 +267,14 @@ namespace Decompiler
 
         void GeneratePatch(int offset, byte[] bytes)
         {
+            int off = 0;
+
+            if (offset == 1)
+            {
+                off = 5;
+                offset = 0;
+            }
+
             var pattern = CreatePatternAtLocation(offset);
 
             if (pattern == null)
@@ -336,9 +313,9 @@ namespace Decompiler
 
             patch += " }";
 
-            var option = MessageBox.Show($"Pattern: {pattern}{Environment.NewLine}Patch: {patch}{Environment.NewLine}Offset: 0{Environment.NewLine}Copy to clipboard?", "Patch Generated", MessageBoxButtons.YesNo);
+            var option = MessageBox.Show($"Pattern: {pattern}{Environment.NewLine}Patch: {patch}{Environment.NewLine}Offset: {off}{Environment.NewLine}Copy to clipboard?", "Patch Generated", MessageBoxButtons.YesNo);
             if (option == DialogResult.Yes)
-                Clipboard.SetText($"\"{pattern}\", 0, {patch}");
+                Clipboard.SetText($"\"{pattern}\", {off}, {patch}");
         }
 
         string DisassembleFunction()
@@ -435,33 +412,46 @@ fail:
             }
         }
 
-        private void patchNopInstructionsToolStripMenuItem_Click(object sender, EventArgs e)
+        void OnPatchClick(Patch patch)
         {
-            GeneratePatch(Math.Min(fctb1.Selection.Start.iLine, fctb1.Selection.End.iLine), GetNopPattern(Math.Min(fctb1.Selection.Start.iLine, fctb1.Selection.End.iLine), Math.Max(fctb1.Selection.Start.iLine, fctb1.Selection.End.iLine) + 1));
+            int start = Math.Min(fctb1.Selection.Start.iLine, fctb1.Selection.End.iLine);
+            int end = Math.Max(fctb1.Selection.Start.iLine, fctb1.Selection.End.iLine) + 1;
+
+            if (!patch.GetData(start, end))
+                return;
+
+            GeneratePatch(start, patch.GetPatch(start, end));
         }
 
-        private void patchPlaceFunctionReturnToolStripMenuItem_Click(object sender, EventArgs e)
+        private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
         {
-            uint value = 0;
+            int start = Math.Min(fctb1.Selection.Start.iLine, fctb1.Selection.End.iLine);
+            int end = Math.Max(fctb1.Selection.Start.iLine, fctb1.Selection.End.iLine) + 1;
 
-            if (Function.NumReturns > 1)
+            contextMenuStrip1.Items.Clear();
+
+            contextMenuStrip1.Items.Add(new ToolStripMenuItem($"Create Pattern", null,
+                    new EventHandler(delegate (object o, EventArgs a)
+                    {
+                        CreatePatternToolStripMenuItem_Click(o, a);
+                    })));
+
+            foreach (var patch in patches)
             {
-                MessageBox.Show("Cannot apply patch as this function returns multiple values", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-            else if (Function.NumReturns > 0)
-            {
-                InputBox box = new();
-                box.Show("Function Return", "Enter value to return", "0");
+                if (!patch.ShouldShowPatch(start, end))
+                    continue;
 
-                if (!uint.TryParse(box.Value, out value))
-                {
-                    MessageBox.Show("Integer is invalid", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-            }
+                var patchButton = new ToolStripMenuItem($"Patch: {patch.GetName(start, end)}", null,
+                    new EventHandler(delegate (object o, EventArgs a)
+                    {
+                        OnPatchClick(patch);
+                    }));
 
-            GeneratePatch(fctb1.Selection.Start.iLine, GetReturnFunctionPattern(value));
+                if (!patch.ShouldEnablePatch(start, end))
+                    patchButton.Enabled = false;
+
+                contextMenuStrip1.Items.Add(patchButton);
+            }
         }
     }
 }
