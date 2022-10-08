@@ -20,3 +20,9 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
+    - name: Upload artifact
+    - uses: actions/upload-artifact@v3
+      with:
+        name: Release
+        path: "GTA V Script Decompiler\\bin\\Debug\\net6.0-windows"
+        if-no-files-found: error
