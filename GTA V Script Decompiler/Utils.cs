@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Decompiler
 {
@@ -32,16 +31,16 @@ namespace Decompiler
 			{
 				case Stack.DataType.Float:
 					return BitConverter.ToSingle(BitConverter.GetBytes(value), 0).ToString() + "f";
-				case Stack.DataType.Bool:
-					break;//return value == 0 ? "false" : "true";				//still need to fix bools
-				case Stack.DataType.FloatPtr:
-				case Stack.DataType.IntPtr:
-				case Stack.DataType.StringPtr:
-				case Stack.DataType.UnkPtr:
-					return "NULL";
 			}
-			if (value > Int32.MaxValue && value <= UInt32.MaxValue)
+
+			var typeInfo = Types.GetTypeInfo(type);
+
+			if (typeInfo.Enum != null)
+				return typeInfo.Enum.GetValue((int)value);
+
+			if (value > int.MaxValue && value <= uint.MaxValue)
 				return ((int) ((uint) value)).ToString();
+
 			return value.ToString();
 		}
 

@@ -82,16 +82,5 @@ namespace Decompiler
 		{
 			return hashes.ContainsKey(value);
 		}
-
-		public static string inttohex(int value)
-		{
-			if (Program.getIntType == Program.IntType._hex)
-			{
-				string s = value.ToString("X");
-				while (s.Length < 8) s = "0" + s;
-				return "0x" + s;
-			}
-			return value.ToString();
-		}
 	}
 }

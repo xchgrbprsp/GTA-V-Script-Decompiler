@@ -10,10 +10,10 @@ namespace Decompiler.Ast
 {
     internal class ConstantInt : AstToken
     {
-        readonly UInt64 Value;
+        readonly ulong Value;
         Stack.DataType Type = Stack.DataType.Int;
 
-        public ConstantInt(Function func, UInt64 integer) : base(func)
+        public ConstantInt(Function func, ulong integer) : base(func)
         {
             Value = integer;
         }
@@ -23,7 +23,7 @@ namespace Decompiler.Ast
             return Type;
         }
 
-        public UInt64 GetValue()
+        public ulong GetValue()
         {
             return Value;
         }

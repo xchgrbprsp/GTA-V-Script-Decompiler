@@ -80,6 +80,13 @@ namespace Decompiler
         {
             int i = 1;
             StreamWriter savestream = new(stream);
+
+            if (Header.GlobalsCount > 0)
+            {
+                savestream.WriteLine($"// Program registers {Header.GlobalsCount & 0x3FFFF} globals at index {Header.GlobalsCount >> 18} starting from Global_{0x40000 * ((Header.GlobalsCount >> 18))}");
+                i++;
+            }
+
             if (Properties.Settings.Default.DeclareVariables)
             {
                 if (Header.StaticsCount > 0)

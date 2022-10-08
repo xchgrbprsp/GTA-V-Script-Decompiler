@@ -6,38 +6,38 @@ namespace Decompiler
 	public class ScriptHeader
 	{
 		//Header Start
-		public Int32 Magic { get; set; }
-		public Int32 SubHeader { get; set; } //wtf?
-		public Int32 CodeBlocksOffset { get; set; }
-		public Int32 GlobalsVersion { get; set; } //Not sure if this is the globals version
-		public Int32 CodeLength { get; set; } //Total length of code
-		public Int32 ParameterCount { get; set; } //Count of paremeters to the script
-		public Int32 StaticsCount { get; set; }
-		public Int32 GlobalsCount { get; set; }
-		public Int32 NativesCount { get; set; } //Native count * 4 = total block length
-		public Int32 StaticsOffset { get; set; }
-		public Int32 GlobalsOffset { get; set; }
-		public Int32 NativesOffset { get; set; }
-		public Int32 Null1 { get; set; } //unknown
-		public Int32 Null2 { get; set; } //Unknown
-		public Int32 NameHash { get; set; } //Hash of the script name at ScriptNameOffset
-		public Int32 Null3 { get; set; }
-		public Int32 ScriptNameOffset { get; set; }
-		public Int32 StringsOffset { get; set; } //Offset of the string table
-		public Int32 StringsSize { get; set; } //Total length of the string block
-		public Int32 Null4 { get; set; }
+		public int Magic { get; set; }
+		public int SubHeader { get; set; } //wtf?
+		public int CodeBlocksOffset { get; set; }
+		public int GlobalsVersion { get; set; } //Not sure if this is the globals version
+		public int CodeLength { get; set; } //Total length of code
+		public int ParameterCount { get; set; } //Count of paremeters to the script
+		public int StaticsCount { get; set; }
+		public int GlobalsCount { get; set; }
+		public int NativesCount { get; set; } //Native count * 4 = total block length
+		public int StaticsOffset { get; set; }
+		public int GlobalsOffset { get; set; }
+		public int NativesOffset { get; set; }
+		public int Null1 { get; set; } //unknown
+		public int Null2 { get; set; } //Unknown
+		public int NameHash { get; set; } //Hash of the script name at ScriptNameOffset
+		public int Null3 { get; set; }
+		public int ScriptNameOffset { get; set; }
+		public int StringsOffset { get; set; } //Offset of the string table
+		public int StringsSize { get; set; } //Total length of the string block
+		public int Null4 { get; set; }
 		//Header End
 
 		//Other Vars
-		public Int32 RSC7Offset;
-		public Int32[] StringTableOffsets { get; set; }
-		public Int32[] CodeTableOffsets { get; set; }
-		public Int32 StringBlocks { get; set; }
-		public Int32 CodeBlocks { get; set; }
+		public int RSC7Offset;
+		public int[] StringTableOffsets { get; set; }
+		public int[] CodeTableOffsets { get; set; }
+		public int StringBlocks { get; set; }
+		public int CodeBlocks { get; set; }
 		public string ScriptName { get; set; }
 		public bool isRSC7 { get; private set; }
 
-		static ScriptHeader GeneratePcHeader(Stream scriptStream)
+		public static ScriptHeader Generate(Stream scriptStream)
 		{
 			ScriptHeader header = new();
 			IO.Reader reader = new(scriptStream);
@@ -80,7 +80,7 @@ namespace Decompiler
 			header.StringBlocks = (header.StringsSize + 0x3FFF) >> 14;
 			header.CodeBlocks = (header.CodeLength + 0x3FFF) >> 14;
 
-			header.StringTableOffsets = new Int32[header.StringBlocks];
+			header.StringTableOffsets = new int[header.StringBlocks];
 			scriptStream.Seek(header.StringsOffset + header.RSC7Offset, SeekOrigin.Begin);
 			for (int i = 0; i < header.StringBlocks; i++)
 			{
@@ -89,7 +89,7 @@ namespace Decompiler
 			}
 
 
-			header.CodeTableOffsets = new Int32[header.CodeBlocks];
+			header.CodeTableOffsets = new int[header.CodeBlocks];
 			scriptStream.Seek(header.CodeBlocksOffset + header.RSC7Offset, SeekOrigin.Begin);
 			for (int i = 0; i < header.CodeBlocks; i++)
 			{
@@ -105,11 +105,6 @@ namespace Decompiler
 				data = scriptStream.ReadByte();
 			}
 			return header;
-		}
-
-		public static ScriptHeader Generate(Stream scriptStream)
-		{
-			return GeneratePcHeader(scriptStream);
 		}
 
 		private ScriptHeader()

@@ -39,17 +39,14 @@ namespace Decompiler
             if (File.Exists(file))
                 lines = File.ReadAllLines(file);
             else
-                lines = Encoding.Default.GetString(Properties.Resources.Functions).Trim().Split("\r\n");
-
-            lines = lines.Select(x => x.Trim()).ToArray();
+                lines = Encoding.Default.GetString(Properties.Resources.Functions).Trim().Split("\r\n", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
             foreach (var line in lines)
             {
                 if (line.StartsWith("#") || line.Length == 0)
                     continue;
 
-                var tokens = line.Split(" ");
-                tokens = tokens.Where(x => x.Length != 0).ToArray();
+                var tokens = line.Split(" ", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
                 uint hash;
                 if (!uint.TryParse(tokens[0].Replace("0x", ""), System.Globalization.NumberStyles.HexNumber, null, out hash))

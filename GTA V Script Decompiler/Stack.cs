@@ -6,13 +6,13 @@ namespace Decompiler
 {
 	public class Stack
 	{
-		List<AstToken> _stack;
-		Function function;
+		readonly List<AstToken> _stack;
+		readonly Function Function;
 
 		public Stack(Function func)
 		{
 			_stack = new List<AstToken>();
-			function = func;
+			Function = func;
 		}
 
 		public void Dispose()
@@ -30,7 +30,7 @@ namespace Decompiler
 			int index = _stack.Count - 1;
 			if (index < 0)
 			{
-				return new AstToken(function);
+				return new AstToken(Function);
 			}
 			var val = _stack[index];
 			_stack.RemoveAt(index);
@@ -44,7 +44,7 @@ namespace Decompiler
 		internal AstToken Peek()
 		{
 			if (_stack.Count == 0)
-				return new AstToken(function);
+				return new AstToken(Function);
 			return _stack[^1];
 		}
 
@@ -59,9 +59,9 @@ namespace Decompiler
 				return Pop(true);
 			else if (_stack.Count >= 3 && PeekIdx(0).GetStackCount() == 1 && PeekIdx(1).GetStackCount() == 1 && PeekIdx(2).GetStackCount() == 1)
 			{
-				return new Vector(function, Pop(), Pop(), Pop());
+				return new Vector(Function, Pop(), Pop(), Pop());
 			}
-			return new Vector(function, new(function), new(function), new(function));
+			return new Vector(Function, new(Function), new(Function), new(Function));
 		}
 
 		internal List<AstToken> PopCount(int count)
@@ -192,7 +192,11 @@ namespace Decompiler
 			eCharacter,
 			eTransitionState,
 			eDispatchType,
-			eLevelIndex
+			eLevelIndex,
+			eViewModeContext,
+			eThreadPriority,
+			eSetPlayerControlFlags,
+			eScriptLookAtFlags,
 		}
 
 		#endregion

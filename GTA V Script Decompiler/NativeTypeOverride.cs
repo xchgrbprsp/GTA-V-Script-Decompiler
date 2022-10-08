@@ -182,6 +182,25 @@ namespace Decompiler
             // MISC level index
 
             Overrides.Add(new("GET_INDEX_OF_CURRENT_LEVEL", -1, Stack.DataType.eLevelIndex));
+
+            // CAM view mode context
+
+            Overrides.Add(new("GET_CAM_ACTIVE_VIEW_MODE_CONTEXT", -1, Stack.DataType.eViewModeContext));
+            Overrides.Add(new("GET_CAM_VIEW_MODE_FOR_CONTEXT", 0, Stack.DataType.eViewModeContext));
+            Overrides.Add(new("SET_CAM_VIEW_MODE_FOR_CONTEXT", 0, Stack.DataType.eViewModeContext));
+
+            // SYSTEM thread priority
+
+            Overrides.Add(new("SET_THIS_THREAD_PRIORITY", 0, Stack.DataType.eThreadPriority));
+
+            // PLAYER set player control flags
+
+            Overrides.Add(new("SET_PLAYER_CONTROL", 2, Stack.DataType.eSetPlayerControlFlags));
+
+            // TASK script lookat flags
+
+            Overrides.Add(new("TASK_LOOK_AT_COORD", 5, Stack.DataType.eScriptLookAtFlags));
+            Overrides.Add(new("TASK_LOOK_AT_ENTITY", 3, Stack.DataType.eScriptLookAtFlags));
         }
 
         public static void Visit(ref NativeDBEntry entry)

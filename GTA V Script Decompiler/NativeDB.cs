@@ -65,7 +65,7 @@ namespace Decompiler
     internal class NativeDB
     {
         Dictionary<string, Dictionary<string, NativeDBEntry>> data;
-        Dictionary<UInt64, NativeDBEntry> entries;
+        Dictionary<ulong, NativeDBEntry> entries;
 
         public static bool CanBeUsedAsAutoName(string param)
         {
@@ -120,7 +120,7 @@ namespace Decompiler
             }
         }
 
-        public NativeDBEntry? GetEntry(UInt64 hash)
+        public NativeDBEntry? GetEntry(ulong hash)
         {
             if (entries.ContainsKey(hash))
                 return entries[hash];

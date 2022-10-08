@@ -18,7 +18,7 @@ namespace Decompiler.IO
 			base.BaseStream.Position += size;
 		}
 
-		public Int32 ReadPointer()
+		public int ReadPointer()
 		{
 			return (ReadInt32() & 0xFFFFFF);
 		}
@@ -33,13 +33,6 @@ namespace Decompiler.IO
 				next = ReadByte();
 			}
 			return temp;
-		}
-	}
-	public class Writer : BinaryWriter
-	{
-		public Writer(Stream stream)
-			: base(stream)
-		{
 		}
 	}
 }

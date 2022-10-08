@@ -55,14 +55,14 @@ namespace Decompiler
 
 		public int InstructionLength
 		{
-			get { return 1 + Operands.Count(); }
+			get { return 1 + Operands.Length; }
 		}
 
 		public int GetOperandsAsInt
 		{
 			get
 			{
-				switch (Operands.Count())
+				switch (Operands.Length)
 				{
 					case 1:
 						return Operands[0];
@@ -73,7 +73,7 @@ namespace Decompiler
 					case 4:
 						return BitConverter.ToInt32(Operands, 0);
 				}
-				throw new Exception("Invalid amount of operands (" + Operands.Count().ToString() + ")");
+				throw new Exception("Invalid amount of operands (" + Operands.Length.ToString() + ")");
 			}
 		}
 
@@ -81,7 +81,7 @@ namespace Decompiler
 		{
 			get
 			{
-				if (Operands.Count() != 4)
+				if (Operands.Length != 4)
 					throw new Exception("Not a Float");
 
 				return BitConverter.ToSingle(Operands, 0);
@@ -97,7 +97,7 @@ namespace Decompiler
 		{
 			get
 			{
-				switch (Operands.Count())
+				switch (Operands.Length)
 				{
 					case 1:
 						return Operands[0];
@@ -108,7 +108,7 @@ namespace Decompiler
 					case 4:
 						return BitConverter.ToUInt32(Operands, 0);
 				}
-				throw new Exception("Invalid amount of operands (" + Operands.Count().ToString() + ")");
+				throw new Exception("Invalid amount of operands (" + Operands.Length.ToString() + ")");
 			}
 		}
 

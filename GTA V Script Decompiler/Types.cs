@@ -70,6 +70,10 @@ namespace Decompiler
 			new TypeInfo(Stack.DataType.eTransitionState, 6, "eTransitionState", "state", "ets", new(typeof(Enums.TransitionState))),
 			new TypeInfo(Stack.DataType.eDispatchType, 6, "eDispatchType", "type", "edt", new(typeof(Enums.DispatchType))),
 			new TypeInfo(Stack.DataType.eLevelIndex, 6, "eLevelIndex", "index", "eli", new(typeof(Enums.LevelIndex))),
+			new TypeInfo(Stack.DataType.eViewModeContext, 6, "eViewModeContext", "context", "evmc", new(typeof(Enums.ViewModeContext))),
+			new TypeInfo(Stack.DataType.eThreadPriority, 6, "eThreadPriority", "priority", "etp", new(typeof(Enums.ThreadPriority))),
+			new TypeInfo(Stack.DataType.eSetPlayerControlFlags, 6, "eSetPlayerControlFlags", "controlBs", "espcf", new(typeof(Enums.SetPlayerControlFlag), true)),
+			new TypeInfo(Stack.DataType.eScriptLookAtFlags, 6, "eScriptLookAtFlags", "lookatFlags", "eslf", new(typeof(Enums.ScriptLookatFlags), true)),
         };
 
 		public static TypeInfo GetTypeInfo(Stack.DataType type)

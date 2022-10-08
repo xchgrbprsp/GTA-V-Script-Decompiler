@@ -14,6 +14,8 @@ namespace Decompiler.Ast
         {
             Lhs = lhs;
             Rhs = rhs;
+            Lhs.HintType(Rhs.GetType());
+            Rhs.HintType(Lhs.GetType());
         }
 
         bool IsLogicalOperation()
@@ -43,6 +45,8 @@ namespace Decompiler.Ast
         {
             Lhs = lhs;
             Rhs = rhs;
+            Lhs.HintType(Rhs.GetType());
+            Rhs.HintType(Lhs.GetType());
         }
 
         bool IsLogicalOperation()

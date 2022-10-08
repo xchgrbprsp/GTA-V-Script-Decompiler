@@ -12,7 +12,7 @@ namespace Decompiler.Ast
         public readonly NativeDBEntry? Entry;
         public readonly int ReturnCount;
 
-        public NativeCall(Function func, List<AstToken> arguments, string name, UInt64 hash, int returnCount) : base(func, arguments)
+        public NativeCall(Function func, List<AstToken> arguments, string name, ulong hash, int returnCount) : base(func, arguments)
         {
             Name = name;
             Entry = Program.nativeDB.GetEntry(hash);

@@ -89,7 +89,7 @@ namespace Decompiler
                 words[i] = string.Concat(words[i][0].ToString().ToUpper(), words[i].AsSpan(1));
             }
 
-            return String.Join("", words);
+            return string.Join("", words);
         }
 
         public static string GetNativeReturnName(string nativeStr)
