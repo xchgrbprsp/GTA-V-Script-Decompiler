@@ -51,7 +51,7 @@ namespace Decompiler
 			new TypeInfo(Stack.DataType.Vehicle, 5, "Vehicle", "vehicle", "ve"),
 			new TypeInfo(Stack.DataType.VehiclePtr, 5, "Vehicle*", "p_vehicle", "pve"),
 
-			new TypeInfo(Stack.DataType.Function, 4, "function", "func", "func"),
+			new TypeInfo(Stack.DataType.Function, 5, "function", "func", "func"),
 
 			new TypeInfo(Stack.DataType.eControlType, 6, "eControlType", "control", "ect", new(typeof(Enums.PadControlType))),
 			new TypeInfo(Stack.DataType.eControlAction, 6, "eControlAction", "action", "eca", new(typeof(Enums.PadControlAction))),
@@ -74,6 +74,7 @@ namespace Decompiler
 			new TypeInfo(Stack.DataType.eThreadPriority, 6, "eThreadPriority", "priority", "etp", new(typeof(Enums.ThreadPriority))),
 			new TypeInfo(Stack.DataType.eSetPlayerControlFlags, 6, "eSetPlayerControlFlags", "controlBs", "espcf", new(typeof(Enums.SetPlayerControlFlag), true)),
 			new TypeInfo(Stack.DataType.eScriptLookAtFlags, 6, "eScriptLookAtFlags", "lookatFlags", "eslf", new(typeof(Enums.ScriptLookatFlags), true)),
+			new TypeInfo(Stack.DataType.eScriptTaskHash, 6, "eScriptTaskHash", "taskHash", "esth", new(typeof(Enums.ScriptTaskHash))),
         };
 
 		public static TypeInfo GetTypeInfo(Stack.DataType type)
@@ -158,7 +159,54 @@ namespace Decompiler
 			}
 		}
 
-		public static bool HasPointerVersion(Stack.DataType type)
+        public static Stack.DataType GetLiteralVersion(Stack.DataType type)
+        {
+            switch (type)
+            {
+                case Stack.DataType.IntPtr:
+                    return Stack.DataType.Int;
+                case Stack.DataType.UnkPtr:
+                    return Stack.DataType.Unk;
+                case Stack.DataType.BoolPtr:
+                    return Stack.DataType.Bool;
+                case Stack.DataType.FloatPtr:
+                    return Stack.DataType.Float;
+                case Stack.DataType.Vector3Ptr:
+                    return Stack.DataType.Vector3;
+                case Stack.DataType.AnyPtr:
+                    return Stack.DataType.Any;
+                case Stack.DataType.BlipPtr:
+                    return Stack.DataType.Blip;
+                case Stack.DataType.CamPtr:
+                    return Stack.DataType.Cam;
+                case Stack.DataType.EntityPtr:
+                    return Stack.DataType.Entity;
+                case Stack.DataType.FireIdPtr:
+                    return Stack.DataType.FireId;
+                case Stack.DataType.HashPtr:
+                    return Stack.DataType.Hash;
+                case Stack.DataType.InteriorPtr:
+                    return Stack.DataType.Interior;
+                case Stack.DataType.ItemSetPtr:
+                    return Stack.DataType.ItemSet;
+                case Stack.DataType.ObjectPtr:
+                    return Stack.DataType.Object;
+                case Stack.DataType.PedPtr:
+                    return Stack.DataType.Ped;
+                case Stack.DataType.PickupPtr:
+                    return Stack.DataType.Pickup;
+                case Stack.DataType.PlayerPtr:
+                    return Stack.DataType.Player;
+                case Stack.DataType.ScrHandlePtr:
+                    return Stack.DataType.ScrHandle;
+                case Stack.DataType.VehiclePtr:
+                    return Stack.DataType.Vehicle;
+                default:
+                    return type;
+            }
+        }
+
+        public static bool HasPointerVersion(Stack.DataType type)
 		{
 			switch (type)
 			{
@@ -188,7 +236,36 @@ namespace Decompiler
 			}
 		}
 
-		public static Stack.DataType GetPrecise(Stack.DataType t1, Stack.DataType t2)
+        public static bool HasLiteralVersion(Stack.DataType type)
+        {
+            switch (type)
+            {
+                case Stack.DataType.IntPtr:
+                case Stack.DataType.UnkPtr:
+                case Stack.DataType.BoolPtr:
+                case Stack.DataType.FloatPtr:
+                case Stack.DataType.Vector3Ptr:
+                case Stack.DataType.AnyPtr:
+                case Stack.DataType.BlipPtr:
+                case Stack.DataType.CamPtr:
+                case Stack.DataType.EntityPtr:
+                case Stack.DataType.FireIdPtr:
+                case Stack.DataType.HashPtr:
+                case Stack.DataType.InteriorPtr:
+                case Stack.DataType.ItemSetPtr:
+                case Stack.DataType.ObjectPtr:
+                case Stack.DataType.PedPtr:
+                case Stack.DataType.PickupPtr:
+                case Stack.DataType.PlayerPtr:
+                case Stack.DataType.ScrHandlePtr:
+                case Stack.DataType.VehiclePtr:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        public static Stack.DataType GetPrecise(Stack.DataType t1, Stack.DataType t2)
 		{
 			var t1info = GetTypeInfo(t1);
 			var t2info = GetTypeInfo(t2);

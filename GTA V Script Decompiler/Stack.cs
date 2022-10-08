@@ -1,6 +1,7 @@
 ﻿using Decompiler.Ast;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Decompiler
 {
@@ -76,8 +77,12 @@ namespace Decompiler
 				if (_stack.Count != 0)
 				{
 					var val = Pop(true);
+
 					if (popped + val.GetStackCount() > count)
-						throw new InvalidOperationException("Require split of multi-count stack token");
+					{
+						//
+					}
+
 					values.Add(val);
 					popped += val.GetStackCount();
 				}
@@ -87,7 +92,7 @@ namespace Decompiler
 					popped++;
 				}
 
-				if (popped == count)
+				if (popped >= count)
 					break;
 			}
 			
@@ -197,7 +202,8 @@ namespace Decompiler
 			eThreadPriority,
 			eSetPlayerControlFlags,
 			eScriptLookAtFlags,
-		}
+            eScriptTaskHash
+        }
 
 		#endregion
 	}

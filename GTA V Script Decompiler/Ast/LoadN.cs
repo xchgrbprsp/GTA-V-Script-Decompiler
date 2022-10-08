@@ -27,7 +27,16 @@ namespace Decompiler.Ast
 
         public override string ToString()
         {
-            return Pointer.ToString(); // TODO: maybe change this?
+            if (Pointer.IsPointer())
+                return Pointer.ToPointerString(); // TODO: maybe change this?
+            else
+                return "*" + Pointer.ToString();
+        }
+
+        public override void HintType(Stack.DataType type)
+        {
+            if (Types.HasPointerVersion(type))
+                Pointer.HintType(Types.GetPointerVersion(type));
         }
     }
 }

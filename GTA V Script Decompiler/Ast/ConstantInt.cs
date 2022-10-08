@@ -42,6 +42,13 @@ namespace Decompiler.Ast
                 else if (Value == 1)
                     return "true";
             }
+            else if (Type == Stack.DataType.Function && Properties.Settings.Default.ShowFunctionPointers)
+            {
+                var func = function.ScriptFile.Functions.Find(f => f.Location == (int)Value);
+
+                if (func != null)
+                    return "&" + func!.Name;
+            }
 
             var info = Types.GetTypeInfo(GetType());
             if (info.Enum != null)

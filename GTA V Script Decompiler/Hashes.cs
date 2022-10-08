@@ -68,14 +68,23 @@ namespace Decompiler
 
 		}
 
-		public string GetHash(uint value, string temp = "")
+		public string GetHash(uint value)
 		{
-			if (Properties.Settings.Default.ReverseHashes == false || value <= 200)
-				return value.ToString();
-			int intvalue = (int) value;
-			if (hashes.ContainsKey(intvalue))
-				return "joaat(\"" + hashes[intvalue] + "\")";
-			return ((int)value).ToString() + temp;
+			if (Properties.Settings.Default.ReverseHashes && value > 200)
+			{
+				int intvalue = (int)value;
+				if (hashes.TryGetValue(intvalue, out var val))
+					return "joaat(\"" + val + "\")";
+			}
+
+			if (Program.getIntType == Program.IntType._int)
+				return ((int)value).ToString();
+			else if (Program.getIntType == Program.IntType._uint)
+				return (value).ToString();
+			else if (Program.getIntType == Program.IntType._hex)
+				return "0x" + value.ToString("X");
+			else
+				throw new IndexOutOfRangeException();
 		}
 
 		public bool IsKnownHash(int value)

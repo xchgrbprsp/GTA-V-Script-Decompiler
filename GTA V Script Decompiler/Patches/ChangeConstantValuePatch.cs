@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace Decompiler.Patches
 {
-    internal class ChangeConstantValue : Patch
+    internal class ChangeConstantValuePatch : Patch
     {
         enum ConstantType : uint
         {
@@ -21,7 +21,7 @@ namespace Decompiler.Patches
         ConstantType constantType;
         uint Value;
 
-        public ChangeConstantValue(Function function) : base(function)
+        public ChangeConstantValuePatch(Function function) : base(function)
         {
         }
 

@@ -435,7 +435,7 @@ namespace Decompiler
 
 			//Hanldle(skip past) any Nops immediately after switch statement
 			int tempoff = 0;
-			while (Instructions[tree.Offset + 1 + tempoff].Opcode == Opcode.NOP)
+			while (Instructions[tree.Offset + 1 + tempoff].OriginalOpcode == Opcode.NOP)
 				tempoff++;
 
 			//Extract the location to jump to if no cases match
@@ -1050,8 +1050,13 @@ FUNCTION_FOUND:
 							var @else = new Ast.StatementTree.Else(this, tree, tree.Offset + 1, Instructions[tree.Offset].GetJumpOffset); // TODO should the parent be tree or tree.Parent?
                             (tree as Ast.StatementTree.If).ElseTree = @else;
                             treeStack.Push(@else);
+
+							//if (tree.Function.Name == "func_159")
+							//	Debugger.Break();
+
 							tree.Parent.Offset = CodeOffsetToFunctionOffset(@else.EndOffset);
-							break;
+							tree.Offset = CodeOffsetToFunctionOffset(@else.EndOffset);
+                            break;
 						}
 
                         int tempoff = 0;
@@ -1076,6 +1081,7 @@ start:
 							}
 
                             tree.Statements.Add(new Ast.Jump(this, Instructions[tree.Offset].GetJumpOffset));
+							comments.Add(new("Unhandled jump detected. Output should be considered invalid"));
 							break;
                         }
 DONE:
@@ -1168,7 +1174,8 @@ DONE_COND:
 
 				while (tree.IsTreeEnd())
 				{
-					treeStack.Pop();
+					var oldTree = treeStack.Pop();
+
 					if (treeStack.Count == 0)
 						return;
 					tree = treeStack.Peek();

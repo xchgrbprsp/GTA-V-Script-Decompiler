@@ -21,7 +21,10 @@ namespace Decompiler.Ast.StatementTree
 
             if (Statements.Count > 0)
             {
-                return Statements[^1] is Break /*|| Statements[^1] is Ast.Return*/ || Statements[^1] is Jump;
+                if (Statements[^1] is Break /*|| Statements[^1] is Ast.Return*/ || Statements[^1] is Jump)
+                {
+                    return true;
+                }
             }
 
             return false;

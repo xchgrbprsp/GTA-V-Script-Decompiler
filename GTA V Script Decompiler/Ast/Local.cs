@@ -30,6 +30,12 @@ namespace Decompiler.Ast
         {
             return true;
         }
+
+        public override void HintType(Stack.DataType type)
+        {
+            if (Types.HasLiteralVersion(type))
+                function.GetFrameVar(Index).HintType(Types.GetLiteralVersion(type));
+        }
     }
 
     internal class LocalLoad : AstToken

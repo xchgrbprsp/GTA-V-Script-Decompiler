@@ -201,6 +201,10 @@ namespace Decompiler
 
             Overrides.Add(new("TASK_LOOK_AT_COORD", 5, Stack.DataType.eScriptLookAtFlags));
             Overrides.Add(new("TASK_LOOK_AT_ENTITY", 3, Stack.DataType.eScriptLookAtFlags));
+
+            // TASK script task hash
+
+            Overrides.Add(new("GET_SCRIPT_TASK_STATUS", 1, Stack.DataType.eScriptTaskHash));
         }
 
         public static void Visit(ref NativeDBEntry entry)

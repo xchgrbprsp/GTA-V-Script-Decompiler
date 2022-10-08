@@ -18,5 +18,11 @@ namespace Decompiler.Ast
         {
             return "*" + Pointer.ToPointerString();
         }
+
+        public override void HintType(Stack.DataType type)
+        {
+            if (Types.HasPointerVersion(type))
+                Pointer.HintType(Types.GetPointerVersion(type));
+        }
     }
 }
