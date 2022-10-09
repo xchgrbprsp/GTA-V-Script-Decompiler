@@ -41,7 +41,7 @@ namespace Decompiler.Patches
 
         public override bool ShouldShowPatch(int start, int end)
         {
-            return Function.Instructions[start].IsConditionJump;
+            return end - start == 1 && Function.Instructions[start].IsConditionJump;
         }
     }
 }
