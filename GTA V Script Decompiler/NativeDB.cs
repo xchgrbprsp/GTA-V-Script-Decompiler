@@ -37,28 +37,28 @@ namespace Decompiler
             return @params[index];
         }
 
-        public Stack.DataType GetParamType(int index)
+        public Types.TypeInfo GetParamType(int index)
         {
             if (index > @params.Count - 1)
-                return Stack.DataType.Unk;
+                return Types.UNKNOWN;
             return Types.GetFromName(@params[index].type);
         }
 
-        public void SetParamType(int index, Stack.DataType type)
+        public void SetParamType(int index, Types.TypeInfo type)
         {
             var param = @params[index];
-            param.type = type.ToString();
+            param.type = type.SingleName;
             @params[index] = param;
         }
 
-        public Stack.DataType GetReturnType()
+        public Types.TypeInfo GetReturnType()
         {
             return Types.GetFromName(return_type);
         }
 
-        public void SetReturnType(Stack.DataType type)
+        public void SetReturnType(Types.TypeInfo type)
         {
-            return_type = type.ToString();
+            return_type = type.SingleName;
         }
     }
 

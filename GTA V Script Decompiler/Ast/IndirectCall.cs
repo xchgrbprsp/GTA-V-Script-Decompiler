@@ -13,7 +13,7 @@ namespace Decompiler.Ast
         public IndirectCall(Function func, List<AstToken> arguments, AstToken location) : base(func, arguments)
         {
             Location = location;
-            Location.HintType(Stack.DataType.Function);
+            Location.HintType(ref Types.FUNCTION.GetContainer());
         }
 
         public override string GetName()

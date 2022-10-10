@@ -16,8 +16,8 @@ namespace Decompiler.Ast
             Pointer = pointer;
             Value = value;
 
-            if (Types.HasPointerVersion(value.GetType()))
-                Pointer.HintType(Types.GetPointerVersion(value.GetType()));
+            //if (Types.HasPointerVersion(value.GetType()))
+            //    Pointer.HintType(Types.GetPointerVersion(value.GetType()));
         }
 
         public override bool IsStatement()

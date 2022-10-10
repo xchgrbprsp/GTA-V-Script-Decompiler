@@ -25,18 +25,13 @@ namespace Decompiler
 			return hash;
 		}
 
-		public static string Represent(long value, Stack.DataType type)
+		public static string Represent(long value, Types.TypeInfo type)
 		{
-			switch (type)
-			{
-				case Stack.DataType.Float:
-					return BitConverter.ToSingle(BitConverter.GetBytes(value), 0).ToString() + "f";
-			}
+			if (type == Types.FLOAT)
+				return BitConverter.ToSingle(BitConverter.GetBytes(value), 0).ToString() + "f";
 
-			var typeInfo = Types.GetTypeInfo(type);
-
-			if (typeInfo.Enum != null)
-				if (typeInfo.Enum.TryGetValue((int)value, out string enumValue))
+			if (type.Enum != null)
+				if (type.Enum.TryGetValue((int)value, out string enumValue))
 					return enumValue;
 
 			if (value > int.MaxValue && value <= uint.MaxValue)

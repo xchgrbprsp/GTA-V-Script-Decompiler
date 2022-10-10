@@ -16,11 +16,12 @@ namespace Decompiler.Ast
         public StringHash(Function func, AstToken @string) : base(func)
         {
             this.@string = @string;
+            @string.HintType(ref Types.PSTRING.GetContainer());
         }
 
-        public override Stack.DataType GetType()
+        public override ref TypeContainer GetTypeContainer()
         {
-            return Stack.DataType.Int;
+            return ref Types.HASH.GetContainer();
         }
 
         public override string ToString()

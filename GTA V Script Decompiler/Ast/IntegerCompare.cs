@@ -14,13 +14,12 @@ namespace Decompiler.Ast
         {
             Lhs = lhs;
             Rhs = rhs;
-            Lhs.HintType(Rhs.GetType());
-            Rhs.HintType(Lhs.GetType());
+            Lhs.HintType(ref Rhs.GetTypeContainer());
         }
 
-        public override Stack.DataType GetType()
+        public override ref TypeContainer GetTypeContainer()
         {
-            return Stack.DataType.Bool;
+            return ref Types.BOOL.GetContainer();
         }
 
         public override string ToString()
@@ -37,13 +36,12 @@ namespace Decompiler.Ast
         {
             Lhs = lhs;
             Rhs = rhs;
-            Lhs.HintType(Rhs.GetType());
-            Rhs.HintType(Lhs.GetType());
+            Lhs.HintType(ref Rhs.GetTypeContainer());
         }
 
-        public override Stack.DataType GetType()
+        public override ref TypeContainer GetTypeContainer()
         {
-            return Stack.DataType.Bool;
+            return ref Types.BOOL.GetContainer();
         }
 
         public override string ToString()
@@ -62,9 +60,9 @@ namespace Decompiler.Ast
             Rhs = rhs;
         }
 
-        public override Stack.DataType GetType()
+        public override ref TypeContainer GetTypeContainer()
         {
-            return Stack.DataType.Bool;
+            return ref Types.BOOL.GetContainer();
         }
 
         public override string ToString()
@@ -83,9 +81,9 @@ namespace Decompiler.Ast
             Rhs = rhs;
         }
 
-        public override Stack.DataType GetType()
+        public override ref TypeContainer GetTypeContainer()
         {
-            return Stack.DataType.Bool;
+            return ref Types.BOOL.GetContainer();
         }
 
         public override string ToString()
@@ -104,9 +102,9 @@ namespace Decompiler.Ast
             Rhs = rhs;
         }
 
-        public override Stack.DataType GetType()
+        public override ref TypeContainer GetTypeContainer()
         {
-            return Stack.DataType.Bool;
+            return ref Types.BOOL.GetContainer();
         }
 
         public override string ToString()
@@ -125,9 +123,9 @@ namespace Decompiler.Ast
             Rhs = rhs;
         }
 
-        public override Stack.DataType GetType()
+        public override ref TypeContainer GetTypeContainer()
         {
-            return Stack.DataType.Bool;
+            return ref Types.BOOL.GetContainer();
         }
 
         public override string ToString()

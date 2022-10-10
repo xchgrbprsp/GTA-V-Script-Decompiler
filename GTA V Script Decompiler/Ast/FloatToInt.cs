@@ -12,12 +12,12 @@ namespace Decompiler.Ast
         public FloatToInt(Function func, AstToken @float) : base(func)
         {
             Float = @float;
-            Float.HintType(Stack.DataType.Float);
+            Float.HintType(ref Types.FLOAT.GetContainer());
         }
 
-        public override Stack.DataType GetType()
+        public override ref TypeContainer GetTypeContainer()
         {
-            return Stack.DataType.Int;
+            return ref Types.INT.GetContainer();
         }
 
         public override string ToString()

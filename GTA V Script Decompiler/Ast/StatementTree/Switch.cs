@@ -22,7 +22,7 @@ namespace Decompiler.Ast.StatementTree
             {
                 foreach (var @case in p.Value)
                 {
-                    @case.HintType(SwitchVal.GetType());
+                    @case.HintType(ref SwitchVal.GetTypeContainer());
                 }
 
                 Statements.Add(new Case(Function, this, Function.CodeOffsetToFunctionOffset(p.Key), p.Value, breakOffset));

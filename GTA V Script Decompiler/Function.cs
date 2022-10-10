@@ -41,7 +41,7 @@ namespace Decompiler
 
 		public ScriptFile ScriptFile;
 
-		public Types.TypeInfo ReturnType { get; private set; }
+		public TypeContainer ReturnType;
 
 		public bool ReturnTypeSealed { get; private set; }
 
@@ -78,16 +78,16 @@ namespace Decompiler
 			Params = new VariableStorage(VariableStorage.ListType.Params, pcount);
 			Stack = new(this);
 			MainTree = new(this);
-			ReturnType = Types.GetTypeInfo(Stack.DataType.Unk);
+			ReturnType = new(Types.UNKNOWN);
 		}
 
-        /// <summary>
-        /// Gets a persistent hash of the function that should not change across updates
-        /// </summary>
-        /// <remarks>
+		/// <summary>
+		/// Gets a persistent hash of the function that should not change across updates
+		/// </summary>
+		/// <remarks>
 		/// DO NOT call this after function decode as things get nopped
-        /// </remarks>
-        uint GetFunctionHash(bool mk2 = false)
+		/// </remarks>
+		uint GetFunctionHash(bool mk2 = false)
 		{
 			StringBuilder sb = new();
 			sb.Append(NumParams);
@@ -153,19 +153,9 @@ namespace Decompiler
 			return Utils.Joaat(sb.ToString());
         }
 
-		internal void HintReturnType(Stack.DataType type)
+		internal void HintReturnType(ref TypeContainer container)
 		{
-			if (ReturnTypeSealed)
-				return;
-
-			var ti = Types.GetTypeInfo(type);
-			if (ti > ReturnType)
-				ReturnType = ti;
-		}
-
-		internal void SealReturnType()
-		{
-			ReturnTypeSealed = true;
+			ReturnType.HintType(ref container);
 		}
 
 		/// <summary>
@@ -197,7 +187,7 @@ namespace Decompiler
 				working.Append("void ");
 			else if (NumReturns == 1)
 			{
-				working.Append(ReturnType.ReturnType);
+				working.Append(ReturnType.Type.ReturnType);
 			}
 
 			else if (NumReturns == 3)
@@ -205,7 +195,7 @@ namespace Decompiler
 
 			else if (NumReturns > 1)
 			{
-				if (ReturnType.Type == Stack.DataType.String)
+				if (ReturnType.Type == Types.STRING)
 				{
 					working.Append("char[" +(NumReturns * 4).ToString() + "] ");
 				}
@@ -1133,7 +1123,7 @@ DONE:
                         goto case CONDITIONAL_JUMP;
                     case CONDITIONAL_JUMP:
 						var condition = Stack.Pop();
-						condition.HintType(Stack.DataType.Bool);
+						condition.HintType(ref Types.BOOL.GetContainer());
 						
 						var tr = tree;
 

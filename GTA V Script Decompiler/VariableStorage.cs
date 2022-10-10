@@ -67,13 +67,13 @@ namespace Decompiler
 
 			string name = "";
 
-            if (var.DataType == Stack.DataType.String)
+            if (var.DataType.Type == Types.STRING)
             {
                 name = "c";
             }
             else if (var.ImmediateSize == 1)
             {
-				name = Types.GetTypeInfo(Vars[(int)index].DataType).Prefix;
+				name = Vars[(int)index].DataType.Type.Prefix;
             }
 
             switch (listType)
@@ -133,14 +133,14 @@ namespace Decompiler
 
 				if (var.ImmediateSize == 1)
 				{
-					dataType = Types.GetTypeInfo(var.DataType).VarDec;
+					dataType = var.DataType.Type.VarDec;
 					
 				}
-				else if (var.DataType == Stack.DataType.String)
+				else if (var.DataType.Type == Types.STRING)
 				{
 					dataType = "char ";
 				}
-				else if (var.DataType == Stack.DataType.Vector3)
+				else if (var.DataType.Type == Types.VEC3)
 				{
 					dataType = "Vector3 ";
 				}
@@ -157,9 +157,9 @@ namespace Decompiler
 					{
 						if (var.ImmediateSize == 1)
 						{
-							value = " = " + Utils.Represent(Vars[j].Value, var.DataType);
+							value = " = " + Utils.Represent(Vars[j].Value, var.DataType.Type);
 						}
-						else if (var.DataType == Stack.DataType.String)
+						else if (var.DataType.Type == Types.STRING)
 						{
 
 							List<byte> data = new();
@@ -176,11 +176,11 @@ namespace Decompiler
 						}
 						else if (var.ImmediateSize > 1)
 						{
-							value += " = { " + Utils.Represent(Vars[j].Value, Stack.DataType.Int);
+							value += " = { " + Utils.Represent(Vars[j].Value, Types.INT);
 
 							for (int l = 1; l < var.ImmediateSize; l++)
 							{
-								value += ", " + Utils.Represent(Vars[j + l].Value, Stack.DataType.Int);
+								value += ", " + Utils.Represent(Vars[j + l].Value, Types.INT);
 							}
 
 							value += " } ";
@@ -197,7 +197,7 @@ namespace Decompiler
 
 							for (int k = 0; k < var.Value; k++)
 							{
-								value += Utils.Represent(Vars[j + 1 + k].Value, var.DataType) + ", ";
+								value += Utils.Represent(Vars[j + 1 + k].Value, var.DataType.Type) + ", ";
 							}
 
 							if (value.Length > 2)
@@ -207,7 +207,7 @@ namespace Decompiler
 
 							value += " }";
 						}
-						else if (var.DataType == Stack.DataType.String)
+						else if (var.DataType.Type == Types.STRING)
 						{
 							value = " = { ";
 
@@ -239,7 +239,7 @@ namespace Decompiler
 					decl += "[" + var.Value.ToString() + "]";
 				}
 
-				if (var.DataType == Stack.DataType.String)
+				if (var.DataType.Type == Types.STRING)
 				{
 					decl += "[" + (var.ImmediateSize*(8)).ToString() + "]";
 				}
@@ -269,26 +269,26 @@ namespace Decompiler
 				string datatype = "";
 				if (!var.Is_Array)
 				{
-					if (var.DataType == Stack.DataType.String)
+					if (var.DataType.Type == Types.STRING)
 					{
 						datatype = "char[" + (var.ImmediateSize * 4).ToString() + "] c";
 					}
 					else if (var.ImmediateSize == 1)
-						datatype = Types.GetTypeInfo(var.DataType).VarDec + (var.Name.Length == 0 ? Types.GetTypeInfo(var.DataType).Prefix : "");
-					else if (var.DataType == Stack.DataType.Vector3)
+						datatype = var.DataType.Type.VarDec + (var.Name.Length == 0 ? var.DataType.Type.Prefix : "");
+					else if (var.DataType.Type == Types.VEC3)
 					{
-						datatype = "Vector3 " + (var.Name.Length == 0 ? Types.GetTypeInfo(var.DataType).Prefix : "");
+						datatype = "Vector3 " + (var.Name.Length == 0 ? var.DataType.Type.Prefix : "");
 					}
 					else datatype = "struct<" + var.ImmediateSize.ToString() + "> ";
 				}
 				else
 				{
-					if (var.DataType == Stack.DataType.String)
+					if (var.DataType.Type == Types.STRING)
 					{
 						datatype = "char[" + (var.ImmediateSize * 4).ToString() + "][] c";
 					}
 					else if (var.ImmediateSize == 1)
-						datatype = Types.GetTypeInfo(var.DataType).ArrayDec;
+						datatype = var.DataType.Type.ArrayDec;
 					/*else if (var.Immediatesize == 3)
 					{
 						datatype = "vector3[] v";
@@ -334,14 +334,7 @@ namespace Decompiler
                 k++;
             }
         }
-        public Stack.DataType GetTypeAtIndex(uint index)
-        {
-            return Vars[(int)index].DataType;
-        }
-        public void SetTypeAtIndex(uint index, Stack.DataType type)
-        {
-            Vars[(int)index].DataType = type;
-        }
+
         public Variable GetVarAtIndex(uint index)
         {
 	        BrokenCheck(index);

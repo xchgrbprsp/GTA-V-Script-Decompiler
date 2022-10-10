@@ -16,9 +16,9 @@ namespace Decompiler.Ast
             Rhs = rhs;
         }
 
-        public override Stack.DataType GetType()
+        public override ref TypeContainer GetTypeContainer()
         {
-            return Stack.DataType.Vector3;
+            return ref Types.VEC3.GetContainer();
         }
 
         public override int GetStackCount()
@@ -42,9 +42,9 @@ namespace Decompiler.Ast
             Rhs = rhs;
         }
 
-        public override Stack.DataType GetType()
+        public override ref TypeContainer GetTypeContainer()
         {
-            return Stack.DataType.Vector3;
+            return ref Types.VEC3.GetContainer();
         }
 
         public override int GetStackCount()
@@ -68,9 +68,9 @@ namespace Decompiler.Ast
             Rhs = rhs;
         }
 
-        public override Stack.DataType GetType()
+        public override ref TypeContainer GetTypeContainer()
         {
-            return Stack.DataType.Vector3;
+            return ref Types.VEC3.GetContainer();
         }
 
         public override int GetStackCount()
@@ -92,9 +92,9 @@ namespace Decompiler.Ast
             this.value = value;
         }
 
-        public override Stack.DataType GetType()
+        public override ref TypeContainer GetTypeContainer()
         {
-            return Stack.DataType.Vector3;
+            return ref Types.VEC3.GetContainer();
         }
 
         public override int GetStackCount()
@@ -118,9 +118,9 @@ namespace Decompiler.Ast
             Rhs = rhs;
         }
 
-        public override Stack.DataType GetType()
+        public override ref TypeContainer GetTypeContainer()
         {
-            return Stack.DataType.Vector3;
+            return ref Types.VEC3.GetContainer();
         }
 
         public override int GetStackCount()

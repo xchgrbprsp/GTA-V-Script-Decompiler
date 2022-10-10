@@ -22,16 +22,16 @@ namespace Decompiler
 
     internal class DefaultAutoName : AutoName
     {
-        readonly Types.TypeInfo Info;
+        readonly Variable Variable;
 
-        public DefaultAutoName(Types.TypeInfo info)
+        public DefaultAutoName(Variable variable)
         {
-            Info = info;
+            Variable = variable;
         }
 
         public override string GetName()
         {
-            return Info.AutoName;
+            return Variable.DataType.Type.AutoName;
         }
 
         public override NameCollisionBehavior GetNameCollisionBehavior()

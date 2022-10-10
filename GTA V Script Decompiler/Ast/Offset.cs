@@ -100,8 +100,7 @@ namespace Decompiler.Ast
             this.offset = offset;
             this.storedValue = storedValue;
 
-            HintType(storedValue.GetType());
-            storedValue.HintType(GetType());
+            HintType(ref storedValue.GetTypeContainer());
         }
 
         public override bool IsStatement()

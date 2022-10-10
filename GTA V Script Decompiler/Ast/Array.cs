@@ -19,7 +19,7 @@ namespace Decompiler.Ast
             Pointer = pointer;
             Index = index;
 
-            Index.HintType(Stack.DataType.Int);
+            Index.HintType(ref Types.INT.GetContainer());
         }
 
         public override string ToString()
@@ -68,7 +68,7 @@ namespace Decompiler.Ast
             Pointer = pointer;
             Index = index;
 
-            Index.HintType(Stack.DataType.Int);
+            Index.HintType(ref Types.INT.GetContainer());
         }
 
         public override string ToString()
@@ -105,10 +105,9 @@ namespace Decompiler.Ast
             Index = index;
             Value = value;
 
-            Index.HintType(Stack.DataType.Int);
+            Index.HintType(ref Types.INT.GetContainer());
 
-            HintType(value.GetType());
-            value.HintType(GetType());
+            HintType(ref value.GetTypeContainer());
         }
 
         public override bool IsStatement()

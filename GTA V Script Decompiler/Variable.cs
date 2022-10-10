@@ -13,7 +13,7 @@ namespace Decompiler
         bool IsUsed;
         public bool IsStruct;
         bool IsCalled = false;
-        Stack.DataType Type { get; set; }
+        public TypeContainer DataType;
         public int Index { get; private set; }
         public long Value { get; set; }
         public int ImmediateSize { get; set; }
@@ -21,10 +21,8 @@ namespace Decompiler
         public bool Is_Used { get { return IsUsed; } }
         public bool Is_Called { get { return IsCalled; } }
         public bool Is_Array { get { return IsArray; } }
-        bool TypeSealed;
-        public Stack.DataType DataType { get { return Type; } set { Type = value; } }
 
-        internal AutoName AutoName { get; private set; } = new DefaultAutoName(Types.GetTypeInfo(Stack.DataType.Unk));
+        internal AutoName AutoName { get; private set; }
 
         public Variable(int index)
         {
@@ -33,7 +31,8 @@ namespace Decompiler
             ImmediateSize = 1;
             IsArray = false;
             IsUsed = true;
-            Type = Stack.DataType.Unk;
+            DataType = new(Types.UNKNOWN);
+            AutoName = new DefaultAutoName(this);
         }
 
         public Variable(int index, long value)
@@ -43,8 +42,9 @@ namespace Decompiler
             ImmediateSize = 1;
             IsArray = false;
             IsUsed = true;
-            Type = Stack.DataType.Unk;
+            DataType = new(Types.UNKNOWN);
             IsStruct = false;
+            AutoName = new DefaultAutoName(this);
         }
 
         public void SetArray()
@@ -60,7 +60,7 @@ namespace Decompiler
 
         public void SetStruct()
         {
-            DataType = Stack.DataType.Unk;
+            DataType = new(Types.UNKNOWN);
             IsArray = false;
             IsStruct = true;
         }
@@ -76,30 +76,14 @@ namespace Decompiler
                 AutoName = autoName;
         }
 
-        public void HintType(Stack.DataType type)
+        public void HintType(ref TypeContainer container)
         {
-            if (TypeSealed)
-                return;
-
-            if (Types.GetTypeInfo(type) > Types.GetTypeInfo(DataType))
-            {
-                DataType = type;
-
-                if (AutoName is DefaultAutoName)
-                {
-                    AutoName = new DefaultAutoName(Types.GetTypeInfo(type));
-                }
-
-                if (type == Stack.DataType.Vector3)
-                {
-                    ImmediateSize = 3;
-                }
-            }
+            DataType.HintType(ref container);
         }
 
-        public void SealType()
+        public ref TypeContainer GetTypeContainer()
         {
-            TypeSealed = true;
+            return ref DataType;
         }
     }
 }

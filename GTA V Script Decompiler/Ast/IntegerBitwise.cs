@@ -14,8 +14,7 @@ namespace Decompiler.Ast
         {
             Lhs = lhs;
             Rhs = rhs;
-            Lhs.HintType(Rhs.GetType());
-            Rhs.HintType(Lhs.GetType());
+            Lhs.HintType(ref Rhs.GetTypeContainer());
         }
 
         bool IsLogicalOperation()
@@ -23,9 +22,10 @@ namespace Decompiler.Ast
             return Lhs is not ConstantInt && Rhs is not ConstantInt;
         }
 
-        public override Stack.DataType GetType()
+        public override ref TypeContainer GetTypeContainer()
         {
-            return IsLogicalOperation() ? Stack.DataType.Bool : Stack.DataType.Int;
+            var type = IsLogicalOperation() ? ref Types.BOOL : ref Types.INT;
+            return ref type.GetContainer();
         }
 
         public override string ToString()
@@ -45,8 +45,7 @@ namespace Decompiler.Ast
         {
             Lhs = lhs;
             Rhs = rhs;
-            Lhs.HintType(Rhs.GetType());
-            Rhs.HintType(Lhs.GetType());
+            Lhs.HintType(ref Rhs.GetTypeContainer());
         }
 
         bool IsLogicalOperation()
@@ -54,9 +53,10 @@ namespace Decompiler.Ast
             return Lhs is not ConstantInt && Rhs is not ConstantInt;
         }
 
-        public override Stack.DataType GetType()
+        public override ref TypeContainer GetTypeContainer()
         {
-            return IsLogicalOperation() ? Stack.DataType.Bool : Stack.DataType.Int;
+            var type = IsLogicalOperation() ? ref Types.BOOL : ref Types.INT;
+            return ref type.GetContainer();
         }
 
         public override string ToString()
@@ -78,9 +78,9 @@ namespace Decompiler.Ast
             Rhs = rhs;
         }
 
-        public override Stack.DataType GetType()
+        public override ref TypeContainer GetTypeContainer()
         {
-            return Stack.DataType.Int;
+            return ref Types.INT.GetContainer();
         }
 
         public override string ToString()

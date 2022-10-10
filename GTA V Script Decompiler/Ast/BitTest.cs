@@ -10,18 +10,18 @@ namespace Decompiler.Ast
     {
         public readonly AstToken Value;
         public readonly AstToken Bit;
+
         public BitTest(Function func, AstToken bit, AstToken value) : base(func)
         {
             Value = value;
             Bit = bit;
 
-            Value.HintType(Stack.DataType.Int);
-            Bit.HintType(Stack.DataType.Int);
+            Value.HintType(ref Types.INT.GetContainer());
+            Bit.HintType(ref Types.INT.GetContainer());
         }
-
-        public override Stack.DataType GetType()
+        public override ref TypeContainer GetTypeContainer()
         {
-            return Stack.DataType.Bool;
+            return ref Types.BOOL.GetContainer();
         }
 
         public override string ToString()

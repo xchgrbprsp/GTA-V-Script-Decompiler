@@ -16,7 +16,7 @@ namespace Decompiler.Ast
         {
             Float = @float;
 
-            Float.HintType(Stack.DataType.Float);
+            Float.HintType(ref Types.FLOAT.GetContainer());
         }
 
         public override int GetStackCount()
@@ -24,9 +24,9 @@ namespace Decompiler.Ast
             return 3;
         }
 
-        public override Stack.DataType GetType()
+        public override ref TypeContainer GetTypeContainer()
         {
-            return Stack.DataType.Vector3;
+            return ref Types.VEC3.GetContainer();
         }
 
         public override string ToString()

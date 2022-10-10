@@ -13,11 +13,12 @@ namespace Decompiler.Ast
         public String(Function func, AstToken index) : base(func)
         {
             Index = index;
+            Index.HintType(ref Types.INT.GetContainer());
         }
 
-        public override Stack.DataType GetType()
+        public override ref TypeContainer GetTypeContainer()
         {
-            return Stack.DataType.StringPtr;
+            return ref Types.PSTRING.GetContainer();
         }
 
         public override string ToString()

@@ -16,7 +16,7 @@ namespace Decompiler.Ast
 
             if (ReturnValues.Count == 1)
             {
-                function.HintReturnType(ReturnValues[0].GetType());
+                function.HintReturnType(ref ReturnValues[0].GetTypeContainer());
             }
         }
 

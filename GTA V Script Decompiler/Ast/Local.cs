@@ -31,11 +31,13 @@ namespace Decompiler.Ast
             return true;
         }
 
+#if false
         public override void HintType(Stack.DataType type)
         {
             if (Types.HasLiteralVersion(type))
                 function.GetFrameVar(Index).HintType(Types.GetLiteralVersion(type));
         }
+#endif
     }
 
     internal class LocalLoad : AstToken
@@ -48,9 +50,9 @@ namespace Decompiler.Ast
             function.GetFrameVar(Index).SetCalled();
         }
 
-        public override Stack.DataType GetType()
+        public override ref TypeContainer GetTypeContainer()
         {
-            return function.GetFrameVar(Index).DataType;
+            return ref function.GetFrameVar(Index).DataType;
         }
 
         public override string ToString()
@@ -58,9 +60,9 @@ namespace Decompiler.Ast
             return function.GetFrameVarName(Index);
         }
 
-        public override void HintType(Stack.DataType type)
+        public override void HintType(ref TypeContainer container)
         {
-            function.GetFrameVar(Index).HintType(type);
+            function.GetFrameVar(Index).HintType(ref container);
         }
     }
 
@@ -74,8 +76,7 @@ namespace Decompiler.Ast
             Index = index;
             Value = value;
             function.GetFrameVar(Index).SetCalled();
-            function.GetFrameVar(Index).HintType(Value.GetType());
-            Value.HintType(function.GetFrameVar(Index).DataType);
+            function.GetFrameVar(Index).HintType(ref Value.GetTypeContainer());
 
             // I really have to move this somewhere else
 

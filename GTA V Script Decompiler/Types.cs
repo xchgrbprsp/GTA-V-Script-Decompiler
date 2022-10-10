@@ -1,83 +1,82 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Decompiler
 {
     public static class Types
 	{
-		public static TypeInfo[] typeInfos = new TypeInfo[]
-		{
-			new TypeInfo(Stack.DataType.Bool, 4, "BOOL", "flag", "b"),
-			new TypeInfo(Stack.DataType.BoolPtr, 4, "BOOL*", "p_bool", "pb"),
-			new TypeInfo(Stack.DataType.Float, 3, "float", "num", "f"),
-			new TypeInfo(Stack.DataType.Int, 3, "int", "num", "i"),
-			new TypeInfo(Stack.DataType.String, 4, "char[]", "str", "c"),
-			new TypeInfo(Stack.DataType.StringPtr, 4, "char*", "str", "s"),
-			new TypeInfo(Stack.DataType.StringPtr, 4, "const char*", "str", "s"),
-			new TypeInfo(Stack.DataType.Unk, 0, "var", "unk", "u"),
-			new TypeInfo(Stack.DataType.Unsure, 1, "var", "unk", "u"),
-			new TypeInfo(Stack.DataType.IntPtr, 3, "int*", "p_int", "pi"),
-			new TypeInfo(Stack.DataType.UnkPtr, 1, "var*", "ptr", "p"),
-			new TypeInfo(Stack.DataType.FloatPtr, 4, "float*", "p_float", "pf"),
-			new TypeInfo(Stack.DataType.Vector3, 2, "Vector3", "vector", "v"),
-			new TypeInfo(Stack.DataType.None, 4, "void", "???", "???"),
+        public static readonly List<TypeInfo> typeInfos = new();
 
-			new TypeInfo(Stack.DataType.Any, 2, "Any", "any", "an"),
-			new TypeInfo(Stack.DataType.AnyPtr, 4, "Any*", "p_any", "pan"),
-			new TypeInfo(Stack.DataType.Blip, 4, "Blip", "blip", "bl"),
-			new TypeInfo(Stack.DataType.BlipPtr, 4, "Blip*", "p_blip", "pbl"),
-			new TypeInfo(Stack.DataType.Cam, 4, "Cam", "cam", "ca"),
-			new TypeInfo(Stack.DataType.CamPtr, 4, "Cam*", "p_cam", "pca"),
-			new TypeInfo(Stack.DataType.Entity, 4, "Entity", "entity", "e"),
-			new TypeInfo(Stack.DataType.EntityPtr, 4, "Entity*", "p_entity", "pe"),
-			new TypeInfo(Stack.DataType.FireId, 4, "FireId", "id", "fi"),
-			new TypeInfo(Stack.DataType.FireIdPtr, 4, "FireId*", "p_fireid", "pfi"),
-			new TypeInfo(Stack.DataType.Hash, 4, "Hash", "hash", "h"),
-			new TypeInfo(Stack.DataType.HashPtr, 4, "Hash*", "p_hash", "ph"),
-			new TypeInfo(Stack.DataType.Interior, 4, "Interior", "interior", "in"),
-			new TypeInfo(Stack.DataType.InteriorPtr, 4, "Interior*", "p_interior", "pin"),
-			new TypeInfo(Stack.DataType.ItemSet, 4, "ItemSet", "itemset", "is"),
-			new TypeInfo(Stack.DataType.ItemSetPtr, 4, "ItemSet*", "p_itemset", "pis"),
-			new TypeInfo(Stack.DataType.Object, 5, "Object", "object", "ob"),
-			new TypeInfo(Stack.DataType.ObjectPtr, 5, "Object*", "p_object", "pob"),
-			new TypeInfo(Stack.DataType.Ped, 5, "Ped", "ped", "ped"),
-            new TypeInfo(Stack.DataType.PedPtr, 5, "Ped*", "p_ped", "pped"),
-			new TypeInfo(Stack.DataType.Pickup, 5, "Pickup", "pickup", "pk"),
-			new TypeInfo(Stack.DataType.PickupPtr, 5, "Pickup*", "p_pickup", "pki"),
-			new TypeInfo(Stack.DataType.Player, 4, "Player", "player", "pl"),
-			new TypeInfo(Stack.DataType.PlayerPtr, 4, "Player", "p_player", "ppl"),
-			new TypeInfo(Stack.DataType.ScrHandle, 4, "ScrHandle", "handle", "sh"),
-			new TypeInfo(Stack.DataType.ScrHandlePtr, 4, "ScrHandle*", "p_handle", "psh"),
-			new TypeInfo(Stack.DataType.Vector3Ptr, 4, "Vector3*", "p_vector", "pv"),
-			new TypeInfo(Stack.DataType.Vehicle, 5, "Vehicle", "vehicle", "ve"),
-			new TypeInfo(Stack.DataType.VehiclePtr, 5, "Vehicle*", "p_vehicle", "pve"),
+        public static readonly TypeInfo BOOL = new TypeInfo(Stack.DataType.Bool, 4, "BOOL", "flag", "b");
+        public static readonly TypeInfo PBOOL = new TypeInfo(Stack.DataType.BoolPtr, 4, "BOOL*", "p_bool", "pb");
+        public static readonly TypeInfo FLOAT = new TypeInfo(Stack.DataType.Float, 3, "float", "num", "f");
+        public static readonly TypeInfo INT = new TypeInfo(Stack.DataType.Int, 3, "int", "num", "i");
+        public static readonly TypeInfo STRING = new TypeInfo(Stack.DataType.String, 4, "char[]", "str", "c");
+        public static readonly TypeInfo PSTRING = new TypeInfo(Stack.DataType.StringPtr, 4, "char*", "str", "s");
+        public static readonly TypeInfo CPSTRING = new TypeInfo(Stack.DataType.StringPtr, 4, "const char*", "str", "s");
+        public static readonly TypeInfo UNKNOWN = new TypeInfo(Stack.DataType.Unk, 0, "var", "unk", "u");
+        public static readonly TypeInfo PINT = new TypeInfo(Stack.DataType.IntPtr, 3, "int*", "p_int", "pi");
+        public static readonly TypeInfo PUNKNOWN = new TypeInfo(Stack.DataType.UnkPtr, 1, "var*", "ptr", "p");
+        public static readonly TypeInfo PFLOAT = new TypeInfo(Stack.DataType.FloatPtr, 4, "float*", "p_float", "pf");
+        public static readonly TypeInfo VEC3 = new TypeInfo(Stack.DataType.Vector3, 2, "Vector3", "vector", "v");
+        public static readonly TypeInfo VOID = new TypeInfo(Stack.DataType.None, 4, "void", "???", "???");
 
-			new TypeInfo(Stack.DataType.Function, 5, "function", "func", "func"),
+        public static readonly TypeInfo ANY = new TypeInfo(Stack.DataType.Any, 2, "Any", "any", "an");
+        public static readonly TypeInfo PANY = new TypeInfo(Stack.DataType.AnyPtr, 4, "Any*", "p_any", "pan");
+        public static readonly TypeInfo BLIP = new TypeInfo(Stack.DataType.Blip, 4, "Blip", "blip", "bl");
+        public static readonly TypeInfo PBLIP = new TypeInfo(Stack.DataType.BlipPtr, 4, "Blip*", "p_blip", "pbl");
+        public static readonly TypeInfo CAM = new TypeInfo(Stack.DataType.Cam, 4, "Cam", "cam", "ca");
+        public static readonly TypeInfo PCAM = new TypeInfo(Stack.DataType.CamPtr, 4, "Cam*", "p_cam", "pca");
+        public static readonly TypeInfo ENTITY = new TypeInfo(Stack.DataType.Entity, 4, "Entity", "entity", "e");
+        public static readonly TypeInfo PENTITY = new TypeInfo(Stack.DataType.EntityPtr, 4, "Entity*", "p_entity", "pe");
+        public static readonly TypeInfo FIREID = new TypeInfo(Stack.DataType.FireId, 4, "FireId", "id", "fi");
+        public static readonly TypeInfo PFIREID = new TypeInfo(Stack.DataType.FireIdPtr, 4, "FireId*", "p_fireid", "pfi");
+        public static readonly TypeInfo HASH = new TypeInfo(Stack.DataType.Hash, 4, "Hash", "hash", "h");
+        public static readonly TypeInfo PHASH = new TypeInfo(Stack.DataType.HashPtr, 4, "Hash*", "p_hash", "ph");
+        public static readonly TypeInfo INTERIOR = new TypeInfo(Stack.DataType.Interior, 4, "Interior", "interior", "in");
+        public static readonly TypeInfo PINTERIOR = new TypeInfo(Stack.DataType.InteriorPtr, 4, "Interior*", "p_interior", "pin");
+        public static readonly TypeInfo ITEMSET = new TypeInfo(Stack.DataType.ItemSet, 4, "ItemSet", "itemset", "is");
+        public static readonly TypeInfo PITEMSET = new TypeInfo(Stack.DataType.ItemSetPtr, 4, "ItemSet*", "p_itemset", "pis");
+        public static readonly TypeInfo OBJECT = new TypeInfo(Stack.DataType.Object, 5, "Object", "object", "ob");
+        public static readonly TypeInfo POBJECT = new TypeInfo(Stack.DataType.ObjectPtr, 5, "Object*", "p_object", "pob");
+        public static readonly TypeInfo PED = new TypeInfo(Stack.DataType.Ped, 5, "Ped", "ped", "ped");
+        public static readonly TypeInfo PPED = new TypeInfo(Stack.DataType.PedPtr, 5, "Ped*", "p_ped", "pped");
+        public static readonly TypeInfo PICKUP = new TypeInfo(Stack.DataType.Pickup, 5, "Pickup", "pickup", "pk");
+        public static readonly TypeInfo PPICKUP = new TypeInfo(Stack.DataType.PickupPtr, 5, "Pickup*", "p_pickup", "pki");
+        public static readonly TypeInfo PLAYER = new TypeInfo(Stack.DataType.Player, 4, "Player", "player", "pl");
+        public static readonly TypeInfo PPLAYER = new TypeInfo(Stack.DataType.PlayerPtr, 4, "Player", "p_player", "ppl");
+        public static readonly TypeInfo SCRHANDLE = new TypeInfo(Stack.DataType.ScrHandle, 4, "ScrHandle", "handle", "sh");
+        public static readonly TypeInfo PSCRHANDLE = new TypeInfo(Stack.DataType.ScrHandlePtr, 4, "ScrHandle*", "p_handle", "psh");
+        public static readonly TypeInfo PVEC3 = new TypeInfo(Stack.DataType.Vector3Ptr, 4, "Vector3*", "p_vector", "pv");
+        public static readonly TypeInfo VEHICLE = new TypeInfo(Stack.DataType.Vehicle, 5, "Vehicle", "vehicle", "ve");
+        public static readonly TypeInfo PVEHICLE = new TypeInfo(Stack.DataType.VehiclePtr, 5, "Vehicle*", "p_vehicle", "pve");
+        public static readonly TypeInfo FUNCTION = new TypeInfo(Stack.DataType.Function, 5, "function", "func", "func");
 
-			new TypeInfo(Stack.DataType.eControlType, 6, "eControlType", "control", "ect", new(typeof(Enums.PadControlType))),
-			new TypeInfo(Stack.DataType.eControlAction, 6, "eControlAction", "action", "eca", new(typeof(Enums.PadControlAction))),
-			new TypeInfo(Stack.DataType.eHudComponent, 6, "eHudComponent", "component", "ehc", new(typeof(Enums.HudComponent))),
-			new TypeInfo(Stack.DataType.ePedType, 6, "ePedType", "type", "ept", new(typeof(Enums.PedType))),
-			new TypeInfo(Stack.DataType.ePedComponentType, 6, "ePedComponentType", "type", "epct", new(typeof(Enums.PedComponentType))),
-			new TypeInfo(Stack.DataType.eStackSize, 6, "eStackSize", "stackSize", "ess", new(typeof(Enums.StackSize))),
-			new TypeInfo(Stack.DataType.eDecoratorType, 6, "eDecoratorType", "decorType", "edt", new(typeof(Enums.DecoratorType))),
-			new TypeInfo(Stack.DataType.eEventGroup, 6, "eEventGroup", "group", "eeg", new(typeof(Enums.EventGroup))),
-			new TypeInfo(Stack.DataType.eHudColour, 6, "eHudColour", "color", "ehc", new(typeof(Enums.HudColour))),
-			new TypeInfo(Stack.DataType.eBlipSprite, 6, "eBlipSprite", "sprite", "ebs", new(typeof(Enums.BlipSprite))),
-			new TypeInfo(Stack.DataType.eKnockOffVehicle, 6, "eKnockOffVehicle", "knockOffState", "eknv", new(typeof(Enums.KnockOffVehicle))),
-			new TypeInfo(Stack.DataType.eCombatMovement, 6, "eCombatMovement", "movement", "ecm", new(typeof(Enums.CombatMovement))),
-			new TypeInfo(Stack.DataType.eCombatAttribute, 6, "eCombatAttribute", "attribute", "ecat", new(typeof(Enums.CombatAttribute))),
-			new TypeInfo(Stack.DataType.eCharacter, 6, "eCharacter", "character", "ech", new(typeof(Enums.Character))),
-			new TypeInfo(Stack.DataType.eTransitionState, 6, "eTransitionState", "state", "ets", new(typeof(Enums.TransitionState))),
-			new TypeInfo(Stack.DataType.eDispatchType, 6, "eDispatchType", "type", "edt", new(typeof(Enums.DispatchType))),
-			new TypeInfo(Stack.DataType.eLevelIndex, 6, "eLevelIndex", "index", "eli", new(typeof(Enums.LevelIndex))),
-			new TypeInfo(Stack.DataType.eViewModeContext, 6, "eViewModeContext", "context", "evmc", new(typeof(Enums.ViewModeContext))),
-			new TypeInfo(Stack.DataType.eThreadPriority, 6, "eThreadPriority", "priority", "etp", new(typeof(Enums.ThreadPriority))),
-			new TypeInfo(Stack.DataType.eSetPlayerControlFlags, 6, "eSetPlayerControlFlags", "controlBs", "espcf", new(typeof(Enums.SetPlayerControlFlag), true)),
-			new TypeInfo(Stack.DataType.eScriptLookAtFlags, 6, "eScriptLookAtFlags", "lookatFlags", "eslf", new(typeof(Enums.ScriptLookatFlags), true)),
-			new TypeInfo(Stack.DataType.eScriptTaskHash, 6, "eScriptTaskHash", "taskHash", "esth", new(typeof(Enums.ScriptTaskHash))),
-			new TypeInfo(Stack.DataType.eMPStat, 6, "eMPStat", "stat", "emps", new(typeof(Enums.MPStat))),
-			new TypeInfo(Stack.DataType.eEventType, 6, "eEventType", "type", "eet", new(typeof(Enums.EventType))),
-        };
+        public static readonly TypeInfo ECONTROLTYPE = new TypeInfo(Stack.DataType.eControlType, 6, "eControlType", "control", "ect", new(typeof(Enums.PadControlType)));
+        public static readonly TypeInfo ECONTROLACTION = new TypeInfo(Stack.DataType.eControlAction, 6, "eControlAction", "action", "eca", new(typeof(Enums.PadControlAction)));
+        public static readonly TypeInfo EHUDCOMPONENT = new TypeInfo(Stack.DataType.eHudComponent, 6, "eHudComponent", "component", "ehc", new(typeof(Enums.HudComponent)));
+        public static readonly TypeInfo EPEDTYPE = new TypeInfo(Stack.DataType.ePedType, 6, "ePedType", "type", "ept", new(typeof(Enums.PedType)));
+        public static readonly TypeInfo EPEDCOMPONENTTYPE = new TypeInfo(Stack.DataType.ePedComponentType, 6, "ePedComponentType", "type", "epct", new(typeof(Enums.PedComponentType)));
+        public static readonly TypeInfo ESTACKSIZE = new TypeInfo(Stack.DataType.eStackSize, 6, "eStackSize", "stackSize", "ess", new(typeof(Enums.StackSize)));
+        public static readonly TypeInfo EDECORATORTYPE = new TypeInfo(Stack.DataType.eDecoratorType, 6, "eDecoratorType", "decorType", "edt", new(typeof(Enums.DecoratorType)));
+        public static readonly TypeInfo EEVENTGROUP = new TypeInfo(Stack.DataType.eEventGroup, 6, "eEventGroup", "group", "eeg", new(typeof(Enums.EventGroup)));
+        public static readonly TypeInfo EHUDCOLOUR = new TypeInfo(Stack.DataType.eHudColour, 6, "eHudColour", "color", "ehc", new(typeof(Enums.HudColour)));
+        public static readonly TypeInfo EBLIPSPRITE = new TypeInfo(Stack.DataType.eBlipSprite, 6, "eBlipSprite", "sprite", "ebs", new(typeof(Enums.BlipSprite)));
+        public static readonly TypeInfo EKNOCKOFFVEHICLE = new TypeInfo(Stack.DataType.eKnockOffVehicle, 6, "eKnockOffVehicle", "knockOffState", "eknv", new(typeof(Enums.KnockOffVehicle)));
+        public static readonly TypeInfo ECOMBATMOVEMENT = new TypeInfo(Stack.DataType.eCombatMovement, 6, "eCombatMovement", "movement", "ecm", new(typeof(Enums.CombatMovement)));
+        public static readonly TypeInfo ECOMBATATTRIBUTE = new TypeInfo(Stack.DataType.eCombatAttribute, 6, "eCombatAttribute", "attribute", "ecat", new(typeof(Enums.CombatAttribute)));
+        public static readonly TypeInfo ECHARACTER = new TypeInfo(Stack.DataType.eCharacter, 6, "eCharacter", "character", "ech", new(typeof(Enums.Character)));
+        public static readonly TypeInfo ETRANSITIONSTATE = new TypeInfo(Stack.DataType.eTransitionState, 6, "eTransitionState", "state", "ets", new(typeof(Enums.TransitionState)));
+        public static readonly TypeInfo EDISPATCHTYPE = new TypeInfo(Stack.DataType.eDispatchType, 6, "eDispatchType", "type", "edt", new(typeof(Enums.DispatchType)));
+        public static readonly TypeInfo ELEVELINDEX = new TypeInfo(Stack.DataType.eLevelIndex, 6, "eLevelIndex", "index", "eli", new(typeof(Enums.LevelIndex)));
+        public static readonly TypeInfo EVIEWMODECONTEXT = new TypeInfo(Stack.DataType.eViewModeContext, 6, "eViewModeContext", "context", "evmc", new(typeof(Enums.ViewModeContext)));
+        public static readonly TypeInfo ETHREADPRIORITY = new TypeInfo(Stack.DataType.eThreadPriority, 6, "eThreadPriority", "priority", "etp", new(typeof(Enums.ThreadPriority)));
+        public static readonly TypeInfo ESETPLAYERCONTROLFLAGS = new TypeInfo(Stack.DataType.eSetPlayerControlFlags, 6, "eSetPlayerControlFlags", "controlBs", "espcf", new(typeof(Enums.SetPlayerControlFlag), true));
+        public static readonly TypeInfo ESCRIPTLOOKATFLAGS = new TypeInfo(Stack.DataType.eScriptLookAtFlags, 6, "eScriptLookAtFlags", "lookatFlags", "eslf", new(typeof(Enums.ScriptLookatFlags), true));
+        public static readonly TypeInfo ESCRIPTTASKHASH = new TypeInfo(Stack.DataType.eScriptTaskHash, 6, "eScriptTaskHash", "taskHash", "esth", new(typeof(Enums.ScriptTaskHash)));
+        public static readonly TypeInfo EMPSTAT = new TypeInfo(Stack.DataType.eMPStat, 6, "eMPStat", "stat", "emps", new(typeof(Enums.MPStat)));
+        public static readonly TypeInfo EEVENTTYPE = new TypeInfo(Stack.DataType.eEventType, 6, "eEventType", "type", "eet", new(typeof(Enums.EventType)));
 
 		public static TypeInfo GetTypeInfo(Stack.DataType type)
 		{
@@ -89,27 +88,12 @@ namespace Decompiler
 			throw new Exception("Unknown type");
 		}
 
-		public static byte IndexOf(Stack.DataType type)
-		{
-			for (byte i = 0; i < typeInfos.Length; i++)
-			{
-				if (typeInfos[i].Type == type)
-					return i;
-			}
-			return 255;
-		}
-
-		public static Stack.DataType GetAtIndex(byte index)
-		{
-			return typeInfos[index].Type;
-		}
-
-		public static Stack.DataType GetFromName(string name)
+		public static TypeInfo GetFromName(string name)
 		{
             foreach (TypeInfo d in typeInfos)
             {
                 if (d.SingleName.ToLower() == name.ToLower())
-                    return d.Type;
+                    return d;
             }
             throw new Exception("Unknown type");
         }
@@ -267,15 +251,7 @@ namespace Decompiler
             }
         }
 
-        public static Stack.DataType GetPrecise(Stack.DataType t1, Stack.DataType t2)
-		{
-			var t1info = GetTypeInfo(t1);
-			var t2info = GetTypeInfo(t2);
-
-			return t1info > t2info ? t1 : t2;
-        }
-
-		public struct TypeInfo
+		public class TypeInfo
 		{
 			public Stack.DataType Type;
 			public int Precedence;
@@ -283,6 +259,7 @@ namespace Decompiler
 			public string AutoName;
 			public ScriptEnum? Enum = null;
 			public string Prefix;
+            TypeContainer sealedContainer;
 
 			public TypeInfo(Stack.DataType type, int precedence, string singlename, string autoname, string prefix, ScriptEnum? @enum = null)
 			{
@@ -292,6 +269,9 @@ namespace Decompiler
 				this.AutoName = autoname;
 				this.Enum = @enum;
 				this.Prefix = prefix;
+
+				Types.typeInfos.Add(this);
+                sealedContainer = new(this, true);
 			}
 
 			public string ReturnType
@@ -318,6 +298,61 @@ namespace Decompiler
             {
                 return a.Precedence < b.Precedence;
             }
+
+            /// <summary>
+            /// Gets a reference of a <b>SEALED</b> container containing the type
+            /// </summary>
+            public ref TypeContainer GetContainer()
+            {
+                return ref sealedContainer;
+            }
         }
 	}
+
+    /// <summary>
+    /// A "container" to hold a type. The container will attempt to propagate itself throught the AST and can even jump across functions
+    /// </summary>
+    public class TypeContainer
+    {
+        public Types.TypeInfo Type { get; private set; }
+        bool IsSealed;
+
+        public TypeContainer(Types.TypeInfo defaultType = null, bool isSealed = false)
+        {
+            Type = defaultType ?? Types.UNKNOWN;
+            IsSealed = isSealed;
+        }
+
+        public void HintType(Types.TypeInfo type)
+        {
+            if (IsSealed)
+                return;
+
+            if (Type < type)
+                Type = type;
+        }
+
+        /// <summary>
+        /// The reference passed WILL be overwritten unless it is sealed
+        /// </summary>
+        public void HintType(ref TypeContainer container)
+        {
+            if ((!IsSealed) && Type < container.Type)
+                Type = container.Type;
+
+            else if (IsSealed && (!container.IsSealed) && Type > container.Type)
+                container.Type = Type;
+
+            if (!(container.IsSealed || IsSealed))
+                container = this;
+        }
+
+        /// <summary>
+        /// Sealing a container makes the underlying type constant and stops propagation
+        /// </summary>
+        public void SealType()
+        {
+            IsSealed = true;
+        }
+    }
 }

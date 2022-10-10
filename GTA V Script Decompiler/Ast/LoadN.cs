@@ -33,10 +33,12 @@ namespace Decompiler.Ast
                 return "*" + Pointer.ToString();
         }
 
+#if false
         public override void HintType(Stack.DataType type)
         {
             if (Types.HasPointerVersion(type))
                 Pointer.HintType(Types.GetPointerVersion(type));
         }
+#endif
     }
 }

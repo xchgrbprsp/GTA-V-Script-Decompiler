@@ -40,14 +40,14 @@ namespace Decompiler.Ast
             Index = index;
         }
 
-        public override Stack.DataType GetType()
+        public override ref TypeContainer GetTypeContainer()
         {
-            return function.ScriptFile.Statics.GetVarAtIndex(Index).DataType;
+            return ref function.ScriptFile.Statics.GetVarAtIndex(Index).DataType;
         }
 
-        public override void HintType(Stack.DataType type)
+        public override void HintType(ref TypeContainer container)
         {
-            function.ScriptFile.Statics.GetVarAtIndex(Index).HintType(type);
+            function.ScriptFile.Statics.GetVarAtIndex(Index).HintType(ref container);
         }
 
         public override string ToString()
@@ -66,8 +66,7 @@ namespace Decompiler.Ast
             Index = index;
             Value = value;
 
-            function.ScriptFile.Statics.GetVarAtIndex(Index).HintType(Value.GetType());
-            Value.HintType(function.ScriptFile.Statics.GetVarAtIndex(Index).DataType);
+            function.ScriptFile.Statics.GetVarAtIndex(Index).HintType(ref Value.GetTypeContainer());
         }
 
         public override bool IsStatement()

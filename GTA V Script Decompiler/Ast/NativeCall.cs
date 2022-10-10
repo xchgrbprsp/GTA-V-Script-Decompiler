@@ -25,7 +25,9 @@ namespace Decompiler.Ast
             {
                 if (arg.GetStackCount() == 1)
                 {
-                    arg.HintType(Entry?.GetParamType(i) ?? Stack.DataType.Unk);
+                    var type = Entry?.GetParamType(i) ?? Types.UNKNOWN;
+                    arg.HintType(ref type.GetContainer());
+
                     if (arg is LocalLoad && (Entry?.GetParam(i)?.autoname ?? false))
                         function.SetFrameVarAutoName((arg as LocalLoad).Index, new NativeParameterAutoName(Entry.Value.GetParam(i).name));
                     else if (arg is Local && (Entry?.GetParam(i)?.autoname ?? false))
@@ -35,19 +37,23 @@ namespace Decompiler.Ast
                 {
                     if (arg is LoadN && (arg as LoadN).Pointer is Local && (Entry?.GetParam(i)?.autoname ?? false))
                     {
-                        // function.SetFrameVarAutoName(((arg as LoadN).Pointer as Local).Index, new NativeParameterAutoName("coords"));
-                        function.GetFrameVar(((arg as LoadN).Pointer as Local).Index).HintType(Stack.DataType.Vector3);
+                        function.GetFrameVar(((arg as LoadN).Pointer as Local).Index).HintType(ref Types.VEC3.GetContainer());
                     }
-                    arg.HintType(Stack.DataType.Vector3);
+                    arg.HintType(ref Types.VEC3.GetContainer());
                 }
 
                 i += arg.GetStackCount();
             }
         }
 
-        public override Stack.DataType GetType()
+        public override ref TypeContainer GetTypeContainer()
         {
-            return Entry?.GetReturnType() ?? base.GetType();
+            var type = Entry?.GetReturnType() ?? Types.UNKNOWN;
+
+            if (type == Types.VOID)
+                return ref Types.UNKNOWN.GetContainer();
+
+            return ref type.GetContainer();
         }
 
         public override string GetName()

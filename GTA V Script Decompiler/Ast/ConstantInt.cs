@@ -11,16 +11,11 @@ namespace Decompiler.Ast
     internal class ConstantInt : AstToken
     {
         readonly ulong Value;
-        Stack.DataType Type = Stack.DataType.Int;
+        TypeContainer Type = new(Types.INT);
 
         public ConstantInt(Function func, ulong integer) : base(func)
         {
             Value = integer;
-        }
-
-        public override Stack.DataType GetType()
-        {
-            return Type;
         }
 
         public ulong GetValue()
@@ -28,21 +23,21 @@ namespace Decompiler.Ast
             return Value;
         }
 
-        public override void HintType(Stack.DataType type)
+        public override ref TypeContainer GetTypeContainer()
         {
-            Type = Types.GetPrecise(Type, type);
+            return ref Type;
         }
 
         public override string ToString()
         {
-            if (Type == Stack.DataType.Bool)
+            if (Type.Type == Types.BOOL)
             {
                 if (Value == 0)
                     return "false";
                 else if (Value == 1)
                     return "true";
             }
-            else if (Type == Stack.DataType.Function && Properties.Settings.Default.ShowFunctionPointers)
+            else if (Type.Type == Types.FUNCTION && Properties.Settings.Default.ShowFunctionPointers)
             {
                 var func = function.ScriptFile.Functions.Find(f => f.Location == (int)Value);
 
@@ -50,14 +45,14 @@ namespace Decompiler.Ast
                     return "&" + func!.Name;
             }
 
-            var info = Types.GetTypeInfo(GetType());
+            var info = Type.Type;
             if (info.Enum != null)
             {
                 if (info.Enum.TryGetValue((int)Value, out string enumVal))
                     return enumVal;
             }    
 
-            return ScriptFile.HashBank.GetHash((uint)Value); // todo int style processing
+            return ScriptFile.HashBank.GetHash((uint)Value);
         }
     }
 }

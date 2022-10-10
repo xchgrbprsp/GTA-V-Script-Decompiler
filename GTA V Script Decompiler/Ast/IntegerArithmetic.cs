@@ -14,13 +14,12 @@ namespace Decompiler.Ast
         {
             Lhs = lhs;
             Rhs = rhs;
-            Lhs.HintType(Stack.DataType.Int);
-            Rhs.HintType(Stack.DataType.Int);
+            Lhs.HintType(ref Types.INT.GetContainer());
         }
 
-        public override Stack.DataType GetType()
+        public override ref TypeContainer GetTypeContainer()
         {
-            return Stack.DataType.Int;
+            return ref Types.INT.GetContainer();
         }
 
         public override string ToString()
@@ -37,13 +36,12 @@ namespace Decompiler.Ast
         {
             Lhs = lhs;
             Rhs = rhs;
-            Lhs.HintType(Stack.DataType.Int);
-            Rhs.HintType(Stack.DataType.Int);
+            Lhs.HintType(ref Types.INT.GetContainer());
         }
 
-        public override Stack.DataType GetType()
+        public override ref TypeContainer GetTypeContainer()
         {
-            return Stack.DataType.Int;
+            return ref Types.INT.GetContainer();
         }
 
         public override string ToString()
@@ -60,13 +58,12 @@ namespace Decompiler.Ast
         {
             Lhs = lhs;
             Rhs = rhs;
-            Lhs.HintType(Stack.DataType.Int);
-            Rhs.HintType(Stack.DataType.Int);
+            Lhs.HintType(ref Types.INT.GetContainer());
         }
 
-        public override Stack.DataType GetType()
+        public override ref TypeContainer GetTypeContainer()
         {
-            return Stack.DataType.Int;
+            return ref Types.INT.GetContainer();
         }
 
         public override string ToString()
@@ -83,13 +80,12 @@ namespace Decompiler.Ast
         {
             Lhs = lhs;
             Rhs = rhs;
-            Lhs.HintType(Stack.DataType.Int);
-            Rhs.HintType(Stack.DataType.Int);
+            Lhs.HintType(ref Types.INT.GetContainer());
         }
 
-        public override Stack.DataType GetType()
+        public override ref TypeContainer GetTypeContainer()
         {
-            return Stack.DataType.Int;
+            return ref Types.INT.GetContainer();
         }
 
         public override string ToString()
@@ -104,12 +100,12 @@ namespace Decompiler.Ast
         public IntegerNeg(Function func, AstToken value) : base(func)
         {
             this.value = value;
-            this.value.HintType(Stack.DataType.Int);
+            this.value.HintType(ref Types.INT.GetContainer());
         }
 
-        public override Stack.DataType GetType()
+        public override ref TypeContainer GetTypeContainer()
         {
-            return Stack.DataType.Int;
+            return ref Types.INT.GetContainer();
         }
 
         public override string ToString()
@@ -124,12 +120,12 @@ namespace Decompiler.Ast
         public IntegerNot(Function func, AstToken value) : base(func)
         {
             this.value = value;
-            this.value.HintType(Stack.DataType.Bool);
+            this.value.HintType(ref Types.BOOL.GetContainer());
         }
 
-        public override Stack.DataType GetType()
+        public override ref TypeContainer GetTypeContainer()
         {
-            return Stack.DataType.Bool;
+            return ref Types.BOOL.GetContainer();
         }
 
         public override string ToString()
@@ -146,13 +142,12 @@ namespace Decompiler.Ast
         {
             Lhs = lhs;
             Rhs = rhs;
-            Lhs.HintType(Stack.DataType.Int);
-            Rhs.HintType(Stack.DataType.Int);
+            Lhs.HintType(ref Types.INT.GetContainer());
         }
 
-        public override Stack.DataType GetType()
+        public override ref TypeContainer GetTypeContainer()
         {
-            return Stack.DataType.Int;
+            return ref Types.INT.GetContainer();
         }
 
         public override string ToString()

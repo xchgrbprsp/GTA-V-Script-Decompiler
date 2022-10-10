@@ -18,8 +18,8 @@ namespace Decompiler.Ast
             Src = src;
             Size = size;
 
-            Dst.HintType(Stack.DataType.StringPtr);
-            Src.HintType(Stack.DataType.StringPtr);
+            Dst.HintType(ref Types.PSTRING.GetContainer());
+            Src.HintType(ref Types.PSTRING.GetContainer());
         }
 
         public override bool IsStatement()
@@ -44,8 +44,8 @@ namespace Decompiler.Ast
             Src = src;
             Size = size;
 
-            Dst.HintType(Stack.DataType.StringPtr);
-            Src.HintType(Stack.DataType.StringPtr);
+            Dst.HintType(ref Types.PSTRING.GetContainer());
+            Src.HintType(ref Types.PSTRING.GetContainer());
         }
 
         public override bool IsStatement()
@@ -70,8 +70,8 @@ namespace Decompiler.Ast
             Integer = integer;
             Size = size;
 
-            Integer.HintType(Stack.DataType.Int);
-            Dst.HintType(Stack.DataType.StringPtr);
+            Integer.HintType(ref Types.INT.GetContainer());
+            Dst.HintType(ref Types.PSTRING.GetContainer());
         }
 
         public override bool IsStatement()
@@ -96,8 +96,8 @@ namespace Decompiler.Ast
             Integer = integer;
             Size = size;
 
-            Integer.HintType(Stack.DataType.Int);
-            Dst.HintType(Stack.DataType.StringPtr);
+            Integer.HintType(ref Types.INT.GetContainer());
+            Dst.HintType(ref Types.PSTRING.GetContainer());
         }
 
         public override bool IsStatement()

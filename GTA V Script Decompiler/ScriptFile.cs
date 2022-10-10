@@ -103,6 +103,7 @@ namespace Decompiler
                     i += 2;
                 }
             }
+
             foreach (Function f in Functions)
             {
                 string s = f.ToString();

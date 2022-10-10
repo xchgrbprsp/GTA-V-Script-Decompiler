@@ -18,21 +18,20 @@ namespace Decompiler.Ast
             {
                 if (arg.GetStackCount() == 1)
                 {
-                    arg.HintType(callee.Params.GetVarAtIndex((uint)i).DataType);
-                    callee.Params.GetVarAtIndex((uint)i).HintType(arg.GetType());
+                    arg.HintType(ref callee.Params.GetVarAtIndex((uint)i).DataType);
                 }
                 i += arg.GetStackCount();
             }
         }
 
-        public override void HintType(Stack.DataType type)
+        public override void HintType(ref TypeContainer container)
         {
-            Callee.HintReturnType(type);
+            Callee.HintReturnType(ref container);
         }
 
-        public override Stack.DataType GetType()
+        public override ref TypeContainer GetTypeContainer()
         {
-            return Callee.ReturnType.Type;
+            return ref Callee.ReturnType;
         }
 
         public override string GetName()

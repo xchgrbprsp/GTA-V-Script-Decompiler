@@ -10,6 +10,8 @@ namespace Decompiler.Ast
     internal class AstToken
     {
         public readonly Function function;
+        TypeContainer dummyContainer;
+
         public AstToken(Function func)
         {
             function = func;
@@ -30,20 +32,18 @@ namespace Decompiler.Ast
             return 1;
         }
 
-        public new virtual Stack.DataType GetType()
+        public virtual ref TypeContainer GetTypeContainer()
         {
-            // TODO move this somewhere else
-
             if (CanGetGlobalIndex())
-                return Program.globalTypeMgr.GetGlobalType(GetGlobalIndex());
+                return ref Program.globalTypeMgr.GetGlobalType(GetGlobalIndex());
 
-            return Stack.DataType.Unk;
+            dummyContainer = new();
+            return ref dummyContainer;
         }
 
-        public virtual void HintType(Stack.DataType type)
+        public virtual void HintType(ref TypeContainer container)
         {
-            if (CanGetGlobalIndex())
-                Program.globalTypeMgr.HintGlobalType(GetGlobalIndex(), type);
+            GetTypeContainer().HintType(ref container);
         }
 
         public override string ToString()

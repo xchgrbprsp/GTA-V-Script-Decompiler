@@ -10,9 +10,9 @@ namespace Decompiler
     internal class FunctionModEntry
     {
         public string? Name = null;
-        public Stack.DataType? ReturnType = null;
+        public Types.TypeInfo? ReturnType = null;
         public Dictionary<int, string> ParamNames = new();
-        public Dictionary<int, Stack.DataType> ParamTypes = new();
+        public Dictionary<int, Types.TypeInfo> ParamTypes = new();
 
         public FunctionModEntry()
         {
@@ -94,8 +94,8 @@ namespace Decompiler
 
             if (entry.ReturnType != null)
             {
-                func.HintReturnType(entry.ReturnType.Value);
-                func.SealReturnType();
+                func.HintReturnType(ref entry.ReturnType.GetContainer());
+                func.ReturnType.SealType();
             }
 
             foreach (var p in entry.ParamNames)
@@ -105,8 +105,8 @@ namespace Decompiler
 
             foreach (var p in entry.ParamTypes)
             {
-                func.GetFrameVar((uint)p.Key).HintType(p.Value);
-                func.GetFrameVar((uint)p.Key).SealType();
+                func.GetFrameVar((uint)p.Key).HintType(ref p.Value.GetContainer());
+                func.GetFrameVar((uint)p.Key).DataType.SealType();
             }
         }
 

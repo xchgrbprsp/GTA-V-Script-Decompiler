@@ -76,8 +76,7 @@ namespace Decompiler.Ast
             Index = index;
             Value = value;
 
-            HintType(value.GetType());
-            value.HintType(GetType());
+            HintType(ref value.GetTypeContainer());
         }
 
         public override bool IsStatement()
