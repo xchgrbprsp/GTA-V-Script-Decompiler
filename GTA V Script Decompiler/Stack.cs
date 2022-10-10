@@ -203,7 +203,8 @@ namespace Decompiler
 			eSetPlayerControlFlags,
 			eScriptLookAtFlags,
             eScriptTaskHash,
-			eMPStat
+			eMPStat,
+			eEventType
         }
 
 		#endregion

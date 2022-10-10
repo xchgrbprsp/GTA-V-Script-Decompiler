@@ -43,6 +43,8 @@ namespace Decompiler
 
 		public Types.TypeInfo ReturnType { get; private set; }
 
+		public bool ReturnTypeSealed { get; private set; }
+
 		internal bool Decoded { get; private set; }
 
 		internal bool DecodeStarted = false;
@@ -153,9 +155,17 @@ namespace Decompiler
 
 		internal void HintReturnType(Stack.DataType type)
 		{
+			if (ReturnTypeSealed)
+				return;
+
 			var ti = Types.GetTypeInfo(type);
 			if (ti > ReturnType)
 				ReturnType = ti;
+		}
+
+		internal void SealReturnType()
+		{
+			ReturnTypeSealed = true;
 		}
 
 		/// <summary>

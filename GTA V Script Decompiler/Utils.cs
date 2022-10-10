@@ -36,7 +36,8 @@ namespace Decompiler
 			var typeInfo = Types.GetTypeInfo(type);
 
 			if (typeInfo.Enum != null)
-				return typeInfo.Enum.GetValue((int)value);
+				if (typeInfo.Enum.TryGetValue((int)value, out string enumValue))
+					return enumValue;
 
 			if (value > int.MaxValue && value <= uint.MaxValue)
 				return ((int) ((uint) value)).ToString();

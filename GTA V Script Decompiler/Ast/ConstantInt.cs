@@ -53,8 +53,8 @@ namespace Decompiler.Ast
             var info = Types.GetTypeInfo(GetType());
             if (info.Enum != null)
             {
-                if (info.Enum!.HasValue((int)Value))
-                    return info.Enum!.GetValue((int)Value);
+                if (info.Enum.TryGetValue((int)Value, out string enumVal))
+                    return enumVal;
             }    
 
             return ScriptFile.HashBank.GetHash((uint)Value); // todo int style processing

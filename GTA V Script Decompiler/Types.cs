@@ -76,6 +76,7 @@ namespace Decompiler
 			new TypeInfo(Stack.DataType.eScriptLookAtFlags, 6, "eScriptLookAtFlags", "lookatFlags", "eslf", new(typeof(Enums.ScriptLookatFlags), true)),
 			new TypeInfo(Stack.DataType.eScriptTaskHash, 6, "eScriptTaskHash", "taskHash", "esth", new(typeof(Enums.ScriptTaskHash))),
 			new TypeInfo(Stack.DataType.eMPStat, 6, "eMPStat", "stat", "emps", new(typeof(Enums.MPStat))),
+			new TypeInfo(Stack.DataType.eEventType, 6, "eEventType", "type", "eet", new(typeof(Enums.EventType))),
         };
 
 		public static TypeInfo GetTypeInfo(Stack.DataType type)

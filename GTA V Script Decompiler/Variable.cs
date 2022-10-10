@@ -21,6 +21,7 @@ namespace Decompiler
         public bool Is_Used { get { return IsUsed; } }
         public bool Is_Called { get { return IsCalled; } }
         public bool Is_Array { get { return IsArray; } }
+        bool TypeSealed;
         public Stack.DataType DataType { get { return Type; } set { Type = value; } }
 
         internal AutoName AutoName { get; private set; } = new DefaultAutoName(Types.GetTypeInfo(Stack.DataType.Unk));
@@ -77,6 +78,9 @@ namespace Decompiler
 
         public void HintType(Stack.DataType type)
         {
+            if (TypeSealed)
+                return;
+
             if (Types.GetTypeInfo(type) > Types.GetTypeInfo(DataType))
             {
                 DataType = type;
@@ -91,6 +95,11 @@ namespace Decompiler
                     ImmediateSize = 3;
                 }
             }
+        }
+
+        public void SealType()
+        {
+            TypeSealed = true;
         }
     }
 }

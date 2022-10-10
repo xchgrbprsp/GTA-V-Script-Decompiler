@@ -95,6 +95,7 @@ namespace Decompiler
             if (entry.ReturnType != null)
             {
                 func.HintReturnType(entry.ReturnType.Value);
+                func.SealReturnType();
             }
 
             foreach (var p in entry.ParamNames)
@@ -105,6 +106,7 @@ namespace Decompiler
             foreach (var p in entry.ParamTypes)
             {
                 func.GetFrameVar((uint)p.Key).HintType(p.Value);
+                func.GetFrameVar((uint)p.Key).SealType();
             }
         }
 

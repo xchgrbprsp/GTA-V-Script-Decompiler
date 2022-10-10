@@ -205,6 +205,17 @@ namespace Decompiler
             // TASK script task hash
 
             Overrides.Add(new("GET_SCRIPT_TASK_STATUS", 1, Stack.DataType.eScriptTaskHash));
+
+            // EVENT, SCRIPT event type
+
+            Overrides.Add(new("CLEAR_DECISION_MAKER_EVENT_RESPONSE", 1, Stack.DataType.eEventType));
+            Overrides.Add(new("BLOCK_DECISION_MAKER_EVENT", 1, Stack.DataType.eEventType));
+            Overrides.Add(new("UNBLOCK_DECISION_MAKER_EVENT", 1, Stack.DataType.eEventType));
+            Overrides.Add(new("ADD_SHOCKING_EVENT_AT_POSITION", 0, Stack.DataType.eEventType));
+            Overrides.Add(new("ADD_SHOCKING_EVENT_FOR_ENTITY", 0, Stack.DataType.eEventType));
+            Overrides.Add(new("IS_SHOCKING_EVENT_IN_SPHERE", 0, Stack.DataType.eEventType));
+            Overrides.Add(new("SUPPRESS_SHOCKING_EVENT_TYPE_NEXT_FRAME", 0, Stack.DataType.eEventType));
+            Overrides.Add(new("GET_EVENT_AT_INDEX", -1, Stack.DataType.eEventType));
         }
 
         public static void Visit(ref NativeDBEntry entry)

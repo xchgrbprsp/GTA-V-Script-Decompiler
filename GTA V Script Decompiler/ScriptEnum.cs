@@ -10,69 +10,63 @@ namespace Decompiler
     {
         public Type Type;
         public bool IsBitset;
+        string[] Keys;
+        int[] Values;
 
         public ScriptEnum(Type type, bool isBitset = false)
         {
             Type = type;
             IsBitset = isBitset;
+            Keys = Enum.GetNames(Type).ToArray();
+            Values = Enum.GetValues(Type).Cast<int>().ToArray();
         }
 
-        public bool HasValue(int val)
+        public bool TryGetValue(int idx, out string val)
         {
-            var values = Enum.GetValues(Type).Cast<int>();
-
-            if (IsBitset)
-            {
-                foreach (var value in values)
-                    if ((val & value) != 0)
-                        return true;
-
-                return false;
-            }
-            else
-            {
-                return values.Contains(val);
-            }
-        }
-
-        public string GetValue(int val)
-        {
-            var keys = Enum.GetNames(Type).ToArray();
-            var values = Enum.GetValues(Type).Cast<int>().ToArray();
+            val = "";
 
             if (IsBitset)
             {
                 string buf = "";
                 bool first = true;
 
-                for (int i = 0; i < values.Length; i++)
+                for (int i = 0; i < Values.Length; i++)
                 {
-                    if ((values[i] & val) != 0)
+                    if ((Values[i] & idx) != 0)
                     {
                         if (first)
-                            buf = keys[i];
+                            buf = Keys[i];
                         else
-                            buf += " | " + keys[i];
+                            buf += " | " + Values[i];
 
-                        val &= ~(values[i]);
+                        idx &= ~(Values[i]);
 
                         first = false;
                     }
                 }
 
-                if (val != 0)
+                if (first)
+                    return false;
+
+                if (idx != 0)
                     buf += " | " + val;
 
-                return buf;
+                val = buf;
+                return true;
             }
             else
             {
-                for (int i = 0; i < values.Length; i++)
-                    if (values[i] == val)
-                        return keys[i];
-            }
+                for (int i = 0; i < Values.Length; i++)
+                {
+                    if (Values[i] == idx)
+                    {
+                        val = Keys[i];
+                        return true;
+                    }
+                }
 
-            return null;
+                return false;
+            }
         }
     }
 }
