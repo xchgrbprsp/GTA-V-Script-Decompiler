@@ -47,10 +47,10 @@
 			// 
 			this.btnOK.Anchor =
 
-                    (System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right);
-			this.btnOK.BackColor = System.Drawing.SystemColors.Control;
-			this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.btnOK.FlatStyle = System.Windows.Forms.FlatStyle.System;
+                    (AnchorStyles.Bottom | AnchorStyles.Right);
+			this.btnOK.BackColor = Drawing.SystemColors.Control;
+			this.btnOK.DialogResult = DialogResult.OK;
+			this.btnOK.FlatStyle = FlatStyle.System;
 			this.btnOK.Location = new Drawing.Point(131, 103);
 			this.btnOK.Name = "btnOK";
 			this.btnOK.Size = new Drawing.Size(59, 29);
@@ -62,10 +62,10 @@
 			// 
 			this.btnCancel.Anchor =
 
-                    (System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right);
-			this.btnCancel.BackColor = System.Drawing.SystemColors.Control;
-			this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.System;
+                    (AnchorStyles.Bottom | AnchorStyles.Right);
+			this.btnCancel.BackColor = Drawing.SystemColors.Control;
+			this.btnCancel.DialogResult = DialogResult.Cancel;
+			this.btnCancel.FlatStyle = FlatStyle.System;
 			this.btnCancel.Location = new Drawing.Point(209, 103);
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.Size = new Drawing.Size(59, 29);
@@ -76,8 +76,8 @@
 			// label1
 			// 
 			this.label1.AutoSize = true;
-			this.label1.Font = new Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold,
-				System.Drawing.GraphicsUnit.Point, 0);
+			this.label1.Font = new Drawing.Font("Microsoft Sans Serif", 12F, Drawing.FontStyle.Bold,
+                Drawing.GraphicsUnit.Point, 0);
 			this.label1.Location = new Drawing.Point(12, 9);
 			this.label1.Name = "label1";
 			this.label1.Size = new Drawing.Size(109, 20);
@@ -88,8 +88,8 @@
 			// 
 			this.textBox1.Anchor =
 
-                    ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                      | System.Windows.Forms.AnchorStyles.Right);
+                    ((AnchorStyles.Top | AnchorStyles.Left)
+                      | AnchorStyles.Right);
 			this.textBox1.Location = new Drawing.Point(15, 68);
 			this.textBox1.Multiline = true;
 			this.textBox1.Name = "textBox1";
@@ -102,8 +102,8 @@
 			// 
 			this.comboBox1.Anchor =
 
-                    ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                      | System.Windows.Forms.AnchorStyles.Right);
+                    ((AnchorStyles.Top | AnchorStyles.Left)
+                      | AnchorStyles.Right);
 			this.comboBox1.FormattingEnabled = true;
 			this.comboBox1.Location = new Drawing.Point(15, 67);
 			this.comboBox1.Name = "comboBox1";
@@ -124,7 +124,7 @@
 			// _InputBox
 			// 
 			this.AutoScaleDimensions = new Drawing.SizeF(6F, 13F);
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.AutoScaleMode = AutoScaleMode.Font;
 			this.ClientSize = new Drawing.Size(280, 144);
 			this.Controls.Add(this.comboBox1);
 			this.Controls.Add(this.textBox1);
@@ -132,7 +132,7 @@
 			this.Controls.Add(this.btnCancel);
 			this.Controls.Add(this.btnOK);
 			this.Controls.Add(this.richTextBox1);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+			this.FormBorderStyle = FormBorderStyle.FixedDialog;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "_InputBox";
@@ -190,7 +190,7 @@
 		private void InputBox_FormClosing(object sender, FormClosingEventArgs e)
 		{
 			if (this.DialogResult != DialogResult.OK && this.DialogResult != DialogResult.Cancel)
-				this.DialogResult = Forms.DialogResult.Abort;
+				this.DialogResult = DialogResult.Abort;
 		}
 
 		internal bool Show(IWin32Window owner, string TitleMessage, string Message, string DefaultResponse)

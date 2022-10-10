@@ -22,12 +22,7 @@ namespace Decompiler
     internal class FunctionDB
     {
         readonly Dictionary<uint, FunctionModEntry> Entries = new();
-
-        private void EnsureEntryCreated(uint hash)
-        {
-            if (!Entries.ContainsKey(hash))
-                Entries[hash] = new();
-        }
+        readonly Dictionary<uint, FunctionModEntry> Mk2Entries = new();
 
         public FunctionDB()
         {
@@ -48,31 +43,68 @@ namespace Decompiler
 
                 var tokens = line.Split(" ", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
+                Dictionary<uint, FunctionModEntry> entryDict;
+
+                if (tokens[0].StartsWith("^"))
+                {
+                    tokens[0] = tokens[0][1..];
+                    entryDict = Mk2Entries;
+                }
+                else
+                {
+                    entryDict = Entries;
+                }
+
                 uint hash;
                 if (!uint.TryParse(tokens[0].Replace("0x", ""), System.Globalization.NumberStyles.HexNumber, null, out hash))
                     throw new FileFormatException("Cannot parse function hash");
 
-                EnsureEntryCreated(hash);
+                if (!entryDict.ContainsKey(hash))
+                    entryDict[hash] = new();
 
                 tokens[1] = tokens[1].ToUpper();
+
 
                 switch (tokens[1])
                 {
                     case "NAME":
-                        Entries[hash].Name = tokens[2];
+                        entryDict[hash].Name = tokens[2];
                         break;
                     case "RETURN":
-                        Entries[hash].ReturnType = Types.GetFromName(tokens[2]);
+                        entryDict[hash].ReturnType = Types.GetFromName(tokens[2]);
                         break;
                     case "ARG_NAME":
-                        Entries[hash].ParamNames.Add(int.Parse(tokens[2]), tokens[3]);
+                        entryDict[hash].ParamNames.Add(int.Parse(tokens[2]), tokens[3]);
                         break;
                     case "ARG_TYPE":
-                        Entries[hash].ParamTypes.Add(int.Parse(tokens[2]), Types.GetFromName(tokens[3]));
+                        entryDict[hash].ParamTypes.Add(int.Parse(tokens[2]), Types.GetFromName(tokens[3]));
                         break;
                     default:
                         throw new FileFormatException("Unknown field");
                 }
+            }
+        }
+
+        public void Apply(Function func, FunctionModEntry entry)
+        {
+            if (entry.Name != null)
+            {
+                func.SetName(entry.Name);
+            }
+
+            if (entry.ReturnType != null)
+            {
+                func.HintReturnType(entry.ReturnType.Value);
+            }
+
+            foreach (var p in entry.ParamNames)
+            {
+                func.GetFrameVar((uint)p.Key).Name = p.Value;
+            }
+
+            foreach (var p in entry.ParamTypes)
+            {
+                func.GetFrameVar((uint)p.Key).HintType(p.Value);
             }
         }
 
@@ -82,25 +114,14 @@ namespace Decompiler
 
             if (Entries.TryGetValue(hash, out var entry))
             {
-                if (entry.Name != null)
-                {
-                    func.SetName(entry.Name);
-                }
+                Apply(func, entry);
+            }
 
-                if (entry.ReturnType != null)
-                {
-                    func.HintReturnType(entry.ReturnType.Value);
-                }
+            uint mk2hash = func.Mk2Hash;
 
-                foreach (var p in entry.ParamNames)
-                {
-                    func.GetFrameVar((uint)p.Key).Name = p.Value;
-                }
-
-                foreach (var p in entry.ParamTypes)
-                {
-                    func.GetFrameVar((uint)p.Key).HintType(p.Value);
-                }
+            if (Mk2Entries.TryGetValue(mk2hash, out var mk2Entry))
+            {
+                Apply(func, mk2Entry);
             }
         }
     }

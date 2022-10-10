@@ -27,6 +27,7 @@ namespace Decompiler
 		public int NumParams { get; private set; }
 		public int NumLocals { get; private set; }
 		public int NumReturns { get; private set; }
+		public int Xrefs { get; set; }
 		public int Location { get; private set; }
 		public int MaxLocation { get; private set; }
 
@@ -56,8 +57,9 @@ namespace Decompiler
 		internal Ast.StatementTree.Main MainTree { get; private set; }
 
 		public uint Hash { get; private set; }
+		public uint Mk2Hash { get; private set; }
 
-		public Function(ScriptFile Owner, string name, int pcount, int vcount, int rcount, int location, int locmax = -1)
+        public Function(ScriptFile Owner, string name, int pcount, int vcount, int rcount, int location, int locmax = -1)
 		{
 			this.ScriptFile = Owner;
 			Name = name;
@@ -83,7 +85,7 @@ namespace Decompiler
         /// <remarks>
 		/// DO NOT call this after function decode as things get nopped
         /// </remarks>
-        uint GetFunctionHash()
+        uint GetFunctionHash(bool mk2 = false)
 		{
 			StringBuilder sb = new();
 			sb.Append(NumParams);
@@ -103,11 +105,16 @@ namespace Decompiler
 				sb.Append(ins.Opcode.ToString());
 				i++;
 
-				if (ins.Opcode == Opcode.LOCAL_U8 || ins.Opcode == Opcode.LOCAL_U16 || ins.Opcode == Opcode.LOCAL_U8_LOAD || ins.Opcode == Opcode.LOCAL_U16_LOAD || ins.Opcode == Opcode.LOCAL_U8_STORE || ins.Opcode == Opcode.LOCAL_U16_STORE)
-					sb.Append(ins.GetOperandsAsUInt); // TODO
+				if (ins.Opcode == Opcode.LOCAL_U8 || ins.Opcode == Opcode.LOCAL_U16 || ins.Opcode == Opcode.LOCAL_U8_LOAD || ins.Opcode == Opcode.LOCAL_U16_LOAD || ins.Opcode == Opcode.LOCAL_U8_STORE || ins.Opcode == Opcode.LOCAL_U16_STORE ||
+					(mk2 && (ins.Opcode == Opcode.IOFFSET_U8 || ins.Opcode == Opcode.IOFFSET_U8_LOAD || ins.Opcode == Opcode.IOFFSET_U8_STORE)))
+					sb.Append(ins.GetOperandsAsUInt);
 
 				else if (ins.Opcode == Opcode.PUSH_CONST_U8)
 					sb.Append(ins.GetOperand(0));
+				else if (mk2 && (ins.Opcode == Opcode.PUSH_CONST_S16 || ins.Opcode == Opcode.PUSH_CONST_U24 || ins.Opcode == Opcode.PUSH_CONST_U32))
+				{
+                    sb.Append(ins.GetOperandsAsUInt);
+                }
 				else if (ins.Opcode == Opcode.PUSH_CONST_U8_U8)
 				{
 					sb.Append(ins.GetOperand(0));
@@ -123,6 +130,11 @@ namespace Decompiler
 				{
 					sb.Append(ins.GetNativeParams);
 					sb.Append(ins.GetNativeReturns);
+
+					if (mk2)
+					{
+						sb.Append(ScriptFile.X64NativeTable.GetNativeHashFromIndex(ins.GetNativeIndex));
+					}
                 }
 				else if (ins.Opcode == Opcode.STRING)
 				{
@@ -204,7 +216,7 @@ namespace Decompiler
 				working.Append(" Position - 0x" + Location.ToString("X"));
 
             if (Properties.Settings.Default.IncludeFunctionHash)
-                working.Append(" Hash - 0x" + Hash.ToString("X"));
+                working.Append($" Hash - 0x{Hash.ToString("X")} ^0x{Mk2Hash.ToString("X")}");
 
             return working.ToString();
 		}
@@ -633,7 +645,8 @@ namespace Decompiler
 			}
 
 			Hash = GetFunctionHash();
-		}
+			Mk2Hash = GetFunctionHash(true);
+        }
 
 
 		/// <summary>
@@ -935,24 +948,26 @@ namespace Decompiler
 						tree.Statements.Add(new Ast.GlobalStore(this, Instructions[tree.Offset].GetOperandsAsUInt, Stack.Pop()));
 						break;
 					case Opcode.CALL:
-						foreach (var function in ScriptFile.Functions)
 						{
-							if (function.Location == Instructions[tree.Offset].GetOperandsAsUInt)
+							var loc = Instructions[tree.Offset].GetOperandsAsUInt;
+							var function = ScriptFile.Functions.Find(f => f.Location == loc);
+
+							if (function == null)
 							{
-								var call = new Ast.FunctionCall(this, Stack.PopCount(function.NumParams), function);
-                                function.Decompile(); // this is a very bad idea that will break everything but can give better type inference??? TODO: find better way to propagate type info
-
-                                if (call.IsStatement())
-									tree.Statements.Add(call);
-								else
-									Stack.Push(call);
-
-								goto FUNCTION_FOUND;
+								throw new InvalidOperationException("Cannot find function");
 							}
+
+							var call = new Ast.FunctionCall(this, Stack.PopCount(function.NumParams), function);
+							function.Decompile(); // this is a very bad idea that will break everything but can give better type inference??? TODO: find better way to propagate type info
+
+							if (call.IsStatement())
+								tree.Statements.Add(call);
+							else
+								Stack.Push(call);
+
+							function.Xrefs++;
+							break;
 						}
-						throw new InvalidOperationException("Cannot find function");
-FUNCTION_FOUND:
-						break;
 					case Opcode.STRING:
 						Stack.Push(new Ast.String(this, Stack.Pop()));
 						break;

@@ -33,7 +33,7 @@ namespace Decompiler.Ast.StatementTree
         public override string ToString()
         {
             if ((Parent as If).CanSkipBraces())
-                return $"else{Environment.NewLine}{base.ToString(false)}";
+                return $"else{Environment.NewLine}{ToString(false)}";
             else
                 return $"else{Environment.NewLine}{{{Environment.NewLine}{base.ToString()}}}";
         }

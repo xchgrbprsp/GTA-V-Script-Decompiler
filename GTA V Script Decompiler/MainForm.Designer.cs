@@ -79,9 +79,7 @@
             this.listView1 = new System.Windows.Forms.ListView();
             this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
-            this.columnHeader3 = new System.Windows.Forms.ColumnHeader();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.timer2 = new System.Windows.Forms.Timer(this.components);
+            this.Xrefs = new System.Windows.Forms.ColumnHeader();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
@@ -485,14 +483,14 @@
             // stringsTableToolStripMenuItem
             // 
             this.stringsTableToolStripMenuItem.Name = "stringsTableToolStripMenuItem";
-            this.stringsTableToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.stringsTableToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
             this.stringsTableToolStripMenuItem.Text = "Strings table";
             this.stringsTableToolStripMenuItem.Click += new System.EventHandler(this.stringsTableToolStripMenuItem_Click);
             // 
             // nativeTableToolStripMenuItem
             // 
             this.nativeTableToolStripMenuItem.Name = "nativeTableToolStripMenuItem";
-            this.nativeTableToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.nativeTableToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
             this.nativeTableToolStripMenuItem.Text = "Native table";
             this.nativeTableToolStripMenuItem.Click += new System.EventHandler(this.nativeTableToolStripMenuItem_Click);
             // 
@@ -511,11 +509,10 @@
             this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1,
             this.columnHeader2,
-            this.columnHeader3});
+            this.Xrefs});
             this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listView1.FullRowSelect = true;
             this.listView1.GridLines = true;
-            this.listView1.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listView1.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.listView1.Location = new System.Drawing.Point(0, 0);
             this.listView1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
@@ -525,9 +522,8 @@
             this.listView1.TabIndex = 0;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
+            this.listView1.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listView1_ColumnClick);
             this.listView1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listView1_MouseDoubleClick);
-            this.listView1.MouseEnter += new System.EventHandler(this.listView1_MouseEnter);
-            this.listView1.MouseLeave += new System.EventHandler(this.listView1_MouseLeave);
             // 
             // columnHeader1
             // 
@@ -539,20 +535,9 @@
             this.columnHeader2.Text = "Line";
             this.columnHeader2.Width = 55;
             // 
-            // columnHeader3
+            // Xrefs
             // 
-            this.columnHeader3.Text = "CodePos";
-            this.columnHeader3.Width = 70;
-            // 
-            // timer1
-            // 
-            this.timer1.Interval = 5000;
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
-            // timer2
-            // 
-            this.timer2.Interval = 1;
-            this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
+            this.Xrefs.Text = "Xrefs";
             // 
             // toolStrip1
             // 
@@ -576,8 +561,8 @@
             this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton1.Name = "toolStripButton1";
             this.toolStripButton1.Padding = new System.Windows.Forms.Padding(2);
-            this.toolStripButton1.Size = new System.Drawing.Size(22, 126);
-            this.toolStripButton1.Text = "Function Locations";
+            this.toolStripButton1.Size = new System.Drawing.Size(22, 72);
+            this.toolStripButton1.Text = "Functions";
             this.toolStripButton1.TextDirection = System.Windows.Forms.ToolStripTextDirection.Vertical90;
             this.toolStripButton1.ToolTipText = "Show the line numbers for functions and lets you jump to them";
             this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
@@ -668,8 +653,6 @@
 		private System.Windows.Forms.ListView listView1;
 		private System.Windows.Forms.ColumnHeader columnHeader1;
 		private System.Windows.Forms.ColumnHeader columnHeader2;
-		private System.Windows.Forms.Timer timer1;
-		private System.Windows.Forms.Timer timer2;
 		private System.Windows.Forms.ToolStrip toolStrip1;
 		private System.Windows.Forms.ToolStripButton toolStripButton1;
 		private System.Windows.Forms.ToolStripMenuItem exportTablesToolStripMenuItem;
@@ -701,12 +684,12 @@
 		private System.Windows.Forms.ToolStripMenuItem globalAndStructHexIndexingToolStripMenuItem;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
-		private System.Windows.Forms.ColumnHeader columnHeader3;
 		private System.Windows.Forms.ToolStripMenuItem includeFunctionHashToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem uppercaseNativesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem includeFunctionPositionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showLocalizedTextsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem resetGlobalTypesToolStripMenuItem;
+        private System.Windows.Forms.ColumnHeader Xrefs;
     }
 }
 

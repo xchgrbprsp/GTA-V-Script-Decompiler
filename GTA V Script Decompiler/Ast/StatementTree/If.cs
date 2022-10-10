@@ -38,15 +38,15 @@ namespace Decompiler.Ast.StatementTree
         // TODO: wtf did i just write?
         public bool CanSkipBraces()
         {
-            if (Statements.Count != 1 || (Statements[0] is not Ast.AstToken && (Statements[0] is not If || !(Statements[0] as If).CanSkipBraces())))
+            if (Statements.Count != 1 || (Statements[0] is not AstToken && (Statements[0] is not If || !(Statements[0] as If).CanSkipBraces())))
                 return false;
 
-            if (ElseTree != null && (ElseTree.Statements.Count != 1 || (ElseTree.Statements[0] is not Ast.AstToken && (ElseTree.Statements[0] is not If || !(ElseTree.Statements[0] as If).CanSkipBraces()))))
+            if (ElseTree != null && (ElseTree.Statements.Count != 1 || (ElseTree.Statements[0] is not AstToken && (ElseTree.Statements[0] is not If || !(ElseTree.Statements[0] as If).CanSkipBraces()))))
                 return false;
 
             foreach (var elseIf in ElseIfTrees)
             {
-                if (elseIf.Statements.Count != 1 || (elseIf.Statements[0] is not Ast.AstToken && (elseIf.Statements[0] is not If || !(elseIf.Statements[0] as If).CanSkipBraces())))
+                if (elseIf.Statements.Count != 1 || (elseIf.Statements[0] is not AstToken && (elseIf.Statements[0] is not If || !(elseIf.Statements[0] as If).CanSkipBraces())))
                     return false;
             }
 
@@ -58,7 +58,7 @@ namespace Decompiler.Ast.StatementTree
             string str;
 
             if (CanSkipBraces())
-                str = $"if ({Condition.ToString()}){Environment.NewLine}{base.ToString(false)}";
+                str = $"if ({Condition.ToString()}){Environment.NewLine}{ToString(false)}";
             else
                 str = $"if ({Condition.ToString()}){Environment.NewLine}{{{Environment.NewLine}{base.ToString()}}}";
 

@@ -46,11 +46,11 @@ namespace Decompiler.Ast.StatementTree
             StringBuilder sb = new();
             foreach (var @case in Cases)
             {
-                if (@case is not Ast.Default)
+                if (@case is not Default)
                     sb.Append("case ");
                 sb.AppendLine(@case.ToString() + ":");
             }
-            sb.Append(base.ToString(false));
+            sb.Append(ToString(false));
             return sb.ToString();
         }
     }

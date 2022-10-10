@@ -21,8 +21,9 @@ namespace Decompiler
 		ScriptFile OpenFile;
 		Queue<string> CompileList;
 		readonly List<Disassembly> DisassembyWindows = new();
+        private FunctionPaneSorter fpnColumnSorter;
 
-		public MainForm()
+        public MainForm()
 		{
 			InitializeComponent();
 
@@ -56,6 +57,9 @@ namespace Decompiler
 					t = hexToolStripMenuItem;
 					break;
 			}
+
+			fpnColumnSorter = new();
+			listView1.ListViewItemSorter = fpnColumnSorter;
 
 			t.Checked = true;
 			t.Enabled = false;
@@ -108,12 +112,16 @@ namespace Decompiler
 
 				OpenFile.Save(ms, false);
 
-				foreach (KeyValuePair<string, Tuple<int, int>> locations in OpenFile.Function_loc)
+				listView1.ListViewItemSorter = null;
+
+				foreach (var locations in OpenFile.Function_loc)
 				{
-					listView1.Items.Add(new ListViewItem(new string[] {locations.Key, locations.Value.Item1.ToString(), locations.Value.Item2.ToString()}));
+					listView1.Items.Add(new ListViewItem(new string[] {locations.Key.Name, locations.Value.Item1.ToString(), locations.Key.Xrefs.ToString()}));
 				}
 
-				OpenFile.Close();
+                listView1.ListViewItemSorter = fpnColumnSorter;
+
+                OpenFile.Close();
 
 				StreamReader sr = new(ms);
 				ms.Position = 0;
@@ -169,7 +177,7 @@ namespace Decompiler
 
 			Enabled = false;
 
-            var progressBar = new ProgressBar("Export Directory", 1, CompileList.Count);
+            var progressBar = new ProgressBar("Export Directory", 1, CompileList.Count + 1);
             progressBar.Show();
 
             if (Properties.Settings.Default.UseMultithreading)
@@ -225,7 +233,7 @@ namespace Decompiler
 			OpenFileDialog ofd = new();
 			ofd.Filter = "GTA V Script Files|*.ysc;*.ysc.full";
 
-			if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+			if (ofd.ShowDialog() == DialogResult.OK)
 			{
 				DateTime Start = DateTime.Now;
 
@@ -385,64 +393,46 @@ namespace Decompiler
 			}
 		}
 
-		private void listView1_MouseLeave(object sender, EventArgs e)
-		{
-			timer1.Start();
-		}
+        private void listView1_ColumnClick(object sender, ColumnClickEventArgs e)
+        {
+            // Determine if clicked column is already the column that is being sorted.
+            if (e.Column == fpnColumnSorter.SortColumn)
+            {
+                // Reverse the current sort direction for this column.
+                if (fpnColumnSorter.Order == SortOrder.Ascending)
+                {
+                    fpnColumnSorter.Order = SortOrder.Descending;
+                }
+                else
+                {
+                    fpnColumnSorter.Order = SortOrder.Ascending;
+                }
+            }
+            else
+            {
+                // Set the column number that is to be sorted; default to ascending.
+                fpnColumnSorter.SortColumn = e.Column;
+                fpnColumnSorter.Order = SortOrder.Ascending;
+            }
 
-		private void timer1_Tick(object sender, EventArgs e)
-		{
-			if (panel1.ClientRectangle.Contains(panel1.PointToClient(Control.MousePosition)))
-			{
-				return;
-			}
-			opening = false;
-			timer2.Start();
-			timer1.Stop();
-		}
+            // Perform the sort with these new sort options.
+            this.listView1.Sort();
+        }
 
-
-		private void listView1_MouseEnter(object sender, EventArgs e)
-		{
-			if (forceclose)
-				return;
-			timer1.Stop();
-			opening = true;
-		}
-
-		private void timer2_Tick(object sender, EventArgs e)
-		{
-			if (opening)
-			{
-				if (panel1.Size.Width < 165) panel1.Size = new Size(panel1.Size.Width + 6, panel1.Size.Height);
-				else
-				{
-					panel1.Size = new Size(170, panel1.Size.Height);
-					timer2.Stop();
-					forceclose = false;
-				}
-
-			}
-			if (!opening)
-			{
-				if (panel1.Size.Width > 2) panel1.Size = new Size(panel1.Size.Width - 2, panel1.Size.Height);
-				else
-				{
-					panel1.Size = new Size(0, panel1.Size.Height);
-					timer2.Stop();
-					forceclose = false;
-				}
-
-			}
-
-		}
-
-		private void toolStripButton1_Click(object sender, EventArgs e)
+        private void toolStripButton1_Click(object sender, EventArgs e)
 		{
 			opening = !opening;
+
 			if (!opening)
+			{
 				forceclose = true;
-			timer2.Start();
+                panel1.Size = new Size(0, panel1.Size.Height);
+            }
+            else
+			{
+                panel1.Size = new Size(240, panel1.Size.Height);
+            }
+
 			columnHeader1.Width = 80;
 			columnHeader2.Width = 76;
 		}
@@ -466,7 +456,7 @@ namespace Decompiler
 			FileStream fs = File.Create(path);
 			new MemoryStream(Properties.Resources.natives).CopyTo(fs);
 			fs.Close();
-			System.Diagnostics.Process.Start(
+			Process.Start(
 				Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)), "natives_exp.dat");
 		}
 
@@ -493,8 +483,7 @@ namespace Decompiler
 		{
 			opening = false;
 			forceclose = true;
-			timer2.Start();
-			timer1.Stop();
+
 			if (e.Button == MouseButtons.Right)
 			{
 				if (fctb1.SelectionLength == 0)
@@ -524,7 +513,7 @@ namespace Decompiler
 			SaveFileDialog sfd = new();
 			sfd.Filter = "Decompiled Script Files|*.c;*.c4;*.sc;*.sch\"";
 			sfd.FileName = FileName + ".c";
-			if (sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+			if (sfd.ShowDialog() == DialogResult.OK)
 			{
 				fctb1.SaveToFile(sfd.FileName, System.Text.Encoding.Default);
 				MessageBox.Show("File Saved");

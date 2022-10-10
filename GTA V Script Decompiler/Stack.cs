@@ -202,7 +202,8 @@ namespace Decompiler
 			eThreadPriority,
 			eSetPlayerControlFlags,
 			eScriptLookAtFlags,
-            eScriptTaskHash
+            eScriptTaskHash,
+			eMPStat
         }
 
 		#endregion

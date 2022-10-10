@@ -24,7 +24,7 @@ namespace Decompiler
         internal VariableStorage Statics;
         internal ProgressBar? ProgressBar = null;
 
-        public Dictionary<string, Tuple<int, int>> Function_loc = new();
+        public Dictionary<Function, Tuple<int, int>> Function_loc = new();
 
         public ScriptFile(Stream scriptStream)
         {
@@ -107,7 +107,7 @@ namespace Decompiler
             {
                 string s = f.ToString();
                 savestream.WriteLine(s);
-                Function_loc.Add(f.Name, new Tuple<int, int>(i, f.Location));
+                Function_loc.Add(f, new Tuple<int, int>(i, f.Location));
                 i += f.LineCount;
             }
             savestream.Flush();
