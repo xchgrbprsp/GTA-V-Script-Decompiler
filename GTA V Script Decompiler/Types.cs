@@ -300,7 +300,7 @@ namespace Decompiler
             }
 
             /// <summary>
-            /// Gets a reference of a <b>SEALED</b> container containing the type
+            /// Gets a reference to a <b>SEALED</b> container containing the type
             /// </summary>
             public ref TypeContainer GetContainer()
             {

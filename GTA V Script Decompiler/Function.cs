@@ -957,6 +957,14 @@ namespace Decompiler
 								throw new InvalidOperationException("Cannot find function");
 							}
 
+							// The ternary operator is implemented as a function in RAGE
+							if (function.Hash == 0x3EE55A88)
+							{
+								var args = Stack.PopCount(function.NumParams);
+                                Stack.Push(new Ast.Ternary(this, args[0], args[1], args[2]));
+								break;
+							}
+
 							var call = new Ast.FunctionCall(this, Stack.PopCount(function.NumParams), function);
 							function.Decompile(); // this is a very bad idea that will break everything but can give better type inference??? TODO: find better way to propagate type info
 
