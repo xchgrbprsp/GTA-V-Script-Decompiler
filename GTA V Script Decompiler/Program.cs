@@ -9,7 +9,6 @@ namespace Decompiler
 	{
 		public static x64NativeFile x64nativefile;
 		public static object ThreadLock;
-		public static int ThreadCount;
 		public static NativeDB nativeDB;
 		public static FunctionDB functionDB;
 		public static TextDB textDB;

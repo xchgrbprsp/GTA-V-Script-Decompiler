@@ -381,7 +381,6 @@ namespace Decompiler
 		#region Function Location
 
 		bool opening = false;
-		bool forceclose = false;
 
 		private void listView1_MouseDoubleClick(object sender, MouseEventArgs e)
 		{
@@ -425,7 +424,6 @@ namespace Decompiler
 
 			if (!opening)
 			{
-				forceclose = true;
                 panel1.Size = new Size(0, panel1.Size.Height);
             }
             else
@@ -482,7 +480,6 @@ namespace Decompiler
 		private void fctb1_MouseClick(object sender, MouseEventArgs e)
 		{
 			opening = false;
-			forceclose = true;
 
 			if (e.Button == MouseButtons.Right)
 			{

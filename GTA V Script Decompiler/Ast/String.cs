@@ -8,7 +8,8 @@ namespace Decompiler.Ast
 {
     internal class String : AstToken
     {
-        public readonly AstToken Index;
+        public readonly AstToken Index = null;
+        public readonly string _string = null;
 
         public String(Function func, AstToken index) : base(func)
         {
@@ -16,13 +17,36 @@ namespace Decompiler.Ast
             Index.HintType(ref Types.INT.GetContainer());
         }
 
+        public String(Function func, string @string) : base(func)
+        {
+            _string = @string;
+        }
+
         public override ref TypeContainer GetTypeContainer()
         {
             return ref Types.PSTRING.GetContainer();
         }
 
+        public string GetString()
+        {
+            if (_string != null)
+                return _string;
+
+            if (Index is ConstantInt)
+            {
+                return function.ScriptFile.StringTable[(int)(Index as ConstantInt).GetValue()];
+            }
+            else
+            {
+                throw new InvalidOperationException("Index is not constant");
+            }
+        }
+
         public override string ToString()
         {
+            if (_string != null)
+                return "\"" + _string + "\"";
+
             if (Index is ConstantInt)
             {
                 if (Properties.Settings.Default.ShowLocalizedTexts)

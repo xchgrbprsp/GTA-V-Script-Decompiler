@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace Decompiler.Ast
 {
-    internal class Ternary : AstToken
+    internal class TernaryOperator : AstToken
     {
         public readonly AstToken Condition;
         public readonly AstToken ValueIfTrue;
         public readonly AstToken ValueIfFalse;
 
-        public Ternary(Function func, AstToken condition, AstToken valueIfTrue, AstToken valueIfFalse) : base(func)
+        public TernaryOperator(Function func, AstToken condition, AstToken valueIfTrue, AstToken valueIfFalse) : base(func)
         {
             Condition = condition;
             ValueIfTrue = valueIfTrue;
@@ -25,6 +25,12 @@ namespace Decompiler.Ast
         public override ref TypeContainer GetTypeContainer()
         {
             return ref ValueIfTrue.GetTypeContainer();
+        }
+
+        public override void HintType(ref TypeContainer container)
+        {
+            ValueIfTrue.HintType(ref container);
+            ValueIfFalse.HintType(ref container);
         }
 
         public override string ToString()

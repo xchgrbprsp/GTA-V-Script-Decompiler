@@ -76,8 +76,10 @@
 			// label1
 			// 
 			this.label1.AutoSize = true;
+#pragma warning disable CA1416 // Validate platform compatibility
 			this.label1.Font = new Drawing.Font("Microsoft Sans Serif", 12F, Drawing.FontStyle.Bold,
                 Drawing.GraphicsUnit.Point, 0);
+#pragma warning restore CA1416 // Validate platform compatibility
 			this.label1.Location = new Drawing.Point(12, 9);
 			this.label1.Name = "label1";
 			this.label1.Size = new Drawing.Size(109, 20);

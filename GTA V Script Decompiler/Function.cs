@@ -63,7 +63,7 @@ namespace Decompiler
 
         public Function(ScriptFile Owner, string name, int pcount, int vcount, int rcount, int location, int locmax = -1)
 		{
-			this.ScriptFile = Owner;
+			ScriptFile = Owner;
 			Name = name;
 			NumParams = pcount;
 			NumLocals = vcount;
@@ -84,6 +84,7 @@ namespace Decompiler
 		/// <summary>
 		/// Gets a persistent hash of the function that should not change across updates
 		/// </summary>
+		/// <param name="mk2">Gets the newer MK2 hash</param>
 		/// <remarks>
 		/// DO NOT call this after function decode as things get nopped
 		/// </remarks>
@@ -961,11 +962,26 @@ namespace Decompiler
 							if (function.Hash == 0x3EE55A88)
 							{
 								var args = Stack.PopCount(function.NumParams);
-                                Stack.Push(new Ast.Ternary(this, args[0], args[1], args[2]));
+                                Stack.Push(new Ast.TernaryOperator(this, args[0], args[1], args[2]));
 								break;
 							}
+							else if (function.Hash == StringObfuscation.GET_STRING_WITH_ROTATE_HASH || function.Hash == StringObfuscation.GET_STRING_WITH_ROTATE_2_HASH)
+							{
+								StringObfuscation.GetStringWithRotate(this, Stack.PopCount(function.NumParams).ToArray(), Stack);
+								break;
+							}
+                            else if (function.Hash == StringObfuscation.REORDER_STRING_4_32_HASH || function.Hash == StringObfuscation.REORDER_STRING_4_64_HASH || function.Hash == StringObfuscation.REORDER_STRING_4_24_HASH)
+                            {
+                                StringObfuscation.ReorderString_4(this, Stack.PopCount(function.NumParams).ToArray(), Stack, function.Hash == StringObfuscation.REORDER_STRING_4_24_HASH ? 6 : 8);
+                                break;
+                            }
+                            else if (function.Hash == StringObfuscation.REORDER_STRING_8_64_HASH)
+                            {
+                                StringObfuscation.ReorderString_8(this, Stack.PopCount(function.NumParams).ToArray(), Stack);
+                                break;
+                            }
 
-							var call = new Ast.FunctionCall(this, Stack.PopCount(function.NumParams), function);
+                            var call = new Ast.FunctionCall(this, Stack.PopCount(function.NumParams), function);
 							function.Decompile(); // this is a very bad idea that will break everything but can give better type inference??? TODO: find better way to propagate type info
 
 							if (call.IsStatement())
