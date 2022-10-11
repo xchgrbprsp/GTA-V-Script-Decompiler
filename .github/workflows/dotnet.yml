@@ -21,7 +21,7 @@ jobs:
       run: dotnet restore
       
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build --no-restore -c Release
       
     - name: Test
       run: dotnet test --no-build --verbosity normal
@@ -30,5 +30,5 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: Release
-        path: "GTA V Script Decompiler\\bin\\Debug\\net6.0-windows"
+        path: "GTA V Script Decompiler\\bin\\Release\\net6.0-windows"
         if-no-files-found: error
