@@ -47,10 +47,10 @@
             this.intToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.uintToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hexToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showLocalizedTextsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.showArraySizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reverseHashesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.showLocalizedTextsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.includeNativeNamespaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.declareVariablesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.shiftVariablesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -88,6 +88,9 @@
             this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.timer3 = new System.Windows.Forms.Timer(this.components);
+            this.disabledToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.gettextStyleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.commentStyleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.fctb1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -224,10 +227,10 @@
             // 
             this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.intStyleToolStripMenuItem,
+            this.showLocalizedTextsToolStripMenuItem,
             this.toolStripSeparator5,
             this.showArraySizeToolStripMenuItem,
             this.reverseHashesToolStripMenuItem,
-            this.showLocalizedTextsToolStripMenuItem,
             this.includeNativeNamespaceToolStripMenuItem,
             this.declareVariablesToolStripMenuItem,
             this.shiftVariablesToolStripMenuItem,
@@ -252,29 +255,40 @@
             this.hexToolStripMenuItem});
             this.intStyleToolStripMenuItem.Name = "intStyleToolStripMenuItem";
             this.intStyleToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
-            this.intStyleToolStripMenuItem.Text = "IntStyle";
+            this.intStyleToolStripMenuItem.Text = "Int Style";
             this.intStyleToolStripMenuItem.ToolTipText = "Choose how to display int32 data types";
             // 
             // intToolStripMenuItem
             // 
             this.intToolStripMenuItem.Name = "intToolStripMenuItem";
-            this.intToolStripMenuItem.Size = new System.Drawing.Size(96, 22);
+            this.intToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.intToolStripMenuItem.Text = "Int";
             this.intToolStripMenuItem.Click += new System.EventHandler(this.intstylechanged);
             // 
             // uintToolStripMenuItem
             // 
             this.uintToolStripMenuItem.Name = "uintToolStripMenuItem";
-            this.uintToolStripMenuItem.Size = new System.Drawing.Size(96, 22);
+            this.uintToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.uintToolStripMenuItem.Text = "Uint";
             this.uintToolStripMenuItem.Click += new System.EventHandler(this.intstylechanged);
             // 
             // hexToolStripMenuItem
             // 
             this.hexToolStripMenuItem.Name = "hexToolStripMenuItem";
-            this.hexToolStripMenuItem.Size = new System.Drawing.Size(96, 22);
+            this.hexToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.hexToolStripMenuItem.Text = "Hex";
             this.hexToolStripMenuItem.Click += new System.EventHandler(this.intstylechanged);
+            // 
+            // showLocalizedTextsToolStripMenuItem
+            // 
+            this.showLocalizedTextsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.disabledToolStripMenuItem,
+            this.gettextStyleToolStripMenuItem,
+            this.commentStyleToolStripMenuItem});
+            this.showLocalizedTextsToolStripMenuItem.Name = "showLocalizedTextsToolStripMenuItem";
+            this.showLocalizedTextsToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
+            this.showLocalizedTextsToolStripMenuItem.Text = "Localized Text Style";
+            this.showLocalizedTextsToolStripMenuItem.ToolTipText = "Replace text labels with their localized text";
             // 
             // toolStripSeparator5
             // 
@@ -298,14 +312,6 @@
             this.reverseHashesToolStripMenuItem.ToolTipText = "Reverse known hashes into their text equivalent\r\ne.g 0xB779A091 -> joaat(\"adder\")" +
     "";
             this.reverseHashesToolStripMenuItem.Click += new System.EventHandler(this.reverseHashesToolStripMenuItem_Click);
-            // 
-            // showLocalizedTextsToolStripMenuItem
-            // 
-            this.showLocalizedTextsToolStripMenuItem.Name = "showLocalizedTextsToolStripMenuItem";
-            this.showLocalizedTextsToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
-            this.showLocalizedTextsToolStripMenuItem.Text = "Show Localized Texts";
-            this.showLocalizedTextsToolStripMenuItem.ToolTipText = "Replace text labels with their localized text";
-            this.showLocalizedTextsToolStripMenuItem.Click += new System.EventHandler(this.showLocalizedTextsStripMenuItem_Click);
             // 
             // includeNativeNamespaceToolStripMenuItem
             // 
@@ -603,6 +609,27 @@
             // 
             this.timer3.Interval = 5000;
             // 
+            // disabledToolStripMenuItem
+            // 
+            this.disabledToolStripMenuItem.Name = "disabledToolStripMenuItem";
+            this.disabledToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.disabledToolStripMenuItem.Text = "Disabled";
+            this.disabledToolStripMenuItem.Click += new System.EventHandler(this.disabledToolStripMenuItem_Click);
+            // 
+            // gettextStyleToolStripMenuItem
+            // 
+            this.gettextStyleToolStripMenuItem.Name = "gettextStyleToolStripMenuItem";
+            this.gettextStyleToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.gettextStyleToolStripMenuItem.Text = "Gettext Style";
+            this.gettextStyleToolStripMenuItem.Click += new System.EventHandler(this.gettextStyleToolStripMenuItem_Click);
+            // 
+            // commentStyleToolStripMenuItem
+            // 
+            this.commentStyleToolStripMenuItem.Name = "commentStyleToolStripMenuItem";
+            this.commentStyleToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.commentStyleToolStripMenuItem.Text = "Comment Style";
+            this.commentStyleToolStripMenuItem.Click += new System.EventHandler(this.commentStyleToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -690,6 +717,9 @@
         private System.Windows.Forms.ToolStripMenuItem showLocalizedTextsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem resetGlobalTypesToolStripMenuItem;
         private System.Windows.Forms.ColumnHeader Xrefs;
+        private System.Windows.Forms.ToolStripMenuItem disabledToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem gettextStyleToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem commentStyleToolStripMenuItem;
     }
 }
 

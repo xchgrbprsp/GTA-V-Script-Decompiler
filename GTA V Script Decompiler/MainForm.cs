@@ -31,7 +31,6 @@ namespace Decompiler
 			
 			showArraySizeToolStripMenuItem.Checked = Properties.Settings.Default.ShowArraySize;
 			reverseHashesToolStripMenuItem.Checked = Properties.Settings.Default.ReverseHashes;
-			showLocalizedTextsToolStripMenuItem.Checked = Properties.Settings.Default.ShowLocalizedTexts;
             declareVariablesToolStripMenuItem.Checked = Properties.Settings.Default.DeclareVariables;
 			shiftVariablesToolStripMenuItem.Checked = Properties.Settings.Default.ShiftVariables;
 			showFuncPointerToolStripMenuItem.Checked = Properties.Settings.Default.ShowFunctionPointers;
@@ -63,6 +62,19 @@ namespace Decompiler
 
 			t.Checked = true;
 			t.Enabled = false;
+
+			switch (Properties.Settings.Default.LocalizedTextType)
+			{
+				case 0:
+					disabledToolStripMenuItem.Checked = true;
+					break;
+				case 1:
+					gettextStyleToolStripMenuItem.Checked = true;
+					break;
+				case 2:
+					commentStyleToolStripMenuItem.Checked = true;
+					break;
+			}
 		}
 
 		void UpdateStatus(string text)
@@ -261,9 +273,38 @@ namespace Decompiler
 			}
 		}
 
-		#region Config Options
+        #region Config Options
 
-		private void intstylechanged(object sender, EventArgs e)
+		void ResetLocalizedTextStyleCheckboxes()
+		{
+            foreach (ToolStripMenuItem t in showLocalizedTextsToolStripMenuItem.DropDownItems)
+            {
+                t.Checked = false;
+            }
+        }
+
+        private void disabledToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+			ResetLocalizedTextStyleCheckboxes();
+			disabledToolStripMenuItem.Checked = true;
+			Properties.Settings.Default.LocalizedTextType = 0;
+        }
+
+        private void gettextStyleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ResetLocalizedTextStyleCheckboxes();
+            gettextStyleToolStripMenuItem.Checked = true;
+            Properties.Settings.Default.LocalizedTextType = 1;
+        }
+
+        private void commentStyleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ResetLocalizedTextStyleCheckboxes();
+            commentStyleToolStripMenuItem.Checked = true;
+            Properties.Settings.Default.LocalizedTextType = 2;
+        }
+
+        private void intstylechanged(object sender, EventArgs e)
 		{
 			ToolStripMenuItem clicked = (ToolStripMenuItem) sender;
 			foreach (ToolStripMenuItem t in intStyleToolStripMenuItem.DropDownItems)
@@ -288,13 +329,6 @@ namespace Decompiler
 		{
 			reverseHashesToolStripMenuItem.Checked = !reverseHashesToolStripMenuItem.Checked;
             Properties.Settings.Default.ReverseHashes = reverseHashesToolStripMenuItem.Checked;
-            Properties.Settings.Default.Save();
-        }
-
-        private void showLocalizedTextsStripMenuItem_Click(object sender, EventArgs e)
-        {
-            showLocalizedTextsToolStripMenuItem.Checked = !showLocalizedTextsToolStripMenuItem.Checked;
-            Properties.Settings.Default.ShowLocalizedTexts = showLocalizedTextsToolStripMenuItem.Checked;
             Properties.Settings.Default.Save();
         }
 
