@@ -299,7 +299,7 @@ namespace Decompiler
 		{
 			foreach (var func in ScriptFile.Functions)
 				if (func.Name == name)
-					return;
+					name += "_0";
 
 			Name = name;
 		}

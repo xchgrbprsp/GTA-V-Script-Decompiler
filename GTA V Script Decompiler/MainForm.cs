@@ -194,7 +194,10 @@ namespace Decompiler
                 await Decompile(saveDirectory, progressBar);
             }
 
+			progressBar.Dispose();
+
 			Enabled = true;
+            Focus();
             UpdateStatus("Directory exported. Time taken: " + (DateTime.Now - Start).ToString());
         }
 

@@ -174,7 +174,7 @@ namespace Decompiler.Enums
         _CHAR_TAOS_TRANSLATOR,
         CHAR_WENDY,
         CHAR_TW,
-        _CHAR_UNK4,
+        _CHAR_MADAM_NAZAR, // probably
         CHAR_MIGUEL_MADROZA,
         CHAR_KEINEMUSIK,
         CHAR_PAVEL,
