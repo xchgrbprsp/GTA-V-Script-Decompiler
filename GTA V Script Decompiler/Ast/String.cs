@@ -49,13 +49,16 @@ namespace Decompiler.Ast
 
             if (Index is ConstantInt)
             {
-                if (Properties.Settings.Default.ShowLocalizedTexts)
+                if (Properties.Settings.Default.LocalizedTextType != 0)
                 {
                     uint hash = Utils.Joaat(function.ScriptFile.StringTable[(int)(Index as ConstantInt).GetValue()]);
 
                     if (hash != 0x3acbce85 /*STRING*/ && Program.textDB.Strings.TryGetValue(hash, out string text))
                     {
-                        return $"_(\"{text.Replace("\"", "\\\"")}\")";
+                        if (Properties.Settings.Default.LocalizedTextType == 1)
+                            return $"_(\"{text.Replace("\"", "\\\"")}\")";
+                        else
+                            return $"\"{function.ScriptFile.StringTable[(int)(Index as ConstantInt).GetValue()]}\" /*{text.Replace("\"", "\\\"")}*/";
                     }    
                 }
 

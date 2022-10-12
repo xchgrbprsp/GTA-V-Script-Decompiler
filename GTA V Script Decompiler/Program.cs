@@ -105,5 +105,5 @@ namespace Decompiler
 		{
 			get { return _getINTType; }
 		}
-	}
+    }
 }

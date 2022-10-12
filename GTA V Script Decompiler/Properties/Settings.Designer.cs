@@ -181,13 +181,13 @@ namespace Decompiler.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool ShowLocalizedTexts {
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        public int LocalizedTextType {
             get {
-                return ((bool)(this["ShowLocalizedTexts"]));
+                return ((int)(this["LocalizedTextType"]));
             }
             set {
-                this["ShowLocalizedTexts"] = value;
+                this["LocalizedTextType"] = value;
             }
         }
     }
