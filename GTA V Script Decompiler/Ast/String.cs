@@ -55,8 +55,8 @@ namespace Decompiler.Ast
 
                     if (hash != 0x3acbce85 /*STRING*/ && Program.textDB.Strings.TryGetValue(hash, out string text))
                     {
-                        return $"_(\"{text.Replace("\"", "\\\"")}\")";
-                    }    
+                        return $"\"{function.ScriptFile.StringTable[(int)(Index as ConstantInt).GetValue()]}\" /*{text.Replace("\"", "\\\"")}*/";
+                    }
                 }
 
                 return "\"" + function.ScriptFile.StringTable[(int)(Index as ConstantInt).GetValue()] + "\"";
