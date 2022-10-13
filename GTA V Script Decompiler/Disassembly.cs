@@ -217,8 +217,8 @@ namespace Decompiler
             }
             else if (instruction.OriginalOpcode == Opcode.CALL)
             {
-                var func = Function.ScriptFile.Functions.Find(f => f.Location == instruction.GetOperandsAsUInt);
-                bytes += " // " + func.Name + ", " + func.NumParams + ", " + func.NumReturns;
+                if (Function.ScriptFile.FunctionAtLocation.TryGetValue(instruction.GetOperandsAsInt, out var func))
+                    bytes += " // " + func.Name + ", " + func.NumParams + ", " + func.NumReturns;
             }
 
             return bytes;

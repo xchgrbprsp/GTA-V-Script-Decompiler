@@ -950,13 +950,10 @@ namespace Decompiler
 						break;
 					case Opcode.CALL:
 						{
-							var loc = Instructions[tree.Offset].GetOperandsAsUInt;
-							var function = ScriptFile.Functions.Find(f => f.Location == loc);
+							var loc = Instructions[tree.Offset].GetOperandsAsInt;
 
-							if (function == null)
-							{
-								throw new InvalidOperationException("Cannot find function");
-							}
+							if(!ScriptFile.FunctionAtLocation.TryGetValue(loc, out var function))
+                                throw new InvalidOperationException("Cannot find function");
 
 							// The ternary operator is implemented as a function in RAGE
 							if (function.Hash == 0x3EE55A88)

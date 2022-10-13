@@ -125,12 +125,14 @@ namespace Decompiler
 				OpenFile.Save(ms, false);
 
 				listView1.ListViewItemSorter = null;
+				listView1.BeginUpdate();
 
-				foreach (var locations in OpenFile.Function_loc)
+				foreach (var locations in OpenFile.FunctionLines)
 				{
-					listView1.Items.Add(new ListViewItem(new string[] {locations.Key.Name, locations.Value.Item1.ToString(), locations.Key.Xrefs.ToString()}));
+					listView1.Items.Add(new ListViewItem(new string[] {locations.Key.Name, locations.Value.ToString(), locations.Key.Xrefs.ToString()}));
 				}
 
+				listView1.EndUpdate();
                 listView1.ListViewItemSorter = fpnColumnSorter;
 
                 OpenFile.Close();
@@ -329,6 +331,7 @@ namespace Decompiler
 		{
 			reverseHashesToolStripMenuItem.Checked = !reverseHashesToolStripMenuItem.Checked;
             Properties.Settings.Default.ReverseHashes = reverseHashesToolStripMenuItem.Checked;
+			Program.shouldReverseHashes = reverseHashesToolStripMenuItem.Checked;
             Properties.Settings.Default.Save();
         }
 
@@ -343,6 +346,7 @@ namespace Decompiler
 		{
 			shiftVariablesToolStripMenuItem.Checked = !shiftVariablesToolStripMenuItem.Checked;
 			Properties.Settings.Default.ShiftVariables = shiftVariablesToolStripMenuItem.Checked;
+			Program.shouldShiftVariables = shiftVariablesToolStripMenuItem.Checked;
             Properties.Settings.Default.Save();
         }
 

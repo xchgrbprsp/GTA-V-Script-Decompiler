@@ -24,7 +24,8 @@ namespace Decompiler
         internal VariableStorage Statics;
         internal ProgressBar? ProgressBar = null;
 
-        public Dictionary<Function, Tuple<int, int>> Function_loc = new();
+        public Dictionary<int, Function> FunctionAtLocation = new();
+        public Dictionary<Function, int> FunctionLines = new();
 
         public ScriptFile(Stream scriptStream)
         {
@@ -108,7 +109,7 @@ namespace Decompiler
             {
                 string s = f.ToString();
                 savestream.WriteLine(s);
-                Function_loc.Add(f, new Tuple<int, int>(i, f.Location));
+                FunctionLines.Add(f, i);
                 i += f.LineCount;
             }
             savestream.Flush();
@@ -257,10 +258,16 @@ namespace Decompiler
             int Location = start2;
             if (start1 == start2)
             {
-                Functions.Add(new Function(this, name, pcount, vcount, rcount, Location));
+                var func = new Function(this, name, pcount, vcount, rcount, Location);
+                Functions.Add(func);
+                FunctionAtLocation[Location] = func;
             }
             else
-                Functions.Add(new Function(this, name, pcount, vcount, rcount, Location, start1));
+            {
+                var func = new Function(this, name, pcount, vcount, rcount, Location, start1);
+                Functions.Add(func);
+                FunctionAtLocation[Location] = func;
+            }
         }
         void GetFunctions()
         {

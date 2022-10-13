@@ -85,11 +85,10 @@ namespace Decompiler
 
             try
             {
-                if (Properties.Settings.Default.ShiftVariables) return name + VarRemapper[(int)index].ToString();
-                else
-                {
+                if (Program.shouldShiftVariables) 
+					return name + VarRemapper[(int)index].ToString();
+				else
                     return name + (listType == ListType.Statics && index >= scriptParamStart ? index - scriptParamStart : index).ToString();
-                }
             }
             catch (KeyNotFoundException)
             {
@@ -119,14 +118,14 @@ namespace Decompiler
 				j++;
 				if (!var.Is_Used)
 				{
-					if (!Properties.Settings.Default.ShiftVariables)
+					if (!Program.shouldShiftVariables)
 						i++;
 					continue;
 				}
 
 				if (listType == ListType.Vars && !var.Is_Called)
 				{
-					if (!Properties.Settings.Default.ShiftVariables)
+					if (!Program.shouldShiftVariables)
 						i++;
 					continue;
 				}
@@ -260,7 +259,7 @@ namespace Decompiler
 			{
 				if (!var.Is_Used)
 				{
-					if (!Properties.Settings.Default.ShiftVariables)
+					if (!Program.shouldShiftVariables)
 					{
 						i++;	 
 					}

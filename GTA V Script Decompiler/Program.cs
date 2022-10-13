@@ -14,10 +14,13 @@ namespace Decompiler
 		public static TextDB textDB;
 		public static GlobalTypeMgr globalTypeMgr;
 
-		/// <summary>
-		/// The main entry point for the application.
-		/// </summary>
-		[STAThread]
+		public static bool shouldShiftVariables = Properties.Settings.Default.ShiftVariables;
+		public static bool shouldReverseHashes = Properties.Settings.Default.ReverseHashes;
+
+        /// <summary>
+        /// The main entry point for the application.
+        /// </summary>
+        [STAThread]
 		static void Main(string[] args)
 		{
 			ThreadLock = new object();
