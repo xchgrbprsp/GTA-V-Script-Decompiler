@@ -6,16 +6,17 @@ using System.Threading.Tasks;
 
 namespace Decompiler.Ast
 {
-    internal class FloatAdd : AstToken
+    internal abstract class FloatArithmetic : AstToken
     {
         AstToken Lhs;
         AstToken Rhs;
-        public FloatAdd(Function func, AstToken rhs, AstToken lhs) : base(func)
+        protected abstract char Symbol { get; }
+
+        protected FloatArithmetic(Function func, AstToken rhs, AstToken lhs) : base(func)
         {
             Lhs = lhs;
             Rhs = rhs;
             Lhs.HintType(ref Types.FLOAT.GetContainer());
-            Rhs.HintType(ref Types.FLOAT.GetContainer());
         }
 
         public override ref TypeContainer GetTypeContainer()
@@ -23,80 +24,66 @@ namespace Decompiler.Ast
             return ref Types.FLOAT.GetContainer();
         }
 
+        public bool IsComplexOperand(AstToken operand)
+        {
+            if (operand is not FloatArithmetic)
+                return false;
+            else
+                return this.GetType() != operand.GetType();
+        }
+
         public override string ToString()
         {
-            return Lhs.ToString() + " + " + Rhs.ToString();
+            string lhs = IsComplexOperand(Lhs) ? "(" + Lhs.ToString() + ")" : Lhs.ToString();
+            string rhs = IsComplexOperand(Rhs) ? "(" + Rhs.ToString() + ")" : Rhs.ToString();
+
+            return $"{lhs} {Symbol} {rhs}";
         }
     }
 
-    internal class FloatDiv : AstToken
+    internal class FloatAdd : FloatArithmetic
     {
-        AstToken Lhs;
-        AstToken Rhs;
-        public FloatDiv(Function func, AstToken rhs, AstToken lhs) : base(func)
+        public FloatAdd(Function func, AstToken rhs, AstToken lhs) : base(func, rhs, lhs)
         {
-            Lhs = lhs;
-            Rhs = rhs;
-            Lhs.HintType(ref Types.FLOAT.GetContainer());
-            Rhs.HintType(ref Types.FLOAT.GetContainer());
         }
 
-        public override ref TypeContainer GetTypeContainer()
-        {
-            return ref Types.FLOAT.GetContainer();
-        }
-
-        public override string ToString()
-        {
-            return Lhs.ToString() + " / " + Rhs.ToString();
-        }
+        protected override char Symbol => '+';
     }
 
-    internal class FloatMod : AstToken
+    internal class FloatSub : FloatArithmetic
     {
-        AstToken Lhs;
-        AstToken Rhs;
-        public FloatMod(Function func, AstToken rhs, AstToken lhs) : base(func)
+        public FloatSub(Function func, AstToken rhs, AstToken lhs) : base(func, rhs, lhs)
         {
-            Lhs = lhs;
-            Rhs = rhs;
-            Lhs.HintType(ref Types.FLOAT.GetContainer());
-            Rhs.HintType(ref Types.FLOAT.GetContainer());
         }
 
-        public override ref TypeContainer GetTypeContainer()
-        {
-            return ref Types.FLOAT.GetContainer();
-        }
-
-        public override string ToString()
-        {
-            return Lhs.ToString() + " % " + Rhs.ToString();
-        }
+        protected override char Symbol => '-';
     }
 
-    internal class FloatMul : AstToken
+    internal class FloatMul : FloatArithmetic
     {
-        AstToken Lhs;
-        AstToken Rhs;
-
-        public FloatMul(Function func, AstToken rhs, AstToken lhs) : base(func)
+        public FloatMul(Function func, AstToken rhs, AstToken lhs) : base(func, rhs, lhs)
         {
-            Lhs = lhs;
-            Rhs = rhs;
-            Lhs.HintType(ref Types.FLOAT.GetContainer());
-            Rhs.HintType(ref Types.FLOAT.GetContainer());
         }
 
-        public override ref TypeContainer GetTypeContainer()
+        protected override char Symbol => '*';
+    }
+
+    internal class FloatDiv : FloatArithmetic
+    {
+        public FloatDiv(Function func, AstToken rhs, AstToken lhs) : base(func, rhs, lhs)
         {
-            return ref Types.FLOAT.GetContainer();
         }
 
-        public override string ToString()
+        protected override char Symbol => '/';
+    }
+
+    internal class FloatMod : FloatArithmetic
+    {
+        public FloatMod(Function func, AstToken rhs, AstToken lhs) : base(func, rhs, lhs)
         {
-            return Lhs.ToString() + " * " + Rhs.ToString();
         }
+
+        protected override char Symbol => '%';
     }
 
     internal class FloatNeg : AstToken
@@ -115,30 +102,10 @@ namespace Decompiler.Ast
 
         public override string ToString()
         {
-            return "-" + value.ToString();
-        }
-    }
-
-    internal class FloatSub : AstToken
-    {
-        AstToken Lhs;
-        AstToken Rhs;
-        public FloatSub(Function func, AstToken rhs, AstToken lhs) : base(func)
-        {
-            Lhs = lhs;
-            Rhs = rhs;
-            Lhs.HintType(ref Types.FLOAT.GetContainer());
-            Rhs.HintType(ref Types.FLOAT.GetContainer());
-        }
-
-        public override ref TypeContainer GetTypeContainer()
-        {
-            return ref Types.FLOAT.GetContainer();
-        }
-
-        public override string ToString()
-        {
-            return Lhs.ToString() + " - " + Rhs.ToString();
+            if (value is FloatArithmetic)
+                return $"-(${value})";
+            else
+                return $"-{value}";
         }
     }
 }

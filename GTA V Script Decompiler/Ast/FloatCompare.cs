@@ -6,17 +6,20 @@ using System.Threading.Tasks;
 
 namespace Decompiler.Ast
 {
-    internal class FloatEq : AstToken
+    internal abstract class FloatCompare : AstToken
     {
         AstToken Lhs;
         AstToken Rhs;
-        public FloatEq(Function func, AstToken rhs, AstToken lhs) : base(func)
+
+        protected FloatCompare(Function func, AstToken rhs, AstToken lhs) : base(func)
         {
             Lhs = lhs;
             Rhs = rhs;
             Lhs.HintType(ref Types.FLOAT.GetContainer());
             Rhs.HintType(ref Types.FLOAT.GetContainer());
         }
+
+        protected abstract string Operator { get; }
 
         public override ref TypeContainer GetTypeContainer()
         {
@@ -25,123 +28,61 @@ namespace Decompiler.Ast
 
         public override string ToString()
         {
-            return Lhs.ToString() + " == " + Rhs.ToString();
+            return $"{Lhs} {Operator} {Rhs}";
         }
     }
 
-    internal class FloatNe : AstToken
+    internal class FloatEq : FloatCompare
     {
-        AstToken Lhs;
-        AstToken Rhs;
-        public FloatNe(Function func, AstToken rhs, AstToken lhs) : base(func)
+        public FloatEq(Function func, AstToken rhs, AstToken lhs) : base(func, rhs, lhs)
         {
-            Lhs = lhs;
-            Rhs = rhs;
-            Lhs.HintType(ref Types.FLOAT.GetContainer());
-            Rhs.HintType(ref Types.FLOAT.GetContainer());
         }
 
-        public override ref TypeContainer GetTypeContainer()
-        {
-            return ref Types.BOOL.GetContainer();
-        }
-
-        public override string ToString()
-        {
-            return Lhs.ToString() + " != " + Rhs.ToString();
-        }
+        protected override string Operator => "==";
     }
 
-    internal class FloatLt : AstToken
+    internal class FloatNe : FloatCompare
     {
-        AstToken Lhs;
-        AstToken Rhs;
-        public FloatLt(Function func, AstToken rhs, AstToken lhs) : base(func)
+        public FloatNe(Function func, AstToken rhs, AstToken lhs) : base(func, rhs, lhs)
         {
-            Lhs = lhs;
-            Rhs = rhs;
-            Lhs.HintType(ref Types.FLOAT.GetContainer());
-            Rhs.HintType(ref Types.FLOAT.GetContainer());
         }
 
-        public override ref TypeContainer GetTypeContainer()
-        {
-            return ref Types.BOOL.GetContainer();
-        }
-
-        public override string ToString()
-        {
-            return Lhs.ToString() + " < " + Rhs.ToString();
-        }
+        protected override string Operator => "!=";
     }
 
-    internal class FloatLe : AstToken
+    internal class FloatLt : FloatCompare
     {
-        AstToken Lhs;
-        AstToken Rhs;
-
-        public FloatLe(Function func, AstToken rhs, AstToken lhs) : base(func)
+        public FloatLt(Function func, AstToken rhs, AstToken lhs) : base(func, rhs, lhs)
         {
-            Lhs = lhs;
-            Rhs = rhs;
-            Lhs.HintType(ref Types.FLOAT.GetContainer());
-            Rhs.HintType(ref Types.FLOAT.GetContainer());
         }
 
-        public override ref TypeContainer GetTypeContainer()
-        {
-            return ref Types.BOOL.GetContainer();
-        }
-
-        public override string ToString()
-        {
-            return Lhs.ToString() + " <= " + Rhs.ToString();
-        }
+        protected override string Operator => "<";
     }
 
-    internal class FloatGt : AstToken
+    internal class FloatLe : FloatCompare
     {
-        AstToken Lhs;
-        AstToken Rhs;
-        public FloatGt(Function func, AstToken rhs, AstToken lhs) : base(func)
+        public FloatLe(Function func, AstToken rhs, AstToken lhs) : base(func, rhs, lhs)
         {
-            Lhs = lhs;
-            Rhs = rhs;
-            Lhs.HintType(ref Types.FLOAT.GetContainer());
-            Rhs.HintType(ref Types.FLOAT.GetContainer());
         }
 
-        public override ref TypeContainer GetTypeContainer()
-        {
-            return ref Types.BOOL.GetContainer();
-        }
-
-        public override string ToString()
-        {
-            return Lhs.ToString() + " > " + Rhs.ToString();
-        }
+        protected override string Operator => "<=";
     }
 
-    internal class FloatGe : AstToken
+    internal class FloatGt : FloatCompare
     {
-        AstToken Lhs;
-        AstToken Rhs;
-        public FloatGe(Function func, AstToken rhs, AstToken lhs) : base(func)
+        public FloatGt(Function func, AstToken rhs, AstToken lhs) : base(func, rhs, lhs)
         {
-            Lhs = lhs;
-            Rhs = rhs;
-            Lhs.HintType(ref Types.FLOAT.GetContainer());
-            Rhs.HintType(ref Types.FLOAT.GetContainer());
         }
 
-        public override ref TypeContainer GetTypeContainer()
+        protected override string Operator => ">";
+    }
+
+    internal class FloatGe : FloatCompare
+    {
+        public FloatGe(Function func, AstToken rhs, AstToken lhs) : base(func, rhs, lhs)
         {
-            return ref Types.BOOL.GetContainer();
         }
 
-        public override string ToString()
-        {
-            return Lhs.ToString() + " > " + Rhs.ToString();
-        }
+        protected override string Operator => ">=";
     }
 }

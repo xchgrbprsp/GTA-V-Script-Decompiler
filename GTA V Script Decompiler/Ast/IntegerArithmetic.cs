@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 
 namespace Decompiler.Ast
 {
-    internal class IntegerAdd : AstToken
+    internal abstract class IntegerArithmetic : AstToken
     {
         AstToken Lhs;
         AstToken Rhs;
-        public IntegerAdd(Function func, AstToken rhs, AstToken lhs) : base(func)
+        protected abstract char Symbol { get; }
+
+        protected IntegerArithmetic(Function func, AstToken rhs, AstToken lhs) : base(func)
         {
             Lhs = lhs;
             Rhs = rhs;
@@ -22,76 +24,66 @@ namespace Decompiler.Ast
             return ref Types.INT.GetContainer();
         }
 
+        public bool IsComplexOperand(AstToken operand)
+        {
+            if (operand is not IntegerArithmetic)
+                return false;
+            else
+                return this.GetType() != operand.GetType();
+        }
+
         public override string ToString()
         {
-            return Lhs.ToString() + " + " + Rhs.ToString();
+            string lhs = IsComplexOperand(Lhs) ? "(" + Lhs.ToString() + ")" : Lhs.ToString();
+            string rhs = IsComplexOperand(Rhs) ? "(" + Rhs.ToString() + ")" : Rhs.ToString();
+
+            return $"{lhs} {Symbol} {rhs}";
         }
     }
 
-    internal class IntegerDiv : AstToken
+    internal class IntegerAdd : IntegerArithmetic
     {
-        AstToken Lhs;
-        AstToken Rhs;
-        public IntegerDiv(Function func, AstToken rhs, AstToken lhs) : base(func)
+        public IntegerAdd(Function func, AstToken rhs, AstToken lhs) : base(func, rhs, lhs)
         {
-            Lhs = lhs;
-            Rhs = rhs;
-            Lhs.HintType(ref Types.INT.GetContainer());
         }
 
-        public override ref TypeContainer GetTypeContainer()
-        {
-            return ref Types.INT.GetContainer();
-        }
-
-        public override string ToString()
-        {
-            return Lhs.ToString() + " / " + Rhs.ToString();
-        }
+        protected override char Symbol => '+';
     }
 
-    internal class IntegerMod : AstToken
+    internal class IntegerSub : IntegerArithmetic
     {
-        AstToken Lhs;
-        AstToken Rhs;
-        public IntegerMod(Function func, AstToken rhs, AstToken lhs) : base(func)
+        public IntegerSub(Function func, AstToken rhs, AstToken lhs) : base(func, rhs, lhs)
         {
-            Lhs = lhs;
-            Rhs = rhs;
-            Lhs.HintType(ref Types.INT.GetContainer());
         }
 
-        public override ref TypeContainer GetTypeContainer()
-        {
-            return ref Types.INT.GetContainer();
-        }
-
-        public override string ToString()
-        {
-            return Lhs.ToString() + " % " + Rhs.ToString();
-        }
+        protected override char Symbol => '-';
     }
 
-    internal class IntegerMul : AstToken
+    internal class IntegerMul : IntegerArithmetic
     {
-        AstToken Lhs;
-        AstToken Rhs;
-        public IntegerMul(Function func, AstToken rhs, AstToken lhs) : base(func)
+        public IntegerMul(Function func, AstToken rhs, AstToken lhs) : base(func, rhs, lhs)
         {
-            Lhs = lhs;
-            Rhs = rhs;
-            Lhs.HintType(ref Types.INT.GetContainer());
         }
 
-        public override ref TypeContainer GetTypeContainer()
+        protected override char Symbol => '*';
+    }
+
+    internal class IntegerDiv : IntegerArithmetic
+    {
+        public IntegerDiv(Function func, AstToken rhs, AstToken lhs) : base(func, rhs, lhs)
         {
-            return ref Types.INT.GetContainer();
         }
 
-        public override string ToString()
+        protected override char Symbol => '/';
+    }
+
+    internal class IntegerMod : IntegerArithmetic
+    {
+        public IntegerMod(Function func, AstToken rhs, AstToken lhs) : base(func, rhs, lhs)
         {
-            return Lhs.ToString() + " * " + Rhs.ToString();
         }
+
+        protected override char Symbol => '%';
     }
 
     internal class IntegerNeg : AstToken
@@ -110,7 +102,10 @@ namespace Decompiler.Ast
 
         public override string ToString()
         {
-            return "-" + value.ToString();
+            if (value is IntegerArithmetic)
+                return $"-(${value})";
+            else
+                return $"-{value}";
         }
     }
 
@@ -130,29 +125,10 @@ namespace Decompiler.Ast
 
         public override string ToString()
         {
-            return "!" + value.ToString();
-        }
-    }
-
-    internal class IntegerSub : AstToken
-    {
-        AstToken Lhs;
-        AstToken Rhs;
-        public IntegerSub(Function func, AstToken rhs, AstToken lhs) : base(func)
-        {
-            Lhs = lhs;
-            Rhs = rhs;
-            Lhs.HintType(ref Types.INT.GetContainer());
-        }
-
-        public override ref TypeContainer GetTypeContainer()
-        {
-            return ref Types.INT.GetContainer();
-        }
-
-        public override string ToString()
-        {
-            return Lhs.ToString() + " - " + Rhs.ToString();
+            if (value is IntegerAnd || value is IntegerOr)
+                return $"!(${value})";
+            else
+                return $"!{value}";
         }
     }
 }

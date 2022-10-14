@@ -6,14 +6,18 @@ using System.Threading.Tasks;
 
 namespace Decompiler.Ast
 {
-    internal class VectorAdd : AstToken
+    internal abstract class VectorArithmetic : AstToken
     {
         AstToken Lhs;
         AstToken Rhs;
-        public VectorAdd(Function func, AstToken rhs, AstToken lhs) : base(func)
+        protected abstract char Symbol { get; }
+
+        protected VectorArithmetic(Function func, AstToken rhs, AstToken lhs) : base(func)
         {
             Lhs = lhs;
             Rhs = rhs;
+            Lhs.HintType(ref Types.VEC3.GetContainer());
+            Rhs.HintType(ref Types.VEC3.GetContainer());
         }
 
         public override ref TypeContainer GetTypeContainer()
@@ -26,62 +30,66 @@ namespace Decompiler.Ast
             return 3;
         }
 
+        public bool IsComplexOperand(AstToken operand)
+        {
+            if (operand is not VectorArithmetic)
+                return false;
+            else
+                return this.GetType() != operand.GetType();
+        }
+
         public override string ToString()
         {
-            return Lhs.ToString() + " + " + Rhs.ToString();
+            string lhs = IsComplexOperand(Lhs) ? "(" + Lhs.ToString() + ")" : Lhs.ToString();
+            string rhs = IsComplexOperand(Rhs) ? "(" + Rhs.ToString() + ")" : Rhs.ToString();
+
+            return $"{lhs} {Symbol} {rhs}";
         }
     }
 
-    internal class VectorDiv : AstToken
+    internal class VectorAdd : VectorArithmetic
     {
-        AstToken Lhs;
-        AstToken Rhs;
-        public VectorDiv(Function func, AstToken rhs, AstToken lhs) : base(func)
+        public VectorAdd(Function func, AstToken rhs, AstToken lhs) : base(func, rhs, lhs)
         {
-            Lhs = lhs;
-            Rhs = rhs;
         }
 
-        public override ref TypeContainer GetTypeContainer()
-        {
-            return ref Types.VEC3.GetContainer();
-        }
-
-        public override int GetStackCount()
-        {
-            return 3;
-        }
-
-        public override string ToString()
-        {
-            return Lhs.ToString() + " / " + Rhs.ToString();
-        }
+        protected override char Symbol => '+';
     }
 
-    internal class VectorMul : AstToken
+    internal class VectorSub : VectorArithmetic
     {
-        AstToken Lhs;
-        AstToken Rhs;
-        public VectorMul(Function func, AstToken rhs, AstToken lhs) : base(func)
+        public VectorSub(Function func, AstToken rhs, AstToken lhs) : base(func, rhs, lhs)
         {
-            Lhs = lhs;
-            Rhs = rhs;
         }
 
-        public override ref TypeContainer GetTypeContainer()
+        protected override char Symbol => '-';
+    }
+
+    internal class VectorMul : VectorArithmetic
+    {
+        public VectorMul(Function func, AstToken rhs, AstToken lhs) : base(func, rhs, lhs)
         {
-            return ref Types.VEC3.GetContainer();
         }
 
-        public override int GetStackCount()
+        protected override char Symbol => '*';
+    }
+
+    internal class VectorDiv : VectorArithmetic
+    {
+        public VectorDiv(Function func, AstToken rhs, AstToken lhs) : base(func, rhs, lhs)
         {
-            return 3;
         }
 
-        public override string ToString()
+        protected override char Symbol => '/';
+    }
+
+    internal class VectorMod : VectorArithmetic
+    {
+        public VectorMod(Function func, AstToken rhs, AstToken lhs) : base(func, rhs, lhs)
         {
-            return Lhs.ToString() + " * " + Rhs.ToString();
         }
+
+        protected override char Symbol => '%';
     }
 
     internal class VectorNeg : AstToken
@@ -90,6 +98,7 @@ namespace Decompiler.Ast
         public VectorNeg(Function func, AstToken value) : base(func)
         {
             this.value = value;
+            this.value.HintType(ref Types.INT.GetContainer());
         }
 
         public override ref TypeContainer GetTypeContainer()
@@ -104,33 +113,10 @@ namespace Decompiler.Ast
 
         public override string ToString()
         {
-            return "-" + value.ToString();
-        }
-    }
-
-    internal class VectorSub : AstToken
-    {
-        AstToken Lhs;
-        AstToken Rhs;
-        public VectorSub(Function func, AstToken rhs, AstToken lhs) : base(func)
-        {
-            Lhs = lhs;
-            Rhs = rhs;
-        }
-
-        public override ref TypeContainer GetTypeContainer()
-        {
-            return ref Types.VEC3.GetContainer();
-        }
-
-        public override int GetStackCount()
-        {
-            return 3;
-        }
-
-        public override string ToString()
-        {
-            return Lhs.ToString() + " - " + Rhs.ToString();
+            if (value is VectorArithmetic)
+                return $"-(${value})";
+            else
+                return $"-{value}";
         }
     }
 }

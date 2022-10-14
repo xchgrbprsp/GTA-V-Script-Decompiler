@@ -6,17 +6,20 @@ using System.Threading.Tasks;
 
 namespace Decompiler.Ast
 {
-    internal class IntegerEq : AstToken
+    internal abstract class IntegerCompare : AstToken
     {
         AstToken Lhs;
         AstToken Rhs;
-        public IntegerEq(Function func, AstToken rhs, AstToken lhs) : base(func)
+
+        protected IntegerCompare(Function func, AstToken rhs, AstToken lhs) : base(func)
         {
             Lhs = lhs;
             Rhs = rhs;
             Lhs.HintType(ref Rhs.GetTypeContainer());
         }
 
+        protected abstract string Operator { get; }
+
         public override ref TypeContainer GetTypeContainer()
         {
             return ref Types.BOOL.GetContainer();
@@ -24,113 +27,61 @@ namespace Decompiler.Ast
 
         public override string ToString()
         {
-            return Lhs.ToString() + " == " + Rhs.ToString();
+            return $"{Lhs} {Operator} {Rhs}";
         }
     }
 
-    internal class IntegerNe : AstToken
+    internal class IntegerEq : IntegerCompare
     {
-        AstToken Lhs;
-        AstToken Rhs;
-        public IntegerNe(Function func, AstToken rhs, AstToken lhs) : base(func)
+        public IntegerEq(Function func, AstToken rhs, AstToken lhs) : base(func, rhs, lhs)
         {
-            Lhs = lhs;
-            Rhs = rhs;
-            Lhs.HintType(ref Rhs.GetTypeContainer());
         }
 
-        public override ref TypeContainer GetTypeContainer()
-        {
-            return ref Types.BOOL.GetContainer();
-        }
-
-        public override string ToString()
-        {
-            return Lhs.ToString() + " != " + Rhs.ToString();
-        }
+        protected override string Operator => "==";
     }
 
-    internal class IntegerLt : AstToken
+    internal class IntegerNe : IntegerCompare
     {
-        AstToken Lhs;
-        AstToken Rhs;
-        public IntegerLt(Function func, AstToken rhs, AstToken lhs) : base(func)
+        public IntegerNe(Function func, AstToken rhs, AstToken lhs) : base(func, rhs, lhs)
         {
-            Lhs = lhs;
-            Rhs = rhs;
         }
 
-        public override ref TypeContainer GetTypeContainer()
-        {
-            return ref Types.BOOL.GetContainer();
-        }
-
-        public override string ToString()
-        {
-            return Lhs.ToString() + " < " + Rhs.ToString();
-        }
+        protected override string Operator => "!=";
     }
 
-    internal class IntegerLe : AstToken
+    internal class IntegerLt : IntegerCompare
     {
-        AstToken Lhs;
-        AstToken Rhs;
-        public IntegerLe(Function func, AstToken rhs, AstToken lhs) : base(func)
+        public IntegerLt(Function func, AstToken rhs, AstToken lhs) : base(func, rhs, lhs)
         {
-            Lhs = lhs;
-            Rhs = rhs;
         }
 
-        public override ref TypeContainer GetTypeContainer()
-        {
-            return ref Types.BOOL.GetContainer();
-        }
-
-        public override string ToString()
-        {
-            return Lhs.ToString() + " <= " + Rhs.ToString();
-        }
+        protected override string Operator => "<";
     }
 
-    internal class IntegerGt : AstToken
+    internal class IntegerLe : IntegerCompare
     {
-        AstToken Lhs;
-        AstToken Rhs;
-        public IntegerGt(Function func, AstToken rhs, AstToken lhs) : base(func)
+        public IntegerLe(Function func, AstToken rhs, AstToken lhs) : base(func, rhs, lhs)
         {
-            Lhs = lhs;
-            Rhs = rhs;
         }
 
-        public override ref TypeContainer GetTypeContainer()
-        {
-            return ref Types.BOOL.GetContainer();
-        }
-
-        public override string ToString()
-        {
-            return Lhs.ToString() + " > " + Rhs.ToString();
-        }
+        protected override string Operator => "<=";
     }
 
-    internal class IntegerGe : AstToken
+    internal class IntegerGt : IntegerCompare
     {
-        AstToken Lhs;
-        AstToken Rhs;
-        public IntegerGe(Function func, AstToken rhs, AstToken lhs) : base(func)
+        public IntegerGt(Function func, AstToken rhs, AstToken lhs) : base(func, rhs, lhs)
         {
-            Lhs = lhs;
-            Rhs = rhs;
         }
 
-        public override ref TypeContainer GetTypeContainer()
+        protected override string Operator => ">";
+    }
+
+    internal class IntegerGe : IntegerCompare
+    {
+        public IntegerGe(Function func, AstToken rhs, AstToken lhs) : base(func, rhs, lhs)
         {
-            return ref Types.BOOL.GetContainer();
         }
 
-        public override string ToString()
-        {
-            return Lhs.ToString() + " > " + Rhs.ToString();
-        }
+        protected override string Operator => ">=";
     }
 }

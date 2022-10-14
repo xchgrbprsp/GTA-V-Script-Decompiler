@@ -12,6 +12,7 @@ namespace Decompiler
         public bool IsBitset;
         string[] Keys;
         int[] Values;
+        Dictionary<int, string> CachedValues = new();
 
         public ScriptEnum(Type type, bool isBitset = false)
         {
@@ -19,6 +20,10 @@ namespace Decompiler
             IsBitset = isBitset;
             Keys = Enum.GetNames(Type).ToArray();
             Values = Enum.GetValues(Type).Cast<int>().ToArray();
+
+            if (!isBitset)
+                for (int i = 0; i < Keys.Length; i++)
+                    CachedValues[Values[i]] = Keys[i];
         }
 
         public bool TryGetValue(int idx, out string val)
@@ -56,16 +61,7 @@ namespace Decompiler
             }
             else
             {
-                for (int i = 0; i < Values.Length; i++)
-                {
-                    if (Values[i] == idx)
-                    {
-                        val = Keys[i];
-                        return true;
-                    }
-                }
-
-                return false;
+                return CachedValues.TryGetValue(idx, out val);
             }
         }
     }
