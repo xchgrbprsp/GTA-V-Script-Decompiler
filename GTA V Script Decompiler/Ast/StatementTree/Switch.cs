@@ -11,9 +11,9 @@ namespace Decompiler.Ast.StatementTree
 
         public Switch(Function function, Tree parent, int offset, Dictionary<int, List<AstToken>> cases, int breakOffset, AstToken switchVal) : base(function, parent, offset)
         {
-            this.Cases = cases;
-            this.BreakOffset = breakOffset;
-            this.SwitchVal = switchVal;
+            Cases = cases;
+            BreakOffset = breakOffset;
+            SwitchVal = switchVal;
 
             foreach (var p in cases)
             {
@@ -27,14 +27,8 @@ namespace Decompiler.Ast.StatementTree
         }
 
         /// <returns>Isn't going to be called anyway</returns>
-        public override bool IsTreeEnd()
-        {
-            return true;
-        }
+        public override bool IsTreeEnd() => true;
 
-        public override string ToString()
-        {
-            return $"switch ({SwitchVal}){Environment.NewLine}{{{Environment.NewLine}{base.ToString()}}}";
-        }
+        public override string ToString() => $"switch ({SwitchVal}){Environment.NewLine}{{{Environment.NewLine}{base.ToString()}}}";
     }
 }

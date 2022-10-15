@@ -2,8 +2,8 @@
 {
     internal abstract class VectorArithmetic : AstToken
     {
-        readonly AstToken Lhs;
-        readonly AstToken Rhs;
+        private readonly AstToken Lhs;
+        private readonly AstToken Rhs;
         protected abstract char Symbol { get; }
 
         protected VectorArithmetic(Function func, AstToken rhs, AstToken lhs) : base(func)
@@ -14,20 +14,11 @@
             Rhs.HintType(ref Types.VEC3.GetContainer());
         }
 
-        public override ref TypeContainer GetTypeContainer()
-        {
-            return ref Types.VEC3.GetContainer();
-        }
+        public override ref TypeContainer GetTypeContainer() => ref Types.VEC3.GetContainer();
 
-        public override int GetStackCount()
-        {
-            return 3;
-        }
+        public override int GetStackCount() => 3;
 
-        public bool IsComplexOperand(AstToken operand)
-        {
-            return operand is not VectorArithmetic ? false : this.GetType() != operand.GetType();
-        }
+        public bool IsComplexOperand(AstToken operand) => operand is VectorArithmetic && GetType() != operand.GetType();
 
         public override string ToString()
         {
@@ -76,26 +67,17 @@
 
     internal class VectorNeg : AstToken
     {
-        readonly AstToken value;
+        private readonly AstToken value;
         public VectorNeg(Function func, AstToken value) : base(func)
         {
             this.value = value;
             this.value.HintType(ref Types.INT.GetContainer());
         }
 
-        public override ref TypeContainer GetTypeContainer()
-        {
-            return ref Types.VEC3.GetContainer();
-        }
+        public override ref TypeContainer GetTypeContainer() => ref Types.VEC3.GetContainer();
 
-        public override int GetStackCount()
-        {
-            return 3;
-        }
+        public override int GetStackCount() => 3;
 
-        public override string ToString()
-        {
-            return value is VectorArithmetic ? $"-({value})" : $"-{value}";
-        }
+        public override string ToString() => value is VectorArithmetic ? $"-({value})" : $"-{value}";
     }
 }

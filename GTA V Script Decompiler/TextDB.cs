@@ -30,7 +30,7 @@ namespace Decompiler
             }
         }
 
-        void LoadFromStream(IO.Reader reader)
+        private void LoadFromStream(IO.Reader reader)
         {
             List<KeyValuePair<uint, uint>> offsets = new();
 

@@ -43,10 +43,7 @@
                 Is_Array = true;
         }
 
-        public void SetCalled()
-        {
-            Is_Called = true;
-        }
+        public void SetCalled() => Is_Called = true;
 
         public void SetStruct()
         {
@@ -55,10 +52,7 @@
             IsStruct = true;
         }
 
-        public void SetNotUsed()
-        {
-            Is_Used = false;
-        }
+        public void SetNotUsed() => Is_Used = false;
 
         internal void SetAutoName(AutoName autoName)
         {
@@ -66,14 +60,8 @@
                 AutoName = autoName;
         }
 
-        public void HintType(ref TypeContainer container)
-        {
-            DataType.HintType(ref container);
-        }
+        public void HintType(ref TypeContainer container) => DataType.HintType(ref container);
 
-        public ref TypeContainer GetTypeContainer()
-        {
-            return ref DataType;
-        }
+        public ref TypeContainer GetTypeContainer() => ref DataType;
     }
 }

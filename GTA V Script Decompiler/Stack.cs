@@ -6,8 +6,8 @@ namespace Decompiler
 {
     public class Stack
     {
-        readonly List<AstToken> _stack;
-        readonly Function Function;
+        private readonly List<AstToken> _stack;
+        private readonly Function Function;
 
         public Stack(Function func)
         {
@@ -15,15 +15,9 @@ namespace Decompiler
             Function = func;
         }
 
-        public void Dispose()
-        {
-            _stack.Clear();
-        }
+        public void Dispose() => _stack.Clear();
 
-        internal void Push(AstToken token)
-        {
-            _stack.Add(token);
-        }
+        internal void Push(AstToken token) => _stack.Add(token);
 
         internal AstToken Pop(bool allowMulti = false)
         {
@@ -39,15 +33,9 @@ namespace Decompiler
             return val.GetStackCount() != 1 && !allowMulti ? throw new InvalidOperationException() : val;
         }
 
-        internal AstToken Peek()
-        {
-            return _stack.Count == 0 ? new AstToken(Function) : _stack[^1];
-        }
+        internal AstToken Peek() => _stack.Count == 0 ? new AstToken(Function) : _stack[^1];
 
-        internal AstToken PeekIdx(int index)
-        {
-            return _stack[^(index + 1)];
-        }
+        internal AstToken PeekIdx(int index) => _stack[^(index + 1)];
 
         internal AstToken PopVector()
         {
@@ -114,10 +102,7 @@ namespace Decompiler
         /// <param name="immediate"></param>
         /// <returns></returns>
         /// <remarks>TODO: Move this somewhere else</remarks>
-        public static string GetArraySizeCmt(uint immediate)
-        {
-            return !Properties.Settings.Default.ShowArraySize ? "" : immediate == 1 ? "" : " /*" + immediate.ToString() + "*/";
-        }
+        public static string GetArraySizeCmt(uint immediate) => !Properties.Settings.Default.ShowArraySize ? "" : immediate == 1 ? "" : " /*" + immediate.ToString() + "*/";
 
         #endregion
     }

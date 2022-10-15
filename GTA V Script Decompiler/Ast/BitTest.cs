@@ -13,14 +13,8 @@
             Value.HintType(ref Types.INT.GetContainer());
             Bit.HintType(ref Types.INT.GetContainer());
         }
-        public override ref TypeContainer GetTypeContainer()
-        {
-            return ref Types.BOOL.GetContainer();
-        }
+        public override ref TypeContainer GetTypeContainer() => ref Types.BOOL.GetContainer();
 
-        public override string ToString()
-        {
-            return "IS_BIT_SET(" + Value.ToString() + ", " + Bit.ToString() + ")";
-        }
+        public override string ToString() => "IS_BIT_SET(" + Value.ToString() + ", " + Bit.ToString() + ")";
     }
 }

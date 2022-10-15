@@ -9,15 +9,9 @@ namespace Decompiler.IO
         {
         }
 
-        public void Advance(int size = 4)
-        {
-            base.BaseStream.Position += size;
-        }
+        public void Advance(int size = 4) => base.BaseStream.Position += size;
 
-        public int ReadPointer()
-        {
-            return ReadInt32() & 0xFFFFFF;
-        }
+        public int ReadPointer() => ReadInt32() & 0xFFFFFF;
 
         public override string ReadString()
         {

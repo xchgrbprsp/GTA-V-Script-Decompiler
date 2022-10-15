@@ -2,7 +2,7 @@
 
 namespace Decompiler
 {
-	static class Utils
+	internal static class Utils
 	{
 		public static uint Joaat(string str)
 		{

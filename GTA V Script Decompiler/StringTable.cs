@@ -56,10 +56,7 @@ addString:
             }
         }
 
-        public bool StringExists(int index)
-        {
-            return index >= 0 && index < _table.Length;
-        }
+        public bool StringExists(int index) => index >= 0 && index < _table.Length;
 
         public string this[int index]
         {
@@ -103,19 +100,10 @@ addString:
             }
         }
 
-        public IEnumerator<KeyValuePair<int, string>> GetEnumerator()
-        {
-            return _dictionary.GetEnumerator();
-        }
+        public IEnumerator<KeyValuePair<int, string>> GetEnumerator() => _dictionary.GetEnumerator();
 
-        public int[] Keys
-        {
-            get { return _dictionary.Keys.ToArray(); }
-        }
-        public string[] Values
-        {
-            get { return _dictionary.Values.ToArray(); }
-        }
+        public int[] Keys => _dictionary.Keys.ToArray();
+        public string[] Values => _dictionary.Values.ToArray();
     }
 }
 

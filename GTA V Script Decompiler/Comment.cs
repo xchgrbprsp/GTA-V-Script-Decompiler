@@ -13,15 +13,9 @@ namespace Decompiler
             hashCode = text.GetHashCode();
         }
 
-        public override int GetHashCode()
-        {
-            return hashCode;
-        }
+        public override int GetHashCode() => hashCode;
 
-        public override string ToString()
-        {
-            return text;
-        }
+        public override string ToString() => text;
     }
 
     public class Comments : List<Comment>

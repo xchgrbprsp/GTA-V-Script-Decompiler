@@ -13,19 +13,13 @@ namespace Decompiler.Ast
             Index.HintType(ref Types.INT.GetContainer());
         }
 
-        public String(Function func, string @string) : base(func)
-        {
-            _string = @string;
-        }
+        public String(Function func, string @string) : base(func) => _string = @string;
 
-        public override ref TypeContainer GetTypeContainer()
-        {
-            return ref Types.PSTRING.GetContainer();
-        }
+        public override ref TypeContainer GetTypeContainer() => ref Types.PSTRING.GetContainer();
 
         public string GetString()
         {
-            return _string ??(Index is ConstantInt
+            return _string ?? (Index is ConstantInt
                 ? function.ScriptFile.StringTable[(int)(Index as ConstantInt).GetValue()]
                 : throw new InvalidOperationException("Index is not constant"));
         }

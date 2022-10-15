@@ -7,7 +7,7 @@ namespace Decompiler
 {
 	public class Hashes
 	{
-		readonly Dictionary<int, string> hashes;
+		private readonly Dictionary<int, string> hashes;
 
 		public Hashes()
 		{
@@ -85,9 +85,6 @@ namespace Decompiler
 				: Program.getIntType == Program.IntType._hex ? "0x" + value.ToString("X") : throw new IndexOutOfRangeException();
 		}
 
-		public bool IsKnownHash(int value)
-		{
-			return hashes.ContainsKey(value);
-		}
+		public bool IsKnownHash(int value) => hashes.ContainsKey(value);
 	}
 }

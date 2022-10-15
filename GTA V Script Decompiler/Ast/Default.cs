@@ -6,9 +6,6 @@
         {
         }
 
-        public override string ToString()
-        {
-            return "default";
-        }
+        public override string ToString() => "default";
     }
 }

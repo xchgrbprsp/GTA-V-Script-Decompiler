@@ -19,8 +19,8 @@ namespace Decompiler
 
     internal class FunctionDB
     {
-        readonly Dictionary<uint, FunctionModEntry> Entries = new();
-        readonly Dictionary<uint, FunctionModEntry> Mk2Entries = new();
+        private readonly Dictionary<uint, FunctionModEntry> Entries = new();
+        private readonly Dictionary<uint, FunctionModEntry> Mk2Entries = new();
 
         public FunctionDB()
         {

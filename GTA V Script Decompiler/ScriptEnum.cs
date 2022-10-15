@@ -8,9 +8,9 @@ namespace Decompiler
     {
         public Type Type;
         public bool IsBitset;
-        readonly string[] Keys;
-        readonly int[] Values;
-        readonly Dictionary<int, string> CachedValues = new();
+        private readonly string[] Keys;
+        private readonly int[] Values;
+        private readonly Dictionary<int, string> CachedValues = new();
 
         public ScriptEnum(Type type, bool isBitset = false)
         {

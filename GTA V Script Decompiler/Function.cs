@@ -27,9 +27,8 @@ namespace Decompiler
 		internal List<Instruction> Instructions;
 
 		internal Dictionary<int, int> InstructionMap;
-		readonly Stack Stack;
-
-		int Offset = 0;
+		private readonly Stack Stack;
+		private int Offset = 0;
 
 		public ScriptFile ScriptFile;
 
@@ -77,7 +76,7 @@ namespace Decompiler
 		/// <remarks>
 		/// DO NOT call this after function decode as things get nopped
 		/// </remarks>
-		uint GetFunctionHash(bool mk2 = false)
+		private uint GetFunctionHash(bool mk2 = false)
 		{
 			StringBuilder sb = new();
 			sb.Append(NumParams);
@@ -143,10 +142,7 @@ namespace Decompiler
 			return Utils.Joaat(sb.ToString());
 		}
 
-		internal void HintReturnType(ref TypeContainer container)
-		{
-			ReturnType.HintType(ref container);
-		}
+		internal void HintReturnType(ref TypeContainer container) => ReturnType.HintType(ref container);
 
 		/// <summary>
 		/// Disposes of the function and returns the function text
@@ -338,7 +334,7 @@ namespace Decompiler
 		/// Check if a jump is jumping out of the function
 		/// if not, then add it to the list of instructions
 		/// </summary>	
-		void IsJumpWithinFunctionBounds()
+		private void IsJumpWithinFunctionBounds()
 		{
 			var cur = Offset;
 			Instruction temp = new(CodeBlock[Offset], GetArray(2), cur);
@@ -360,7 +356,7 @@ namespace Decompiler
 		/// if it is, dont add it (Rockstars way of doing and/or conditionals)
 		/// </summary>
 		/// <remarks>Do we really need this?</remarks>
-		void CheckDupForInstruction()
+		private void CheckDupForInstruction()
 		{
 			//May need refining, but works fine for rockstars code
 			var off = 0;
@@ -389,7 +385,7 @@ Start:
 		/// </summary>
 		/// <param name="items">how many bytes to grab</param>
 		/// <returns>the operands for the instruction</returns>
-		IEnumerable<byte> GetArray(int items)
+		private IEnumerable<byte> GetArray(int items)
 		{
 			var temp = Offset + 1;
 			Offset += items;
@@ -400,7 +396,7 @@ Start:
 		/// <summary>
 		/// Create a switch statement, then set up the rest of the decompiler to handle the rest of the switch statement
 		/// </summary>
-		void HandleSwitch(Ast.StatementTree.Tree tree)
+		private void HandleSwitch(Ast.StatementTree.Tree tree)
 		{
 			Dictionary<int, List<Ast.AstToken>> cases = new();
 			Ast.AstToken case_val;
@@ -649,21 +645,15 @@ Start:
 		/// </summary>
 		/// <param name="offset">the offset in the code</param>
 		/// <param name="instruction">the instruction</param>
-		void AddInstruction(int offset, Instruction instruction)
+		private void AddInstruction(int offset, Instruction instruction)
 		{
 			Instructions.Add(instruction);
 			InstructionMap.Add(offset, Instructions.Count - 1);
 		}
 
-		internal int CodeOffsetToFunctionOffset(int codeOffset)
-		{
-			return InstructionMap[codeOffset];
-		}
+		internal int CodeOffsetToFunctionOffset(int codeOffset) => InstructionMap[codeOffset];
 
-		internal int FunctionOffsetToCodeOffset(int funcOffset)
-		{
-			return (from p in InstructionMap where p.Value == funcOffset select p.Key).First();
-		}
+		internal int FunctionOffsetToCodeOffset(int funcOffset) => (from p in InstructionMap where p.Value == funcOffset select p.Key).First();
 
 		/// <summary>
 		/// Decodes the instruction at the current offset
@@ -838,8 +828,8 @@ Start:
 							tree.Statements.Add(new Ast.Drop(this, dropped));
 						break;
 					case Opcode.NATIVE:
-						var native = new Ast.NativeCall(this, Stack.PopCount(Instructions[tree.Offset].GetNativeParams), this.ScriptFile.X64NativeTable.GetNativeFromIndex(Instructions[tree.Offset].GetNativeIndex),
-							this.ScriptFile.X64NativeTable.GetNativeHashFromIndex(Instructions[tree.Offset].GetNativeIndex), Instructions[tree.Offset].GetNativeReturns);
+						var native = new Ast.NativeCall(this, Stack.PopCount(Instructions[tree.Offset].GetNativeParams), ScriptFile.X64NativeTable.GetNativeFromIndex(Instructions[tree.Offset].GetNativeIndex),
+							ScriptFile.X64NativeTable.GetNativeHashFromIndex(Instructions[tree.Offset].GetNativeIndex), Instructions[tree.Offset].GetNativeReturns);
 						if (native.IsStatement())
 							tree.Statements.Add(native);
 						else

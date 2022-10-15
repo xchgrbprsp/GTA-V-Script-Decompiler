@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace Decompiler
 {
-	static class Program
+	internal static class Program
 	{
 		public static x64NativeFile x64nativefile;
 		public static object ThreadLock;
@@ -20,7 +20,7 @@ namespace Decompiler
 		/// The main entry point for the application.
 		/// </summary>
 		[STAThread]
-		static void Main(string[] args)
+		private static void Main(string[] args)
 		{
 			ThreadLock = new object();
 

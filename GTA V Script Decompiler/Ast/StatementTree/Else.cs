@@ -5,10 +5,7 @@ namespace Decompiler.Ast.StatementTree
     internal class Else : Tree
     {
         public readonly int EndOffset;
-        public Else(Function function, Tree parent, int offset, int endOffset) : base(function, parent, offset)
-        {
-            EndOffset = endOffset;
-        }
+        public Else(Function function, Tree parent, int offset, int endOffset) : base(function, parent, offset) => EndOffset = endOffset;
 
         public override bool IsTreeEnd()
         {

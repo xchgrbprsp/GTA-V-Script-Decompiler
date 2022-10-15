@@ -7,7 +7,7 @@ namespace Decompiler.Patches
 {
     internal class ChangeConstantValuePatch : Patch
     {
-        enum ConstantType : uint
+        private enum ConstantType : uint
         {
             SHORTHAND = 7,
             U8 = 255,
@@ -16,17 +16,14 @@ namespace Decompiler.Patches
             U32 = 4294967295
         }
 
-        ConstantType constantType;
-        uint Value;
+        private ConstantType constantType;
+        private uint Value;
 
         public ChangeConstantValuePatch(Function function) : base(function)
         {
         }
 
-        public override string GetName(int start, int end)
-        {
-            return "Change Constant Push Value";
-        }
+        public override string GetName(int start, int end) => "Change Constant Push Value";
 
         public override byte[] GetPatch(int start, int end)
         {
@@ -58,10 +55,7 @@ namespace Decompiler.Patches
             return bytes.ToArray();
         }
 
-        public override bool ShouldEnablePatch(int start, int end)
-        {
-            return true;
-        }
+        public override bool ShouldEnablePatch(int start, int end) => true;
 
         public override bool ShouldShowPatch(int start, int end)
         {

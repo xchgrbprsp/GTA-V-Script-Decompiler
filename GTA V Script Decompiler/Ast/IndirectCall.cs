@@ -12,14 +12,8 @@ namespace Decompiler.Ast
             Location.HintType(ref Types.FUNCTION.GetContainer());
         }
 
-        public override string GetName()
-        {
-            return Location.ToString();
-        }
+        public override string GetName() => Location.ToString();
 
-        public override int GetReturnCount()
-        {
-            return 0; // we can't really figure this out afaik
-        }
+        public override int GetReturnCount() => 0; // we can't really figure this out afaik
     }
 }

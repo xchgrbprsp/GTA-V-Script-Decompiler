@@ -2,8 +2,8 @@
 {
     internal class IntegerAnd : AstToken
     {
-        readonly AstToken Lhs;
-        readonly AstToken Rhs;
+        private readonly AstToken Lhs;
+        private readonly AstToken Rhs;
         public IntegerAnd(Function func, AstToken rhs, AstToken lhs) : base(func)
         {
             Lhs = lhs;
@@ -11,10 +11,7 @@
             Lhs.HintType(ref Rhs.GetTypeContainer());
         }
 
-        bool IsLogicalOperation()
-        {
-            return Lhs is not ConstantInt && Rhs is not ConstantInt;
-        }
+        private bool IsLogicalOperation() => Lhs is not ConstantInt && Rhs is not ConstantInt;
 
         public override ref TypeContainer GetTypeContainer()
         {
@@ -22,16 +19,13 @@
             return ref type.GetContainer();
         }
 
-        public override string ToString()
-        {
-            return IsLogicalOperation() ? Lhs.ToString() + " && " + Rhs.ToString() : Lhs.ToString() + " & " + Rhs.ToString();
-        }
+        public override string ToString() => IsLogicalOperation() ? Lhs.ToString() + " && " + Rhs.ToString() : Lhs.ToString() + " & " + Rhs.ToString();
     }
 
     internal class IntegerOr : AstToken
     {
-        readonly AstToken Lhs;
-        readonly AstToken Rhs;
+        private readonly AstToken Lhs;
+        private readonly AstToken Rhs;
         public IntegerOr(Function func, AstToken rhs, AstToken lhs) : base(func)
         {
             Lhs = lhs;
@@ -39,10 +33,7 @@
             Lhs.HintType(ref Rhs.GetTypeContainer());
         }
 
-        bool IsLogicalOperation()
-        {
-            return Lhs is not ConstantInt && Rhs is not ConstantInt;
-        }
+        private bool IsLogicalOperation() => Lhs is not ConstantInt && Rhs is not ConstantInt;
 
         public override ref TypeContainer GetTypeContainer()
         {
@@ -50,30 +41,21 @@
             return ref type.GetContainer();
         }
 
-        public override string ToString()
-        {
-            return IsLogicalOperation() ? Lhs.ToString() + " || " + Rhs.ToString() : Lhs.ToString() + " | " + Rhs.ToString();
-        }
+        public override string ToString() => IsLogicalOperation() ? Lhs.ToString() + " || " + Rhs.ToString() : Lhs.ToString() + " | " + Rhs.ToString();
     }
 
     internal class IntegerXor : AstToken
     {
-        readonly AstToken Lhs;
-        readonly AstToken Rhs;
+        private readonly AstToken Lhs;
+        private readonly AstToken Rhs;
         public IntegerXor(Function func, AstToken rhs, AstToken lhs) : base(func)
         {
             Lhs = lhs;
             Rhs = rhs;
         }
 
-        public override ref TypeContainer GetTypeContainer()
-        {
-            return ref Types.INT.GetContainer();
-        }
+        public override ref TypeContainer GetTypeContainer() => ref Types.INT.GetContainer();
 
-        public override string ToString()
-        {
-            return Lhs.ToString() + " ^ " + Rhs.ToString();
-        }
+        public override string ToString() => Lhs.ToString() + " ^ " + Rhs.ToString();
     }
 }

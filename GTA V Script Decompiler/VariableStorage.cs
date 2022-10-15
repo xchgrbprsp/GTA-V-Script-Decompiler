@@ -9,12 +9,12 @@ namespace Decompiler
 	/// </summary>
 	public class VariableStorage
 	{
-		readonly ListType listType;//static/function_var/parameter
+		private readonly ListType listType;//static/function_var/parameter
 		public List<Variable> Vars;
-		Dictionary<int, int> VarRemapper; //not necessary, just shifts variables up if variables before are bigger than 1 DWORD
+		private Dictionary<int, int> VarRemapper; //not necessary, just shifts variables up if variables before are bigger than 1 DWORD
 		private readonly int count;
 		private int scriptParamCount = 0;
-		private int scriptParamStart { get { return Vars.Count - scriptParamCount; } }
+		private int scriptParamStart => Vars.Count - scriptParamCount;
 		public VariableStorage(ListType type, int varcount)
 		{
 			listType = type;
@@ -31,23 +31,15 @@ namespace Decompiler
 			listType = type;
 			Vars = new List<Variable>();
 		}
-		public void AddVar(int value)
-		{
-			Vars.Add(new Variable(Vars.Count, value));//only used for static variables that are pre assigned
-		}
+		public void AddVar(int value) => Vars.Add(new Variable(Vars.Count, value));//only used for static variables that are pre assigned
 
-		public void AddVar(long value)
-		{
-			Vars.Add(new Variable(Vars.Count, value));
-		}
-		public void checkvars()
-		{
-			unusedcheck();
-		}
+		public void AddVar(long value) => Vars.Add(new Variable(Vars.Count, value));
+		public void checkvars() => unusedcheck();
+
 		//This shouldnt be needed but in gamever 1.0.757.2
 		//It seems a few of the scripts are accessing items from the
 		//Stack frame that they havent reserver
-		void BrokenCheck(uint index)
+		private void BrokenCheck(uint index)
 		{
 			if (index >= Vars.Count)
 			{

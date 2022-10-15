@@ -15,41 +15,23 @@ namespace Decompiler
         public static readonly TypeInfo PSTRING = new(4, "char*", "str", "s");
         public static readonly TypeInfo CPSTRING = new(4, "const char*", "str", "s");
         public static readonly TypeInfo UNKNOWN = new(0, "var", "unk", "u");
-        public static readonly TypeInfo PINT = new(3, "int*", "p_int", "pi");
-        public static readonly TypeInfo PUNKNOWN = new(1, "var*", "ptr", "p");
-        public static readonly TypeInfo PFLOAT = new(4, "float*", "p_float", "pf");
         public static readonly TypeInfo VEC3 = new(2, "Vector3", "vector", "v");
         public static readonly TypeInfo VOID = new(4, "void", "???", "???");
 
         public static readonly TypeInfo ANY = new(2, "Any", "any", "an");
-        public static readonly TypeInfo PANY = new(4, "Any*", "p_any", "pan");
         public static readonly TypeInfo BLIP = new(4, "Blip", "blip", "bl");
-        public static readonly TypeInfo PBLIP = new(4, "Blip*", "p_blip", "pbl");
         public static readonly TypeInfo CAM = new(4, "Cam", "cam", "ca");
-        public static readonly TypeInfo PCAM = new(4, "Cam*", "p_cam", "pca");
         public static readonly TypeInfo ENTITY = new(4, "Entity", "entity", "e");
-        public static readonly TypeInfo PENTITY = new(4, "Entity*", "p_entity", "pe");
         public static readonly TypeInfo FIREID = new(4, "FireId", "id", "fi");
-        public static readonly TypeInfo PFIREID = new(4, "FireId*", "p_fireid", "pfi");
         public static readonly TypeInfo HASH = new(4, "Hash", "hash", "h");
-        public static readonly TypeInfo PHASH = new(4, "Hash*", "p_hash", "ph");
         public static readonly TypeInfo INTERIOR = new(4, "Interior", "interior", "in");
-        public static readonly TypeInfo PINTERIOR = new(4, "Interior*", "p_interior", "pin");
         public static readonly TypeInfo ITEMSET = new(4, "ItemSet", "itemset", "is");
-        public static readonly TypeInfo PITEMSET = new(4, "ItemSet*", "p_itemset", "pis");
         public static readonly TypeInfo OBJECT = new(5, "Object", "object", "ob");
-        public static readonly TypeInfo POBJECT = new(5, "Object*", "p_object", "pob");
         public static readonly TypeInfo PED = new(5, "Ped", "ped", "ped");
-        public static readonly TypeInfo PPED = new(5, "Ped*", "p_ped", "pped");
         public static readonly TypeInfo PICKUP = new(5, "Pickup", "pickup", "pk");
-        public static readonly TypeInfo PPICKUP = new(5, "Pickup*", "p_pickup", "pki");
         public static readonly TypeInfo PLAYER = new(4, "Player", "player", "pl");
-        public static readonly TypeInfo PPLAYER = new(4, "Player", "p_player", "ppl");
         public static readonly TypeInfo SCRHANDLE = new(4, "ScrHandle", "handle", "sh");
-        public static readonly TypeInfo PSCRHANDLE = new(4, "ScrHandle*", "p_handle", "psh");
-        public static readonly TypeInfo PVEC3 = new(4, "Vector3*", "p_vector", "pv");
         public static readonly TypeInfo VEHICLE = new(5, "Vehicle", "vehicle", "ve");
-        public static readonly TypeInfo PVEHICLE = new(5, "Vehicle*", "p_vehicle", "pve");
         public static readonly TypeInfo FUNCTION = new(5, "function", "func", "func");
 
         public static readonly TypeInfo ECONTROLTYPE = new(6, "eControlType", "control", "ect", new(typeof(Enums.PadControlType)));
@@ -95,52 +77,50 @@ namespace Decompiler
             public string AutoName;
             public ScriptEnum? Enum = null;
             public string Prefix;
-            TypeContainer sealedContainer;
+            private TypeContainer sealedContainer;
+            public bool IsPointerType { get; private set; }
+            public TypeInfo ChildPtr;
+            public TypeInfo ParentPtr;
 
-            public TypeInfo(int precedence, string singlename, string autoname, string prefix, ScriptEnum? @enum = null)
+            public TypeInfo(int precedence, string singlename, string autoname, string prefix, ScriptEnum? @enum = null, TypeInfo parent = null)
             {
-                this.Precedence = precedence;
-                this.SingleName = singlename;
-                this.AutoName = autoname;
-                this.Enum = @enum;
-                this.Prefix = prefix;
+                Precedence = precedence;
+                SingleName = singlename;
+                AutoName = autoname;
+                Enum = @enum;
+                Prefix = prefix;
+                ParentPtr = parent;
 
                 Types.typeInfos.Add(this);
                 sealedContainer = new(this, true);
+
+                if (ParentPtr == null)
+                    _ = GetPointerVersion();
             }
 
-            public string ReturnType
-            {
-                get { return SingleName + " "; }
-            }
+            public string ReturnType => SingleName + " ";
 
-            public string VarDec
-            {
-                get { return SingleName + " "; }
-            }
+            public string VarDec => SingleName + " ";
 
-            public string ArrayDec
-            {
-                get { return SingleName + "[] "; }
-            }
+            public string ArrayDec => SingleName + "[] ";
 
-            public static bool operator >(TypeInfo a, TypeInfo b)
-            {
-                return a.Precedence > b.Precedence;
-            }
+            public static bool operator >(TypeInfo a, TypeInfo b) => a.Precedence > b.Precedence;
 
-            public static bool operator <(TypeInfo a, TypeInfo b)
-            {
-                return a.Precedence < b.Precedence;
-            }
+            public static bool operator <(TypeInfo a, TypeInfo b) => a.Precedence < b.Precedence;
 
             /// <summary>
             /// Gets a reference to a <b>SEALED</b> container containing the type
             /// </summary>
-            public ref TypeContainer GetContainer()
+            public ref TypeContainer GetContainer() => ref sealedContainer;
+
+            public TypeInfo GetPointerVersion()
             {
-                return ref sealedContainer;
+                ChildPtr ??= new(Precedence, SingleName + "*", "p_" + AutoName, "p" + Prefix, Enum, this);
+
+                return ChildPtr;
             }
+
+            public TypeInfo? TryGetLiteralVersion() => ParentPtr ?? null;
         }
     }
 
@@ -150,7 +130,8 @@ namespace Decompiler
     public class TypeContainer
     {
         public Types.TypeInfo Type { get; private set; }
-        bool IsSealed;
+
+        private bool IsSealed;
 
         public TypeContainer(Types.TypeInfo defaultType = null, bool isSealed = false)
         {
@@ -185,9 +166,6 @@ namespace Decompiler
         /// <summary>
         /// Sealing a container makes the underlying type constant and stops propagation
         /// </summary>
-        public void SealType()
-        {
-            IsSealed = true;
-        }
+        public void SealType() => IsSealed = true;
     }
 }

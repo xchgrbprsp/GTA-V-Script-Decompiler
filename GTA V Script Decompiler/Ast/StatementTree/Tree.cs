@@ -19,10 +19,7 @@ namespace Decompiler.Ast.StatementTree
             Parent = parent;
         }
 
-        public virtual bool IsTreeEnd()
-        {
-            return false;
-        }
+        public virtual bool IsTreeEnd() => false;
 
         public string ToString(bool newlines)
         {
@@ -72,9 +69,6 @@ namespace Decompiler.Ast.StatementTree
             return str;
         }
 
-        public override string ToString()
-        {
-            return ToString(true);
-        }
+        public override string ToString() => ToString(true);
     }
 }

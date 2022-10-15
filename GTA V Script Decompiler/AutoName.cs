@@ -18,52 +18,28 @@ namespace Decompiler
 
     internal class DefaultAutoName : AutoName
     {
-        readonly Variable Variable;
+        private readonly Variable Variable;
 
-        public DefaultAutoName(Variable variable)
-        {
-            Variable = variable;
-        }
+        public DefaultAutoName(Variable variable) => Variable = variable;
 
-        public override string GetName()
-        {
-            return Variable.DataType.Type.AutoName;
-        }
+        public override string GetName() => Variable.DataType.Type.AutoName;
 
-        public override NameCollisionBehavior GetNameCollisionBehavior()
-        {
-            return NameCollisionBehavior.AddNumberSuffix;
-        }
+        public override NameCollisionBehavior GetNameCollisionBehavior() => NameCollisionBehavior.AddNumberSuffix;
 
-        public override int GetPrecedence()
-        {
-            return 0;
-        }
+        public override int GetPrecedence() => 0;
     }
 
     internal class NativeParameterAutoName : AutoName
     {
-        readonly string Parameter;
+        private readonly string Parameter;
 
-        public NativeParameterAutoName(string parameter)
-        {
-            Parameter = parameter;
-        }
+        public NativeParameterAutoName(string parameter) => Parameter = parameter;
 
-        public override string GetName()
-        {
-            return Parameter;
-        }
+        public override string GetName() => Parameter;
 
-        public override NameCollisionBehavior GetNameCollisionBehavior()
-        {
-            return NameCollisionBehavior.AddNumberSuffix;
-        }
+        public override NameCollisionBehavior GetNameCollisionBehavior() => NameCollisionBehavior.AddNumberSuffix;
 
-        public override int GetPrecedence()
-        {
-            return 1;
-        }
+        public override int GetPrecedence() => 1;
     }
 
     internal class NativeReturnAutoName : AutoName
@@ -105,44 +81,23 @@ namespace Decompiler
             throw new InvalidOperationException("Could not extract name from native");
         }
 
-        readonly string Name;
+        private readonly string Name;
 
-        public NativeReturnAutoName(NativeDBEntry native)
-        {
-            Name = GetNativeReturnName(native.name);
-        }
+        public NativeReturnAutoName(NativeDBEntry native) => Name = GetNativeReturnName(native.name);
 
-        public override string GetName()
-        {
-            return Name;
-        }
+        public override string GetName() => Name;
 
-        public override NameCollisionBehavior GetNameCollisionBehavior()
-        {
-            return NameCollisionBehavior.AddNumberSuffix;
-        }
+        public override NameCollisionBehavior GetNameCollisionBehavior() => NameCollisionBehavior.AddNumberSuffix;
 
-        public override int GetPrecedence()
-        {
-            return 2;
-        }
+        public override int GetPrecedence() => 2;
     }
 
     internal class LoopIndexAutoName : AutoName
     {
-        public override string GetName()
-        {
-            return "i";
-        }
+        public override string GetName() => "i";
 
-        public override NameCollisionBehavior GetNameCollisionBehavior()
-        {
-            return NameCollisionBehavior.IncrementCharacter;
-        }
+        public override NameCollisionBehavior GetNameCollisionBehavior() => NameCollisionBehavior.IncrementCharacter;
 
-        public override int GetPrecedence()
-        {
-            return 3;
-        }
+        public override int GetPrecedence() => 3;
     }
 }

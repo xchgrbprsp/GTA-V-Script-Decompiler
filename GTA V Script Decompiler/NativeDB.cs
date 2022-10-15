@@ -29,15 +29,9 @@ namespace Decompiler
 
         public Types.TypeInfo ReturnTypeInfo;
 
-        public NativeDBParam? GetParam(int index)
-        {
-            return index >= @params.Count ? null : @params[index];
-        }
+        public NativeDBParam? GetParam(int index) => index >= @params.Count ? null : @params[index];
 
-        public Types.TypeInfo GetParamType(int index)
-        {
-            return index > @params.Count - 1 ? Types.UNKNOWN : @params[index].TypeInfo;
-        }
+        public Types.TypeInfo GetParamType(int index) => index > @params.Count - 1 ? Types.UNKNOWN : @params[index].TypeInfo;
 
         public void SetParamType(int index, Types.TypeInfo type)
         {
@@ -47,10 +41,7 @@ namespace Decompiler
             @params[index] = param;
         }
 
-        public Types.TypeInfo GetReturnType()
-        {
-            return ReturnTypeInfo;
-        }
+        public Types.TypeInfo GetReturnType() => ReturnTypeInfo;
 
         public void SetReturnType(Types.TypeInfo type)
         {
@@ -61,8 +52,8 @@ namespace Decompiler
 
     internal class NativeDB
     {
-        Dictionary<string, Dictionary<string, NativeDBEntry>> data;
-        Dictionary<ulong, NativeDBEntry> entries;
+        private Dictionary<string, Dictionary<string, NativeDBEntry>> data;
+        private Dictionary<ulong, NativeDBEntry> entries;
 
         public static bool CanBeUsedAsAutoName(string param)
         {
@@ -119,9 +110,6 @@ namespace Decompiler
             }
         }
 
-        public NativeDBEntry? GetEntry(ulong hash)
-        {
-            return entries.ContainsKey(hash) ? entries[hash] : null;
-        }
+        public NativeDBEntry? GetEntry(ulong hash) => entries.ContainsKey(hash) ? entries[hash] : null;
     }
 }

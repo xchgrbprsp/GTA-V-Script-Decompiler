@@ -114,10 +114,7 @@ namespace Decompiler
                 savestream.Close();
         }
 
-        public void Close()
-        {
-            file.Close();
-        }
+        public void Close() => file.Close();
 
         public string[] GetStringTable()
         {
@@ -130,10 +127,7 @@ namespace Decompiler
             return table.ToArray();
         }
 
-        public string[] GetNativeTable()
-        {
-            return X64NativeTable.GetNativeTable();
-        }
+        public string[] GetNativeTable() => X64NativeTable.GetNativeTable();
 
         public void GetFunctionCode()
         {
@@ -152,12 +146,9 @@ namespace Decompiler
             }
         }
 
-        void advpos(int pos)
-        {
-            offset += pos;
-        }
+        private void advpos(int pos) => offset += pos;
 
-        void AddFunction(int start1, int start2)
+        private void AddFunction(int start1, int start2)
         {
             var namelen = CodeTable[start1 + 4];
             var name = "";
@@ -268,7 +259,8 @@ namespace Decompiler
                 FunctionAtLocation[Location] = func;
             }
         }
-        void GetFunctions()
+
+        private void GetFunctions()
         {
             var returnpos = -3;
             while (offset < CodeTable.Count)

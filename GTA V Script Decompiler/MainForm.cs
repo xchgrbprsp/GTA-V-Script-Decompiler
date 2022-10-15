@@ -1,4 +1,5 @@
-﻿using Microsoft.WindowsAPICodePack.Dialogs;
+﻿using Decompiler.UI;
+using Microsoft.WindowsAPICodePack.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,10 +14,10 @@ namespace Decompiler
 
 	public partial class MainForm : Form
 	{
-		string FileName = "";
-		ScriptFile OpenFile;
-		Queue<string> CompileList;
-		readonly List<Disassembly> DisassembyWindows = new();
+		private string FileName = "";
+		private ScriptFile OpenFile;
+		private Queue<string> CompileList;
+		private readonly List<Disassembly> DisassembyWindows = new();
 		private readonly FunctionPaneSorter fpnColumnSorter;
 
 		public MainForm()
@@ -73,13 +74,13 @@ namespace Decompiler
 			}
 		}
 
-		void UpdateStatus(string text)
+		private void UpdateStatus(string text)
 		{
 			toolStripStatusLabel1.Text = text;
 			Application.DoEvents();
 		}
 
-		void ResetLoadedFile()
+		private void ResetLoadedFile()
 		{
 			fctb1.Clear();
 			listView1.Items.Clear();
@@ -280,7 +281,7 @@ namespace Decompiler
 
 		#region Config Options
 
-		void ResetLocalizedTextStyleCheckboxes()
+		private void ResetLocalizedTextStyleCheckboxes()
 		{
 			foreach (ToolStripMenuItem t in showLocalizedTextsToolStripMenuItem.DropDownItems)
 			{
@@ -425,7 +426,7 @@ namespace Decompiler
 
 		#region Function Location
 
-		bool opening = false;
+		private bool opening = false;
 
 		private void listView1_MouseDoubleClick(object sender, MouseEventArgs e)
 		{
@@ -453,7 +454,7 @@ namespace Decompiler
 			}
 
 			// Perform the sort with these new sort options.
-			this.listView1.Sort();
+			listView1.Sort();
 		}
 
 		private void toolStripButton1_Click(object sender, EventArgs e)
@@ -468,15 +469,9 @@ namespace Decompiler
 
 		#endregion
 
-		private void resetGlobalTypesToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			Program.globalTypeMgr.Reset();
-		}
+		private void resetGlobalTypesToolStripMenuItem_Click(object sender, EventArgs e) => Program.globalTypeMgr.Reset();
 
-		private void entitiesToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			ScriptFile.HashBank.Export_Entities();
-		}
+		private void entitiesToolStripMenuItem_Click(object sender, EventArgs e) => ScriptFile.HashBank.Export_Entities();
 
 		private void nativesToolStripMenuItem_Click(object sender, EventArgs e)
 		{
@@ -489,10 +484,7 @@ namespace Decompiler
 				Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)), "natives_exp.dat");
 		}
 
-		private void closeToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			this.Close();
-		}
+		private void closeToolStripMenuItem_Click(object sender, EventArgs e) => Close();
 
 		private void expandAllBlocksToolStripMenuItem_Click(object sender, EventArgs e)
 		{
@@ -526,14 +518,14 @@ namespace Decompiler
 		private void SetFileName(string name)
 		{
 			if (name == null)
-				this.Text = "GTA V High Level Decompiler";
+				Text = "GTA V High Level Decompiler";
 			if (name.Length == 0)
-				this.Text = "GTA V High Level Decompiler";
+				Text = "GTA V High Level Decompiler";
 			else
 			{
 				if (name.Contains('.'))
 					name = name.Remove(name.IndexOf('.'));
-				this.Text = "GTA V High Level Decompiler - " + name;
+				Text = "GTA V High Level Decompiler - " + name;
 			}
 		}
 
@@ -560,12 +552,9 @@ namespace Decompiler
 				e.Cancel = true;
 		}
 
-		bool islegalchar(char c)
-		{
-			return char.IsLetterOrDigit(c) ? true : c == '_';
-		}
+		private bool islegalchar(char c) => char.IsLetterOrDigit(c) ||c == '_';
 
-		string GetWordAtCursor()
+		private string GetWordAtCursor()
 		{
 			var line = fctb1.Lines[fctb1.Selection.Start.iLine];
 			if (line.Length == 0)

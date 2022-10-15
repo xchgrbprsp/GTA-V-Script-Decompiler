@@ -2,20 +2,11 @@
 {
     internal class Drop : AstToken
     {
-        readonly AstToken Dropped;
-        public Drop(Function func, AstToken dropped) : base(func)
-        {
-            Dropped = dropped;
-        }
+        private readonly AstToken Dropped;
+        public Drop(Function func, AstToken dropped) : base(func) => Dropped = dropped;
 
-        public override bool IsStatement()
-        {
-            return true;
-        }
+        public override bool IsStatement() => true;
 
-        public override string ToString()
-        {
-            return Dropped.ToString() + ";";
-        }
+        public override string ToString() => Dropped.ToString() + ";";
     }
 }

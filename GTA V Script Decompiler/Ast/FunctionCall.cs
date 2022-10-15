@@ -21,24 +21,12 @@ namespace Decompiler.Ast
             }
         }
 
-        public override void HintType(ref TypeContainer container)
-        {
-            Callee.HintReturnType(ref container);
-        }
+        public override void HintType(ref TypeContainer container) => Callee.HintReturnType(ref container);
 
-        public override ref TypeContainer GetTypeContainer()
-        {
-            return ref Callee.ReturnType;
-        }
+        public override ref TypeContainer GetTypeContainer() => ref Callee.ReturnType;
 
-        public override string GetName()
-        {
-            return Callee.Name;
-        }
+        public override string GetName() => Callee.Name;
 
-        public override int GetReturnCount()
-        {
-            return Callee.NumReturns;
-        }
+        public override int GetReturnCount() => Callee.NumReturns;
     }
 }

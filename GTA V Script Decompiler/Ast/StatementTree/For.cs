@@ -15,10 +15,7 @@ namespace Decompiler.Ast.StatementTree
         }
 
         /// <returns>Isn't going to be called anyway</returns>
-        public override bool IsTreeEnd()
-        {
-            return true;
-        }
+        public override bool IsTreeEnd() => true;
 
         public override string ToString()
         {

@@ -2,8 +2,8 @@
 {
     internal abstract class FloatCompare : AstToken
     {
-        readonly AstToken Lhs;
-        readonly AstToken Rhs;
+        private readonly AstToken Lhs;
+        private readonly AstToken Rhs;
 
         protected FloatCompare(Function func, AstToken rhs, AstToken lhs) : base(func)
         {
@@ -15,15 +15,9 @@
 
         protected abstract string Operator { get; }
 
-        public override ref TypeContainer GetTypeContainer()
-        {
-            return ref Types.BOOL.GetContainer();
-        }
+        public override ref TypeContainer GetTypeContainer() => ref Types.BOOL.GetContainer();
 
-        public override string ToString()
-        {
-            return $"{Lhs} {Operator} {Rhs}";
-        }
+        public override string ToString() => $"{Lhs} {Operator} {Rhs}";
     }
 
     internal class FloatEq : FloatCompare

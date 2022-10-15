@@ -13,19 +13,10 @@
             Float.HintType(ref Types.FLOAT.GetContainer());
         }
 
-        public override int GetStackCount()
-        {
-            return 3;
-        }
+        public override int GetStackCount() => 3;
 
-        public override ref TypeContainer GetTypeContainer()
-        {
-            return ref Types.VEC3.GetContainer();
-        }
+        public override ref TypeContainer GetTypeContainer() => ref Types.VEC3.GetContainer();
 
-        public override string ToString()
-        {
-            return "F2V(" + Float.ToString() + ")";
-        }
+        public override string ToString() => "F2V(" + Float.ToString() + ")";
     }
 }

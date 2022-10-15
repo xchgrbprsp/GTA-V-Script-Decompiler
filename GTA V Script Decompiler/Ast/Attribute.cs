@@ -11,14 +11,8 @@
             NeedSemicolon = semi;
         }
 
-        public override bool IsStatement()
-        {
-            return true;
-        }
+        public override bool IsStatement() => true;
 
-        public override string ToString()
-        {
-            return $"[[{Value}]]{(NeedSemicolon ? ";" : "")}";
-        }
+        public override string ToString() => $"[[{Value}]]{(NeedSemicolon ? ";" : "")}";
     }
 }

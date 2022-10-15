@@ -33,20 +33,11 @@
             return Pointer.ToPointerString() + sep + "[" + Index.ToString() + Stack.GetArraySizeCmt(Size) + "]";
         }
 
-        public override bool CanGetGlobalIndex()
-        {
-            return Pointer.CanGetGlobalIndex();
-        }
+        public override bool CanGetGlobalIndex() => Pointer.CanGetGlobalIndex();
 
-        public override int GetGlobalIndex()
-        {
-            return Pointer.GetGlobalIndex() + 1;
-        }
+        public override int GetGlobalIndex() => Pointer.GetGlobalIndex() + 1;
 
-        public override bool IsPointer()
-        {
-            return true;
-        }
+        public override bool IsPointer() => true;
     }
 
     internal class ArrayLoad : AstToken
@@ -73,15 +64,9 @@
             return Pointer.ToPointerString() + sep + "[" + Index.ToString() + Stack.GetArraySizeCmt(Size) + "]";
         }
 
-        public override bool CanGetGlobalIndex()
-        {
-            return Pointer.CanGetGlobalIndex();
-        }
+        public override bool CanGetGlobalIndex() => Pointer.CanGetGlobalIndex();
 
-        public override int GetGlobalIndex()
-        {
-            return Pointer.GetGlobalIndex() + 1;
-        }
+        public override int GetGlobalIndex() => Pointer.GetGlobalIndex() + 1;
     }
 
     internal class ArrayStore : AstToken
@@ -103,10 +88,7 @@
             HintType(ref value.GetTypeContainer());
         }
 
-        public override bool IsStatement()
-        {
-            return true;
-        }
+        public override bool IsStatement() => true;
 
         public override string ToString()
         {
@@ -117,14 +99,8 @@
             return Pointer.ToPointerString() + sep + "[" + Index.ToString() + Stack.GetArraySizeCmt(Size) + "] = " + Value.ToString() + ";";
         }
 
-        public override bool CanGetGlobalIndex()
-        {
-            return Pointer.CanGetGlobalIndex();
-        }
+        public override bool CanGetGlobalIndex() => Pointer.CanGetGlobalIndex();
 
-        public override int GetGlobalIndex()
-        {
-            return Pointer.GetGlobalIndex() + 1;
-        }
+        public override int GetGlobalIndex() => Pointer.GetGlobalIndex() + 1;
     }
 }

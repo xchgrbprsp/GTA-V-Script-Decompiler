@@ -16,10 +16,7 @@
             ValueIfTrue.HintType(ref ValueIfFalse.GetTypeContainer());
         }
 
-        public override ref TypeContainer GetTypeContainer()
-        {
-            return ref ValueIfTrue.GetTypeContainer();
-        }
+        public override ref TypeContainer GetTypeContainer() => ref ValueIfTrue.GetTypeContainer();
 
         public override void HintType(ref TypeContainer container)
         {
@@ -27,9 +24,6 @@
             ValueIfFalse.HintType(ref container);
         }
 
-        public override string ToString()
-        {
-            return $"{Condition} ? {ValueIfTrue} : {ValueIfFalse}";
-        }
+        public override string ToString() => $"{Condition} ? {ValueIfTrue} : {ValueIfFalse}";
     }
 }

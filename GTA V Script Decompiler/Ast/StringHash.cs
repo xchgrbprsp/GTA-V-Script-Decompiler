@@ -13,14 +13,8 @@
             @string.HintType(ref Types.PSTRING.GetContainer());
         }
 
-        public override ref TypeContainer GetTypeContainer()
-        {
-            return ref Types.HASH.GetContainer();
-        }
+        public override ref TypeContainer GetTypeContainer() => ref Types.HASH.GetContainer();
 
-        public override string ToString()
-        {
-            return "joaat(" + @string.ToString() + ")";
-        }
+        public override string ToString() => "joaat(" + @string.ToString() + ")";
     }
 }

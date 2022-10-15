@@ -33,20 +33,11 @@
                 : value.ToPointerString() + sep + "f_[" + offset.ToString() + "]";
         }
 
-        public override bool CanGetGlobalIndex()
-        {
-            return value.CanGetGlobalIndex() && offset is ConstantInt;
-        }
+        public override bool CanGetGlobalIndex() => value.CanGetGlobalIndex() && offset is ConstantInt;
 
-        public override int GetGlobalIndex()
-        {
-            return value.GetGlobalIndex() + (int)(offset as ConstantInt).GetValue();
-        }
+        public override int GetGlobalIndex() => value.GetGlobalIndex() + (int)(offset as ConstantInt).GetValue();
 
-        public override bool IsPointer()
-        {
-            return true;
-        }
+        public override bool IsPointer() => true;
     }
 
     internal class OffsetLoad : AstToken
@@ -69,15 +60,9 @@
             return value.ToPointerString() + sep + "f_" + offset.ToString();
         }
 
-        public override bool CanGetGlobalIndex()
-        {
-            return value.CanGetGlobalIndex();
-        }
+        public override bool CanGetGlobalIndex() => value.CanGetGlobalIndex();
 
-        public override int GetGlobalIndex()
-        {
-            return value.GetGlobalIndex() + offset;
-        }
+        public override int GetGlobalIndex() => value.GetGlobalIndex() + offset;
     }
 
     internal class OffsetStore : AstToken
@@ -95,10 +80,7 @@
             HintType(ref storedValue.GetTypeContainer());
         }
 
-        public override bool IsStatement()
-        {
-            return true;
-        }
+        public override bool IsStatement() => true;
 
         public override string ToString()
         {

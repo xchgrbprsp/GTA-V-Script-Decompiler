@@ -17,15 +17,9 @@ namespace Decompiler.Ast
             Src.HintType(ref Types.PSTRING.GetContainer());
         }
 
-        public override bool IsStatement()
-        {
-            return true;
-        }
+        public override bool IsStatement() => true;
 
-        public override string ToString()
-        {
-            return "TEXT_LABEL_ASSIGN_STRING(" + Dst.ToString() + ", " + Src.ToString() + ", " + Size + ");";
-        }
+        public override string ToString() => "TEXT_LABEL_ASSIGN_STRING(" + Dst.ToString() + ", " + Src.ToString() + ", " + Size + ");";
     }
 
     internal class TextLabelAppendString : AstToken
@@ -43,15 +37,9 @@ namespace Decompiler.Ast
             Src.HintType(ref Types.PSTRING.GetContainer());
         }
 
-        public override bool IsStatement()
-        {
-            return true;
-        }
+        public override bool IsStatement() => true;
 
-        public override string ToString()
-        {
-            return "TEXT_LABEL_APPEND_STRING(" + Dst.ToString() + ", " + Src.ToString() + ", " + Size + ");";
-        }
+        public override string ToString() => "TEXT_LABEL_APPEND_STRING(" + Dst.ToString() + ", " + Src.ToString() + ", " + Size + ");";
     }
 
     internal class TextLabelAssignInt : AstToken
@@ -69,15 +57,9 @@ namespace Decompiler.Ast
             Dst.HintType(ref Types.PSTRING.GetContainer());
         }
 
-        public override bool IsStatement()
-        {
-            return true;
-        }
+        public override bool IsStatement() => true;
 
-        public override string ToString()
-        {
-            return "TEXT_LABEL_ASSIGN_INT(" + Dst.ToString() + ", " + Integer.ToString() + ", " + Size + ");";
-        }
+        public override string ToString() => "TEXT_LABEL_ASSIGN_INT(" + Dst.ToString() + ", " + Integer.ToString() + ", " + Size + ");";
     }
 
     internal class TextLabelAppendInt : AstToken
@@ -95,15 +77,9 @@ namespace Decompiler.Ast
             Dst.HintType(ref Types.PSTRING.GetContainer());
         }
 
-        public override bool IsStatement()
-        {
-            return true;
-        }
+        public override bool IsStatement() => true;
 
-        public override string ToString()
-        {
-            return "TEXT_LABEL_APPEND_INT(" + Dst.ToString() + ", " + Integer.ToString() + ", " + Size + ");";
-        }
+        public override string ToString() => "TEXT_LABEL_APPEND_INT(" + Dst.ToString() + ", " + Integer.ToString() + ", " + Size + ");";
     }
 
     internal class TextLabelCopy : AstToken
@@ -119,10 +95,7 @@ namespace Decompiler.Ast
             Value = value;
         }
 
-        public override bool IsStatement()
-        {
-            return true;
-        }
+        public override bool IsStatement() => true;
 
         public override string ToString()
         {

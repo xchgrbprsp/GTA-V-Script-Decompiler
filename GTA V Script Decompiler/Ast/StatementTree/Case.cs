@@ -6,8 +6,8 @@ namespace Decompiler.Ast.StatementTree
     internal class Case : Tree
     {
         public readonly int BreakOffset;
-        readonly int StartOffset;
-        readonly List<AstToken> Cases;
+        private readonly int StartOffset;
+        private readonly List<AstToken> Cases;
 
         public Case(Function function, Tree parent, int offset, List<AstToken> cases, int breakOffset) : base(function, parent, offset)
         {

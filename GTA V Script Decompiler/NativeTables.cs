@@ -63,10 +63,7 @@ namespace Decompiler
 
             return table.ToArray();
         }
-        public string[] GetNativeHeader()
-        {
-            return NativeNames.ToArray();
-        }
+        public string[] GetNativeHeader() => NativeNames.ToArray();
         public string GetNativeFromIndex(int index)
         {
             return index < 0
@@ -89,9 +86,6 @@ namespace Decompiler
                 ? throw new ArgumentOutOfRangeException("Index is greater than native table size")
                 : NativeHashes[index];
         }
-        public void Dispose()
-        {
-            NativeNames.Clear();
-        }
+        public void Dispose() => NativeNames.Clear();
     }
 }

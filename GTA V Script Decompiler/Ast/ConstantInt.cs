@@ -2,23 +2,14 @@
 {
     internal class ConstantInt : AstToken
     {
-        readonly ulong Value;
-        TypeContainer Type = new(Types.INT);
+        private readonly ulong Value;
+        private TypeContainer Type = new(Types.INT);
 
-        public ConstantInt(Function func, ulong integer) : base(func)
-        {
-            Value = integer;
-        }
+        public ConstantInt(Function func, ulong integer) : base(func) => Value = integer;
 
-        public ulong GetValue()
-        {
-            return Value;
-        }
+        public ulong GetValue() => Value;
 
-        public override ref TypeContainer GetTypeContainer()
-        {
-            return ref Type;
-        }
+        public override ref TypeContainer GetTypeContainer() => ref Type;
 
         public override string ToString()
         {

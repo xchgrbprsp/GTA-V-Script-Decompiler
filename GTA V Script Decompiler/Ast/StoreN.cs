@@ -4,9 +4,9 @@ namespace Decompiler.Ast
 {
     internal class StoreN : AstToken
     {
-        readonly AstToken Pointer;
-        readonly AstToken Count;
-        readonly List<AstToken> Values;
+        private readonly AstToken Pointer;
+        private readonly AstToken Count;
+        private readonly List<AstToken> Values;
 
         public StoreN(Function func, AstToken pointer, AstToken count, List<AstToken> values) : base(func)
         {
@@ -16,7 +16,7 @@ namespace Decompiler.Ast
 
             if (pointer is Local && values.Count == 1 && values[0] is NativeCall && count is ConstantInt && (count as ConstantInt).GetValue() == 3)
             {
-                pointer.HintType(ref Types.PVEC3.GetContainer()); // almost always true
+                pointer.HintType(ref Types.VEC3.GetPointerVersion().GetContainer()); // almost always true
 
                 var entry = (values[0] as NativeCall).Entry;
                 if (entry != null)
@@ -33,10 +33,7 @@ namespace Decompiler.Ast
             //}
         }
 
-        public override bool IsStatement()
-        {
-            return true;
-        }
+        public override bool IsStatement() => true;
 
         public override string ToString()
         {

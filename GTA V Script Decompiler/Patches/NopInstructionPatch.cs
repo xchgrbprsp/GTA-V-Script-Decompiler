@@ -8,10 +8,7 @@ namespace Decompiler.Patches
         {
         }
 
-        public override string GetName(int start, int end)
-        {
-            return $"Nop Instruction{(end - start != 1 ? "s" : "")}";
-        }
+        public override string GetName(int start, int end) => $"Nop Instruction{(end - start != 1 ? "s" : "")}";
 
         public override byte[] GetPatch(int start, int end)
         {
@@ -30,14 +27,8 @@ namespace Decompiler.Patches
             return bytes.ToArray();
         }
 
-        public override bool ShouldEnablePatch(int start, int end)
-        {
-            return true;
-        }
+        public override bool ShouldEnablePatch(int start, int end) => true;
 
-        public override bool ShouldShowPatch(int start, int end)
-        {
-            return true;
-        }
+        public override bool ShouldShowPatch(int start, int end) => true;
     }
 }

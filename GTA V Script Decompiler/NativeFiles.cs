@@ -5,7 +5,7 @@ using System.IO.Compression;
 
 namespace Decompiler
 {
-    class x64NativeFile : Dictionary<ulong, string>
+    internal class x64NativeFile : Dictionary<ulong, string>
     {
         public ulong TranslateHash(ulong hash)
         {

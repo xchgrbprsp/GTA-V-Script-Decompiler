@@ -2,8 +2,8 @@
 {
     internal abstract class FloatArithmetic : AstToken
     {
-        readonly AstToken Lhs;
-        readonly AstToken Rhs;
+        private readonly AstToken Lhs;
+        private readonly AstToken Rhs;
         protected abstract char Symbol { get; }
 
         protected FloatArithmetic(Function func, AstToken rhs, AstToken lhs) : base(func)
@@ -13,15 +13,9 @@
             Lhs.HintType(ref Types.FLOAT.GetContainer());
         }
 
-        public override ref TypeContainer GetTypeContainer()
-        {
-            return ref Types.FLOAT.GetContainer();
-        }
+        public override ref TypeContainer GetTypeContainer() => ref Types.FLOAT.GetContainer();
 
-        public bool IsComplexOperand(AstToken operand)
-        {
-            return operand is not FloatArithmetic ? false : this.GetType() != operand.GetType();
-        }
+        public bool IsComplexOperand(AstToken operand) => operand is FloatArithmetic && GetType() != operand.GetType();
 
         public override string ToString()
         {
@@ -79,21 +73,15 @@
 
     internal class FloatNeg : AstToken
     {
-        readonly AstToken value;
+        private readonly AstToken value;
         public FloatNeg(Function func, AstToken value) : base(func)
         {
             this.value = value;
             this.value.HintType(ref Types.FLOAT.GetContainer());
         }
 
-        public override ref TypeContainer GetTypeContainer()
-        {
-            return ref Types.FLOAT.GetContainer();
-        }
+        public override ref TypeContainer GetTypeContainer() => ref Types.FLOAT.GetContainer();
 
-        public override string ToString()
-        {
-            return value is FloatArithmetic ? $"-({value})" : $"-{value}";
-        }
+        public override string ToString() => value is FloatArithmetic ? $"-({value})" : $"-{value}";
     }
 }

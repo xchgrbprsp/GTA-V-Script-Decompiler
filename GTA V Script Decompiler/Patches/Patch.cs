@@ -8,10 +8,7 @@ namespace Decompiler.Patches
     {
         protected Function Function;
 
-        public Patch(Function function)
-        {
-            Function = function;
-        }
+        public Patch(Function function) => Function = function;
 
         public static Patch[] GetPatches(Function func)
         {
@@ -26,10 +23,7 @@ namespace Decompiler.Patches
         public abstract bool ShouldEnablePatch(int start, int end);
         public abstract byte[] GetPatch(int start, int end);
 
-        public virtual bool GetData(int start, int end)
-        {
-            return true;
-        }
+        public virtual bool GetData(int start, int end) => true;
 
         public virtual void Reset() { }
     }

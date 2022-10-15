@@ -6,14 +6,8 @@
         {
         }
 
-        public override bool IsStatement()
-        {
-            return true;
-        }
+        public override bool IsStatement() => true;
 
-        public override string ToString()
-        {
-            return "break;";
-        }
+        public override string ToString() => "break;";
     }
 }

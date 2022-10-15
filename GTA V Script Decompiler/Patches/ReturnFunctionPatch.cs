@@ -6,16 +6,13 @@ namespace Decompiler.Patches
 {
     internal class ReturnFunctionPatch : Patch
     {
-        uint ReturnValue = 0;
+        private uint ReturnValue = 0;
 
         public ReturnFunctionPatch(Function function) : base(function)
         {
         }
 
-        public override string GetName(int start, int end)
-        {
-            return "Place Function Return";
-        }
+        public override string GetName(int start, int end) => "Place Function Return";
 
         public override byte[] GetPatch(int start, int end)
         {
@@ -44,15 +41,9 @@ namespace Decompiler.Patches
             return bytes.ToArray();
         }
 
-        public override bool ShouldEnablePatch(int start, int end)
-        {
-            return end - start == 1 && Function.Instructions[start].OriginalOpcode != Opcode.ENTER;
-        }
+        public override bool ShouldEnablePatch(int start, int end) => end - start == 1 && Function.Instructions[start].OriginalOpcode != Opcode.ENTER;
 
-        public override bool ShouldShowPatch(int start, int end)
-        {
-            return true;
-        }
+        public override bool ShouldShowPatch(int start, int end) => true;
 
         public override bool GetData(int start, int end)
         {

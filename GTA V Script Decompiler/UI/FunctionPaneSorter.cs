@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Windows.Forms;
 
-namespace Decompiler
+namespace Decompiler.UI
 {
     /// <summary>
     /// This class is an implementation of the 'IComparer' interface.
@@ -52,10 +52,8 @@ namespace Decompiler
 
             // Calculate correct return value based on object comparison
             if (Order == SortOrder.Ascending)
-            {
                 // Ascending sort is selected, return normal result of compare operation
                 return compareResult;
-            }
             else if (Order == SortOrder.Descending)
             {
                 // Descending sort is selected, return negative result of compare operation

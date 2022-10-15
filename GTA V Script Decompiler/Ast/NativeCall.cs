@@ -50,14 +50,8 @@ namespace Decompiler.Ast
             return ref type == Types.VOID ? ref Types.UNKNOWN.GetContainer() : ref type.GetContainer();
         }
 
-        public override string GetName()
-        {
-            return Name;
-        }
+        public override string GetName() => Name;
 
-        public override int GetReturnCount()
-        {
-            return ReturnCount;
-        }
+        public override int GetReturnCount() => ReturnCount;
     }
 }

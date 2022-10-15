@@ -7,28 +7,19 @@ namespace Decompiler
     /// </summary>
     internal class TypeContainerHolder
     {
-        TypeContainer TypeContainer;
+        private TypeContainer TypeContainer;
 
-        public TypeContainerHolder()
-        {
-            TypeContainer = new();
-        }
+        public TypeContainerHolder() => TypeContainer = new();
 
-        public TypeContainerHolder(TypeContainer typeContainer)
-        {
-            TypeContainer = typeContainer;
-        }
+        public TypeContainerHolder(TypeContainer typeContainer) => TypeContainer = typeContainer;
 
-        public ref TypeContainer GetContainer()
-        {
-            return ref TypeContainer;
-        }
+        public ref TypeContainer GetContainer() => ref TypeContainer;
     }
 
     internal class GlobalTypeMgr
     {
-        readonly Dictionary<int, TypeContainerHolder> GlobalTypes = new();
-        readonly Dictionary<int, string> GlobalNameOverrides = new();
+        private readonly Dictionary<int, TypeContainerHolder> GlobalTypes = new();
+        private readonly Dictionary<int, string> GlobalNameOverrides = new();
 
         public GlobalTypeMgr()
         {

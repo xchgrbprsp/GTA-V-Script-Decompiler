@@ -4,50 +4,26 @@
     {
         public readonly uint Index;
 
-        public Static(Function func, uint index) : base(func)
-        {
-            Index = index;
-        }
+        public Static(Function func, uint index) : base(func) => Index = index;
 
-        public override string ToString()
-        {
-            return "&" + function.ScriptFile.Statics.GetVarName(Index);
-        }
+        public override string ToString() => "&" + function.ScriptFile.Statics.GetVarName(Index);
 
-        public override string ToPointerString()
-        {
-            return function.ScriptFile.Statics.GetVarName(Index);
-        }
+        public override string ToPointerString() => function.ScriptFile.Statics.GetVarName(Index);
 
-        public override bool IsPointer()
-        {
-            return true;
-        }
+        public override bool IsPointer() => true;
     }
 
     internal class StaticLoad : AstToken
     {
         public readonly uint Index;
 
-        public StaticLoad(Function func, uint index) : base(func)
-        {
-            Index = index;
-        }
+        public StaticLoad(Function func, uint index) : base(func) => Index = index;
 
-        public override ref TypeContainer GetTypeContainer()
-        {
-            return ref function.ScriptFile.Statics.GetVarAtIndex(Index).DataType;
-        }
+        public override ref TypeContainer GetTypeContainer() => ref function.ScriptFile.Statics.GetVarAtIndex(Index).DataType;
 
-        public override void HintType(ref TypeContainer container)
-        {
-            function.ScriptFile.Statics.GetVarAtIndex(Index).HintType(ref container);
-        }
+        public override void HintType(ref TypeContainer container) => function.ScriptFile.Statics.GetVarAtIndex(Index).HintType(ref container);
 
-        public override string ToString()
-        {
-            return function.ScriptFile.Statics.GetVarName(Index);
-        }
+        public override string ToString() => function.ScriptFile.Statics.GetVarName(Index);
     }
 
     internal class StaticStore : AstToken
@@ -63,14 +39,8 @@
             function.ScriptFile.Statics.GetVarAtIndex(Index).HintType(ref Value.GetTypeContainer());
         }
 
-        public override bool IsStatement()
-        {
-            return true;
-        }
+        public override bool IsStatement() => true;
 
-        public override string ToString()
-        {
-            return function.ScriptFile.Statics.GetVarName(Index) + " = " + Value.ToString() + ";";
-        }
+        public override string ToString() => function.ScriptFile.Statics.GetVarName(Index) + " = " + Value.ToString() + ";";
     }
 }

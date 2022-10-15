@@ -10,20 +10,11 @@
             function.GetFrameVar(Index).SetCalled();
         }
 
-        public override string ToString()
-        {
-            return "&" + function.GetFrameVarName(Index);
-        }
+        public override string ToString() => "&" + function.GetFrameVarName(Index);
 
-        public override string ToPointerString()
-        {
-            return function.GetFrameVarName(Index);
-        }
+        public override string ToPointerString() => function.GetFrameVarName(Index);
 
-        public override bool IsPointer()
-        {
-            return true;
-        }
+        public override bool IsPointer() => true;
 
 #if false
         public override void HintType(Stack.DataType type)
@@ -44,20 +35,11 @@
             function.GetFrameVar(Index).SetCalled();
         }
 
-        public override ref TypeContainer GetTypeContainer()
-        {
-            return ref function.GetFrameVar(Index).DataType;
-        }
+        public override ref TypeContainer GetTypeContainer() => ref function.GetFrameVar(Index).DataType;
 
-        public override string ToString()
-        {
-            return function.GetFrameVarName(Index);
-        }
+        public override string ToString() => function.GetFrameVarName(Index);
 
-        public override void HintType(ref TypeContainer container)
-        {
-            function.GetFrameVar(Index).HintType(ref container);
-        }
+        public override void HintType(ref TypeContainer container) => function.GetFrameVar(Index).HintType(ref container);
     }
 
     internal class LocalStore : AstToken
@@ -85,14 +67,8 @@
             }
         }
 
-        public override bool IsStatement()
-        {
-            return true;
-        }
+        public override bool IsStatement() => true;
 
-        public override string ToString()
-        {
-            return function.GetFrameVarName(Index) + " = " + Value.ToString() + ";";
-        }
+        public override string ToString() => function.GetFrameVarName(Index) + " = " + Value.ToString() + ";";
     }
 }

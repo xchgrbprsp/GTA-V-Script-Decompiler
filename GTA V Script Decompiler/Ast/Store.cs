@@ -14,10 +14,7 @@
             //    Pointer.HintType(Types.GetPointerVersion(value.GetType()));
         }
 
-        public override bool IsStatement()
-        {
-            return true;
-        }
+        public override bool IsStatement() => true;
 
         public override string ToString()
         {

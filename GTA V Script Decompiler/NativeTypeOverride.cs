@@ -4,13 +4,12 @@ namespace Decompiler
 {
     internal class NativeTypeOverride
     {
-        readonly string Name;
-        readonly int Index;
-        readonly Types.TypeInfo NewType;
+        private readonly string Name;
+        private readonly int Index;
+        private readonly Types.TypeInfo NewType;
+        private static readonly List<NativeTypeOverride> Overrides = new();
 
-        static readonly List<NativeTypeOverride> Overrides = new();
-
-        NativeTypeOverride(string name, int index, Types.TypeInfo newType)
+        private NativeTypeOverride(string name, int index, Types.TypeInfo newType)
         {
             Name = name;
             Index = index;

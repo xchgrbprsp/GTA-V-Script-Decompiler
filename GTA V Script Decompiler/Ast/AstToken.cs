@@ -3,27 +3,15 @@
     internal class AstToken
     {
         public readonly Function function;
-        TypeContainer dummyContainer;
+        private TypeContainer dummyContainer;
 
-        public AstToken(Function func)
-        {
-            function = func;
-        }
+        public AstToken(Function func) => function = func;
 
-        public virtual bool IsStatement()
-        {
-            return false;
-        }
+        public virtual bool IsStatement() => false;
 
-        public virtual bool HasSideEffects()
-        {
-            return false;
-        }
+        public virtual bool HasSideEffects() => false;
 
-        public virtual int GetStackCount()
-        {
-            return 1;
-        }
+        public virtual int GetStackCount() => 1;
 
         public virtual ref TypeContainer GetTypeContainer()
         {
@@ -34,39 +22,18 @@
             return ref dummyContainer;
         }
 
-        public virtual void HintType(ref TypeContainer container)
-        {
-            GetTypeContainer().HintType(ref container);
-        }
+        public virtual void HintType(ref TypeContainer container) => GetTypeContainer().HintType(ref container);
 
-        public override string ToString()
-        {
-            return "StackVal";
-        }
+        public override string ToString() => "StackVal";
 
-        public virtual string ToLiteralString()
-        {
-            return ToString();
-        }
+        public virtual string ToLiteralString() => ToString();
 
-        public virtual string ToPointerString()
-        {
-            return ToString();
-        }
+        public virtual string ToPointerString() => ToString();
 
-        public virtual bool CanGetGlobalIndex()
-        {
-            return false;
-        }
+        public virtual bool CanGetGlobalIndex() => false;
 
-        public virtual int GetGlobalIndex()
-        {
-            return 0;
-        }
+        public virtual int GetGlobalIndex() => 0;
 
-        public virtual bool IsPointer()
-        {
-            return false;
-        }
+        public virtual bool IsPointer() => false;
     }
 }

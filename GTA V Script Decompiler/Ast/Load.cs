@@ -2,16 +2,10 @@
 {
     internal class Load : AstToken
     {
-        readonly AstToken Pointer;
-        public Load(Function func, AstToken pointer) : base(func)
-        {
-            Pointer = pointer;
-        }
+        private readonly AstToken Pointer;
+        public Load(Function func, AstToken pointer) : base(func) => Pointer = pointer;
 
-        public override string ToString()
-        {
-            return "*" + Pointer.ToPointerString();
-        }
+        public override string ToString() => "*" + Pointer.ToPointerString();
 
 #if false
         public override void HintType(Stack.DataType type)
