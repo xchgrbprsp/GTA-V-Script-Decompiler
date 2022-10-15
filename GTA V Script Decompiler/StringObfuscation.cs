@@ -1,6 +1,4 @@
-﻿using Decompiler.Ast;
-
-using String = Decompiler.Ast.String;
+﻿using String = Decompiler.Ast.String;
 
 namespace Decompiler
 {
@@ -15,7 +13,7 @@ namespace Decompiler
 
         public static void GetStringWithRotate(Function func, Ast.AstToken[] args, Stack stack)
         {
-            var iParam0 = (int)(args[0] as ConstantInt).GetValue();
+            var iParam0 = (int)(args[0] as Ast.ConstantInt).GetValue();
             iParam0 = 32 - iParam0;
 
             switch (iParam0)
