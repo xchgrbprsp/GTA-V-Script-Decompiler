@@ -21,10 +21,9 @@
 
         public override string ToString()
         {
-            if (Pointer.IsPointer())
-                return Pointer.ToPointerString() + " = " + Value.ToString() + ";";
-            else
-                return "*" + Pointer.ToPointerString() + " = " + Value.ToString() + ";";
+            return Pointer.IsPointer()
+                ? Pointer.ToPointerString() + " = " + Value.ToString() + ";"
+                : "*" + Pointer.ToPointerString() + " = " + Value.ToString() + ";";
         }
     }
 }

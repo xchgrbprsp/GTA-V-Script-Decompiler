@@ -8,15 +8,6 @@ namespace Decompiler
     /// </summary>
     public class FunctionPaneSorter : IComparer
     {
-        /// <summary>
-        /// Specifies the column to be sorted
-        /// </summary>
-        private int ColumnToSort;
-
-        /// <summary>
-        /// Specifies the order in which to sort (i.e. 'Ascending').
-        /// </summary>
-        private SortOrder OrderOfSort;
 
         /// <summary>
         /// Case insensitive comparer object
@@ -29,10 +20,10 @@ namespace Decompiler
         public FunctionPaneSorter()
         {
             // Initialize the column to '1'
-            ColumnToSort = 1;
+            SortColumn = 1;
 
             // Initialize the sort order to 'none'
-            OrderOfSort = SortOrder.None;
+            Order = SortOrder.None;
 
             // Initialize the CaseInsensitiveComparer object
             ObjectCompare = new CaseInsensitiveComparer();
@@ -55,25 +46,20 @@ namespace Decompiler
 
             // Compare the two items
 
-            if (ColumnToSort != 0)
-            {
-                compareResult = int.Parse(listviewX.SubItems[ColumnToSort].Text).CompareTo(int.Parse(listviewY.SubItems[ColumnToSort].Text));
-            }
-            else
-            {
-                compareResult = ObjectCompare.Compare(listviewX.SubItems[ColumnToSort].Text, listviewY.SubItems[ColumnToSort].Text);
-            }
+            compareResult =SortColumn != 0
+                ? int.Parse(listviewX.SubItems[SortColumn].Text).CompareTo(int.Parse(listviewY.SubItems[SortColumn].Text))
+                : ObjectCompare.Compare(listviewX.SubItems[SortColumn].Text, listviewY.SubItems[SortColumn].Text);
 
             // Calculate correct return value based on object comparison
-            if (OrderOfSort == SortOrder.Ascending)
+            if (Order == SortOrder.Ascending)
             {
                 // Ascending sort is selected, return normal result of compare operation
                 return compareResult;
             }
-            else if (OrderOfSort == SortOrder.Descending)
+            else if (Order == SortOrder.Descending)
             {
                 // Descending sort is selected, return negative result of compare operation
-                return (-compareResult);
+                return -compareResult;
             }
             else
             {
@@ -85,32 +71,11 @@ namespace Decompiler
         /// <summary>
         /// Gets or sets the number of the column to which to apply the sorting operation (Defaults to '0').
         /// </summary>
-        public int SortColumn
-        {
-            set
-            {
-                ColumnToSort = value;
-            }
-            get
-            {
-                return ColumnToSort;
-            }
-        }
+        public int SortColumn { set; get; }
 
         /// <summary>
         /// Gets or sets the order of sorting to apply (for example, 'Ascending' or 'Descending').
         /// </summary>
-        public SortOrder Order
-        {
-            set
-            {
-                OrderOfSort = value;
-            }
-            get
-            {
-                return OrderOfSort;
-            }
-        }
-
+        public SortOrder Order { set; get; }
     }
 }

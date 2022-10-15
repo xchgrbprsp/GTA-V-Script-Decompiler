@@ -17,7 +17,7 @@ namespace Decompiler.Patches
         {
             List<byte> bytes = new();
 
-            for (int i = start; i < end; i++)
+            for (var i = start; i < end; i++)
             {
                 bytes.Add(0);
 

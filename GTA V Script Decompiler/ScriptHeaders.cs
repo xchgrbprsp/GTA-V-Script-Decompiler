@@ -81,33 +81,33 @@ namespace Decompiler
 
 			header.StringTableOffsets = new int[header.StringBlocks];
 			scriptStream.Seek(header.StringsOffset + header.RSC7Offset, SeekOrigin.Begin);
-			for (int i = 0; i < header.StringBlocks; i++)
+			for (var i = 0; i < header.StringBlocks; i++)
 			{
 				header.StringTableOffsets[i] = reader.ReadPointer() + header.RSC7Offset;
 				reader.Advance();
 			}
 
-
 			header.CodeTableOffsets = new int[header.CodeBlocks];
 			scriptStream.Seek(header.CodeBlocksOffset + header.RSC7Offset, SeekOrigin.Begin);
-			for (int i = 0; i < header.CodeBlocks; i++)
+			for (var i = 0; i < header.CodeBlocks; i++)
 			{
 				header.CodeTableOffsets[i] = reader.ReadPointer() + header.RSC7Offset;
 				reader.Advance();
 			}
+
 			scriptStream.Position = header.ScriptNameOffset + header.RSC7Offset;
-			int data = scriptStream.ReadByte();
+			var data = scriptStream.ReadByte();
 			header.ScriptName = "";
-			while (data != 0 && data != -1)
+			while (data is not 0 and not (-1))
 			{
 				header.ScriptName += (char)data;
 				data = scriptStream.ReadByte();
 			}
+
 			return header;
 		}
 
 		private ScriptHeader()
 		{ }
 	}
-
 }

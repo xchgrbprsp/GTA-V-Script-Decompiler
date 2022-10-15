@@ -20,16 +20,13 @@
 
         public bool IsComplexOperand(AstToken operand)
         {
-            if (operand is not IntegerArithmetic)
-                return false;
-            else
-                return this.GetType() != operand.GetType();
+            return operand is not IntegerArithmetic ? false : this.GetType() != operand.GetType();
         }
 
         public override string ToString()
         {
-            string lhs = IsComplexOperand(Lhs) ? "(" + Lhs.ToString() + ")" : Lhs.ToString();
-            string rhs = IsComplexOperand(Rhs) ? "(" + Rhs.ToString() + ")" : Rhs.ToString();
+            var lhs = IsComplexOperand(Lhs) ? "(" + Lhs.ToString() + ")" : Lhs.ToString();
+            var rhs = IsComplexOperand(Rhs) ? "(" + Rhs.ToString() + ")" : Rhs.ToString();
 
             return $"{lhs} {Symbol} {rhs}";
         }
@@ -96,10 +93,7 @@
 
         public override string ToString()
         {
-            if (value is IntegerArithmetic)
-                return $"-({value})";
-            else
-                return $"-{value}";
+            return value is IntegerArithmetic ? $"-({value})" : $"-{value}";
         }
     }
 
@@ -119,10 +113,7 @@
 
         public override string ToString()
         {
-            if (value is IntegerAnd || value is IntegerOr)
-                return $"!({value})";
-            else
-                return $"!{value}";
+            return value is IntegerAnd or IntegerOr ? $"!({value})" : $"!{value}";
         }
     }
 }

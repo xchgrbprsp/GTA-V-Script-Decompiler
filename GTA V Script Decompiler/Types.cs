@@ -79,175 +79,78 @@ namespace Decompiler
 
         public static TypeInfo GetTypeInfo(Stack.DataType type)
         {
-            foreach (TypeInfo d in typeInfos)
+            foreach (var d in typeInfos)
             {
                 if (d.Type == type)
                     return d;
             }
+
             throw new Exception("Unknown type");
         }
 
         public static TypeInfo GetFromName(string name)
         {
-            foreach (TypeInfo d in typeInfos)
+            foreach (var d in typeInfos)
             {
                 if (d.SingleName.ToLower() == name.ToLower())
                     return d;
             }
+
             throw new Exception("Unknown type");
         }
 
         public static Stack.DataType GetPointerVersion(Stack.DataType type)
         {
-            switch (type)
+            return type switch
             {
-                case Stack.DataType.Int:
-                    return Stack.DataType.IntPtr;
-                case Stack.DataType.Unk:
-                    return Stack.DataType.UnkPtr;
-                case Stack.DataType.Bool:
-                    return Stack.DataType.BoolPtr;
-                case Stack.DataType.Float:
-                    return Stack.DataType.FloatPtr;
-                case Stack.DataType.Vector3:
-                    return Stack.DataType.Vector3Ptr;
-                case Stack.DataType.Any:
-                    return Stack.DataType.AnyPtr;
-                case Stack.DataType.Blip:
-                    return Stack.DataType.BlipPtr;
-                case Stack.DataType.Cam:
-                    return Stack.DataType.CamPtr;
-                case Stack.DataType.Entity:
-                    return Stack.DataType.EntityPtr;
-                case Stack.DataType.FireId:
-                    return Stack.DataType.FireIdPtr;
-                case Stack.DataType.Hash:
-                    return Stack.DataType.HashPtr;
-                case Stack.DataType.Interior:
-                    return Stack.DataType.InteriorPtr;
-                case Stack.DataType.ItemSet:
-                    return Stack.DataType.ItemSetPtr;
-                case Stack.DataType.Object:
-                    return Stack.DataType.ObjectPtr;
-                case Stack.DataType.Ped:
-                    return Stack.DataType.PedPtr;
-                case Stack.DataType.Pickup:
-                    return Stack.DataType.PickupPtr;
-                case Stack.DataType.Player:
-                    return Stack.DataType.PlayerPtr;
-                case Stack.DataType.ScrHandle:
-                    return Stack.DataType.ScrHandlePtr;
-                case Stack.DataType.Vehicle:
-                    return Stack.DataType.VehiclePtr;
-                default:
-                    return type;
-            }
+                Stack.DataType.Int => Stack.DataType.IntPtr,
+                Stack.DataType.Unk => Stack.DataType.UnkPtr,
+                Stack.DataType.Bool => Stack.DataType.BoolPtr,
+                Stack.DataType.Float => Stack.DataType.FloatPtr,
+                Stack.DataType.Vector3 => Stack.DataType.Vector3Ptr,
+                Stack.DataType.Any => Stack.DataType.AnyPtr,
+                Stack.DataType.Blip => Stack.DataType.BlipPtr,
+                Stack.DataType.Cam => Stack.DataType.CamPtr,
+                Stack.DataType.Entity => Stack.DataType.EntityPtr,
+                Stack.DataType.FireId => Stack.DataType.FireIdPtr,
+                Stack.DataType.Hash => Stack.DataType.HashPtr,
+                Stack.DataType.Interior => Stack.DataType.InteriorPtr,
+                Stack.DataType.ItemSet => Stack.DataType.ItemSetPtr,
+                Stack.DataType.Object => Stack.DataType.ObjectPtr,
+                Stack.DataType.Ped => Stack.DataType.PedPtr,
+                Stack.DataType.Pickup => Stack.DataType.PickupPtr,
+                Stack.DataType.Player => Stack.DataType.PlayerPtr,
+                Stack.DataType.ScrHandle => Stack.DataType.ScrHandlePtr,
+                Stack.DataType.Vehicle => Stack.DataType.VehiclePtr,
+                _ => type,
+            };
         }
 
         public static Stack.DataType GetLiteralVersion(Stack.DataType type)
         {
-            switch (type)
+            return type switch
             {
-                case Stack.DataType.IntPtr:
-                    return Stack.DataType.Int;
-                case Stack.DataType.UnkPtr:
-                    return Stack.DataType.Unk;
-                case Stack.DataType.BoolPtr:
-                    return Stack.DataType.Bool;
-                case Stack.DataType.FloatPtr:
-                    return Stack.DataType.Float;
-                case Stack.DataType.Vector3Ptr:
-                    return Stack.DataType.Vector3;
-                case Stack.DataType.AnyPtr:
-                    return Stack.DataType.Any;
-                case Stack.DataType.BlipPtr:
-                    return Stack.DataType.Blip;
-                case Stack.DataType.CamPtr:
-                    return Stack.DataType.Cam;
-                case Stack.DataType.EntityPtr:
-                    return Stack.DataType.Entity;
-                case Stack.DataType.FireIdPtr:
-                    return Stack.DataType.FireId;
-                case Stack.DataType.HashPtr:
-                    return Stack.DataType.Hash;
-                case Stack.DataType.InteriorPtr:
-                    return Stack.DataType.Interior;
-                case Stack.DataType.ItemSetPtr:
-                    return Stack.DataType.ItemSet;
-                case Stack.DataType.ObjectPtr:
-                    return Stack.DataType.Object;
-                case Stack.DataType.PedPtr:
-                    return Stack.DataType.Ped;
-                case Stack.DataType.PickupPtr:
-                    return Stack.DataType.Pickup;
-                case Stack.DataType.PlayerPtr:
-                    return Stack.DataType.Player;
-                case Stack.DataType.ScrHandlePtr:
-                    return Stack.DataType.ScrHandle;
-                case Stack.DataType.VehiclePtr:
-                    return Stack.DataType.Vehicle;
-                default:
-                    return type;
-            }
-        }
-
-        public static bool HasPointerVersion(Stack.DataType type)
-        {
-            switch (type)
-            {
-                case Stack.DataType.Int:
-                case Stack.DataType.Unk:
-                case Stack.DataType.Bool:
-                case Stack.DataType.Unsure:
-                case Stack.DataType.Float:
-                case Stack.DataType.Vector3:
-                case Stack.DataType.Any:
-                case Stack.DataType.Blip:
-                case Stack.DataType.Cam:
-                case Stack.DataType.Entity:
-                case Stack.DataType.FireId:
-                case Stack.DataType.Hash:
-                case Stack.DataType.Interior:
-                case Stack.DataType.ItemSet:
-                case Stack.DataType.Object:
-                case Stack.DataType.Ped:
-                case Stack.DataType.Pickup:
-                case Stack.DataType.Player:
-                case Stack.DataType.ScrHandle:
-                case Stack.DataType.Vehicle:
-                    return true;
-                default:
-                    return false;
-            }
-        }
-
-        public static bool HasLiteralVersion(Stack.DataType type)
-        {
-            switch (type)
-            {
-                case Stack.DataType.IntPtr:
-                case Stack.DataType.UnkPtr:
-                case Stack.DataType.BoolPtr:
-                case Stack.DataType.FloatPtr:
-                case Stack.DataType.Vector3Ptr:
-                case Stack.DataType.AnyPtr:
-                case Stack.DataType.BlipPtr:
-                case Stack.DataType.CamPtr:
-                case Stack.DataType.EntityPtr:
-                case Stack.DataType.FireIdPtr:
-                case Stack.DataType.HashPtr:
-                case Stack.DataType.InteriorPtr:
-                case Stack.DataType.ItemSetPtr:
-                case Stack.DataType.ObjectPtr:
-                case Stack.DataType.PedPtr:
-                case Stack.DataType.PickupPtr:
-                case Stack.DataType.PlayerPtr:
-                case Stack.DataType.ScrHandlePtr:
-                case Stack.DataType.VehiclePtr:
-                    return true;
-                default:
-                    return false;
-            }
+                Stack.DataType.IntPtr => Stack.DataType.Int,
+                Stack.DataType.UnkPtr => Stack.DataType.Unk,
+                Stack.DataType.BoolPtr => Stack.DataType.Bool,
+                Stack.DataType.FloatPtr => Stack.DataType.Float,
+                Stack.DataType.Vector3Ptr => Stack.DataType.Vector3,
+                Stack.DataType.AnyPtr => Stack.DataType.Any,
+                Stack.DataType.BlipPtr => Stack.DataType.Blip,
+                Stack.DataType.CamPtr => Stack.DataType.Cam,
+                Stack.DataType.EntityPtr => Stack.DataType.Entity,
+                Stack.DataType.FireIdPtr => Stack.DataType.FireId,
+                Stack.DataType.HashPtr => Stack.DataType.Hash,
+                Stack.DataType.InteriorPtr => Stack.DataType.Interior,
+                Stack.DataType.ItemSetPtr => Stack.DataType.ItemSet,
+                Stack.DataType.ObjectPtr => Stack.DataType.Object,
+                Stack.DataType.PedPtr => Stack.DataType.Ped,
+                Stack.DataType.PickupPtr => Stack.DataType.Pickup,
+                Stack.DataType.PlayerPtr => Stack.DataType.Player,
+                Stack.DataType.ScrHandlePtr => Stack.DataType.ScrHandle,
+                Stack.DataType.VehiclePtr => Stack.DataType.Vehicle,
+                _ => type,
+            };
         }
 
         public class TypeInfo

@@ -7,16 +7,17 @@ namespace Decompiler
 		public static uint Joaat(string str)
 		{
 			uint hash, i;
-			char[] key = str.ToLower().ToCharArray();
+			var key = str.ToLower().ToCharArray();
 			for (hash = i = 0; i < key.Length; i++)
 			{
 				hash += key[i];
-				hash += (hash << 10);
-				hash ^= (hash >> 6);
+				hash += hash << 10;
+				hash ^= hash >> 6;
 			}
-			hash += (hash << 3);
-			hash ^= (hash >> 11);
-			hash += (hash << 15);
+
+			hash += hash << 3;
+			hash ^= hash >> 11;
+			hash += hash << 15;
 			return hash;
 		}
 
@@ -26,18 +27,15 @@ namespace Decompiler
 				return BitConverter.ToSingle(BitConverter.GetBytes(value), 0).ToString() + "f";
 
 			if (type.Enum != null)
-				if (type.Enum.TryGetValue((int)value, out string enumValue))
+				if (type.Enum.TryGetValue((int)value, out var enumValue))
 					return enumValue;
 
-			if (value > int.MaxValue && value <= uint.MaxValue)
-				return ((int)((uint)value)).ToString();
-
-			return value.ToString();
+			return value is > int.MaxValue and <= uint.MaxValue ? ((int)(uint)value).ToString() : value.ToString();
 		}
 
 		public static ushort SwapEndian(ushort num)
 		{
-			byte[] data = BitConverter.GetBytes(num);
+			var data = BitConverter.GetBytes(num);
 			Array.Reverse(data);
 			return BitConverter.ToUInt16(data, 0);
 		}

@@ -61,10 +61,7 @@ namespace Decompiler
 			NumLocals = vcount;
 			NumReturns = rcount;
 			Location = location;
-			if (locmax != -1)
-				MaxLocation = locmax;
-			else
-				MaxLocation = Location;
+			MaxLocation =locmax != -1 ? locmax : Location;
 			Decoded = false;
 			Vars = new VariableStorage(VariableStorage.ListType.Vars, vcount - 2);
 			Params = new VariableStorage(VariableStorage.ListType.Params, pcount);
@@ -89,7 +86,7 @@ namespace Decompiler
 			//if (Instructions.Count <= 5)
 			//	return 0; too many collisions but lets still give it a try
 
-			int i = 0;
+			var i = 0;
 			Instruction? lastIns = null;
 
 			foreach (var ins in Instructions)
@@ -157,7 +154,7 @@ namespace Decompiler
 		/// <returns>The whole function high level code</returns>
 		public override string ToString()
 		{
-			string str = FunctionHeader() + Environment.NewLine + MainTree.ToString();
+			var str = FunctionHeader() + Environment.NewLine + MainTree.ToString();
 			LineCount = Regex.Matches(str, Environment.NewLine).Count + 1;
 			return str;
 		}
@@ -261,7 +258,7 @@ namespace Decompiler
 				if (local.Name.Length != 0)
 					continue;
 
-				string name = prefix + local.AutoName.GetName();
+				var name = prefix + local.AutoName.GetName();
 
 				if (setNames.ContainsKey(name))
 				{
@@ -273,7 +270,7 @@ namespace Decompiler
 					else if (local.AutoName.GetNameCollisionBehavior() == AutoName.NameCollisionBehavior.IncrementCharacter)
 					{
 						setNames[name]++;
-						char chr = name[^1];
+						var chr = name[^1];
 						chr += (char)(setNames[name] - 1);
 						name = chr.ToString(); // TODO
 					}
@@ -308,11 +305,12 @@ namespace Decompiler
 		/// <returns>basic information about the function at that offset</returns>
 		public Function GetFunctionFromOffset(int offset)
 		{
-			foreach (Function f in ScriptFile.Functions)
+			foreach (var f in ScriptFile.Functions)
 			{
 				if (f.Location <= offset && offset <= f.MaxLocation)
 					return f;
 			}
+
 			throw new Exception("Function Not Found");
 		}
 
@@ -342,7 +340,7 @@ namespace Decompiler
 		/// </summary>	
 		void IsJumpWithinFunctionBounds()
 		{
-			int cur = Offset;
+			var cur = Offset;
 			Instruction temp = new(CodeBlock[Offset], GetArray(2), cur);
 			if (temp.GetJumpOffset > 0)
 			{
@@ -365,7 +363,7 @@ namespace Decompiler
 		void CheckDupForInstruction()
 		{
 			//May need refining, but works fine for rockstars code
-			int off = 0;
+			var off = 0;
 Start:
 			off += 1;
 			if (CodeBlock[Offset + off] == 0)
@@ -375,10 +373,12 @@ Start:
 				Offset = Offset + off + 2;
 				return;
 			}
+
 			if (CodeBlock[Offset + off] == 6)
 			{
 				goto Start;
 			}
+
 			Instructions.Add(new Instruction(CodeBlock[Offset], Offset));
 			return;
 		}
@@ -391,7 +391,7 @@ Start:
 		/// <returns>the operands for the instruction</returns>
 		IEnumerable<byte> GetArray(int items)
 		{
-			int temp = Offset + 1;
+			var temp = Offset + 1;
 			Offset += items;
 
 			return CodeBlock.GetRange(temp, items);
@@ -410,7 +410,7 @@ Start:
 			bool usedefault;
 			Instruction temp;
 
-			for (int i = 0; i < Instructions[tree.Offset].GetOperand(0); i++)
+			for (var i = 0; i < Instructions[tree.Offset].GetOperand(0); i++)
 			{
 				if (CodeOffsetToFunctionOffset(Instructions[tree.Offset].GetSwitchOffset(i)) <= tree.Offset)
 					throw new InvalidOperationException("Switch case offset goes backwards???");
@@ -420,7 +420,6 @@ Start:
 
 				//Get the offset to jump to
 				offset = Instructions[tree.Offset].GetSwitchOffset(i);
-
 
 				if (!cases.ContainsKey(offset))
 				{
@@ -435,11 +434,11 @@ Start:
 			}
 
 			//Not sure how necessary this step is, but just incase R* compiler doesnt order jump offsets, do it anyway
-			List<int> sorted = cases.Keys.ToList();
+			var sorted = cases.Keys.ToList();
 			sorted.Sort();
 
 			//Hanldle(skip past) any Nops immediately after switch statement
-			int tempoff = 0;
+			var tempoff = 0;
 			while (Instructions[tree.Offset + 1 + tempoff].OriginalOpcode == Opcode.NOP)
 				tempoff++;
 
@@ -455,30 +454,30 @@ Start:
 
 			//check if case last instruction is a jump to default location, if so default location is a break;
 			//if not break location is where last instrcution jumps to
-			for (int i = 0; i <= sorted.Count; i++)
+			for (var i = 0; i <= sorted.Count; i++)
 			{
-				int index = 0;
-				if (i == sorted.Count)
-					index = InstructionMap[defaultloc] - 1;
-				else
-					index = InstructionMap[sorted[i]] - 1;
+				var index = i == sorted.Count ? InstructionMap[defaultloc] - 1 : InstructionMap[sorted[i]] - 1;
 				if (index - 1 == tree.Offset)
 				{
 					continue;
 				}
+
 				temp = Instructions[index];
 				if (temp.Opcode != Opcode.J)
 				{
 					continue;
 				}
+
 				if (temp.GetJumpOffset == defaultloc)
 				{
 					usedefault = false;
 					breakloc = defaultloc;
 					break;
 				}
+
 				breakloc = temp.GetJumpOffset;
 			}
+
 			if (usedefault)
 			{
 				//this seems to be causing some errors
@@ -618,7 +617,7 @@ Start:
 						break;
 					case 98:
 						int temp = CodeBlock[Offset + 1];
-						AddInstruction(curoff, new Instruction(CodeBlock[Offset], GetArray(temp*6 + 1), curoff));
+						AddInstruction(curoff, new Instruction(CodeBlock[Offset], GetArray((temp*6) + 1), curoff));
 						break;
 					case 101:
 					case 102:
@@ -630,17 +629,19 @@ Start:
 						AddInstruction(curoff, new Instruction(CodeBlock[Offset], curoff));
 						break;
 					default:
-						if (CodeBlock[Offset] <= 126) AddInstruction(curoff, new Instruction(CodeBlock[Offset], curoff));
-						else throw new Exception("Unexpected Opcode");
+						if (CodeBlock[Offset] <= 126)
+							AddInstruction(curoff, new Instruction(CodeBlock[Offset], curoff));
+						else
+							throw new Exception("Unexpected Opcode");
 						break;
 				}
+
 				Offset++;
 			}
 
 			Hash = GetFunctionHash();
 			Mk2Hash = GetFunctionHash(true);
 		}
-
 
 		/// <summary>
 		/// Adds an instruction to the list of instructions
@@ -831,6 +832,7 @@ Start:
 								comments.Add(new("DROP: Dropped token with GetStackCount() > 1 && Peek() is not Ast.FunctionCallBase, not sure what to do, defaulting to incorrect behavior"));
 							}
 						}
+
 						var dropped = Stack.Pop(true);
 						if (dropped.HasSideEffects())
 							tree.Statements.Add(new Ast.Drop(this, dropped));
@@ -954,12 +956,12 @@ Start:
 								Stack.Push(new Ast.TernaryOperator(this, args[0], args[1], args[2]));
 								break;
 							}
-							else if (function.Hash == StringObfuscation.GET_STRING_WITH_ROTATE_HASH || function.Hash == StringObfuscation.GET_STRING_WITH_ROTATE_2_HASH)
+							else if (function.Hash is StringObfuscation.GET_STRING_WITH_ROTATE_HASH or StringObfuscation.GET_STRING_WITH_ROTATE_2_HASH)
 							{
 								StringObfuscation.GetStringWithRotate(this, Stack.PopCount(function.NumParams).ToArray(), Stack);
 								break;
 							}
-							else if (function.Hash == StringObfuscation.REORDER_STRING_4_32_HASH || function.Hash == StringObfuscation.REORDER_STRING_4_64_HASH || function.Hash == StringObfuscation.REORDER_STRING_4_24_HASH)
+							else if (function.Hash is StringObfuscation.REORDER_STRING_4_32_HASH or StringObfuscation.REORDER_STRING_4_64_HASH or StringObfuscation.REORDER_STRING_4_24_HASH)
 							{
 								StringObfuscation.ReorderString_4(this, Stack.PopCount(function.NumParams).ToArray(), Stack, function.Hash == StringObfuscation.REORDER_STRING_4_24_HASH ? 6 : 8);
 								break;
@@ -1087,7 +1089,7 @@ Start:
 							break;
 						}
 
-						int tempoff = 0;
+						var tempoff = 0;
 start:
 //Check to see if the jump is just jumping past nops(end of code table)
 //should be the only case for finding another jump now
@@ -1105,13 +1107,13 @@ start:
 									tempoff++;
 									goto start;
 								}
-
 							}
 
 							tree.Statements.Add(new Ast.Jump(this, Instructions[tree.Offset].GetJumpOffset));
 							comments.Add(new("Unhandled jump detected. Output should be considered invalid"));
 							break;
 						}
+
 DONE:
 						break;
 					case Opcode.JZ:
@@ -1189,6 +1191,7 @@ DONE:
 							tree.Offset = CodeOffsetToFunctionOffset(@if.EndOffset);
 							break;
 						}
+
 DONE_COND:
 						break;
 					default:
@@ -1218,13 +1221,11 @@ DONE_COND:
 			{
 				return (tk1 as Ast.GlobalStore).Index == (tk2 as Ast.GlobalStore).Index;
 			}
-
-			if (tk1 is Ast.LocalStore && tk2 is Ast.LocalStore)
+			else if (tk1 is Ast.LocalStore && tk2 is Ast.LocalStore)
 			{
 				return (tk1 as Ast.LocalStore).Index == (tk2 as Ast.LocalStore).Index;
 			}
-
-			if (tk1 is Ast.StaticStore && tk2 is Ast.StaticStore)
+			else if (tk1 is Ast.StaticStore && tk2 is Ast.StaticStore)
 			{
 				return (tk1 as Ast.StaticStore).Index == (tk2 as Ast.StaticStore).Index;
 			}
@@ -1252,14 +1253,17 @@ DONE_COND:
 					if (@else.Statements.Count == 1 && @else.Statements[^1] is Ast.StatementTree.If)
 					{
 						var insideIf = @else.Statements[^1] as Ast.StatementTree.If;
-						var newElseif = new Ast.StatementTree.ElseIf(this, lastIf, -1, insideIf.Condition, -1);
-						newElseif.Statements = insideIf.Statements;
+						var newElseif = new Ast.StatementTree.ElseIf(this, lastIf, -1, insideIf.Condition, -1)
+						{
+							Statements = insideIf.Statements
+						};
 						lastIf.ElseIfTrees.Add(newElseif);
 						foreach (var elseIf in insideIf.ElseIfTrees)
 						{
 							elseIf.Parent = lastIf;
 							lastIf.ElseIfTrees.Add(elseIf);
 						}
+
 						lastIf.ElseTree = insideIf.ElseTree;
 						if (lastIf.ElseTree != null)
 							lastIf.ElseTree!.Parent = lastIf;

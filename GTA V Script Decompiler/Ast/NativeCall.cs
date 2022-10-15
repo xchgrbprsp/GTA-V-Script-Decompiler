@@ -14,7 +14,7 @@ namespace Decompiler.Ast
             Entry = Program.nativeDB.GetEntry(hash);
             ReturnCount = returnCount;
 
-            int i = 0;
+            var i = 0;
 
             // TODO move this somewhere else!!!!
             foreach (var arg in arguments)
@@ -35,6 +35,7 @@ namespace Decompiler.Ast
                     {
                         function.GetFrameVar(((arg as LoadN).Pointer as Local).Index).HintType(ref Types.VEC3.GetContainer());
                     }
+
                     arg.HintType(ref Types.VEC3.GetContainer());
                 }
 
@@ -46,10 +47,7 @@ namespace Decompiler.Ast
         {
             var type = Entry?.GetReturnType() ?? Types.UNKNOWN;
 
-            if (type == Types.VOID)
-                return ref Types.UNKNOWN.GetContainer();
-
-            return ref type.GetContainer();
+            return ref type == Types.VOID ? ref Types.UNKNOWN.GetContainer() : ref type.GetContainer();
         }
 
         public override string GetName()

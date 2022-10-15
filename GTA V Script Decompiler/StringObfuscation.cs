@@ -15,7 +15,7 @@ namespace Decompiler
 
         public static void GetStringWithRotate(Function func, Ast.AstToken[] args, Stack stack)
         {
-            int iParam0 = (int)(args[0] as ConstantInt).GetValue();
+            var iParam0 = (int)(args[0] as ConstantInt).GetValue();
             iParam0 = 32 - iParam0;
 
             switch (iParam0)
@@ -164,7 +164,7 @@ namespace Decompiler
                 (args[2] as String).GetString()
             ));
 
-            for (int i = 0; i < (size - 1); i++)
+            for (var i = 0; i < (size - 1); i++)
                 stack.Push(new String(func, ""));
         }
 
@@ -181,7 +181,7 @@ namespace Decompiler
                 (args[3] as String).GetString()
             ));
 
-            for (int i = 0; i < 15; i++)
+            for (var i = 0; i < 15; i++)
                 stack.Push(new String(func, ""));
         }
     }

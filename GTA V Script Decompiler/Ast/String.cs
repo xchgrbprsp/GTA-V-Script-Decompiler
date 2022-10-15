@@ -25,17 +25,9 @@ namespace Decompiler.Ast
 
         public string GetString()
         {
-            if (_string != null)
-                return _string;
-
-            if (Index is ConstantInt)
-            {
-                return function.ScriptFile.StringTable[(int)(Index as ConstantInt).GetValue()];
-            }
-            else
-            {
-                throw new InvalidOperationException("Index is not constant");
-            }
+            return _string ??(Index is ConstantInt
+                ? function.ScriptFile.StringTable[(int)(Index as ConstantInt).GetValue()]
+                : throw new InvalidOperationException("Index is not constant"));
         }
 
         public override string ToString()
@@ -47,14 +39,13 @@ namespace Decompiler.Ast
             {
                 if (Properties.Settings.Default.LocalizedTextType != 0)
                 {
-                    uint hash = Utils.Joaat(function.ScriptFile.StringTable[(int)(Index as ConstantInt).GetValue()]);
+                    var hash = Utils.Joaat(function.ScriptFile.StringTable[(int)(Index as ConstantInt).GetValue()]);
 
-                    if (hash != 0x3acbce85 /*STRING*/ && Program.textDB.Strings.TryGetValue(hash, out string text))
+                    if (hash != 0x3acbce85 /*STRING*/ && Program.textDB.Strings.TryGetValue(hash, out var text))
                     {
-                        if (Properties.Settings.Default.LocalizedTextType == 1)
-                            return $"_(\"{text.Replace("\"", "\\\"")}\")";
-                        else
-                            return $"\"{function.ScriptFile.StringTable[(int)(Index as ConstantInt).GetValue()]}\" /*{text}*/";
+                        return Properties.Settings.Default.LocalizedTextType == 1
+                            ? $"_(\"{text.Replace("\"", "\\\"")}\")"
+                            : $"\"{function.ScriptFile.StringTable[(int)(Index as ConstantInt).GetValue()]}\" /*{text}*/";
                     }
                 }
 

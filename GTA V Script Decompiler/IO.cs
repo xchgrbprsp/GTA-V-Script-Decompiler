@@ -16,18 +16,19 @@ namespace Decompiler.IO
 
         public int ReadPointer()
         {
-            return (ReadInt32() & 0xFFFFFF);
+            return ReadInt32() & 0xFFFFFF;
         }
 
         public override string ReadString()
         {
-            string temp = "";
-            byte next = ReadByte();
+            var temp = "";
+            var next = ReadByte();
             while (next != 0)
             {
                 temp += (char)next;
                 next = ReadByte();
             }
+
             return temp;
         }
     }

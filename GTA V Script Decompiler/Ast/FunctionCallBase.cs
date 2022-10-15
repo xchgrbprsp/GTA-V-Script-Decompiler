@@ -38,7 +38,7 @@ namespace Decompiler.Ast
 
         public override string ToString()
         {
-            bool first = true;
+            var first = true;
             StringBuilder sb = new();
             sb.Append(GetName());
             sb.Append('(');
@@ -50,6 +50,7 @@ namespace Decompiler.Ast
                 sb.Append(arg.ToString());
                 first = false;
             }
+
             sb.Append(')');
             if (IsStatement())
                 sb.Append(';');

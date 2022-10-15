@@ -30,10 +30,10 @@ namespace Decompiler
             X64NativeTable = new X64NativeTable(scriptStream, Header.NativesOffset + Header.RSC7Offset, Header.NativesCount, Header.CodeLength);
 
             CodeTable = new List<byte>();
-            for (int i = 0; i < Header.CodeBlocks; i++)
+            for (var i = 0; i < Header.CodeBlocks; i++)
             {
-                int tablesize = ((i + 1) * 0x4000 >= Header.CodeLength) ? Header.CodeLength % 0x4000 : 0x4000;
-                byte[] working = new byte[tablesize];
+                var tablesize = ((i + 1) * 0x4000 >= Header.CodeLength) ? Header.CodeLength % 0x4000 : 0x4000;
+                var working = new byte[tablesize];
                 scriptStream.Position = Header.CodeTableOffsets[i];
                 scriptStream.Read(working, 0, tablesize);
                 CodeTable.AddRange(working);
@@ -51,7 +51,7 @@ namespace Decompiler
 
             Statics.checkvars();
 
-            foreach (Function func in Functions)
+            foreach (var func in Functions)
             {
                 func.BuildInstructions();
                 Program.functionDB.Visit(func);
@@ -59,7 +59,7 @@ namespace Decompiler
 
             bar?.SetMax(Functions.Count + 1);
 
-            foreach (Function func in Functions)
+            foreach (var func in Functions)
             {
                 await Task.Run(
                     () => func.Decompile());
@@ -74,12 +74,12 @@ namespace Decompiler
 
         public void Save(Stream stream, bool close = false)
         {
-            int i = 1;
+            var i = 1;
             StreamWriter savestream = new(stream);
 
             if (Header.GlobalsCount > 0)
             {
-                savestream.WriteLine($"// Program registers {Header.GlobalsCount & 0x3FFFF} globals at index {Header.GlobalsCount >> 18} starting from Global_{0x40000 * ((Header.GlobalsCount >> 18))}");
+                savestream.WriteLine($"// Program registers {Header.GlobalsCount & 0x3FFFF} globals at index {Header.GlobalsCount >> 18} starting from Global_{0x40000 * (Header.GlobalsCount >> 18)}");
                 i++;
             }
 
@@ -89,24 +89,26 @@ namespace Decompiler
                 {
                     savestream.WriteLine("#region Local Var");
                     i++;
-                    foreach (string s in Statics.GetDeclaration())
+                    foreach (var s in Statics.GetDeclaration())
                     {
                         savestream.WriteLine("\t" + s);
                         i++;
                     }
+
                     savestream.WriteLine("#endregion");
                     savestream.WriteLine("");
                     i += 2;
                 }
             }
 
-            foreach (Function f in Functions)
+            foreach (var f in Functions)
             {
-                string s = f.ToString();
+                var s = f.ToString();
                 savestream.WriteLine(s);
                 FunctionLines.Add(f, i);
                 i += f.LineCount;
             }
+
             savestream.Flush();
             if (close)
                 savestream.Close();
@@ -120,10 +122,11 @@ namespace Decompiler
         public string[] GetStringTable()
         {
             List<string> table = new();
-            foreach (KeyValuePair<int, string> item in StringTable)
+            foreach (var item in StringTable)
             {
                 table.Add(item.Key.ToString() + ": " + item.Value);
             }
+
             return table.ToArray();
         }
 
@@ -134,16 +137,17 @@ namespace Decompiler
 
         public void GetFunctionCode()
         {
-            for (int i = 0; i < Functions.Count - 1; i++)
+            for (var i = 0; i < Functions.Count - 1; i++)
             {
-                int start = Functions[i].MaxLocation;
-                int end = Functions[i + 1].Location;
+                var start = Functions[i].MaxLocation;
+                var end = Functions[i + 1].Location;
                 Functions[i].CodeBlock = CodeTable.GetRange(start, end - start);
             }
-            Functions[Functions.Count - 1].CodeBlock = CodeTable.GetRange(Functions[Functions.Count - 1].MaxLocation, CodeTable.Count - Functions[Functions.Count - 1].MaxLocation);
-            foreach (Function func in Functions)
+
+            Functions[^1].CodeBlock = CodeTable.GetRange(Functions[^1].MaxLocation, CodeTable.Count - Functions[^1].MaxLocation);
+            foreach (var func in Functions)
             {
-                if (func.CodeBlock[0] != 45 && func.CodeBlock[func.CodeBlock.Count - 3] != 46)
+                if (func.CodeBlock[0] != 45 && func.CodeBlock[^3] != 46)
                     throw new Exception("Function has incorrect start/ends");
             }
         }
@@ -155,11 +159,11 @@ namespace Decompiler
 
         void AddFunction(int start1, int start2)
         {
-            byte namelen = CodeTable[start1 + 4];
-            string name = "";
+            var namelen = CodeTable[start1 + 4];
+            var name = "";
             if (namelen > 0)
             {
-                for (int i = 0; i < namelen; i++)
+                for (var i = 0; i < namelen; i++)
                 {
                     name += (char)CodeTable[start1 + 5 + i];
                 }
@@ -168,22 +172,20 @@ namespace Decompiler
                     if (fun.Name == name)
                         name += "_0";
             }
-            else if (start1 == 0)
-            {
-                name = "main";
-            }
             else
             {
-                name = "func_" + Functions.Count.ToString();
+                name =start1 == 0 ? "main" : "func_" + Functions.Count.ToString();
             }
+
             int pcount = CodeTable[offset + 1];
             int tmp1 = CodeTable[offset + 2], tmp2 = CodeTable[offset + 3];
-            int vcount = ((tmp2 << 0x8) | tmp1);
+            var vcount = (tmp2 << 0x8) | tmp1;
             if (vcount < 0)
             {
                 throw new Exception("Well this shouldnt have happened");
             }
-            int temp = start1 + 5 + namelen;
+
+            var temp = start1 + 5 + namelen;
             while (CodeTable[temp] != 46)
             {
                 switch (CodeTable[temp])
@@ -241,16 +243,18 @@ namespace Decompiler
                     case 95:
                     case 96:
                     case 97: temp += 3; break;
-                    case 98: temp += 1 + CodeTable[temp + 1] * 6; break;
+                    case 98: temp += 1 + (CodeTable[temp + 1] * 6); break;
                     case 101:
                     case 102:
                     case 103:
                     case 104: temp += 1; break;
                 }
+
                 temp += 1;
             }
+
             int rcount = CodeTable[temp + 2];
-            int Location = start2;
+            var Location = start2;
             if (start1 == start2)
             {
                 var func = new Function(this, name, pcount, vcount, rcount, Location);
@@ -266,7 +270,7 @@ namespace Decompiler
         }
         void GetFunctions()
         {
-            int returnpos = -3;
+            var returnpos = -3;
             while (offset < CodeTable.Count)
             {
                 switch (CodeTable[offset])
@@ -324,14 +328,16 @@ namespace Decompiler
                     case 95:
                     case 96:
                     case 97: advpos(3); break;
-                    case 98: advpos(1 + CodeTable[offset + 1] * 6); break;
+                    case 98: advpos(1 + (CodeTable[offset + 1] * 6)); break;
                     case 101:
                     case 102:
                     case 103:
                     case 104: advpos(1); break;
                 }
+
                 advpos(1);
             }
+
             offset = 0;
             GetFunctionCode();
         }
@@ -342,7 +348,7 @@ namespace Decompiler
             Statics.SetScriptParamCount(Header.ParameterCount);
             IO.Reader reader = new(file);
             reader.BaseStream.Position = Header.StaticsOffset + Header.RSC7Offset;
-            for (int count = 0; count < Header.StaticsCount; count++)
+            for (var count = 0; count < Header.StaticsCount; count++)
             {
                 Statics.AddVar(reader.ReadInt64());
             }

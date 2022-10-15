@@ -17,10 +17,9 @@
             if (value.IsPointer())
                 sep = ".";
 
-            if (offset is ConstantInt)
-                return "&(" + value.ToPointerString() + sep + "f_" + offset.ToString() + ")";
-            else
-                return "&(" + value.ToPointerString() + sep + "f_[" + offset.ToString() + "])";
+            return offset is ConstantInt
+                ? "&(" + value.ToPointerString() + sep + "f_" + offset.ToString() + ")"
+                : "&(" + value.ToPointerString() + sep + "f_[" + offset.ToString() + "])";
         }
 
         public override string ToPointerString()
@@ -29,10 +28,9 @@
             if (value.IsPointer())
                 sep = ".";
 
-            if (offset is ConstantInt)
-                return value.ToPointerString() + sep + "f_" + (offset as ConstantInt).GetValue();
-            else
-                return value.ToPointerString() + sep + "f_[" + offset.ToString() + "]";
+            return offset is ConstantInt
+                ? value.ToPointerString() + sep + "f_" + (offset as ConstantInt).GetValue()
+                : value.ToPointerString() + sep + "f_[" + offset.ToString() + "]";
         }
 
         public override bool CanGetGlobalIndex()
@@ -42,7 +40,7 @@
 
         public override int GetGlobalIndex()
         {
-            return value.GetGlobalIndex() + (int)((offset as ConstantInt).GetValue());
+            return value.GetGlobalIndex() + (int)(offset as ConstantInt).GetValue();
         }
 
         public override bool IsPointer()

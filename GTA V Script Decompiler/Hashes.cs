@@ -32,13 +32,14 @@ namespace Decompiler
 				Decompressed.Position = 0;
 				reader = new StreamReader(Decompressed);
 			}
+
 			while (!reader.EndOfStream)
 			{
-				string line = reader.ReadLine();
-				string[] split = line.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
+				var line = reader.ReadLine();
+				var split = line.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
 				if (split.Length != 2)
 					continue;
-				int hash = 0;
+				var hash = 0;
 				try
 				{
 					hash = Convert.ToInt32(split[0]);
@@ -47,10 +48,10 @@ namespace Decompiler
 				{
 					hash = (int)Convert.ToUInt32(split[0]);
 				}
+
 				if (!hashes.ContainsKey(hash) && hash != 0)
 					hashes.Add(hash, split[1]);
 			}
-
 		}
 
 		public void Export_Entities()
@@ -72,19 +73,16 @@ namespace Decompiler
 		{
 			if (Program.shouldReverseHashes && value > 200)
 			{
-				int intvalue = (int)value;
+				var intvalue = (int)value;
 				if (hashes.TryGetValue(intvalue, out var val))
 					return "joaat(\"" + val + "\")";
 			}
 
-			if (Program.getIntType == Program.IntType._int)
-				return ((int)value).ToString();
-			else if (Program.getIntType == Program.IntType._uint)
-				return (value).ToString();
-			else if (Program.getIntType == Program.IntType._hex)
-				return "0x" + value.ToString("X");
-			else
-				throw new IndexOutOfRangeException();
+			return Program.getIntType == Program.IntType._int
+				? ((int)value).ToString()
+				: Program.getIntType == Program.IntType._uint
+				? value.ToString()
+				: Program.getIntType == Program.IntType._hex ? "0x" + value.ToString("X") : throw new IndexOutOfRangeException();
 		}
 
 		public bool IsKnownHash(int value)

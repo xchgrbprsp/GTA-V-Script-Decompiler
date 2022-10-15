@@ -47,6 +47,7 @@ namespace Decompiler.Ast.StatementTree
                     sb.Append("case ");
                 sb.AppendLine(@case.ToString() + ":");
             }
+
             sb.Append(ToString(false));
             return sb.ToString();
         }

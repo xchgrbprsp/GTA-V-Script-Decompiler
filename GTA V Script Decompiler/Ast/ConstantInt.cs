@@ -40,7 +40,7 @@
             var info = Type.Type;
             if (info.Enum != null)
             {
-                if (info.Enum.TryGetValue((int)Value, out string enumVal))
+                if (info.Enum.TryGetValue((int)Value, out var enumVal))
                     return enumVal;
             }
 

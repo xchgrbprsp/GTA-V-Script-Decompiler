@@ -46,12 +46,13 @@ namespace Decompiler
 			}
 			else
 			{
-				DateTime Start = DateTime.Now;
-				string ext = Path.GetExtension(args[0]);
+				var Start = DateTime.Now;
+				var ext = Path.GetExtension(args[0]);
 				if (ext == ".full")
 				{
 					ext = Path.GetExtension(Path.GetFileNameWithoutExtension(args[0]));
 				}
+
 				ScriptFile fileopen;
 				Console.WriteLine("Decompiling " + args[0] + "...");
 				try
@@ -65,17 +66,19 @@ namespace Decompiler
 					Console.WriteLine("Error decompiling script " + ex.Message);
 					return;
 				}
+
 				Console.WriteLine("Decompiled in " + (DateTime.Now - Start).ToString());
 				fileopen.Save(File.OpenWrite(args[0] + ".c"), true);
 				Console.WriteLine("Extracing native table...");
 				StreamWriter fw = new(File.OpenWrite(args[0] + " native table.txt"));
-				foreach (ulong nat in fileopen.X64NativeTable.NativeHashes)
+				foreach (var nat in fileopen.X64NativeTable.NativeHashes)
 				{
-					string temps = nat.ToString("X");
+					var temps = nat.ToString("X");
 					while (temps.Length < 16)
 						temps = "0" + temps;
 					fw.WriteLine(temps);
 				}
+
 				fw.Flush();
 				fw.Close();
 				Console.WriteLine("All done & saved!");
@@ -91,21 +94,14 @@ namespace Decompiler
 
 		public static IntType Find_getINTType()
 		{
-			string s = Properties.Settings.Default.IntStyle;
-			if (s.StartsWith("int")) return _getINTType = IntType._int;
-			else if (s.StartsWith("uint")) return _getINTType = IntType._uint;
-			else if (s.StartsWith("hex")) return _getINTType = IntType._hex;
-			else
-			{
-				return _getINTType = IntType._int;
-			}
+			var s = Properties.Settings.Default.IntStyle;
+			return s.StartsWith("int")
+				? (getIntType = IntType._int)
+				: s.StartsWith("uint")
+				? (getIntType = IntType._uint)
+				: s.StartsWith("hex") ? (getIntType = IntType._hex) : (getIntType = IntType._int);
 		}
 
-		private static IntType _getINTType = IntType._int;
-
-		public static IntType getIntType
-		{
-			get { return _getINTType; }
-		}
+		public static IntType getIntType { get; private set; } = IntType._int;
 	}
 }

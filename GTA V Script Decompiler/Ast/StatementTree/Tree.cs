@@ -27,8 +27,8 @@ namespace Decompiler.Ast.StatementTree
         public string ToString(bool newlines)
         {
             StringBuilder sb = new();
-            bool lastIsTree = false;
-            bool first = true;
+            var lastIsTree = false;
+            var first = true;
 
             foreach (var statement in Statements)
             {
@@ -37,7 +37,7 @@ namespace Decompiler.Ast.StatementTree
                     if (lastIsTree && (this is not Case || statement is not Break))
                         sb.AppendLine();
 
-                    string repr = statement.ToString();
+                    var repr = statement.ToString();
                     if (!string.IsNullOrEmpty(repr))
                     {
                         sb.Append('\t');
@@ -64,7 +64,7 @@ namespace Decompiler.Ast.StatementTree
                 first = false;
             }
 
-            string str = sb.ToString();
+            var str = sb.ToString();
 
             if (!newlines)
                 str = str.TrimEnd();

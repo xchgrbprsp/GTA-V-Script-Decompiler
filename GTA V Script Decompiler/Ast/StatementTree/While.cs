@@ -15,15 +15,9 @@ namespace Decompiler.Ast.StatementTree
 
         public override bool IsTreeEnd()
         {
-            if (Offset < Function.Instructions.Count && Function.Instructions[Offset].Offset >= BreakOffset)
-                return true;
-
-            if (Statements.Count > 0)
-            {
-                return Statements[^1] is Break /*|| Statements[^1] is Ast.Return*/ || Statements[^1] is Jump;
-            }
-
-            return false;
+            return Offset < Function.Instructions.Count && Function.Instructions[Offset].Offset >= BreakOffset
+                ? true
+                : Statements.Count > 0 ? Statements[^1] is Break /*|| Statements[^1] is Ast.Return*/ or Jump : false;
         }
 
         public override string ToString()

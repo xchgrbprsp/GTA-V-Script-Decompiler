@@ -19,17 +19,18 @@ namespace Decompiler
             _table = new byte[wholesize];
             for (int i = 0, off = 0; i < blockcount; i++, off += 0x4000)
             {
-                int tablesize = ((i + 1)*0x4000 >= wholesize) ? wholesize%0x4000 : 0x4000;
+                var tablesize = ((i + 1)*0x4000 >= wholesize) ? wholesize%0x4000 : 0x4000;
                 scriptFile.Position = stringtablelocs[i];
                 scriptFile.Read(_table, off, tablesize);
             }
+
             _dictionary = new Dictionary<int, string>();
             List<byte> Working = new(100);
             for (int i = 0, index = 0, max = _table.Length; i<max; i++)
             {
                 for (index = i; i < max; i++)
                 {
-                    byte b = _table[i];
+                    var b = _table[i];
                     switch (b)
                     {
                         case 0:
@@ -48,11 +49,11 @@ namespace Decompiler
                             break;
                     }
                 }
+
 addString:
                 _dictionary.Add(index, Encoding.ASCII.GetString(Working.ToArray()).Replace("\\", "\\\\").Replace("\"", "\\\""));
                 Working.Clear();
             }
-
         }
 
         public bool StringExists(int index)
@@ -73,10 +74,11 @@ addString:
                 {
                     throw new IndexOutOfRangeException("The index given was outside the range of the String table");
                 }
+
                 List<byte> Working = new(100);
                 for (int i = index, max = _table.Length; i < max; i++)
                 {
-                    byte b = _table[i];
+                    var b = _table[i];
                     switch (b)
                     {
                         case 0:
@@ -95,6 +97,7 @@ addString:
                             break;
                     }
                 }
+
 addString:
                 return Encoding.ASCII.GetString(Working.ToArray());
             }

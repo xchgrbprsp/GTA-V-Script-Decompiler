@@ -20,7 +20,7 @@ namespace Decompiler
             Values = Enum.GetValues(Type).Cast<int>().ToArray();
 
             if (!isBitset)
-                for (int i = 0; i < Keys.Length; i++)
+                for (var i = 0; i < Keys.Length; i++)
                     CachedValues[Values[i]] = Keys[i];
         }
 
@@ -30,10 +30,10 @@ namespace Decompiler
 
             if (IsBitset)
             {
-                string buf = "";
-                bool first = true;
+                var buf = "";
+                var first = true;
 
-                for (int i = 0; i < Values.Length; i++)
+                for (var i = 0; i < Values.Length; i++)
                 {
                     if ((Values[i] & idx) != 0)
                     {
@@ -42,7 +42,7 @@ namespace Decompiler
                         else
                             buf += " | " + Values[i];
 
-                        idx &= ~(Values[i]);
+                        idx &= ~Values[i];
 
                         first = false;
                     }

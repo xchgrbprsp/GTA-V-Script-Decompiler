@@ -12,7 +12,7 @@ namespace Decompiler
         public X64NativeTable(Stream scriptFile, int position, int length, int codeSize)
         {
             IO.Reader reader = new(scriptFile);
-            int count = 0;
+            var count = 0;
             ulong nat;
             reader.BaseStream.Position = position;
             NativeNames = new List<string>();
@@ -26,11 +26,11 @@ namespace Decompiler
 
                 nat = Program.x64nativefile.TranslateHash(Rotl(reader.ReadUInt64(), codeSize + count));
                 NativeHashes.Add(nat);
-                NativeDBEntry? entry = Program.nativeDB.GetEntry(nat);
+                var entry = Program.nativeDB.GetEntry(nat);
 
                 if (entry != null)
                 {
-                    string nativeName = "";
+                    var nativeName = "";
                     if (Properties.Settings.Default.ShowNativeNamespace)
                         nativeName += entry?.@namespace + "::";
 
@@ -43,7 +43,7 @@ namespace Decompiler
                 }
                 else
                 {
-                    string temps = nat.ToString("X");
+                    var temps = nat.ToString("X");
                     while (temps.Length < 16)
                         temps = "0" + temps;
                     NativeNames.Add("unk_0x" + temps);
@@ -51,16 +51,16 @@ namespace Decompiler
 
                 count++;
             }
-
         }
         public string[] GetNativeTable()
         {
             List<string> table = new();
-            int i = 0;
-            foreach (string native in NativeNames)
+            var i = 0;
+            foreach (var native in NativeNames)
             {
                 table.Add(i++.ToString("X2") + ": " + native);
             }
+
             return table.ToArray();
         }
         public string[] GetNativeHeader()
@@ -69,25 +69,25 @@ namespace Decompiler
         }
         public string GetNativeFromIndex(int index)
         {
-            if (index < 0)
-                throw new ArgumentOutOfRangeException("Index must be a positive integer");
-            if (index >= NativeNames.Count)
-                throw new ArgumentOutOfRangeException("Index is greater than native table size");
-            return NativeNames[index];
+            return index < 0
+                ? throw new ArgumentOutOfRangeException("Index must be a positive integer")
+                : index >= NativeNames.Count
+                ? throw new ArgumentOutOfRangeException("Index is greater than native table size")
+                : NativeNames[index];
         }
 
         private static ulong Rotl(ulong hash, int rotate)
         {
             rotate %= 64;
-            return hash << rotate | hash >> (64 - rotate);
+            return (hash << rotate) | (hash >> (64 - rotate));
         }
         public ulong GetNativeHashFromIndex(int index)
         {
-            if (index < 0)
-                throw new ArgumentOutOfRangeException("Index must be a positive integer");
-            if (index >= NativeHashes.Count)
-                throw new ArgumentOutOfRangeException("Index is greater than native table size");
-            return NativeHashes[index];
+            return index < 0
+                ? throw new ArgumentOutOfRangeException("Index must be a positive integer")
+                : index >= NativeHashes.Count
+                ? throw new ArgumentOutOfRangeException("Index is greater than native table size")
+                : NativeHashes[index];
         }
         public void Dispose()
         {

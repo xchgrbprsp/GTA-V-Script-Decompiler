@@ -40,7 +40,7 @@ namespace Decompiler.Ast
 
         public override string ToString()
         {
-            string res = (Pointer.IsPointer() ? Pointer.ToPointerString() : ("*" + Pointer.ToString())) + " = { ";
+            var res = (Pointer.IsPointer() ? Pointer.ToPointerString() : ("*" + Pointer.ToString())) + " = { ";
             foreach (var value in Values)
                 res += value + ", ";
             return res.Remove(res.Length - 2) + " };";

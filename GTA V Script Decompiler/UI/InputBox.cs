@@ -24,6 +24,7 @@
 			{
 				components.Dispose();
 			}
+
 			base.Dispose(disposing);
 		}
 
@@ -47,7 +48,7 @@
 			// 
 			this.btnOK.Anchor =
 
-					(AnchorStyles.Bottom | AnchorStyles.Right);
+					AnchorStyles.Bottom | AnchorStyles.Right;
 			this.btnOK.BackColor = Drawing.SystemColors.Control;
 			this.btnOK.DialogResult = DialogResult.OK;
 			this.btnOK.FlatStyle = FlatStyle.System;
@@ -62,7 +63,7 @@
 			// 
 			this.btnCancel.Anchor =
 
-					(AnchorStyles.Bottom | AnchorStyles.Right);
+					AnchorStyles.Bottom | AnchorStyles.Right;
 			this.btnCancel.BackColor = Drawing.SystemColors.Control;
 			this.btnCancel.DialogResult = DialogResult.Cancel;
 			this.btnCancel.FlatStyle = FlatStyle.System;
@@ -90,8 +91,8 @@
 			// 
 			this.textBox1.Anchor =
 
-					((AnchorStyles.Top | AnchorStyles.Left)
-					  | AnchorStyles.Right);
+					AnchorStyles.Top | AnchorStyles.Left
+					  | AnchorStyles.Right;
 			this.textBox1.Location = new Drawing.Point(15, 68);
 			this.textBox1.Multiline = true;
 			this.textBox1.Name = "textBox1";
@@ -104,8 +105,8 @@
 			// 
 			this.comboBox1.Anchor =
 
-					((AnchorStyles.Top | AnchorStyles.Left)
-					  | AnchorStyles.Right);
+					AnchorStyles.Top | AnchorStyles.Left
+					  | AnchorStyles.Right;
 			this.comboBox1.FormattingEnabled = true;
 			this.comboBox1.Location = new Drawing.Point(15, 67);
 			this.comboBox1.Name = "comboBox1";
@@ -191,7 +192,7 @@
 
 		private void InputBox_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			if (this.DialogResult != DialogResult.OK && this.DialogResult != DialogResult.Cancel)
+			if (this.DialogResult is not DialogResult.OK and not DialogResult.Cancel)
 				this.DialogResult = DialogResult.Abort;
 		}
 
@@ -200,19 +201,16 @@
 			textBox1.Visible = true;
 			inputtype = type.text;
 			textBox1.Focus();
-			this.Text = TitleMessage == null ? "Input Value" : TitleMessage;
+			this.Text = TitleMessage ??"Input Value";
 			if (DefaultResponse != null)
 			{
 				textBox1.Text = DefaultResponse;
 				textBox1.SelectAll();
 				Default = DefaultResponse;
 			}
-			label1.Text = Message == null ? "Enter Value:" : Message;
-			if (owner == null)
-			{
-				return ShowDialog() == DialogResult.OK;
-			}
-			return ShowDialog(owner) == DialogResult.OK;
+
+			label1.Text = Message ??"Enter Value:";
+			return owner == null ? ShowDialog() == DialogResult.OK : ShowDialog(owner) == DialogResult.OK;
 		}
 
 		internal bool Show(IWin32Window owner, string TitleMessage, string Message, string[] StandardValues)
@@ -220,15 +218,11 @@
 			comboBox1.Visible = true;
 			inputtype = type.dropdown;
 			comboBox1.Focus();
-			this.Text = TitleMessage == null ? "Input Value" : TitleMessage;
-			label1.Text = Message == null ? "Enter Value:" : Message;
+			this.Text = TitleMessage ??"Input Value";
+			label1.Text = Message ??"Enter Value:";
 			comboBox1.Items.Clear();
 			comboBox1.Items.AddRange(StandardValues);
-			if (owner == null)
-			{
-				return ShowDialog() == DialogResult.OK;
-			}
-			return ShowDialog(owner) == DialogResult.OK;
+			return owner == null ? ShowDialog() == DialogResult.OK : ShowDialog(owner) == DialogResult.OK;
 		}
 
 		internal bool Show(IWin32Window owner, string TitleMessage, string Message, AutoCompleteSource acs)
@@ -236,16 +230,12 @@
 			comboBox1.Visible = true;
 			inputtype = type.dropdown;
 			comboBox1.Focus();
-			this.Text = TitleMessage == null ? "Input Value" : TitleMessage;
-			label1.Text = Message == null ? "Enter Value:" : Message;
+			this.Text = TitleMessage ??"Input Value";
+			label1.Text = Message ??"Enter Value:";
 			comboBox1.Items.Clear();
 			comboBox1.AutoCompleteSource = acs;
 			comboBox1.AutoCompleteMode = AutoCompleteMode.Suggest;
-			if (owner == null)
-			{
-				return ShowDialog() == DialogResult.OK;
-			}
-			return ShowDialog(owner) == DialogResult.OK;
+			return owner == null ? ShowDialog() == DialogResult.OK : ShowDialog(owner) == DialogResult.OK;
 		}
 
 		internal bool ShowList(IWin32Window owner, string TitleMessage, string Message)
@@ -254,13 +244,9 @@
 			this.Height = 300;
 			inputtype = type.list;
 			richTextBox1.Focus();
-			this.Text = TitleMessage == null ? "Input Value" : TitleMessage;
-			label1.Text = Message == null ? "Enter Value:" : Message;
-			if (owner == null)
-			{
-				return ShowDialog() == DialogResult.OK;
-			}
-			return ShowDialog(owner) == DialogResult.OK;
+			this.Text = TitleMessage ??"Input Value";
+			label1.Text = Message ??"Enter Value:";
+			return owner == null ? ShowDialog() == DialogResult.OK : ShowDialog(owner) == DialogResult.OK;
 		}
 
 		private void Input_KeyDown(object sender, KeyEventArgs e)
@@ -270,7 +256,6 @@
 				this.DialogResult = DialogResult.OK;
 			}
 		}
-
 	}
 
 	/// <summary>
@@ -364,9 +349,9 @@
 		{
 			if (disposing)
 			{
-				if (_ibx != null) _ibx.Dispose();
+				if (_ibx != null)
+					_ibx.Dispose();
 			}
 		}
-
 	}
 }

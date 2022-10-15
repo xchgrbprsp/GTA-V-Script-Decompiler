@@ -31,17 +31,12 @@ namespace Decompiler
 
         public NativeDBParam? GetParam(int index)
         {
-            if (index >= @params.Count)
-                return null;
-
-            return @params[index];
+            return index >= @params.Count ? null : @params[index];
         }
 
         public Types.TypeInfo GetParamType(int index)
         {
-            if (index > @params.Count - 1)
-                return Types.UNKNOWN;
-            return @params[index].TypeInfo;
+            return index > @params.Count - 1 ? Types.UNKNOWN : @params[index].TypeInfo;
         }
 
         public void SetParamType(int index, Types.TypeInfo type)
@@ -92,13 +87,12 @@ namespace Decompiler
 
         public void LoadData()
         {
-            string file = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location),
+            var file = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location),
                 "natives.json");
 
-            if (File.Exists(file))
-                data = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, NativeDBEntry>>>(File.ReadAllText(file));
-            else
-                data = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, NativeDBEntry>>>(Properties.Resources.native_db_json);
+            data =File.Exists(file)
+                ? JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, NativeDBEntry>>>(File.ReadAllText(file))
+                : JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, NativeDBEntry>>>(Properties.Resources.native_db_json);
 
             entries = new();
 
@@ -108,7 +102,7 @@ namespace Decompiler
             {
                 foreach (var native in ns.Value)
                 {
-                    NativeDBEntry entry = native.Value;
+                    var entry = native.Value;
                     NativeTypeOverride.Visit(ref entry);
                     entry.@namespace = ns.Key;
 
@@ -127,10 +121,7 @@ namespace Decompiler
 
         public NativeDBEntry? GetEntry(ulong hash)
         {
-            if (entries.ContainsKey(hash))
-                return entries[hash];
-
-            return null;
+            return entries.ContainsKey(hash) ? entries[hash] : null;
         }
     }
 }

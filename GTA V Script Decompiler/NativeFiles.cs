@@ -13,6 +13,7 @@ namespace Decompiler
             {
                 hash = TranslationTable[hash];
             }
+
             return hash;
         }
 
@@ -30,18 +31,16 @@ namespace Decompiler
             sr = new StreamReader(Decompressed);
             while (!sr.EndOfStream)
             {
-                string line = sr.ReadLine();
+                var line = sr.ReadLine();
                 if (line.Length > 1)
                 {
-                    string val = line.Remove(line.IndexOfAny(new char[] { ':', '=' }));
-                    string nat = line.Substring(val.Length + 1);
-                    ulong newer;
-                    ulong older;
-                    if (ulong.TryParse(val, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out newer))
+                    var val = line.Remove(line.IndexOfAny(new char[] { ':', '=' }));
+                    var nat = line[(val.Length + 1)..];
+                    if (ulong.TryParse(val, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var newer))
                     {
                         if (!ContainsKey(newer))
                         {
-                            if (ulong.TryParse(nat, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out older))
+                            if (ulong.TryParse(nat, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var older))
                             {
                                 if (!TranslationTable.ContainsKey(newer))
                                 {
@@ -52,6 +51,7 @@ namespace Decompiler
                     }
                 }
             }
+
             sr.Close();
         }
     }

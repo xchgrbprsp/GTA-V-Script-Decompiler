@@ -20,10 +20,9 @@ namespace Decompiler.Ast.StatementTree
 
         public override string ToString()
         {
-            if ((Parent as If).CanSkipBraces())
-                return $"else if ({Condition}){Environment.NewLine}{ToString(false)}";
-            else
-                return $"else if ({Condition}){Environment.NewLine}{{{Environment.NewLine}{base.ToString()}}}";
+            return (Parent as If).CanSkipBraces()
+                ? $"else if ({Condition}){Environment.NewLine}{ToString(false)}"
+                : $"else if ({Condition}){Environment.NewLine}{{{Environment.NewLine}{base.ToString()}}}";
         }
     }
 }

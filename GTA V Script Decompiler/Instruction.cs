@@ -6,7 +6,6 @@ namespace Decompiler
 {
 	internal class Instruction
 	{
-		readonly int offset;
 		public Opcode Opcode { get; private set; }
 		public Opcode OriginalOpcode { get; private set; }
 		public byte[] Operands { get; private set; }
@@ -16,7 +15,7 @@ namespace Decompiler
 			Opcode = Instruction;
 			OriginalOpcode = Opcode;
 			this.Operands = Operands.ToArray();
-			offset = Offset;
+			this.Offset = Offset;
 		}
 
 		public Instruction(byte Instruction, IEnumerable<byte> Operands, int Offset)
@@ -24,7 +23,7 @@ namespace Decompiler
 			Opcode = (Opcode)Instruction;
 			OriginalOpcode =  Opcode;
 			this.Operands = Operands.ToArray();
-			offset = Offset;
+			this.Offset = Offset;
 		}
 
 		public Instruction(Opcode Instruction, int Offset)
@@ -32,7 +31,7 @@ namespace Decompiler
 			Opcode = Instruction;
 			OriginalOpcode = Opcode;
 			Operands = new byte[0];
-			offset = Offset;
+			this.Offset = Offset;
 		}
 
 		public Instruction(byte Instruction, int Offset)
@@ -40,7 +39,7 @@ namespace Decompiler
 			Opcode = (Opcode)Instruction;
 			OriginalOpcode = (Opcode)Instruction;
 			Operands = new byte[0];
-			offset = Offset;
+			this.Offset = Offset;
 		}
 
 		public void NopInstruction()
@@ -48,10 +47,7 @@ namespace Decompiler
 			Opcode = Opcode.NOP;
 		}
 
-		public int Offset
-		{
-			get { return offset; }
-		}
+		public int Offset { get; }
 
 		public int InstructionLength
 		{
@@ -62,18 +58,14 @@ namespace Decompiler
 		{
 			get
 			{
-				switch (Operands.Length)
+				return Operands.Length switch
 				{
-					case 1:
-						return Operands[0];
-					case 2:
-						return BitConverter.ToInt16(Operands, 0);
-					case 3:
-						return Operands[2] << 16 | Operands[1] << 8 | Operands[0];
-					case 4:
-						return BitConverter.ToInt32(Operands, 0);
-				}
-				throw new Exception("Invalid amount of operands (" + Operands.Length.ToString() + ")");
+					1 => Operands[0],
+					2 => BitConverter.ToInt16(Operands, 0),
+					3 => (Operands[2] << 16) | (Operands[1] << 8) | Operands[0],
+					4 => BitConverter.ToInt32(Operands, 0),
+					_ => throw new Exception("Invalid amount of operands (" + Operands.Length.ToString() + ")"),
+				};
 			}
 		}
 
@@ -81,10 +73,7 @@ namespace Decompiler
 		{
 			get
 			{
-				if (Operands.Length != 4)
-					throw new Exception("Not a Float");
-
-				return BitConverter.ToSingle(Operands, 0);
+				return Operands.Length != 4 ? throw new Exception("Not a Float") : BitConverter.ToSingle(Operands, 0);
 			}
 		}
 
@@ -97,18 +86,14 @@ namespace Decompiler
 		{
 			get
 			{
-				switch (Operands.Length)
+				return Operands.Length switch
 				{
-					case 1:
-						return Operands[0];
-					case 2:
-						return BitConverter.ToUInt16(Operands, 0);
-					case 3:
-						return (uint)(Operands[2] << 16 | Operands[1] << 8 | Operands[0]);
-					case 4:
-						return BitConverter.ToUInt32(Operands, 0);
-				}
-				throw new Exception("Invalid amount of operands (" + Operands.Length.ToString() + ")");
+					1 => Operands[0],
+					2 => BitConverter.ToUInt16(Operands, 0),
+					3 => (uint)((Operands[2] << 16) | (Operands[1] << 8) | Operands[0]),
+					4 => BitConverter.ToUInt32(Operands, 0),
+					_ => throw new Exception("Invalid amount of operands (" + Operands.Length.ToString() + ")"),
+				};
 			}
 		}
 
@@ -116,9 +101,7 @@ namespace Decompiler
 		{
 			get
 			{
-				if (IsJumpInstruction)
-					return BitConverter.ToInt16(Operands, 0) + offset + 3;
-				throw new Exception("Not A jump");
+				return IsJumpInstruction ? BitConverter.ToInt16(Operands, 0) + Offset + 3 : throw new Exception("Not A jump");
 			}
 		}
 
@@ -126,11 +109,7 @@ namespace Decompiler
 		{
 			get
 			{
-				if (Opcode == Opcode.NATIVE)
-				{
-					return (byte)(Operands[0] >> 2);
-				}
-				throw new Exception("Not A Native");
+				return Opcode == Opcode.NATIVE ? (byte)(Operands[0] >> 2) : throw new Exception("Not A Native");
 			}
 		}
 
@@ -138,11 +117,7 @@ namespace Decompiler
 		{
 			get
 			{
-				if (Opcode == Opcode.NATIVE)
-				{
-					return (byte)(Operands[0] & 0x3);
-				}
-				throw new Exception("Not A Native");
+				return Opcode == Opcode.NATIVE ? (byte)(Operands[0] & 0x3) : throw new Exception("Not A Native");
 			}
 		}
 
@@ -157,6 +132,7 @@ namespace Decompiler
 					//else
 					//	return BitConverter.ToUInt16(operands, 1);
 				}
+
 				throw new Exception("Not A Native");
 			}
 		}
@@ -166,10 +142,9 @@ namespace Decompiler
 			if (Opcode == Opcode.SWITCH)
 			{
 				int cases = GetOperand(0);
-				if (index >= cases)
-					throw new Exception("Out of range script case");
-				return BitConverter.ToInt32(Operands, 1 + index * 6);
+				return index >= cases ? throw new Exception("Out of range script case") : BitConverter.ToInt32(Operands, 1 + (index * 6));
 			}
+
 			throw new Exception("Not A Switch Statement");
 		}
 
@@ -178,13 +153,13 @@ namespace Decompiler
 			if (Opcode == Opcode.SWITCH)
 			{
 				int cases = GetOperand(0);
-				if (index >= cases)
-					throw new Exception("Out of range script case");
-
-				return Program.getIntType == Program.IntType._uint
-					? ScriptFile.HashBank.GetHash(BitConverter.ToUInt32(Operands, 1 + index*6))
-					: ScriptFile.HashBank.GetHash(BitConverter.ToUInt32(Operands, 1 + index*6));
+				return index >= cases
+					? throw new Exception("Out of range script case")
+					: Program.getIntType == Program.IntType._uint
+					? ScriptFile.HashBank.GetHash(BitConverter.ToUInt32(Operands, 1 + (index*6)))
+					: ScriptFile.HashBank.GetHash(BitConverter.ToUInt32(Operands, 1 + (index*6)));
 			}
+
 			throw new Exception("Not A Switch Statement");
 		}
 
@@ -193,11 +168,11 @@ namespace Decompiler
 			if (Opcode == Opcode.SWITCH)
 			{
 				int cases = GetOperand(0);
-				if (index >= cases)
-					throw new Exception("Out of range script case");
-
-				return offset + 8 + index*6 + BitConverter.ToInt16(Operands, 5 + index*6);
+				return index >= cases
+					? throw new Exception("Out of range script case")
+					: Offset + 8 + (index*6) + BitConverter.ToInt16(Operands, 5 + (index*6));
 			}
+
 			throw new Exception("Not A Switch Statement");
 		}
 
@@ -205,12 +180,8 @@ namespace Decompiler
 		{
 			get
 			{
-				int _instruction = (int)Opcode;
-				if (_instruction >= 109 && _instruction <= 117)
-				{
-					return _instruction - 110;
-				}
-				throw new Exception("Not An Immediate Int Push");
+				var _instruction = (int)Opcode;
+				return _instruction is>=109 and <=117 ? _instruction - 110 : throw new Exception("Not An Immediate Int Push");
 			}
 		}
 
@@ -218,36 +189,26 @@ namespace Decompiler
 		{
 			get
 			{
-				int _instruction = (int)Opcode;
-				if (_instruction >= 118 && _instruction <= 126)
-				{
-					return _instruction - 119;
-				}
-				throw new Exception("Not An Immediate Float Push");
+				var _instruction = (int)Opcode;
+				return _instruction is>=118 and <=126 ? _instruction - 119 : throw new Exception("Not An Immediate Float Push");
 			}
 		}
 
 		public bool IsJumpInstruction
 		{
-			get { return (int)OriginalOpcode > 84 && (int)OriginalOpcode < 93; }
+			get { return (int)OriginalOpcode is>84 and <93; }
 		}
 
 		public bool IsConditionJump
 		{
-			get { return (int)Opcode > 85 && (int)Opcode < 93; }
+			get { return (int)Opcode is>85 and <93; }
 		}
 
 		public bool IsWhileJump
 		{
 			get
 			{
-				if (Opcode == Opcode.J)
-				{
-					if (GetJumpOffset <= 0)
-						return false;
-					return (GetOperandsAsInt < 0);
-				}
-				return false;
+				return Opcode == Opcode.J ? GetJumpOffset <= 0 ? false : GetOperandsAsInt < 0 : false;
 			}
 		}
 	}

@@ -155,11 +155,11 @@ namespace Decompiler
         // TODO: Rewrite this
         string DisassembleInstruction(Instruction instruction)
         {
-            string bytes = "";
+            var bytes = "";
 
             bytes += ((uint)instruction.OriginalOpcode).ToString("X").PadLeft(2, '0');
 
-            int i = 0;
+            var i = 0;
             foreach (var op in instruction.Operands)
             {
                 bytes += " " + ((sbyte)op).ToString("X").PadLeft(2, '0');
@@ -220,9 +220,9 @@ namespace Decompiler
 
         string? CreatePatternAtLocation(int offset)
         {
-            string pattern = "";
+            var pattern = "";
 
-            for (int i = offset; i < Function.Instructions.Count; i++)
+            for (var i = offset; i < Function.Instructions.Count; i++)
             {
                 if (Function.Instructions[i].OriginalOpcode == Opcode.SWITCH)
                     break;
@@ -231,7 +231,7 @@ namespace Decompiler
 
                 foreach (var op in Function.Instructions[i].Operands)
                 {
-                    if (Function.Instructions[i].OriginalOpcode == Opcode.LOCAL_U8 || Function.Instructions[i].OriginalOpcode == Opcode.LOCAL_U8_LOAD || Function.Instructions[i].OriginalOpcode == Opcode.LOCAL_U8_STORE || Function.Instructions[i].OriginalOpcode == Opcode.ENTER)
+                    if (Function.Instructions[i].OriginalOpcode is Opcode.LOCAL_U8 or Opcode.LOCAL_U8_LOAD or Opcode.LOCAL_U8_STORE or Opcode.ENTER)
                     {
                         pattern += " " + ((sbyte)op).ToString("X").PadLeft(2, '0');
                     }
@@ -239,12 +239,11 @@ namespace Decompiler
                     {
                         pattern += " ?";
                     }
-
                 }
 
                 pattern += " ";
 
-                int results = GetNumPatternResults(pattern);
+                var results = GetNumPatternResults(pattern);
 
                 if (results == 0)
                     break;
@@ -259,7 +258,7 @@ namespace Decompiler
 
         void GeneratePatch(int offset, byte[] bytes)
         {
-            int off = 0;
+            var off = 0;
 
             if (offset == 1)
             {
@@ -275,7 +274,7 @@ namespace Decompiler
                 return;
             }
 
-            int length = 0;
+            var length = 0;
             for (var i = offset; i < Function.Instructions.Count; i++)
             {
                 if (length >= bytes.Length)
@@ -292,7 +291,7 @@ namespace Decompiler
 
             var patch = "{ ";
 
-            bool first = true;
+            var first = true;
             foreach (var b in bytes)
             {
                 if (!first)
@@ -327,21 +326,21 @@ namespace Decompiler
             pat = pat.Trim();
 
             var bytes = pat.Split(" ");
-            int num = 0;
+            var num = 0;
 
             var compiled = new List<int>();
 
             foreach (var @byte in bytes)
             {
-                if (int.TryParse(@byte, System.Globalization.NumberStyles.HexNumber, null, out int res))
+                if (int.TryParse(@byte, System.Globalization.NumberStyles.HexNumber, null, out var res))
                     compiled.Add(res);
                 else
                     compiled.Add(-1);
             }
 
-            for (int i = 0; i < (Function.ScriptFile.CodeTable.Count - compiled.Count); i++)
+            for (var i = 0; i < (Function.ScriptFile.CodeTable.Count - compiled.Count); i++)
             {
-                for (int j = 0; j < bytes.Length; j++)
+                for (var j = 0; j < bytes.Length; j++)
                 {
                     if (compiled[j] == -1)
                         continue;
@@ -349,6 +348,7 @@ namespace Decompiler
                     if (compiled[j] != Function.ScriptFile.CodeTable[i+j])
                         goto fail;
                 }
+
                 num++;
 fail:
                 continue;
@@ -366,7 +366,7 @@ fail:
                 if (!IB.Show("Pattern", "Enter a pattern"))
                     return;
 
-                int results = GetNumPatternResults(IB.Value);
+                var results = GetNumPatternResults(IB.Value);
 
                 if (results == 0)
                     MessageBox.Show("Cannot find pattern");
@@ -406,8 +406,8 @@ fail:
 
         void OnPatchClick(Patch patch)
         {
-            int start = Math.Min(fctb1.Selection.Start.iLine, fctb1.Selection.End.iLine);
-            int end = Math.Max(fctb1.Selection.Start.iLine, fctb1.Selection.End.iLine) + 1;
+            var start = Math.Min(fctb1.Selection.Start.iLine, fctb1.Selection.End.iLine);
+            var end = Math.Max(fctb1.Selection.Start.iLine, fctb1.Selection.End.iLine) + 1;
 
             if (!patch.GetData(start, end))
                 return;
@@ -417,8 +417,8 @@ fail:
 
         private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
         {
-            int start = Math.Min(fctb1.Selection.Start.iLine, fctb1.Selection.End.iLine);
-            int end = Math.Max(fctb1.Selection.Start.iLine, fctb1.Selection.End.iLine) + 1;
+            var start = Math.Min(fctb1.Selection.Start.iLine, fctb1.Selection.End.iLine);
+            var end = Math.Max(fctb1.Selection.Start.iLine, fctb1.Selection.End.iLine) + 1;
 
             contextMenuStrip1.Items.Clear();
 

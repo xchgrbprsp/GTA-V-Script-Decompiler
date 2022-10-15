@@ -24,16 +24,12 @@ namespace Decompiler
 
         public FunctionDB()
         {
-            string file = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location),
+            var file = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location),
                 "functions.db");
 
-            string[] lines;
-
-            if (File.Exists(file))
-                lines = File.ReadAllLines(file);
-            else
-                lines = Encoding.Default.GetString(Properties.Resources.Functions).Trim().Split("\r\n", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-
+            var lines = File.Exists(file)
+                ? File.ReadAllLines(file)
+                : Encoding.Default.GetString(Properties.Resources.Functions).Trim().Split("\r\n", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
             foreach (var line in lines)
             {
                 if (line.StartsWith("#") || line.Length == 0)
@@ -53,15 +49,13 @@ namespace Decompiler
                     entryDict = Entries;
                 }
 
-                uint hash;
-                if (!uint.TryParse(tokens[0].Replace("0x", ""), System.Globalization.NumberStyles.HexNumber, null, out hash))
+                if (!uint.TryParse(tokens[0].Replace("0x", ""), System.Globalization.NumberStyles.HexNumber, null, out var hash))
                     throw new FileFormatException("Cannot parse function hash");
 
                 if (!entryDict.ContainsKey(hash))
                     entryDict[hash] = new();
 
                 tokens[1] = tokens[1].ToUpper();
-
 
                 switch (tokens[1])
                 {
@@ -110,14 +104,14 @@ namespace Decompiler
 
         public void Visit(Function func)
         {
-            uint hash = func.Hash;
+            var hash = func.Hash;
 
             if (Entries.TryGetValue(hash, out var entry))
             {
                 Apply(func, entry);
             }
 
-            uint mk2hash = func.Mk2Hash;
+            var mk2hash = func.Mk2Hash;
 
             if (Mk2Entries.TryGetValue(mk2hash, out var mk2Entry))
             {

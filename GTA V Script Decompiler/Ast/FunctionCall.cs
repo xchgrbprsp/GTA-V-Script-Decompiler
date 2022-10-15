@@ -9,13 +9,14 @@ namespace Decompiler.Ast
         {
             Callee = callee;
 
-            int i = 0;
+            var i = 0;
             foreach (var arg in arguments)
             {
                 if (arg.GetStackCount() == 1)
                 {
                     arg.HintType(ref callee.Params.GetVarAtIndex((uint)i).DataType);
                 }
+
                 i += arg.GetStackCount();
             }
         }

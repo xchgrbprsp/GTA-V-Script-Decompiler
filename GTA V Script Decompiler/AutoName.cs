@@ -70,7 +70,7 @@ namespace Decompiler
     {
         public static bool CanApply(NativeDBEntry native)
         {
-            string name = native.name;
+            var name = native.name;
 
             return name.Contains("GET_") || name.StartsWith("IS") || name.StartsWith("HAS");
         }
@@ -79,7 +79,7 @@ namespace Decompiler
         {
             words[0] = words[0].ToLower();
 
-            for (int i = 1; i < words.Length; i++)
+            for (var i = 1; i < words.Length; i++)
             {
                 words[i] = words[i].ToLower();
                 words[i] = string.Concat(words[i][0].ToString().ToUpper(), words[i].AsSpan(1));
@@ -91,7 +91,7 @@ namespace Decompiler
         public static string GetNativeReturnName(string nativeStr)
         {
             var split = nativeStr.Split("_");
-            if (split[0] == "IS" || split[0] == "HAS")
+            if (split[0] is "IS" or "HAS")
             {
                 return CamelCase(split);
             }
@@ -99,10 +99,7 @@ namespace Decompiler
             {
                 split = nativeStr.Split("GET_");
 
-                if (split.Length == 1)
-                    return CamelCase(split[0].Split("_"));
-                else
-                    return CamelCase(split[1].Split("_"));
+                return split.Length == 1 ? CamelCase(split[0].Split("_")) : CamelCase(split[1].Split("_"));
             }
 
             throw new InvalidOperationException("Could not extract name from native");

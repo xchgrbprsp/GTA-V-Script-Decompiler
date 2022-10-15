@@ -2,18 +2,15 @@
 {
     public class Variable
     {
-        bool IsArray;
-        bool IsUsed;
         public bool IsStruct;
-        bool IsCalled = false;
         public TypeContainer DataType;
         public int Index { get; private set; }
         public long Value { get; set; }
         public int ImmediateSize { get; set; }
         public string Name { get; set; } = "";
-        public bool Is_Used { get { return IsUsed; } }
-        public bool Is_Called { get { return IsCalled; } }
-        public bool Is_Array { get { return IsArray; } }
+        public bool Is_Used { get; private set; }
+        public bool Is_Called { get; private set; } = false;
+        public bool Is_Array { get; private set; }
 
         internal AutoName AutoName { get; private set; }
 
@@ -22,8 +19,8 @@
             Index = index;
             Value = 0;
             ImmediateSize = 1;
-            IsArray = false;
-            IsUsed = true;
+            Is_Array = false;
+            Is_Used = true;
             DataType = new(Types.UNKNOWN);
             AutoName = new DefaultAutoName(this);
         }
@@ -33,8 +30,8 @@
             Index = index;
             Value = value;
             ImmediateSize = 1;
-            IsArray = false;
-            IsUsed = true;
+            Is_Array = false;
+            Is_Used = true;
             DataType = new(Types.UNKNOWN);
             IsStruct = false;
             AutoName = new DefaultAutoName(this);
@@ -43,24 +40,24 @@
         public void SetArray()
         {
             if (!IsStruct)
-                IsArray = true;
+                Is_Array = true;
         }
 
         public void SetCalled()
         {
-            IsCalled = true;
+            Is_Called = true;
         }
 
         public void SetStruct()
         {
             DataType = new(Types.UNKNOWN);
-            IsArray = false;
+            Is_Array = false;
             IsStruct = true;
         }
 
         public void SetNotUsed()
         {
-            IsUsed = false;
+            Is_Used = false;
         }
 
         internal void SetAutoName(AutoName autoName)

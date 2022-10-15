@@ -19,10 +19,11 @@ namespace Decompiler
 		{
 			listType = type;
 			Vars = new List<Variable>();
-			for (int i = 0; i < varcount; i++)
+			for (var i = 0; i < varcount; i++)
 			{
 				Vars.Add(new Variable(i));
 			}
+
 			count = varcount;
 		}
 		public VariableStorage(ListType type)
@@ -50,7 +51,7 @@ namespace Decompiler
 		{
 			if (index >= Vars.Count)
 			{
-				for (int i = Vars.Count; i <= index; i++)
+				for (var i = Vars.Count; i <= index; i++)
 				{
 					Vars.Add(new Variable(i));
 				}
@@ -58,12 +59,12 @@ namespace Decompiler
 		}
 		public string GetVarName(uint index)
 		{
-			Variable var = Vars[(int)index];
+			var var = Vars[(int)index];
 
 			if (var.Name != "")
 				return var.Name;
 
-			string name = "";
+			var name = "";
 
 			if (var.DataType.Type == Types.STRING)
 			{
@@ -76,17 +77,16 @@ namespace Decompiler
 
 			switch (listType)
 			{
-				case ListType.Statics: name += (index >= scriptParamStart ? "ScriptParam_" : "Local_"); break;
+				case ListType.Statics: name += index >= scriptParamStart ? "ScriptParam_" : "Local_"; break;
 				case ListType.Vars: name += "Var"; break;
 				case ListType.Params: name += "Param"; break;
 			}
 
 			try
 			{
-				if (Program.shouldShiftVariables)
-					return name + VarRemapper[(int)index].ToString();
-				else
-					return name + (listType == ListType.Statics && index >= scriptParamStart ? index - scriptParamStart : index).ToString();
+				return Program.shouldShiftVariables
+					? name + VarRemapper[(int)index].ToString()
+					: name + (listType == ListType.Statics && index >= scriptParamStart ? index - scriptParamStart : index).ToString();
 			}
 			catch (KeyNotFoundException)
 			{
@@ -105,12 +105,12 @@ namespace Decompiler
 		public string[] GetDeclaration()
 		{
 			List<string> Working = new();
-			string varName = "";
-			string dataType = "";
+			var varName = "";
+			var dataType = "";
 
-			int i = 0;
-			int j = -1;
-			foreach (Variable var in Vars)
+			var i = 0;
+			var j = -1;
+			foreach (var var in Vars)
 			{
 				varName = GetVarName((uint)i);
 				j++;
@@ -128,25 +128,13 @@ namespace Decompiler
 					continue;
 				}
 
-				if (var.ImmediateSize == 1)
-				{
-					dataType = var.DataType.Type.VarDec;
+				dataType =var.ImmediateSize == 1
+					? var.DataType.Type.VarDec
+					: var.DataType.Type == Types.STRING
+						? "char "
+						: var.DataType.Type == Types.VEC3 ? "Vector3 " : "struct<" + var.ImmediateSize.ToString() + "> ";
 
-				}
-				else if (var.DataType.Type == Types.STRING)
-				{
-					dataType = "char ";
-				}
-				else if (var.DataType.Type == Types.VEC3)
-				{
-					dataType = "Vector3 ";
-				}
-				else
-				{
-					dataType = "struct<" + var.ImmediateSize.ToString() + "> ";
-				}
-
-				string value = "";
+				var value = "";
 
 				if (!var.Is_Array)
 				{
@@ -161,12 +149,12 @@ namespace Decompiler
 
 							List<byte> data = new();
 
-							for (int l = 0; l < var.ImmediateSize; l++)
+							for (var l = 0; l < var.ImmediateSize; l++)
 							{
 								data.AddRange(BitConverter.GetBytes(Vars[j + l].Value));
 							}
 
-							int len = data.IndexOf(0);
+							var len = data.IndexOf(0);
 							data.RemoveRange(len, data.Count - len);
 							value = " = \"" + Encoding.ASCII.GetString(data.ToArray()) + "\"";
 
@@ -175,7 +163,7 @@ namespace Decompiler
 						{
 							value += " = { " + Utils.Represent(Vars[j].Value, Types.INT);
 
-							for (int l = 1; l < var.ImmediateSize; l++)
+							for (var l = 1; l < var.ImmediateSize; l++)
 							{
 								value += ", " + Utils.Represent(Vars[j + l].Value, Types.INT);
 							}
@@ -192,7 +180,7 @@ namespace Decompiler
 						{
 							value = " = { ";
 
-							for (int k = 0; k < var.Value; k++)
+							for (var k = 0; k < var.Value; k++)
 							{
 								value += Utils.Represent(Vars[j + 1 + k].Value, var.DataType.Type) + ", ";
 							}
@@ -208,16 +196,16 @@ namespace Decompiler
 						{
 							value = " = { ";
 
-							for (int k = 0; k < var.Value; k++)
+							for (var k = 0; k < var.Value; k++)
 							{
 								List<byte> data = new();
-								for (int l = 0; l < var.ImmediateSize; l++)
+								for (var l = 0; l < var.ImmediateSize; l++)
 								{
-									data.AddRange(BitConverter.GetBytes(Vars[j + 1 + var.ImmediateSize * k + l].Value));
+									data.AddRange(BitConverter.GetBytes(Vars[j + 1 + (var.ImmediateSize * k) + l].Value));
 								}
+
 								value += "\"" + Encoding.ASCII.GetString(data.ToArray()) + "\", ";
 							}
-
 
 							if (value.Length > 2)
 							{
@@ -229,7 +217,7 @@ namespace Decompiler
 					}
 				}
 
-				string decl = dataType + varName;
+				var decl = dataType + varName;
 
 				if (var.Is_Array)
 				{
@@ -238,12 +226,13 @@ namespace Decompiler
 
 				if (var.DataType.Type == Types.STRING)
 				{
-					decl += "[" + (var.ImmediateSize*(8)).ToString() + "]";
+					decl += "[" + (var.ImmediateSize*8).ToString() + "]";
 				}
 
 				Working.Add(decl + value + ";");
 				i++;
 			}
+
 			return Working.ToArray();
 		}
 
@@ -251,9 +240,9 @@ namespace Decompiler
 		{
 			if (listType != ListType.Params)
 				throw new DecompilingException("Only params use this declaration");
-			string decl = "";
-			int i = 0;
-			foreach (Variable var in Vars)
+			var decl = "";
+			var i = 0;
+			foreach (var var in Vars)
 			{
 				if (!var.Is_Used)
 				{
@@ -261,40 +250,25 @@ namespace Decompiler
 					{
 						i++;
 					}
+
 					continue;
 				}
-				string datatype = "";
-				if (!var.Is_Array)
-				{
-					if (var.DataType.Type == Types.STRING)
-					{
-						datatype = "char[" + (var.ImmediateSize * 4).ToString() + "] c";
-					}
-					else if (var.ImmediateSize == 1)
-						datatype = var.DataType.Type.VarDec + (var.Name.Length == 0 ? var.DataType.Type.Prefix : "");
-					else if (var.DataType.Type == Types.VEC3)
-					{
-						datatype = "Vector3 " + (var.Name.Length == 0 ? var.DataType.Type.Prefix : "");
-					}
-					else datatype = "struct<" + var.ImmediateSize.ToString() + "> ";
-				}
-				else
-				{
-					if (var.DataType.Type == Types.STRING)
-					{
-						datatype = "char[" + (var.ImmediateSize * 4).ToString() + "][] c";
-					}
-					else if (var.ImmediateSize == 1)
-						datatype = var.DataType.Type.ArrayDec;
-					/*else if (var.Immediatesize == 3)
-					{
-						datatype = "vector3[] v";
-					}*/
-					else datatype = "struct<" + var.ImmediateSize.ToString() + ">[] ";
-				}
+
+				var datatype = !var.Is_Array
+					? var.DataType.Type == Types.STRING
+						? "char[" + (var.ImmediateSize * 4).ToString() + "] c"
+						: var.ImmediateSize == 1
+						? var.DataType.Type.VarDec + (var.Name.Length == 0 ? var.DataType.Type.Prefix : "")
+						: var.DataType.Type == Types.VEC3
+							? "Vector3 " + (var.Name.Length == 0 ? var.DataType.Type.Prefix : "")
+							: "struct<" + var.ImmediateSize.ToString() + "> "
+					: var.DataType.Type == Types.STRING
+						? "char[" + (var.ImmediateSize * 4).ToString() + "][] c"
+						: var.ImmediateSize == 1 ? var.DataType.Type.ArrayDec : "struct<" + var.ImmediateSize.ToString() + ">[] ";
 				decl += datatype + (var.Name == "" ? ("Param" + i.ToString()) : var.Name) + ", ";
 				i++;
 			}
+
 			if (decl.Length > 2)
 				decl = decl.Remove(decl.Length - 2);
 			return decl;
@@ -314,19 +288,20 @@ namespace Decompiler
 					continue;
 				if (Vars[i].Is_Array)
 				{
-					for (int j = i + 1; j < i + 1 + Vars[i].Value * Vars[i].ImmediateSize; j++)
+					for (var j = i + 1; j < i + 1 + (Vars[i].Value * Vars[i].ImmediateSize); j++)
 					{
 						Vars[j].SetNotUsed();
 					}
 				}
 				else if (Vars[i].ImmediateSize > 1)
 				{
-					for (int j = i + 1; j < i + Vars[i].ImmediateSize; j++)
+					for (var j = i + 1; j < i + Vars[i].ImmediateSize; j++)
 					{
 						BrokenCheck((uint)j);
 						Vars[j].SetNotUsed();
 					}
 				}
+
 				VarRemapper.Add(i, k);
 				k++;
 			}

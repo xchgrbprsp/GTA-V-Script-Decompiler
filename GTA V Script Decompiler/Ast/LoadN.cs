@@ -15,10 +15,9 @@ namespace Decompiler.Ast
 
         public override int GetStackCount()
         {
-            if (Count is not ConstantInt)
-                throw new InvalidOperationException("Cannot retrieve load size as it is not a constant");
-
-            return (int)(Count as ConstantInt).GetValue();
+            return Count is not ConstantInt
+                ? throw new InvalidOperationException("Cannot retrieve load size as it is not a constant")
+                : (int)(Count as ConstantInt).GetValue();
         }
 
         public override string ToString()

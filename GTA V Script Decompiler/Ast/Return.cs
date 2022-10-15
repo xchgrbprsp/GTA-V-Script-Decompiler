@@ -30,7 +30,7 @@ namespace Decompiler.Ast
             }
             else
             {
-                bool first = true;
+                var first = true;
                 StringBuilder sb = new();
 
                 sb.Append("return ");

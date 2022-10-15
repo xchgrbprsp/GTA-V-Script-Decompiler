@@ -17,7 +17,7 @@ namespace Decompiler.Ast.StatementTree
 
             if (Statements.Count > 0)
             {
-                if (Statements[^1] is Break /*|| Statements[^1] is Ast.Return*/ || Statements[^1] is Jump)
+                if (Statements[^1] is Break /*|| Statements[^1] is Ast.Return*/ or Jump)
                 {
                     return true;
                 }
@@ -28,10 +28,9 @@ namespace Decompiler.Ast.StatementTree
 
         public override string ToString()
         {
-            if ((Parent as If).CanSkipBraces())
-                return $"else{Environment.NewLine}{ToString(false)}";
-            else
-                return $"else{Environment.NewLine}{{{Environment.NewLine}{base.ToString()}}}";
+            return (Parent as If).CanSkipBraces()
+                ? $"else{Environment.NewLine}{ToString(false)}"
+                : $"else{Environment.NewLine}{{{Environment.NewLine}{base.ToString()}}}";
         }
     }
 }

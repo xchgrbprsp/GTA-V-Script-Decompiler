@@ -95,12 +95,14 @@ namespace Decompiler
 
 		private async void openToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			OpenFileDialog ofd = new();
-			ofd.Filter = "GTA V Script Files|*.ysc;*.ysc.full";
+			OpenFileDialog ofd = new()
+			{
+				Filter = "GTA V Script Files|*.ysc;*.ysc.full"
+			};
 
 			if (ofd.ShowDialog() == DialogResult.OK)
 			{
-				DateTime Start = DateTime.Now;
+				var Start = DateTime.Now;
 				FileName = Path.GetFileNameWithoutExtension(ofd.FileName);
 
 				ResetLoadedFile();
@@ -157,8 +159,10 @@ namespace Decompiler
 
 		private async void directoryToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			CommonOpenFileDialog fsd = new();
-			fsd.IsFolderPicker = true;
+			CommonOpenFileDialog fsd = new()
+			{
+				IsFolderPicker = true
+			};
 			if (fsd.ShowDialog() == CommonFileDialogResult.Ok)
 			{
 				await BatchDecompile(fsd.FileName);
@@ -170,17 +174,17 @@ namespace Decompiler
 			CompileList = new Queue<string>();
 			var tasks = new List<Task>();
 
-			DateTime Start = DateTime.Now;
+			var Start = DateTime.Now;
 			var saveDirectory = Path.Combine(dirPath, "exported");
 			if (!Directory.Exists(saveDirectory))
 				Directory.CreateDirectory(saveDirectory);
 
-			foreach (string file in Directory.GetFiles(dirPath, "*.ysc"))
+			foreach (var file in Directory.GetFiles(dirPath, "*.ysc"))
 			{
 				CompileList.Enqueue(file);
 			}
 
-			foreach (string file in Directory.GetFiles(dirPath, "*.ysc.full"))
+			foreach (var file in Directory.GetFiles(dirPath, "*.ysc.full"))
 			{
 				CompileList.Enqueue(file);
 			}
@@ -192,7 +196,7 @@ namespace Decompiler
 
 			if (Properties.Settings.Default.UseMultithreading)
 			{
-				for (int i = 0; i < Environment.ProcessorCount; i++)
+				for (var i = 0; i < Environment.ProcessorCount; i++)
 				{
 					tasks.Add(Decompile(saveDirectory, progressBar));
 				}
@@ -232,7 +236,7 @@ namespace Decompiler
 						scriptFile.Close();
 					});
 				}
-				catch (Exception ex)
+				catch (Exception)
 				{
 					// MessageBox.Show("Error decompiling script " + Path.GetFileNameWithoutExtension(scriptToDecode) + " - " + ex.Message);
 					throw;
@@ -244,12 +248,14 @@ namespace Decompiler
 
 		private async void fileToolStripMenuItem1_Click(object sender, EventArgs e)
 		{
-			OpenFileDialog ofd = new();
-			ofd.Filter = "GTA V Script Files|*.ysc;*.ysc.full";
+			OpenFileDialog ofd = new()
+			{
+				Filter = "GTA V Script Files|*.ysc;*.ysc.full"
+			};
 
 			if (ofd.ShowDialog() == DialogResult.OK)
 			{
-				DateTime Start = DateTime.Now;
+				var Start = DateTime.Now;
 
 				var progressBar = new ProgressBar("Export File", 1, 2);
 				progressBar.Show();
@@ -305,12 +311,13 @@ namespace Decompiler
 
 		private void intstylechanged(object sender, EventArgs e)
 		{
-			ToolStripMenuItem clicked = (ToolStripMenuItem)sender;
+			var clicked = (ToolStripMenuItem)sender;
 			foreach (ToolStripMenuItem t in intStyleToolStripMenuItem.DropDownItems)
 			{
 				t.Enabled = true;
 				t.Checked = false;
 			}
+
 			clicked.Checked = true;
 			clicked.Enabled = false;
 			Properties.Settings.Default.IntStyle = clicked.Text.ToLower();
@@ -424,7 +431,7 @@ namespace Decompiler
 		{
 			if (listView1.SelectedItems.Count == 1)
 			{
-				int num = Convert.ToInt32(listView1.SelectedItems[0].SubItems[1].Text);
+				var num = Convert.ToInt32(listView1.SelectedItems[0].SubItems[1].Text);
 				fctb1.Selection = new FastColoredTextBoxNS.Range(fctb1, 0, num, 0, num);
 				fctb1.DoSelectionVisible();
 			}
@@ -436,14 +443,7 @@ namespace Decompiler
 			if (e.Column == fpnColumnSorter.SortColumn)
 			{
 				// Reverse the current sort direction for this column.
-				if (fpnColumnSorter.Order == SortOrder.Ascending)
-				{
-					fpnColumnSorter.Order = SortOrder.Descending;
-				}
-				else
-				{
-					fpnColumnSorter.Order = SortOrder.Ascending;
-				}
+				fpnColumnSorter.Order =fpnColumnSorter.Order == SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
 			}
 			else
 			{
@@ -460,14 +460,7 @@ namespace Decompiler
 		{
 			opening = !opening;
 
-			if (!opening)
-			{
-				panel1.Size = new Size(0, panel1.Size.Height);
-			}
-			else
-			{
-				panel1.Size = new Size(240, panel1.Size.Height);
-			}
+			panel1.Size =!opening ? new Size(0, panel1.Size.Height) : new Size(240, panel1.Size.Height);
 
 			columnHeader1.Width = 80;
 			columnHeader2.Width = 76;
@@ -487,9 +480,9 @@ namespace Decompiler
 
 		private void nativesToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			string path = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location),
+			var path = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location),
 				"natives_exp.dat");
-			FileStream fs = File.Create(path);
+			var fs = File.Create(path);
 			new MemoryStream(Properties.Resources.natives).CopyTo(fs);
 			fs.Close();
 			Process.Start(
@@ -525,6 +518,7 @@ namespace Decompiler
 				{
 					fctb1.SelectionStart = fctb1.PointToPosition(fctb1.PointToClient(Cursor.Position));
 				}
+
 				cmsText.Show();
 			}
 		}
@@ -545,9 +539,12 @@ namespace Decompiler
 
 		private void saveCFileToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			SaveFileDialog sfd = new();
-			sfd.Filter = "Decompiled Script Files|*.c;*.c4;*.sc;*.sch\"";
-			sfd.FileName = FileName + ".c";
+			SaveFileDialog sfd = new()
+			{
+				Filter = "Decompiled Script Files|*.c;*.c4;*.sc;*.sch\"",
+				FileName = FileName + ".c"
+			};
+
 			if (sfd.ShowDialog() == DialogResult.OK)
 			{
 				fctb1.SaveToFile(sfd.FileName, System.Text.Encoding.Default);
@@ -565,17 +562,15 @@ namespace Decompiler
 
 		bool islegalchar(char c)
 		{
-			if (char.IsLetterOrDigit(c)) return true;
-			return c == '_';
-
+			return char.IsLetterOrDigit(c) ? true : c == '_';
 		}
 
 		string GetWordAtCursor()
 		{
-			string line = fctb1.Lines[fctb1.Selection.Start.iLine];
+			var line = fctb1.Lines[fctb1.Selection.Start.iLine];
 			if (line.Length == 0)
 				return "";
-			int pos = fctb1.Selection.Start.iChar;
+			var pos = fctb1.Selection.Start.iChar;
 			if (pos == line.Length)
 				return "";
 			int min = pos, max = pos;
@@ -586,7 +581,8 @@ namespace Decompiler
 				else
 					break;
 			}
-			int len = line.Length;
+
+			var len = line.Length;
 			while (max < len)
 			{
 				if (islegalchar(line[max]))
@@ -594,12 +590,13 @@ namespace Decompiler
 				else
 					break;
 			}
-			return line.Substring(min, max - min);
+
+			return line[min..max];
 		}
 
 		private void GetContextItems()
 		{
-			string word = GetWordAtCursor();
+			var word = GetWordAtCursor();
 			cmsText.Items.Clear();
 			foreach (ListViewItem lvi in listView1.Items)
 			{
@@ -608,7 +605,7 @@ namespace Decompiler
 					cmsText.Items.Add(new ToolStripMenuItem("Goto Declaration (" + lvi.Text + ")", null,
 						new EventHandler(delegate (object o, EventArgs a)
 						{
-							int num = Convert.ToInt32(lvi.SubItems[1].Text);
+							var num = Convert.ToInt32(lvi.SubItems[1].Text);
 							fctb1.Selection = new FastColoredTextBoxNS.Range(fctb1, 0, num, 0, num);
 							fctb1.DoSelectionVisible();
 						}), Keys.F12));
@@ -629,39 +626,44 @@ namespace Decompiler
 						}), Keys.F10));
 				}
 			}
-
 		}
 
 		private void stringsTableToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			SaveFileDialog sfd = new();
-			sfd.Title = "Select location to save string table";
-			sfd.Filter = "Text files|*.txt|All Files|*.*";
-			sfd.FileName = ((FileName.Contains('.')) ? FileName.Remove(FileName.IndexOf('.')) : FileName) + "(Strings).txt";
+			SaveFileDialog sfd = new()
+			{
+				Title = "Select location to save string table",
+				Filter = "Text files|*.txt|All Files|*.*",
+				FileName = (FileName.Contains('.') ? FileName.Remove(FileName.IndexOf('.')) : FileName) + "(Strings).txt"
+			};
 			if (sfd.ShowDialog() != DialogResult.OK)
 				return;
-			StreamWriter sw = File.CreateText(sfd.FileName);
-			foreach (string line in OpenFile.GetStringTable())
+			var sw = File.CreateText(sfd.FileName);
+			foreach (var line in OpenFile.GetStringTable())
 			{
 				sw.WriteLine(line);
 			}
+
 			sw.Close();
 			MessageBox.Show("File Saved");
 		}
 
 		private void nativeTableToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			SaveFileDialog sfd = new();
-			sfd.Title = "Select location to save native table";
-			sfd.Filter = "Text files|*.txt|All Files|*.*";
-			sfd.FileName = ((FileName.Contains('.')) ? FileName.Remove(FileName.IndexOf('.')) : FileName) + "(natives).txt";
+			SaveFileDialog sfd = new()
+			{
+				Title = "Select location to save native table",
+				Filter = "Text files|*.txt|All Files|*.*",
+				FileName = (FileName.Contains('.') ? FileName.Remove(FileName.IndexOf('.')) : FileName) + "(natives).txt"
+			};
 			if (sfd.ShowDialog() != DialogResult.OK)
 				return;
-			StreamWriter sw = File.CreateText(sfd.FileName);
-			foreach (string line in OpenFile.GetNativeTable())
+			var sw = File.CreateText(sfd.FileName);
+			foreach (var line in OpenFile.GetNativeTable())
 			{
 				sw.WriteLine(line);
 			}
+
 			sw.Close();
 			MessageBox.Show("File Saved");
 		}

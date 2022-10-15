@@ -65,15 +65,15 @@ namespace Decompiler.Patches
 
         public override bool ShouldShowPatch(int start, int end)
         {
-            Opcode op = Function.Instructions[start].Opcode;
+            var op = Function.Instructions[start].Opcode;
             return (end - start == 1) && (op == Opcode.PUSH_CONST_U8 || op == Opcode.PUSH_CONST_S16 || op == Opcode.PUSH_CONST_U32 || op == Opcode.PUSH_CONST_U24 || (op >= Opcode.PUSH_CONST_0 && op <= Opcode.PUSH_CONST_7));
         }
 
         public override bool GetData(int start, int end)
         {
-            Opcode op = Function.Instructions[start].Opcode;
+            var op = Function.Instructions[start].Opcode;
 
-            if (op >= Opcode.PUSH_CONST_0 && op <= Opcode.PUSH_CONST_7)
+            if (op is >= Opcode.PUSH_CONST_0 and <= Opcode.PUSH_CONST_7)
                 constantType = ConstantType.SHORTHAND;
             else if (op == Opcode.PUSH_CONST_U8)
                 constantType = ConstantType.U8;

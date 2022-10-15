@@ -12,14 +12,14 @@ namespace Decompiler
 
         public TextDB()
         {
-            string textsDir = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location),
+            var textsDir = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location),
                 "texts");
 
             if (Directory.Exists(textsDir))
             {
-                string[] texts = Directory.GetFiles(textsDir);
+                var texts = Directory.GetFiles(textsDir);
 
-                foreach (string text in texts)
+                foreach (var text in texts)
                 {
                     LoadFromStream(new IO.Reader(File.OpenRead(text)));
                 }
@@ -37,9 +37,9 @@ namespace Decompiler
             if (reader.ReadUInt32() != 1196971058)
                 throw new FileFormatException("Invalid magic");
 
-            uint count = reader.ReadUInt32();
+            var count = reader.ReadUInt32();
 
-            for (int i = 0; i < count; i++)
+            for (var i = 0; i < count; i++)
             {
                 offsets.Add(new(reader.ReadUInt32(), reader.ReadUInt32()));
             }
@@ -47,16 +47,16 @@ namespace Decompiler
             if (reader.ReadUInt32() != 1196971058)
                 throw new FileFormatException("Invalid magic");
 
-            uint end = reader.ReadUInt32();
+            var end = reader.ReadUInt32();
 
-            for (int i = 0; i < count; i++)
+            for (var i = 0; i < count; i++)
             {
                 reader.BaseStream.Position = offsets[i].Value;
-                string buf = "";
+                var buf = "";
 
                 do
                 {
-                    char c = reader.ReadChar();
+                    var c = reader.ReadChar();
 
                     if (c == 0)
                         break;

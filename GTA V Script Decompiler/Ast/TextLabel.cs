@@ -126,7 +126,7 @@ namespace Decompiler.Ast
 
         public override string ToString()
         {
-            string res = "{ ";
+            var res = "{ ";
             foreach (var value in Values)
                 res += value + ", ";
             res = res.Remove(res.Length - 2) + " }";

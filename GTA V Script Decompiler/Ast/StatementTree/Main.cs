@@ -29,13 +29,14 @@ namespace Decompiler.Ast.StatementTree
             //write all the function variables declared by the function
             if (Properties.Settings.Default.DeclareVariables)
             {
-                bool temp = false;
-                foreach (string s in Function.Vars.GetDeclaration())
+                var temp = false;
+                foreach (var s in Function.Vars.GetDeclaration())
                 {
                     sb.Append('\t');
                     sb.AppendLine(s);
                     temp = true;
                 }
+
                 if (temp)
                     sb.AppendLine();
             }

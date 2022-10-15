@@ -15,7 +15,7 @@ namespace Decompiler
             {
                 const int CS_NOCLOSE = 0x200;
 
-                CreateParams cp = base.CreateParams;
+                var cp = base.CreateParams;
                 cp.ClassStyle |= CS_NOCLOSE;
                 return cp;
             }

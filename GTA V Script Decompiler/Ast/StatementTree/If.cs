@@ -26,7 +26,7 @@ namespace Decompiler.Ast.StatementTree
             if (Statements.Count > 0)
             {
                 // TODO: Ast.Return breaks else tree when if statement returns
-                return Statements[^1] is Break /*|| Statements[^1] is Ast.Return*/ || Statements[^1] is Jump;
+                return Statements[^1] is Break /*|| Statements[^1] is Ast.Return*/ or Jump;
             }
 
             return false;
@@ -52,13 +52,9 @@ namespace Decompiler.Ast.StatementTree
 
         public override string ToString()
         {
-            string str;
-
-            if (CanSkipBraces())
-                str = $"if ({Condition}){Environment.NewLine}{ToString(false)}";
-            else
-                str = $"if ({Condition}){Environment.NewLine}{{{Environment.NewLine}{base.ToString()}}}";
-
+            var str = CanSkipBraces()
+                ? $"if ({Condition}){Environment.NewLine}{ToString(false)}"
+                : $"if ({Condition}){Environment.NewLine}{{{Environment.NewLine}{base.ToString()}}}";
             foreach (var elseIf in ElseIfTrees)
             {
                 str += Environment.NewLine + elseIf.ToString();

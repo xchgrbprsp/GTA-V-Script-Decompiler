@@ -27,25 +27,21 @@ namespace Decompiler
 
         internal AstToken Pop(bool allowMulti = false)
         {
-            int index = _stack.Count - 1;
+            var index = _stack.Count - 1;
             if (index < 0)
             {
                 return new AstToken(Function);
             }
+
             var val = _stack[index];
             _stack.RemoveAt(index);
 
-            if (val.GetStackCount() != 1 && !allowMulti)
-                throw new InvalidOperationException();
-
-            return val;
+            return val.GetStackCount() != 1 && !allowMulti ? throw new InvalidOperationException() : val;
         }
 
         internal AstToken Peek()
         {
-            if (_stack.Count == 0)
-                return new AstToken(Function);
-            return _stack[^1];
+            return _stack.Count == 0 ? new AstToken(Function) : _stack[^1];
         }
 
         internal AstToken PeekIdx(int index)
@@ -61,6 +57,7 @@ namespace Decompiler
             {
                 return new Vector(Function, Pop(), Pop(), Pop());
             }
+
             return new Vector(Function, new(Function), new(Function), new(Function));
         }
 
@@ -70,7 +67,7 @@ namespace Decompiler
                 return new List<AstToken>();
 
             List<AstToken> values = new();
-            int popped = 0;
+            var popped = 0;
             while (true)
             {
                 if (_stack.Count != 0)
@@ -101,7 +98,7 @@ namespace Decompiler
 
         internal int GetCount()
         {
-            int count = 0;
+            var count = 0;
 
             foreach (var val in _stack)
                 count += val.GetStackCount();
@@ -119,11 +116,7 @@ namespace Decompiler
         /// <remarks>TODO: Move this somewhere else</remarks>
         public static string GetArraySizeCmt(uint immediate)
         {
-            if (!Properties.Settings.Default.ShowArraySize)
-                return "";
-            if (immediate == 1)
-                return "";
-            return " /*" + immediate.ToString() + "*/";
+            return !Properties.Settings.Default.ShowArraySize ? "" : immediate == 1 ? "" : " /*" + immediate.ToString() + "*/";
         }
 
         #endregion

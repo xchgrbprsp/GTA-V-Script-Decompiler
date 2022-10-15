@@ -22,8 +22,8 @@ namespace Decompiler.Ast.StatementTree
 
         public override string ToString()
         {
-            string increment = Increment.ToString();
-            increment = increment.Substring(0, increment.Length - 1); // remove trailing semicolon, ugly hack
+            var increment = Increment.ToString();
+            increment = increment[..^1]; // remove trailing semicolon, ugly hack
             return $"for ({Initializer} {Condition}; {increment}){Environment.NewLine}{{{Environment.NewLine}{base.ToString()}}}";
         }
     }

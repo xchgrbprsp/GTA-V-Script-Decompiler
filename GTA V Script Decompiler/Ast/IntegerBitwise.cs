@@ -24,10 +24,7 @@
 
         public override string ToString()
         {
-            if (IsLogicalOperation())
-                return Lhs.ToString() + " && " + Rhs.ToString();
-            else
-                return Lhs.ToString() + " & " + Rhs.ToString();
+            return IsLogicalOperation() ? Lhs.ToString() + " && " + Rhs.ToString() : Lhs.ToString() + " & " + Rhs.ToString();
         }
     }
 
@@ -55,10 +52,7 @@
 
         public override string ToString()
         {
-            if (IsLogicalOperation())
-                return Lhs.ToString() + " || " + Rhs.ToString();
-            else
-                return Lhs.ToString() + " | " + Rhs.ToString();
+            return IsLogicalOperation() ? Lhs.ToString() + " || " + Rhs.ToString() : Lhs.ToString() + " | " + Rhs.ToString();
         }
     }
 
