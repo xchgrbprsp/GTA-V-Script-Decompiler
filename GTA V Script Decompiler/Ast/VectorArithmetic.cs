@@ -114,7 +114,7 @@ namespace Decompiler.Ast
         public override string ToString()
         {
             if (value is VectorArithmetic)
-                return $"-(${value})";
+                return $"-({value})";
             else
                 return $"-{value}";
         }

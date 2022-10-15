@@ -103,7 +103,7 @@ namespace Decompiler.Ast
         public override string ToString()
         {
             if (value is IntegerArithmetic)
-                return $"-(${value})";
+                return $"-({value})";
             else
                 return $"-{value}";
         }
@@ -126,7 +126,7 @@ namespace Decompiler.Ast
         public override string ToString()
         {
             if (value is IntegerAnd || value is IntegerOr)
-                return $"!(${value})";
+                return $"!({value})";
             else
                 return $"!{value}";
         }

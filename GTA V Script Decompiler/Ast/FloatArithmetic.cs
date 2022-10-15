@@ -103,7 +103,7 @@ namespace Decompiler.Ast
         public override string ToString()
         {
             if (value is FloatArithmetic)
-                return $"-(${value})";
+                return $"-({value})";
             else
                 return $"-{value}";
         }
