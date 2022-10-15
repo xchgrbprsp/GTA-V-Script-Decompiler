@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Decompiler.Ast
+﻿namespace Decompiler.Ast
 {
     internal class Local : AstToken
     {
-        readonly public uint Index;
+        public readonly uint Index;
 
         public Local(Function func, uint index) : base(func)
         {
@@ -42,7 +36,7 @@ namespace Decompiler.Ast
 
     internal class LocalLoad : AstToken
     {
-        readonly public uint Index;
+        public readonly uint Index;
 
         public LocalLoad(Function func, uint index) : base(func)
         {
@@ -68,8 +62,8 @@ namespace Decompiler.Ast
 
     internal class LocalStore : AstToken
     {
-        readonly public uint Index;
-        readonly public AstToken Value;
+        public readonly uint Index;
+        public readonly AstToken Value;
 
         public LocalStore(Function func, uint index, AstToken value) : base(func)
         {
@@ -88,7 +82,7 @@ namespace Decompiler.Ast
                     if (NativeReturnAutoName.CanApply(entry.Value))
                         function.SetFrameVarAutoName(index, new NativeReturnAutoName(entry.Value));
                 }
-            }    
+            }
         }
 
         public override bool IsStatement()

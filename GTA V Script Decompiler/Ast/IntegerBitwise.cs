@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Decompiler.Ast
+﻿namespace Decompiler.Ast
 {
     internal class IntegerAnd : AstToken
     {
-        AstToken Lhs;
-        AstToken Rhs;
+        readonly AstToken Lhs;
+        readonly AstToken Rhs;
         public IntegerAnd(Function func, AstToken rhs, AstToken lhs) : base(func)
         {
             Lhs = lhs;
@@ -39,8 +33,8 @@ namespace Decompiler.Ast
 
     internal class IntegerOr : AstToken
     {
-        AstToken Lhs;
-        AstToken Rhs;
+        readonly AstToken Lhs;
+        readonly AstToken Rhs;
         public IntegerOr(Function func, AstToken rhs, AstToken lhs) : base(func)
         {
             Lhs = lhs;
@@ -70,8 +64,8 @@ namespace Decompiler.Ast
 
     internal class IntegerXor : AstToken
     {
-        AstToken Lhs;
-        AstToken Rhs;
+        readonly AstToken Lhs;
+        readonly AstToken Rhs;
         public IntegerXor(Function func, AstToken rhs, AstToken lhs) : base(func)
         {
             Lhs = lhs;

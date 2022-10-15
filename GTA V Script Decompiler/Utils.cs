@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace Decompiler
 {
@@ -35,7 +30,7 @@ namespace Decompiler
 					return enumValue;
 
 			if (value > int.MaxValue && value <= uint.MaxValue)
-				return ((int) ((uint) value)).ToString();
+				return ((int)((uint)value)).ToString();
 
 			return value.ToString();
 		}

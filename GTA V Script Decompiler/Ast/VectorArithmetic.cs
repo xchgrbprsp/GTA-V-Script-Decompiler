@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Decompiler.Ast
+﻿namespace Decompiler.Ast
 {
     internal abstract class VectorArithmetic : AstToken
     {
-        AstToken Lhs;
-        AstToken Rhs;
+        readonly AstToken Lhs;
+        readonly AstToken Rhs;
         protected abstract char Symbol { get; }
 
         protected VectorArithmetic(Function func, AstToken rhs, AstToken lhs) : base(func)
@@ -83,18 +77,9 @@ namespace Decompiler.Ast
         protected override char Symbol => '/';
     }
 
-    internal class VectorMod : VectorArithmetic
-    {
-        public VectorMod(Function func, AstToken rhs, AstToken lhs) : base(func, rhs, lhs)
-        {
-        }
-
-        protected override char Symbol => '%';
-    }
-
     internal class VectorNeg : AstToken
     {
-        AstToken value;
+        readonly AstToken value;
         public VectorNeg(Function func, AstToken value) : base(func)
         {
             this.value = value;

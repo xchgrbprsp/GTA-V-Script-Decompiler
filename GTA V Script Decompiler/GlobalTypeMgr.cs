@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Decompiler
 {
@@ -11,7 +7,17 @@ namespace Decompiler
     /// </summary>
     internal class TypeContainerHolder
     {
-        TypeContainer TypeContainer = new();
+        TypeContainer TypeContainer;
+
+        public TypeContainerHolder()
+        {
+            TypeContainer = new();
+        }
+
+        public TypeContainerHolder(TypeContainer typeContainer)
+        {
+            TypeContainer = typeContainer;
+        }
 
         public ref TypeContainer GetContainer()
         {
@@ -21,8 +27,8 @@ namespace Decompiler
 
     internal class GlobalTypeMgr
     {
-        Dictionary<int, TypeContainerHolder> GlobalTypes = new();
-        Dictionary<int, string> GlobalNameOverrides = new();
+        readonly Dictionary<int, TypeContainerHolder> GlobalTypes = new();
+        readonly Dictionary<int, string> GlobalNameOverrides = new();
 
         public GlobalTypeMgr()
         {

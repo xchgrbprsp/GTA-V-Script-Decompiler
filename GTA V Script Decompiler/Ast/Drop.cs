@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Decompiler.Ast
+﻿namespace Decompiler.Ast
 {
     internal class Drop : AstToken
     {
-        AstToken Dropped;
+        readonly AstToken Dropped;
         public Drop(Function func, AstToken dropped) : base(func)
         {
             Dropped = dropped;

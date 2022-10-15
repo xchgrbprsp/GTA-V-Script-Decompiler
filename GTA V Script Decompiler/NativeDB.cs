@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Text.Json;
 using System.IO;
-using System.Security.Policy;
+using System.Text.Json;
 
 namespace Decompiler
 {
@@ -13,7 +9,9 @@ namespace Decompiler
     {
         public string type { get; set; }
         public string name { get; set; }
-        public bool autoname;
+
+        public bool AutoName;
+        public Types.TypeInfo TypeInfo;
     }
 
     internal struct NativeDBEntry
@@ -29,6 +27,8 @@ namespace Decompiler
 
         public string @namespace;
 
+        public Types.TypeInfo ReturnTypeInfo;
+
         public NativeDBParam? GetParam(int index)
         {
             if (index >= @params.Count)
@@ -41,24 +41,26 @@ namespace Decompiler
         {
             if (index > @params.Count - 1)
                 return Types.UNKNOWN;
-            return Types.GetFromName(@params[index].type);
+            return @params[index].TypeInfo;
         }
 
         public void SetParamType(int index, Types.TypeInfo type)
         {
             var param = @params[index];
             param.type = type.SingleName;
+            param.TypeInfo = type;
             @params[index] = param;
         }
 
         public Types.TypeInfo GetReturnType()
         {
-            return Types.GetFromName(return_type);
+            return ReturnTypeInfo;
         }
 
         public void SetReturnType(Types.TypeInfo type)
         {
             return_type = type.SingleName;
+            ReturnTypeInfo = type;
         }
     }
 
@@ -112,8 +114,11 @@ namespace Decompiler
 
                     foreach (var param in entry.@params)
                     {
-                        param.autoname = CanBeUsedAsAutoName(param.name);
+                        param.TypeInfo = Types.GetFromName(param.type);
+                        param.AutoName = CanBeUsedAsAutoName(param.name);
                     }
+
+                    entry.ReturnTypeInfo = Types.GetFromName(entry.return_type);
 
                     entries[Convert.ToUInt64(native.Key, 16)] = entry;
                 }

@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Decompiler.Ast.StatementTree
 {
@@ -45,7 +42,7 @@ namespace Decompiler.Ast.StatementTree
 
             sb.Append(base.ToString());
 
-            return $"{{{Environment.NewLine}{sb.ToString()}}}{Environment.NewLine}";
+            return $"{{{Environment.NewLine}{sb}}}{Environment.NewLine}";
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Decompiler
@@ -17,10 +16,10 @@ namespace Decompiler
 		public static bool shouldShiftVariables = Properties.Settings.Default.ShiftVariables;
 		public static bool shouldReverseHashes = Properties.Settings.Default.ReverseHashes;
 
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
-        [STAThread]
+		/// <summary>
+		/// The main entry point for the application.
+		/// </summary>
+		[STAThread]
 		static void Main(string[] args)
 		{
 			ThreadLock = new object();
@@ -108,5 +107,5 @@ namespace Decompiler
 		{
 			get { return _getINTType; }
 		}
-    }
+	}
 }

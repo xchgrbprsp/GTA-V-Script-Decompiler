@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Decompiler.Ast
 {
@@ -33,8 +28,8 @@ namespace Decompiler.Ast
 
             //if (values.Count == 1 && values[0].GetType() != Stack.DataType.Unk)
             //{
-                //if (Types.HasPointerVersion(values[0].GetType()))
-                //    pointer.HintType(Types.GetPointerVersion(values[0].GetType()));
+            //if (Types.HasPointerVersion(values[0].GetType()))
+            //    pointer.HintType(Types.GetPointerVersion(values[0].GetType()));
             //}
         }
 

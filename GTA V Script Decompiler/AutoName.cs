@@ -1,9 +1,5 @@
 ﻿using System;
-using System.CodeDom;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Decompiler
 {
@@ -15,9 +11,9 @@ namespace Decompiler
             IncrementCharacter // for loop index
         }
 
-        abstract public string GetName();
-        abstract public int GetPrecedence();
-        abstract public NameCollisionBehavior GetNameCollisionBehavior();
+        public abstract string GetName();
+        public abstract int GetPrecedence();
+        public abstract NameCollisionBehavior GetNameCollisionBehavior();
     }
 
     internal class DefaultAutoName : AutoName

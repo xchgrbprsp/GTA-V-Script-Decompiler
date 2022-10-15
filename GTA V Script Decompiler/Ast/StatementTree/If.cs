@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Decompiler.Ast.StatementTree
 {
@@ -58,9 +55,9 @@ namespace Decompiler.Ast.StatementTree
             string str;
 
             if (CanSkipBraces())
-                str = $"if ({Condition.ToString()}){Environment.NewLine}{ToString(false)}";
+                str = $"if ({Condition}){Environment.NewLine}{ToString(false)}";
             else
-                str = $"if ({Condition.ToString()}){Environment.NewLine}{{{Environment.NewLine}{base.ToString()}}}";
+                str = $"if ({Condition}){Environment.NewLine}{{{Environment.NewLine}{base.ToString()}}}";
 
             foreach (var elseIf in ElseIfTrees)
             {

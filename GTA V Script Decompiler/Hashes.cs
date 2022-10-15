@@ -7,7 +7,7 @@ namespace Decompiler
 {
 	public class Hashes
 	{
-		Dictionary<int, string> hashes;
+		readonly Dictionary<int, string> hashes;
 
 		public Hashes()
 		{
@@ -35,7 +35,7 @@ namespace Decompiler
 			while (!reader.EndOfStream)
 			{
 				string line = reader.ReadLine();
-				string[] split = line.Split(new char[] {':'}, StringSplitOptions.RemoveEmptyEntries);
+				string[] split = line.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
 				if (split.Length != 2)
 					continue;
 				int hash = 0;
@@ -45,7 +45,7 @@ namespace Decompiler
 				}
 				catch
 				{
-					hash = (int) Convert.ToUInt32(split[0]);
+					hash = (int)Convert.ToUInt32(split[0]);
 				}
 				if (!hashes.ContainsKey(hash) && hash != 0)
 					hashes.Add(hash, split[1]);

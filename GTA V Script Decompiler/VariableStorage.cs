@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Text;
 
 namespace Decompiler
@@ -10,41 +8,41 @@ namespace Decompiler
 	/// This is what i use for detecting if a variable is a int/float/bool/struct/array etc
 	/// </summary>
 	public class VariableStorage
-    {
-        ListType listType;//static/function_var/parameter
-        public List<Variable> Vars;
-        Dictionary<int, int> VarRemapper; //not necessary, just shifts variables up if variables before are bigger than 1 DWORD
-		private int count;
+	{
+		readonly ListType listType;//static/function_var/parameter
+		public List<Variable> Vars;
+		Dictionary<int, int> VarRemapper; //not necessary, just shifts variables up if variables before are bigger than 1 DWORD
+		private readonly int count;
 		private int scriptParamCount = 0;
 		private int scriptParamStart { get { return Vars.Count - scriptParamCount; } }
-        public VariableStorage(ListType type, int varcount)
-        {
-            listType = type;
-            Vars = new List<Variable>();
-            for (int i = 0; i < varcount; i++)
-            {
-                Vars.Add(new Variable(i));
-            }
-			count = varcount;
-        }
-        public VariableStorage(ListType type)
-        {
-            listType = type;
+		public VariableStorage(ListType type, int varcount)
+		{
+			listType = type;
 			Vars = new List<Variable>();
-        }
-        public void AddVar(int value)
-        {
-            Vars.Add(new Variable(Vars.Count, value));//only used for static variables that are pre assigned
-        }
+			for (int i = 0; i < varcount; i++)
+			{
+				Vars.Add(new Variable(i));
+			}
+			count = varcount;
+		}
+		public VariableStorage(ListType type)
+		{
+			listType = type;
+			Vars = new List<Variable>();
+		}
+		public void AddVar(int value)
+		{
+			Vars.Add(new Variable(Vars.Count, value));//only used for static variables that are pre assigned
+		}
 
-        public void AddVar(long value)
-        {
-            Vars.Add(new Variable(Vars.Count, value));
-        }
-        public void checkvars()
-        {
-            unusedcheck();
-        }
+		public void AddVar(long value)
+		{
+			Vars.Add(new Variable(Vars.Count, value));
+		}
+		public void checkvars()
+		{
+			unusedcheck();
+		}
 		//This shouldnt be needed but in gamever 1.0.757.2
 		//It seems a few of the scripts are accessing items from the
 		//Stack frame that they havent reserver
@@ -58,43 +56,43 @@ namespace Decompiler
 				}
 			}
 		}
-        public string GetVarName(uint index)
-        {
-            Variable var = Vars[(int)index];
+		public string GetVarName(uint index)
+		{
+			Variable var = Vars[(int)index];
 
 			if (var.Name != "")
 				return var.Name;
 
 			string name = "";
 
-            if (var.DataType.Type == Types.STRING)
-            {
-                name = "c";
-            }
-            else if (var.ImmediateSize == 1)
-            {
+			if (var.DataType.Type == Types.STRING)
+			{
+				name = "c";
+			}
+			else if (var.ImmediateSize == 1)
+			{
 				name = Vars[(int)index].DataType.Type.Prefix;
-            }
+			}
 
-            switch (listType)
-            {
-                case ListType.Statics: name += (index >= scriptParamStart ? "ScriptParam_" : "Local_"); break;
-                case ListType.Vars: name += "Var"; break;
-                case ListType.Params: name += "Param"; break;
-            }
+			switch (listType)
+			{
+				case ListType.Statics: name += (index >= scriptParamStart ? "ScriptParam_" : "Local_"); break;
+				case ListType.Vars: name += "Var"; break;
+				case ListType.Params: name += "Param"; break;
+			}
 
-            try
-            {
-                if (Program.shouldShiftVariables) 
+			try
+			{
+				if (Program.shouldShiftVariables)
 					return name + VarRemapper[(int)index].ToString();
 				else
-                    return name + (listType == ListType.Statics && index >= scriptParamStart ? index - scriptParamStart : index).ToString();
-            }
-            catch (KeyNotFoundException)
-            {
-                return name + (listType == ListType.Statics && index >= scriptParamStart ? index - scriptParamStart : index).ToString();
-            }
-        }
+					return name + (listType == ListType.Statics && index >= scriptParamStart ? index - scriptParamStart : index).ToString();
+			}
+			catch (KeyNotFoundException)
+			{
+				return name + (listType == ListType.Statics && index >= scriptParamStart ? index - scriptParamStart : index).ToString();
+			}
+		}
 
 		public void SetScriptParamCount(int count)
 		{
@@ -133,7 +131,7 @@ namespace Decompiler
 				if (var.ImmediateSize == 1)
 				{
 					dataType = var.DataType.Type.VarDec;
-					
+
 				}
 				else if (var.DataType.Type == Types.STRING)
 				{
@@ -261,10 +259,10 @@ namespace Decompiler
 				{
 					if (!Program.shouldShiftVariables)
 					{
-						i++;	 
+						i++;
 					}
 					continue;
-				}			   
+				}
 				string datatype = "";
 				if (!var.Is_Array)
 				{
@@ -302,49 +300,49 @@ namespace Decompiler
 			return decl;
 		}
 
-        /// <summary>
-        /// Remove unused vars from declaration, and shift var indexes down
-        /// </summary>
-        private void unusedcheck()
-        {
-            VarRemapper = new Dictionary<int, int>();
-            for (int i = 0, k=0; i < Vars.Count; i++)
-            {
-                if (!Vars[i].Is_Used)
-                    continue;
-                if (listType == ListType.Vars && !Vars[i].Is_Called)
-                    continue;
-                if (Vars[i].Is_Array)
-                {
-                    for (int j = i + 1; j < i + 1 + Vars[i].Value * Vars[i].ImmediateSize; j++)
-                    {
-                        Vars[j].SetNotUsed();
-                    }
-                }
-                else if (Vars[i].ImmediateSize > 1)
-                {
-                    for (int j = i + 1; j < i + Vars[i].ImmediateSize; j++)
-                    {
-	                    BrokenCheck((uint)j);
-                        Vars[j].SetNotUsed();
-                    }
-                }
-                VarRemapper.Add(i, k);
-                k++;
-            }
-        }
+		/// <summary>
+		/// Remove unused vars from declaration, and shift var indexes down
+		/// </summary>
+		private void unusedcheck()
+		{
+			VarRemapper = new Dictionary<int, int>();
+			for (int i = 0, k = 0; i < Vars.Count; i++)
+			{
+				if (!Vars[i].Is_Used)
+					continue;
+				if (listType == ListType.Vars && !Vars[i].Is_Called)
+					continue;
+				if (Vars[i].Is_Array)
+				{
+					for (int j = i + 1; j < i + 1 + Vars[i].Value * Vars[i].ImmediateSize; j++)
+					{
+						Vars[j].SetNotUsed();
+					}
+				}
+				else if (Vars[i].ImmediateSize > 1)
+				{
+					for (int j = i + 1; j < i + Vars[i].ImmediateSize; j++)
+					{
+						BrokenCheck((uint)j);
+						Vars[j].SetNotUsed();
+					}
+				}
+				VarRemapper.Add(i, k);
+				k++;
+			}
+		}
 
-        public Variable GetVarAtIndex(uint index)
-        {
-	        BrokenCheck(index);
-            return Vars[(int)index];
-        }
+		public Variable GetVarAtIndex(uint index)
+		{
+			BrokenCheck(index);
+			return Vars[(int)index];
+		}
 
-        public enum ListType
-        {
-            Statics,
-            Params,
-            Vars
-        }
-    }
+		public enum ListType
+		{
+			Statics,
+			Params,
+			Vars
+		}
+	}
 }

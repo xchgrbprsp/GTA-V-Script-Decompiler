@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Decompiler.Ast.StatementTree
 {
@@ -37,7 +34,7 @@ namespace Decompiler.Ast.StatementTree
 
         public override string ToString()
         {
-            return $"switch ({SwitchVal.ToString()}){Environment.NewLine}{{{Environment.NewLine}{base.ToString()}}}";
+            return $"switch ({SwitchVal}){Environment.NewLine}{{{Environment.NewLine}{base.ToString()}}}";
         }
     }
 }

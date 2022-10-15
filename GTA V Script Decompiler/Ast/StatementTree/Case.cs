@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Decompiler.Ast.StatementTree
 {
@@ -10,7 +7,7 @@ namespace Decompiler.Ast.StatementTree
     {
         public readonly int BreakOffset;
         readonly int StartOffset;
-        List<AstToken> Cases;
+        readonly List<AstToken> Cases;
 
         public Case(Function function, Tree parent, int offset, List<AstToken> cases, int breakOffset) : base(function, parent, offset)
         {

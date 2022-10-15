@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Decompiler.Ast
+﻿namespace Decompiler.Ast
 {
     internal class Global : AstToken
     {
-        readonly public uint Index;
+        public readonly uint Index;
 
         public Global(Function func, uint index) : base(func)
         {
@@ -43,7 +37,7 @@ namespace Decompiler.Ast
 
     internal class GlobalLoad : AstToken
     {
-        readonly public uint Index;
+        public readonly uint Index;
 
         public GlobalLoad(Function func, uint index) : base(func)
         {
@@ -68,8 +62,8 @@ namespace Decompiler.Ast
 
     internal class GlobalStore : AstToken
     {
-        readonly public uint Index;
-        readonly public AstToken Value;
+        public readonly uint Index;
+        public readonly AstToken Value;
 
         public GlobalStore(Function func, uint index, AstToken value) : base(func)
         {

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Decompiler
 {
@@ -10,9 +8,9 @@ namespace Decompiler
     {
         public Type Type;
         public bool IsBitset;
-        string[] Keys;
-        int[] Values;
-        Dictionary<int, string> CachedValues = new();
+        readonly string[] Keys;
+        readonly int[] Values;
+        readonly Dictionary<int, string> CachedValues = new();
 
         public ScriptEnum(Type type, bool isBitset = false)
         {

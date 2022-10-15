@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Decompiler.Ast
 {
@@ -28,14 +24,14 @@ namespace Decompiler.Ast
                     var type = Entry?.GetParamType(i) ?? Types.UNKNOWN;
                     arg.HintType(ref type.GetContainer());
 
-                    if (arg is LocalLoad && (Entry?.GetParam(i)?.autoname ?? false))
+                    if (arg is LocalLoad && (Entry?.GetParam(i)?.AutoName ?? false))
                         function.SetFrameVarAutoName((arg as LocalLoad).Index, new NativeParameterAutoName(Entry.Value.GetParam(i).name));
-                    else if (arg is Local && (Entry?.GetParam(i)?.autoname ?? false))
+                    else if (arg is Local && (Entry?.GetParam(i)?.AutoName ?? false))
                         function.SetFrameVarAutoName((arg as Local).Index, new NativeParameterAutoName(Entry.Value.GetParam(i).name));
                 }
                 else if (arg.GetStackCount() == 3)
                 {
-                    if (arg is LoadN && (arg as LoadN).Pointer is Local && (Entry?.GetParam(i)?.autoname ?? false))
+                    if (arg is LoadN && (arg as LoadN).Pointer is Local && (Entry?.GetParam(i)?.AutoName ?? false))
                     {
                         function.GetFrameVar(((arg as LoadN).Pointer as Local).Index).HintType(ref Types.VEC3.GetContainer());
                     }

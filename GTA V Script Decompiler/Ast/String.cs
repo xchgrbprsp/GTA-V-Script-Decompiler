@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Decompiler.Ast
 {
@@ -58,8 +54,8 @@ namespace Decompiler.Ast
                         if (Properties.Settings.Default.LocalizedTextType == 1)
                             return $"_(\"{text.Replace("\"", "\\\"")}\")";
                         else
-                            return $"\"{function.ScriptFile.StringTable[(int)(Index as ConstantInt).GetValue()]}\" /*{text.Replace("\"", "\\\"")}*/";
-                    }    
+                            return $"\"{function.ScriptFile.StringTable[(int)(Index as ConstantInt).GetValue()]}\" /*{text}*/";
+                    }
                 }
 
                 return "\"" + function.ScriptFile.StringTable[(int)(Index as ConstantInt).GetValue()] + "\"";

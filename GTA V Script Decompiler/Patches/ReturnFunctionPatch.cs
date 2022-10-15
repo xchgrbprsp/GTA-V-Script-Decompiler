@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Decompiler.Patches
@@ -36,7 +33,7 @@ namespace Decompiler.Patches
                 else
                 {
                     bytes.Add((byte)Opcode.PUSH_CONST_U32);
-                    bytes.AddRange(BitConverter.GetBytes((uint)ReturnValue));
+                    bytes.AddRange(BitConverter.GetBytes(ReturnValue));
                 }
             }
 

@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Decompiler.Ast
+﻿namespace Decompiler.Ast
 {
     internal abstract class IntegerArithmetic : AstToken
     {
-        AstToken Lhs;
-        AstToken Rhs;
+        readonly AstToken Lhs;
+        readonly AstToken Rhs;
         protected abstract char Symbol { get; }
 
         protected IntegerArithmetic(Function func, AstToken rhs, AstToken lhs) : base(func)
@@ -88,7 +82,7 @@ namespace Decompiler.Ast
 
     internal class IntegerNeg : AstToken
     {
-        AstToken value;
+        readonly AstToken value;
         public IntegerNeg(Function func, AstToken value) : base(func)
         {
             this.value = value;
@@ -111,7 +105,7 @@ namespace Decompiler.Ast
 
     internal class IntegerNot : AstToken
     {
-        AstToken value;
+        readonly AstToken value;
         public IntegerNot(Function func, AstToken value) : base(func)
         {
             this.value = value;

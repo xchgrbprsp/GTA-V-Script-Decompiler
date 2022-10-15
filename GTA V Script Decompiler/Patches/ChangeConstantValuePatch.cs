@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Decompiler.Patches
@@ -49,12 +47,12 @@ namespace Decompiler.Patches
             else if (constantType == ConstantType.U24)
             {
                 bytes.Add((byte)Opcode.PUSH_CONST_U24);
-                bytes.AddRange(BitConverter.GetBytes((uint)Value).Skip(1)); // todo does this work?
+                bytes.AddRange(BitConverter.GetBytes(Value).Skip(1)); // todo does this work?
             }
             else if (constantType == ConstantType.U32)
             {
                 bytes.Add((byte)Opcode.PUSH_CONST_U32);
-                bytes.AddRange(BitConverter.GetBytes((uint)Value));
+                bytes.AddRange(BitConverter.GetBytes(Value));
             }
 
             return bytes.ToArray();

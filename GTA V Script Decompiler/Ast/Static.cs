@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Decompiler.Ast
+﻿namespace Decompiler.Ast
 {
     internal class Static : AstToken
     {
@@ -30,7 +24,7 @@ namespace Decompiler.Ast
             return true;
         }
     }
-    
+
     internal class StaticLoad : AstToken
     {
         public readonly uint Index;

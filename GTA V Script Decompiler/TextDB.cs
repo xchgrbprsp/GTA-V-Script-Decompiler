@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Decompiler
 {
@@ -22,7 +18,7 @@ namespace Decompiler
             if (Directory.Exists(textsDir))
             {
                 string[] texts = Directory.GetFiles(textsDir);
-                
+
                 foreach (string text in texts)
                 {
                     LoadFromStream(new IO.Reader(File.OpenRead(text)));
@@ -42,7 +38,7 @@ namespace Decompiler
                 throw new FileFormatException("Invalid magic");
 
             uint count = reader.ReadUInt32();
-            
+
             for (int i = 0; i < count; i++)
             {
                 offsets.Add(new(reader.ReadUInt32(), reader.ReadUInt32()));
@@ -66,7 +62,7 @@ namespace Decompiler
                         break;
 
                     buf += c;
-                } 
+                }
                 while (reader.BaseStream.Position < end);
 
                 Strings.Add(offsets[i].Key, buf);

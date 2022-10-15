@@ -12,7 +12,7 @@
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
-		private System.ComponentModel.IContainer components = null;
+		private readonly System.ComponentModel.IContainer components = null;
 
 		/// <summary>
 		/// Clean up any resources being used.
@@ -47,7 +47,7 @@
 			// 
 			this.btnOK.Anchor =
 
-                    (AnchorStyles.Bottom | AnchorStyles.Right);
+					(AnchorStyles.Bottom | AnchorStyles.Right);
 			this.btnOK.BackColor = Drawing.SystemColors.Control;
 			this.btnOK.DialogResult = DialogResult.OK;
 			this.btnOK.FlatStyle = FlatStyle.System;
@@ -62,7 +62,7 @@
 			// 
 			this.btnCancel.Anchor =
 
-                    (AnchorStyles.Bottom | AnchorStyles.Right);
+					(AnchorStyles.Bottom | AnchorStyles.Right);
 			this.btnCancel.BackColor = Drawing.SystemColors.Control;
 			this.btnCancel.DialogResult = DialogResult.Cancel;
 			this.btnCancel.FlatStyle = FlatStyle.System;
@@ -78,7 +78,7 @@
 			this.label1.AutoSize = true;
 #pragma warning disable CA1416 // Validate platform compatibility
 			this.label1.Font = new Drawing.Font("Microsoft Sans Serif", 12F, Drawing.FontStyle.Bold,
-                Drawing.GraphicsUnit.Point, 0);
+				Drawing.GraphicsUnit.Point, 0);
 #pragma warning restore CA1416 // Validate platform compatibility
 			this.label1.Location = new Drawing.Point(12, 9);
 			this.label1.Name = "label1";
@@ -90,8 +90,8 @@
 			// 
 			this.textBox1.Anchor =
 
-                    ((AnchorStyles.Top | AnchorStyles.Left)
-                      | AnchorStyles.Right);
+					((AnchorStyles.Top | AnchorStyles.Left)
+					  | AnchorStyles.Right);
 			this.textBox1.Location = new Drawing.Point(15, 68);
 			this.textBox1.Multiline = true;
 			this.textBox1.Name = "textBox1";
@@ -104,8 +104,8 @@
 			// 
 			this.comboBox1.Anchor =
 
-                    ((AnchorStyles.Top | AnchorStyles.Left)
-                      | AnchorStyles.Right);
+					((AnchorStyles.Top | AnchorStyles.Left)
+					  | AnchorStyles.Right);
 			this.comboBox1.FormattingEnabled = true;
 			this.comboBox1.Location = new Drawing.Point(15, 67);
 			this.comboBox1.Name = "comboBox1";
@@ -278,7 +278,7 @@
 	/// </summary>
 	public class InputBox : IDisposable
 	{
-		private _InputBox _ibx;
+		private readonly _InputBox _ibx;
 
 		/// <summary>
 		/// Initialises a new InputBox Class and enables access to the hidden base class

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Decompiler.Ast.StatementTree
 {
@@ -32,7 +28,7 @@ namespace Decompiler.Ast.StatementTree
 
         public override string ToString()
         {
-            return $"while ({Condition.ToString()}){Environment.NewLine}{{{Environment.NewLine}{base.ToString()}}}";
+            return $"while ({Condition}){Environment.NewLine}{{{Environment.NewLine}{base.ToString()}}}";
         }
     }
 }

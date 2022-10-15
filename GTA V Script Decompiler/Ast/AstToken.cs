@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Decompiler.Ast
+﻿namespace Decompiler.Ast
 {
     internal class AstToken
     {
@@ -60,7 +53,7 @@ namespace Decompiler.Ast
         {
             return ToString();
         }
-        
+
         public virtual bool CanGetGlobalIndex()
         {
             return false;

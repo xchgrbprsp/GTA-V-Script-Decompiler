@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Decompiler.Ast
+﻿namespace Decompiler.Ast
 {
     internal class FloatToInt : AstToken
     {
-        AstToken Float;
+        readonly AstToken Float;
         public FloatToInt(Function func, AstToken @float) : base(func)
         {
             Float = @float;

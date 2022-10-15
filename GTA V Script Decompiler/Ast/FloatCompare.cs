@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Decompiler.Ast
+﻿namespace Decompiler.Ast
 {
     internal abstract class FloatCompare : AstToken
     {
-        AstToken Lhs;
-        AstToken Rhs;
+        readonly AstToken Lhs;
+        readonly AstToken Rhs;
 
         protected FloatCompare(Function func, AstToken rhs, AstToken lhs) : base(func)
         {

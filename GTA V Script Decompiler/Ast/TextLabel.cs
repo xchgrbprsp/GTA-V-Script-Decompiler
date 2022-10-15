@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Decompiler.Ast
 {
@@ -29,7 +24,7 @@ namespace Decompiler.Ast
 
         public override string ToString()
         {
-            return "TEXT_LABEL_ASSIGN_STRING(" + Dst.ToString() + ", " + Src.ToString() + ", " + Size + ");" ;
+            return "TEXT_LABEL_ASSIGN_STRING(" + Dst.ToString() + ", " + Src.ToString() + ", " + Size + ");";
         }
     }
 

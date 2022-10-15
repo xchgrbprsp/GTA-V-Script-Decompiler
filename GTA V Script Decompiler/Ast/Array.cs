@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Microsoft.WindowsAPICodePack.Shell.PropertySystem.SystemProperties.System;
-
-namespace Decompiler.Ast
+﻿namespace Decompiler.Ast
 {
     internal class Array : AstToken
     {

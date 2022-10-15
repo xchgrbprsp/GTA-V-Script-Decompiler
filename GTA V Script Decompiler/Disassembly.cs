@@ -1,14 +1,9 @@
-﻿using System;
+﻿using Decompiler.Patches;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using Decompiler.Patches;
 
 namespace Decompiler
 {
@@ -145,9 +140,8 @@ namespace Decompiler
             new[]{"PUSH_CONST_F7", ""},
             new[]{"IS_BIT_SET", ""}
         };
-
-        Function Function;
-        Patch[] patches;
+        readonly Function Function;
+        readonly Patch[] patches;
 
         public Disassembly(Function func)
         {
@@ -197,7 +191,7 @@ namespace Decompiler
                     bytes += " " + (int)instruction.GetOperand(0) + ", " + (int)instruction.GetOperand(1) + ", " + (int)instruction.GetOperand(2);
                     break;
                 case "bs":
-                    bytes += " " + (int)instruction.GetOperand(0) + ", " + BitConverter.ToInt16(new byte[]{ instruction.GetOperand(1), instruction.GetOperand(2)});
+                    bytes += " " + (int)instruction.GetOperand(0) + ", " + BitConverter.ToInt16(new byte[] { instruction.GetOperand(1), instruction.GetOperand(2) });
                     break;
                 case "d":
                 case "h":
@@ -241,7 +235,7 @@ namespace Decompiler
                     {
                         pattern += " " + ((sbyte)op).ToString("X").PadLeft(2, '0');
                     }
-                    else 
+                    else
                     {
                         pattern += " ?";
                     }

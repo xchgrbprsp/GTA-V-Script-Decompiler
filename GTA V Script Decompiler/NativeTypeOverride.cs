@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Decompiler
 {
     internal class NativeTypeOverride
     {
-        string Name;
-        int Index;
-        Types.TypeInfo NewType;
+        readonly string Name;
+        readonly int Index;
+        readonly Types.TypeInfo NewType;
 
-        static List<NativeTypeOverride> Overrides = new();
+        static readonly List<NativeTypeOverride> Overrides = new();
 
         NativeTypeOverride(string name, int index, Types.TypeInfo newType)
         {

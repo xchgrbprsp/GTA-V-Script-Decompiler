@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
-using System.IO.Compression;
-using System.Threading;
 using System.Diagnostics;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace Decompiler
 {
@@ -19,7 +14,7 @@ namespace Decompiler
         private int offset = 0;
         public List<Function> Functions;
         public static Hashes HashBank;
-        private Stream file;
+        private readonly Stream file;
         public ScriptHeader Header;
         internal VariableStorage Statics;
         internal ProgressBar? ProgressBar = null;

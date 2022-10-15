@@ -1,15 +1,8 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.DirectoryServices.ActiveDirectory;
 using System.Linq;
 using System.Text;
-using System.Text.Json.Serialization.Metadata;
 using System.Text.RegularExpressions;
-using System.Threading;
-using System.Windows.Forms;
-using System.Xml.Linq;
 
 namespace Decompiler
 {
@@ -34,8 +27,7 @@ namespace Decompiler
 		internal List<Instruction> Instructions;
 
 		internal Dictionary<int, int> InstructionMap;
-
-		Stack Stack;
+		readonly Stack Stack;
 
 		int Offset = 0;
 
@@ -61,7 +53,7 @@ namespace Decompiler
 		public uint Hash { get; private set; }
 		public uint Mk2Hash { get; private set; }
 
-        public Function(ScriptFile Owner, string name, int pcount, int vcount, int rcount, int location, int locmax = -1)
+		public Function(ScriptFile Owner, string name, int pcount, int vcount, int rcount, int location, int locmax = -1)
 		{
 			ScriptFile = Owner;
 			Name = name;
@@ -116,19 +108,19 @@ namespace Decompiler
 					sb.Append(ins.GetOperand(0));
 				else if (mk2 && (ins.Opcode == Opcode.PUSH_CONST_S16 || ins.Opcode == Opcode.PUSH_CONST_U24 || ins.Opcode == Opcode.PUSH_CONST_U32))
 				{
-                    sb.Append(ins.GetOperandsAsUInt);
-                }
+					sb.Append(ins.GetOperandsAsUInt);
+				}
 				else if (ins.Opcode == Opcode.PUSH_CONST_U8_U8)
 				{
 					sb.Append(ins.GetOperand(0));
 					sb.Append(ins.GetOperand(1));
-                }
+				}
 				else if (ins.Opcode == Opcode.PUSH_CONST_U8_U8_U8)
 				{
-                    sb.Append(ins.GetOperand(0));
-                    sb.Append(ins.GetOperand(1));
-                    sb.Append(ins.GetOperand(2));
-                }
+					sb.Append(ins.GetOperand(0));
+					sb.Append(ins.GetOperand(1));
+					sb.Append(ins.GetOperand(2));
+				}
 				else if (ins.Opcode == Opcode.NATIVE)
 				{
 					sb.Append(ins.GetNativeParams);
@@ -138,21 +130,21 @@ namespace Decompiler
 					{
 						sb.Append(ScriptFile.X64NativeTable.GetNativeHashFromIndex(ins.GetNativeIndex));
 					}
-                }
+				}
 				else if (ins.Opcode == Opcode.STRING)
 				{
 					if (lastIns != null && (lastIns.Opcode == Opcode.PUSH_CONST_U8 || lastIns.Opcode == Opcode.PUSH_CONST_U24 || lastIns.Opcode == Opcode.PUSH_CONST_U32))
 						sb.Append(ScriptFile.StringTable[lastIns.GetOperandsAsInt]);
 				}
 
-                if (i > 22)
+				if (i > 22)
 					break;
 
 				lastIns = ins;
 			}
 
 			return Utils.Joaat(sb.ToString());
-        }
+		}
 
 		internal void HintReturnType(ref TypeContainer container)
 		{
@@ -168,7 +160,7 @@ namespace Decompiler
 			string str = FunctionHeader() + Environment.NewLine + MainTree.ToString();
 			LineCount = Regex.Matches(str, Environment.NewLine).Count + 1;
 			return str;
-        }
+		}
 
 		/// <summary>
 		/// Gets the first line of the function Declaration
@@ -205,7 +197,7 @@ namespace Decompiler
 					working.Append("struct<" + NumReturns.ToString() + "> ");
 				}
 			}
-			else 
+			else
 				throw new DecompilingException("Unexpected return count");
 
 			working.Append(Name);
@@ -216,10 +208,10 @@ namespace Decompiler
 			if (Properties.Settings.Default.IncludeFunctionPosition)
 				working.Append(" Position - 0x" + Location.ToString("X"));
 
-            if (Properties.Settings.Default.IncludeFunctionHash)
-                working.Append($" Hash - 0x{Hash.ToString("X")} ^0x{Mk2Hash.ToString("X")}");
+			if (Properties.Settings.Default.IncludeFunctionHash)
+				working.Append($" Hash - 0x{Hash.ToString("X")} ^0x{Mk2Hash.ToString("X")}");
 
-            return working.ToString();
+			return working.ToString();
 		}
 
 		/// <summary>
@@ -233,7 +225,7 @@ namespace Decompiler
 				return Params.GetVarName(index);
 			else if (index < NumParams + 2)
 				throw new Exception("Unexpected fvar");
-			return Vars.GetVarName((uint) (index - 2 - NumParams));
+			return Vars.GetVarName((uint)(index - 2 - NumParams));
 		}
 
 		/// <summary>
@@ -247,7 +239,7 @@ namespace Decompiler
 				return Params.GetVarAtIndex(index);
 			else if (index < NumParams + 2)
 				throw new Exception("Unexpected fvar");
-			return Vars.GetVarAtIndex((uint) (index - 2 - NumParams));
+			return Vars.GetVarAtIndex((uint)(index - 2 - NumParams));
 		}
 
 		internal void SetFrameVarAutoName(uint index, AutoName name)
@@ -258,7 +250,7 @@ namespace Decompiler
 				throw new Exception("Unexpected fvar");
 			else
 				Vars.GetVarAtIndex((uint)(index - 2 - NumParams)).SetAutoName(name);
-        }
+		}
 
 		public void ApplyVarAutoNames(VariableStorage storage, string prefix = "")
 		{
@@ -304,10 +296,10 @@ namespace Decompiler
 			Name = name;
 		}
 
-        /// <summary>
-        /// The block of code that the function takes up
-        /// </summary>
-        public List<byte> CodeBlock { get; set; }
+		/// <summary>
+		/// The block of code that the function takes up
+		/// </summary>
+		public List<byte> CodeBlock { get; set; }
 
 		/// <summary>
 		/// Gets the function info given the offset where its called from
@@ -333,14 +325,14 @@ namespace Decompiler
 				return;
 
 			DecodeStarted = true;
-			if (Decoded) 
+			if (Decoded)
 				return;
 
 			DecodeStatementTree(MainTree);
 			ApplyVarAutoNames(Vars);
 			// ApplyVarAutoNames(Params, "a_"); currently makes code less readable
 
-            Decoded = true;
+			Decoded = true;
 			ScriptFile.NotifyFunctionDecompiled();
 		}
 
@@ -362,7 +354,7 @@ namespace Decompiler
 			}
 
 			temp.NopInstruction();
-			AddInstruction(cur, temp); 
+			AddInstruction(cur, temp);
 		}
 
 		/// <summary>
@@ -374,7 +366,7 @@ namespace Decompiler
 		{
 			//May need refining, but works fine for rockstars code
 			int off = 0;
-			Start:
+Start:
 			off += 1;
 			if (CodeBlock[Offset + off] == 0)
 				goto Start;
@@ -420,11 +412,11 @@ namespace Decompiler
 
 			for (int i = 0; i < Instructions[tree.Offset].GetOperand(0); i++)
 			{
-                if (CodeOffsetToFunctionOffset(Instructions[tree.Offset].GetSwitchOffset(i)) <= tree.Offset)
-                    throw new InvalidOperationException("Switch case offset goes backwards???");
+				if (CodeOffsetToFunctionOffset(Instructions[tree.Offset].GetSwitchOffset(i)) <= tree.Offset)
+					throw new InvalidOperationException("Switch case offset goes backwards???");
 
-                //Check if the case is a known hash
-                case_val = new Ast.ConstantInt(this, (ulong)Instructions[tree.Offset].GetSwitchCase(i));
+				//Check if the case is a known hash
+				case_val = new Ast.ConstantInt(this, (ulong)Instructions[tree.Offset].GetSwitchCase(i));
 
 				//Get the offset to jump to
 				offset = Instructions[tree.Offset].GetSwitchOffset(i);
@@ -433,7 +425,7 @@ namespace Decompiler
 				if (!cases.ContainsKey(offset))
 				{
 					//unknown offset
-					cases.Add(offset, new List<Ast.AstToken>(new Ast.AstToken[] {case_val}));
+					cases.Add(offset, new List<Ast.AstToken>(new Ast.AstToken[] { case_val }));
 				}
 				else
 				{
@@ -504,9 +496,9 @@ namespace Decompiler
 				}
 				else
 				{
-                    //Default location is a new code path
-                    cases.Add(defaultloc, new List<Ast.AstToken>(new Ast.AstToken[] { new Ast.Default(this) }));
-                    sorted = cases.Keys.ToList();
+					//Default location is a new code path
+					cases.Add(defaultloc, new List<Ast.AstToken>(new Ast.AstToken[] { new Ast.Default(this) }));
+					sorted = cases.Keys.ToList();
 					sorted.Sort();
 				}
 			}
@@ -553,7 +545,7 @@ namespace Decompiler
 						AddInstruction(curoff, new Instruction(CodeBlock[Offset], GetArray(4), curoff));
 						break;
 					case 42: //Because of how rockstar codes and/or conditionals, its neater to detect dups
-						//and only add them if they are not used for conditionals
+							 //and only add them if they are not used for conditionals
 						CheckDupForInstruction();
 						break;
 					case 44:
@@ -647,7 +639,7 @@ namespace Decompiler
 
 			Hash = GetFunctionHash();
 			Mk2Hash = GetFunctionHash(true);
-        }
+		}
 
 
 		/// <summary>
@@ -898,7 +890,7 @@ namespace Decompiler
 						break;
 					case Opcode.LOCAL_U8_STORE:
 					case Opcode.LOCAL_U16_STORE:
-                        tree.Statements.Add(new Ast.LocalStore(this, Instructions[tree.Offset].GetOperandsAsUInt, Stack.Pop()));
+						tree.Statements.Add(new Ast.LocalStore(this, Instructions[tree.Offset].GetOperandsAsUInt, Stack.Pop()));
 						break;
 					case Opcode.STATIC_U8:
 					case Opcode.STATIC_U16:
@@ -914,11 +906,11 @@ namespace Decompiler
 						break;
 					case Opcode.IADD_U8:
 					case Opcode.IADD_S16:
-						Stack.Push(new Ast.IntegerAdd(this, new Ast.ConstantInt(this, (ulong)Instructions[tree.Offset].GetOperandsAsUInt), Stack.Pop()));
+						Stack.Push(new Ast.IntegerAdd(this, new Ast.ConstantInt(this, Instructions[tree.Offset].GetOperandsAsUInt), Stack.Pop()));
 						break;
 					case Opcode.IMUL_U8:
 					case Opcode.IMUL_S16:
-						Stack.Push(new Ast.IntegerMul(this, new Ast.ConstantInt(this, (ulong)Instructions[tree.Offset].GetOperandsAsUInt), Stack.Pop())); ;
+						Stack.Push(new Ast.IntegerMul(this, new Ast.ConstantInt(this, Instructions[tree.Offset].GetOperandsAsUInt), Stack.Pop())); ;
 						break;
 					case Opcode.IOFFSET:
 						var offset = Stack.Pop();
@@ -926,7 +918,7 @@ namespace Decompiler
 						break;
 					case Opcode.IOFFSET_U8:
 					case Opcode.IOFFSET_S16:
-						Stack.Push(new Ast.Offset(this, Stack.Pop(), new Ast.ConstantInt(this, (ulong)Instructions[tree.Offset].GetOperandsAsUInt)));
+						Stack.Push(new Ast.Offset(this, Stack.Pop(), new Ast.ConstantInt(this, Instructions[tree.Offset].GetOperandsAsUInt)));
 						break;
 					case Opcode.IOFFSET_U8_LOAD:
 					case Opcode.IOFFSET_S16_LOAD:
@@ -952,14 +944,14 @@ namespace Decompiler
 						{
 							var loc = Instructions[tree.Offset].GetOperandsAsInt;
 
-							if(!ScriptFile.FunctionAtLocation.TryGetValue(loc, out var function))
-                                throw new InvalidOperationException("Cannot find function");
+							if (!ScriptFile.FunctionAtLocation.TryGetValue(loc, out var function))
+								throw new InvalidOperationException("Cannot find function");
 
 							// The ternary operator is implemented as a function in RAGE
 							if (function.Hash == 0x3EE55A88)
 							{
 								var args = Stack.PopCount(function.NumParams);
-                                Stack.Push(new Ast.TernaryOperator(this, args[0], args[1], args[2]));
+								Stack.Push(new Ast.TernaryOperator(this, args[0], args[1], args[2]));
 								break;
 							}
 							else if (function.Hash == StringObfuscation.GET_STRING_WITH_ROTATE_HASH || function.Hash == StringObfuscation.GET_STRING_WITH_ROTATE_2_HASH)
@@ -967,18 +959,18 @@ namespace Decompiler
 								StringObfuscation.GetStringWithRotate(this, Stack.PopCount(function.NumParams).ToArray(), Stack);
 								break;
 							}
-                            else if (function.Hash == StringObfuscation.REORDER_STRING_4_32_HASH || function.Hash == StringObfuscation.REORDER_STRING_4_64_HASH || function.Hash == StringObfuscation.REORDER_STRING_4_24_HASH)
-                            {
-                                StringObfuscation.ReorderString_4(this, Stack.PopCount(function.NumParams).ToArray(), Stack, function.Hash == StringObfuscation.REORDER_STRING_4_24_HASH ? 6 : 8);
-                                break;
-                            }
-                            else if (function.Hash == StringObfuscation.REORDER_STRING_8_64_HASH)
-                            {
-                                StringObfuscation.ReorderString_8(this, Stack.PopCount(function.NumParams).ToArray(), Stack);
-                                break;
-                            }
+							else if (function.Hash == StringObfuscation.REORDER_STRING_4_32_HASH || function.Hash == StringObfuscation.REORDER_STRING_4_64_HASH || function.Hash == StringObfuscation.REORDER_STRING_4_24_HASH)
+							{
+								StringObfuscation.ReorderString_4(this, Stack.PopCount(function.NumParams).ToArray(), Stack, function.Hash == StringObfuscation.REORDER_STRING_4_24_HASH ? 6 : 8);
+								break;
+							}
+							else if (function.Hash == StringObfuscation.REORDER_STRING_8_64_HASH)
+							{
+								StringObfuscation.ReorderString_8(this, Stack.PopCount(function.NumParams).ToArray(), Stack);
+								break;
+							}
 
-                            var call = new Ast.FunctionCall(this, Stack.PopCount(function.NumParams), function);
+							var call = new Ast.FunctionCall(this, Stack.PopCount(function.NumParams), function);
 							function.Decompile(); // this is a very bad idea that will break everything but can give better type inference??? TODO: find better way to propagate type info
 
 							if (call.IsStatement())
@@ -1060,7 +1052,7 @@ namespace Decompiler
 							// break from switch case
 							if (t is Ast.StatementTree.Case)
 							{
-                                if (Instructions[tree.Offset].GetJumpOffset == (t as Ast.StatementTree.Case).BreakOffset)
+								if (Instructions[tree.Offset].GetJumpOffset == (t as Ast.StatementTree.Case).BreakOffset)
 								{
 									tree.Statements.Add(new Ast.Break(this));
 									goto DONE;
@@ -1068,38 +1060,38 @@ namespace Decompiler
 							}
 
 							// break from while loop
-                            if (t is Ast.StatementTree.While)
-                            {
-                                if (Instructions[tree.Offset].GetJumpOffset == (t as Ast.StatementTree.While).BreakOffset)
-                                {
-                                    tree.Statements.Add(new Ast.Break(this));
-                                    goto DONE;
-                                }
-                            }
+							if (t is Ast.StatementTree.While)
+							{
+								if (Instructions[tree.Offset].GetJumpOffset == (t as Ast.StatementTree.While).BreakOffset)
+								{
+									tree.Statements.Add(new Ast.Break(this));
+									goto DONE;
+								}
+							}
 
-                            t = t.Parent;
+							t = t.Parent;
 						}
 
 						// else
-                        if (tree is Ast.StatementTree.If && Instructions[tree.Offset + 1].Offset == (tree as Ast.StatementTree.If).EndOffset && Instructions[tree.Offset].GetJumpOffset != Instructions[tree.Offset + 1].Offset)
+						if (tree is Ast.StatementTree.If && Instructions[tree.Offset + 1].Offset == (tree as Ast.StatementTree.If).EndOffset && Instructions[tree.Offset].GetJumpOffset != Instructions[tree.Offset + 1].Offset)
 						{
 							var @else = new Ast.StatementTree.Else(this, tree, tree.Offset + 1, Instructions[tree.Offset].GetJumpOffset); // TODO should the parent be tree or tree.Parent?
-                            (tree as Ast.StatementTree.If).ElseTree = @else;
-                            treeStack.Push(@else);
+							(tree as Ast.StatementTree.If).ElseTree = @else;
+							treeStack.Push(@else);
 
 							//if (tree.Function.Name == "func_159")
 							//	Debugger.Break();
 
 							tree.Parent.Offset = CodeOffsetToFunctionOffset(@else.EndOffset);
 							tree.Offset = CodeOffsetToFunctionOffset(@else.EndOffset);
-                            break;
+							break;
 						}
 
-                        int tempoff = 0;
+						int tempoff = 0;
 start:
-						//Check to see if the jump is just jumping past nops(end of code table)
-						//should be the only case for finding another jump now
-                        if (Instructions[tree.Offset].GetJumpOffset != Instructions[tree.Offset + 1 + tempoff].Offset)
+//Check to see if the jump is just jumping past nops(end of code table)
+//should be the only case for finding another jump now
+						if (Instructions[tree.Offset].GetJumpOffset != Instructions[tree.Offset + 1 + tempoff].Offset)
 						{
 							if (Instructions[tree.Offset + 1 + tempoff].Opcode == Opcode.NOP)
 							{
@@ -1116,36 +1108,36 @@ start:
 
 							}
 
-                            tree.Statements.Add(new Ast.Jump(this, Instructions[tree.Offset].GetJumpOffset));
+							tree.Statements.Add(new Ast.Jump(this, Instructions[tree.Offset].GetJumpOffset));
 							comments.Add(new("Unhandled jump detected. Output should be considered invalid"));
 							break;
-                        }
+						}
 DONE:
-                        break;
+						break;
 					case Opcode.JZ:
 						goto case CONDITIONAL_JUMP;
 					case Opcode.IEQ_JZ:
-                        Stack.Push(new Ast.IntegerEq(this, Stack.Pop(), Stack.Pop()));
+						Stack.Push(new Ast.IntegerEq(this, Stack.Pop(), Stack.Pop()));
 						goto case CONDITIONAL_JUMP;
-                    case Opcode.INE_JZ:
-                        Stack.Push(new Ast.IntegerNe(this, Stack.Pop(), Stack.Pop()));
-                        goto case CONDITIONAL_JUMP;
-                    case Opcode.IGT_JZ:
-                        Stack.Push(new Ast.IntegerGt(this, Stack.Pop(), Stack.Pop()));
-                        goto case CONDITIONAL_JUMP;
-                    case Opcode.IGE_JZ:
-                        Stack.Push(new Ast.IntegerGe(this, Stack.Pop(), Stack.Pop()));
-                        goto case CONDITIONAL_JUMP;
-                    case Opcode.ILT_JZ:
-                        Stack.Push(new Ast.IntegerLt(this, Stack.Pop(), Stack.Pop()));
-                        goto case CONDITIONAL_JUMP;
-                    case Opcode.ILE_JZ:
-                        Stack.Push(new Ast.IntegerLe(this, Stack.Pop(), Stack.Pop()));
-                        goto case CONDITIONAL_JUMP;
-                    case CONDITIONAL_JUMP:
+					case Opcode.INE_JZ:
+						Stack.Push(new Ast.IntegerNe(this, Stack.Pop(), Stack.Pop()));
+						goto case CONDITIONAL_JUMP;
+					case Opcode.IGT_JZ:
+						Stack.Push(new Ast.IntegerGt(this, Stack.Pop(), Stack.Pop()));
+						goto case CONDITIONAL_JUMP;
+					case Opcode.IGE_JZ:
+						Stack.Push(new Ast.IntegerGe(this, Stack.Pop(), Stack.Pop()));
+						goto case CONDITIONAL_JUMP;
+					case Opcode.ILT_JZ:
+						Stack.Push(new Ast.IntegerLt(this, Stack.Pop(), Stack.Pop()));
+						goto case CONDITIONAL_JUMP;
+					case Opcode.ILE_JZ:
+						Stack.Push(new Ast.IntegerLe(this, Stack.Pop(), Stack.Pop()));
+						goto case CONDITIONAL_JUMP;
+					case CONDITIONAL_JUMP:
 						var condition = Stack.Pop();
 						condition.HintType(ref Types.BOOL.GetContainer());
-						
+
 						var tr = tree;
 
 						if (Instructions[tree.Offset].GetOperandsAsUInt == 0 || CodeOffsetToFunctionOffset(Instructions[tree.Offset].GetJumpOffset) == tree.Offset + 1)
@@ -1154,35 +1146,35 @@ DONE:
 							break;
 						}
 
-                        while (tr != null)
-                        {
-                            if (tr is Ast.StatementTree.While)
-                            {
-                                if (Instructions[tree.Offset].GetJumpOffset == (tr as Ast.StatementTree.While).BreakOffset)
-                                {
+						while (tr != null)
+						{
+							if (tr is Ast.StatementTree.While)
+							{
+								if (Instructions[tree.Offset].GetJumpOffset == (tr as Ast.StatementTree.While).BreakOffset)
+								{
 									var condBreak = new Ast.StatementTree.If(this, tree, -1, condition, -1);
 									condBreak.Statements.Add(new Ast.Break(this));
 									tree.Statements.Add(condBreak);
 									goto DONE_COND;
-                                }
-                            }
+								}
+							}
 
-                            tr = tr.Parent;
-                        }
+							tr = tr.Parent;
+						}
 
 						var jumpLoc = Instructions[CodeOffsetToFunctionOffset(Instructions[tree.Offset].GetJumpOffset) - 1];
-                        if (jumpLoc.IsWhileJump && jumpLoc.GetJumpOffset < Instructions[tree.Offset].Offset)
-                        {
+						if (jumpLoc.IsWhileJump && jumpLoc.GetJumpOffset < Instructions[tree.Offset].Offset)
+						{
 							if (CodeOffsetToFunctionOffset(Instructions[tree.Offset].GetJumpOffset) <= tree.Offset)
 								throw new InvalidOperationException("Break offset <= Current offset");
 
 							Instructions[CodeOffsetToFunctionOffset(Instructions[tree.Offset].GetJumpOffset) - 1].NopInstruction(); // is this really required?
-                            var @while = new Ast.StatementTree.While(this, tree, tree.Offset + 1, condition, Instructions[tree.Offset].GetJumpOffset);
-                            treeStack.Push(@while);
-                            tree.Statements.Add(@while);
+							var @while = new Ast.StatementTree.While(this, tree, tree.Offset + 1, condition, Instructions[tree.Offset].GetJumpOffset);
+							treeStack.Push(@while);
+							tree.Statements.Add(@while);
 							tree.Offset = CodeOffsetToFunctionOffset(@while.BreakOffset);
-                            break;
-                        }
+							break;
+						}
 						else
 						{
 							if (Instructions[tree.Offset].GetJumpOffset <= Instructions[tree.Offset].Offset)
@@ -1192,8 +1184,8 @@ DONE:
 							}
 
 							var @if = new Ast.StatementTree.If(this, tree, tree.Offset + 1, condition, Instructions[tree.Offset].GetJumpOffset);
-                            treeStack.Push(@if);
-                            tree.Statements.Add(@if);
+							treeStack.Push(@if);
+							tree.Statements.Add(@if);
 							tree.Offset = CodeOffsetToFunctionOffset(@if.EndOffset);
 							break;
 						}
@@ -1201,7 +1193,7 @@ DONE_COND:
 						break;
 					default:
 						throw new InvalidOperationException("Opcode not handled");
-                }
+				}
 
 				if (tree == treeStack.Peek())
 					tree.Offset++;
@@ -1217,7 +1209,7 @@ DONE_COND:
 					tree = treeStack.Peek();
 					TryOptimizeTree(tree);
 				}
-            }
+			}
 		}
 
 		internal static bool IsForLoopPair(Ast.AstToken tk1, Ast.AstToken tk2)
@@ -1225,19 +1217,19 @@ DONE_COND:
 			if (tk1 is Ast.GlobalStore && tk2 is Ast.GlobalStore)
 			{
 				return (tk1 as Ast.GlobalStore).Index == (tk2 as Ast.GlobalStore).Index;
-            }
+			}
 
-            if (tk1 is Ast.LocalStore && tk2 is Ast.LocalStore)
-            {
-                return (tk1 as Ast.LocalStore).Index == (tk2 as Ast.LocalStore).Index;
-            }
+			if (tk1 is Ast.LocalStore && tk2 is Ast.LocalStore)
+			{
+				return (tk1 as Ast.LocalStore).Index == (tk2 as Ast.LocalStore).Index;
+			}
 
-            if (tk1 is Ast.StaticStore && tk2 is Ast.StaticStore)
-            {
-                return (tk1 as Ast.StaticStore).Index == (tk2 as Ast.StaticStore).Index;
-            }
+			if (tk1 is Ast.StaticStore && tk2 is Ast.StaticStore)
+			{
+				return (tk1 as Ast.StaticStore).Index == (tk2 as Ast.StaticStore).Index;
+			}
 
-            return false;
+			return false;
 		}
 
 		/// <summary>
@@ -1261,8 +1253,8 @@ DONE_COND:
 					{
 						var insideIf = @else.Statements[^1] as Ast.StatementTree.If;
 						var newElseif = new Ast.StatementTree.ElseIf(this, lastIf, -1, insideIf.Condition, -1);
-                        newElseif.Statements = insideIf.Statements;
-                        lastIf.ElseIfTrees.Add(newElseif);
+						newElseif.Statements = insideIf.Statements;
+						lastIf.ElseIfTrees.Add(newElseif);
 						foreach (var elseIf in insideIf.ElseIfTrees)
 						{
 							elseIf.Parent = lastIf;
@@ -1271,8 +1263,8 @@ DONE_COND:
 						lastIf.ElseTree = insideIf.ElseTree;
 						if (lastIf.ElseTree != null)
 							lastIf.ElseTree!.Parent = lastIf;
-                    }
-                }
+					}
+				}
 			}
 			else if (lastTree is Ast.StatementTree.While && tree.Statements.Count > 1)
 			{
@@ -1281,7 +1273,7 @@ DONE_COND:
 				if (lastWhile.Statements.Count >= 1 && lastWhile.Statements[^1] is Ast.AstToken && lastSet is Ast.AstToken)
 				{
 					var lastStmtInWhile = lastWhile.Statements[^1] as Ast.AstToken;
-                    if (IsForLoopPair(lastSet as Ast.AstToken, lastStmtInWhile))
+					if (IsForLoopPair(lastSet as Ast.AstToken, lastStmtInWhile))
 					{
 						var @for = new Ast.StatementTree.For(this, tree, -1, lastSet as Ast.AstToken, lastWhile.Condition, lastStmtInWhile);
 						lastWhile.Statements.Remove(lastStmtInWhile);
@@ -1295,7 +1287,7 @@ DONE_COND:
 						{
 							SetFrameVarAutoName((lastSet as Ast.LocalStore).Index, new LoopIndexAutoName());
 						}
-                    }
+					}
 				}
 			}
 		}
