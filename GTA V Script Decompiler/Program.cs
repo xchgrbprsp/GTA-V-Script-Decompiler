@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Windows.Forms;
+using System.Globalization;
 
 namespace Decompiler
 {
@@ -21,6 +22,9 @@ namespace Decompiler
 		[STAThread]
 		private static void Main(string[] args)
 		{
+			CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
+			CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
+
 			Crossmap = new Crossmap();
 
 			ScriptFile.HashBank = new Hashes();
