@@ -463,17 +463,6 @@ namespace Decompiler
 
 		private void entitiesToolStripMenuItem_Click(object sender, EventArgs e) => Program.Hashes.Export_Entities();
 
-		private void nativesToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			var path = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location),
-				"natives_exp.dat");
-			var fs = File.Create(path);
-			new MemoryStream(Properties.Resources.natives).CopyTo(fs);
-			fs.Close();
-			Process.Start(
-				Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)), "natives_exp.dat");
-		}
-
 		private void closeToolStripMenuItem_Click(object sender, EventArgs e) => Close();
 
 		private void expandAllBlocksToolStripMenuItem_Click(object sender, EventArgs e)

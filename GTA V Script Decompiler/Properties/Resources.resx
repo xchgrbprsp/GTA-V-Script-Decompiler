@@ -130,16 +130,7 @@
   <data name="globalText" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\global.gxt2;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="natives" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\natives.dat;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="native_db_json" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\natives.json;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="x64nativeinfo" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\x64nativeinfo.dat;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="x64natives" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\x64natives.dat;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>

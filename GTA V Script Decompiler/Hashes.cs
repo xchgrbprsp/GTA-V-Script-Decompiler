@@ -12,45 +12,17 @@ namespace Decompiler
 		public Hashes()
 		{
 			hashes = new Dictionary<int, string>();
-			StreamReader reader;
-			if (
-				File.Exists(Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location),
-					"entities.dat")))
-			{
-				reader =
-					new StreamReader(
+			var reader = File.Exists(Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location),
+					"entities.dat"))
+				? new StreamReader(
 						File.OpenRead(Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location),
-							"entities.dat")));
-			}
-			else
-			{
-				Stream Decompressed = new MemoryStream();
-				Stream Compressed = new MemoryStream(Properties.Resources.Entities);
-				DeflateStream deflate = new(Compressed, CompressionMode.Decompress);
-				deflate.CopyTo(Decompressed);
-				deflate.Dispose();
-				Decompressed.Position = 0;
-				reader = new StreamReader(Decompressed);
-			}
+							"entities.dat")))
+				: (new(new MemoryStream(Properties.Resources.Entities)));
 
 			while (!reader.EndOfStream)
 			{
 				var line = reader.ReadLine();
-				var split = line.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
-				if (split.Length != 2)
-					continue;
-				var hash = 0;
-				try
-				{
-					hash = Convert.ToInt32(split[0]);
-				}
-				catch
-				{
-					hash = (int)Convert.ToUInt32(split[0]);
-				}
-
-				if (!hashes.ContainsKey(hash) && hash != 0)
-					hashes.Add(hash, split[1]);
+				hashes[(int)Utils.Joaat(line)] = line;
 			}
 		}
 

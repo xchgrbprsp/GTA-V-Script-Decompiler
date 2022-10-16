@@ -109,35 +109,5 @@ namespace Decompiler.Properties {
                 return ((byte[])(obj));
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] natives {
-            get {
-                object obj = ResourceManager.GetObject("natives", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] x64nativeinfo {
-            get {
-                object obj = ResourceManager.GetObject("x64nativeinfo", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] x64natives {
-            get {
-                object obj = ResourceManager.GetObject("x64natives", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
     }
 }
