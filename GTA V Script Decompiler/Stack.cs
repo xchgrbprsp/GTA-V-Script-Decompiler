@@ -42,9 +42,7 @@ namespace Decompiler
             if (Peek().GetStackCount() == 3)
                 return Pop(true);
             else if (_stack.Count >= 3 && PeekIdx(0).GetStackCount() == 1 && PeekIdx(1).GetStackCount() == 1 && PeekIdx(2).GetStackCount() == 1)
-            {
                 return new Vector(Function, Pop(), Pop(), Pop());
-            }
 
             return new Vector(Function, new(Function), new(Function), new(Function));
         }
@@ -61,12 +59,6 @@ namespace Decompiler
                 if (_stack.Count != 0)
                 {
                     var val = Pop(true);
-
-                    if (popped + val.GetStackCount() > count)
-                    {
-                        //
-                    }
-
                     values.Add(val);
                     popped += val.GetStackCount();
                 }

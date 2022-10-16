@@ -76,7 +76,7 @@ namespace Decompiler
 
 			try
 			{
-				return Program.shouldShiftVariables
+				return Program.ShouldShiftVariables
 					? name + VarRemapper[(int)index].ToString()
 					: name + (listType == ListType.Statics && index >= scriptParamStart ? index - scriptParamStart : index).ToString();
 			}
@@ -108,14 +108,14 @@ namespace Decompiler
 				j++;
 				if (!var.Is_Used)
 				{
-					if (!Program.shouldShiftVariables)
+					if (!Program.ShouldShiftVariables)
 						i++;
 					continue;
 				}
 
 				if (listType == ListType.Vars && !var.Is_Called)
 				{
-					if (!Program.shouldShiftVariables)
+					if (!Program.ShouldShiftVariables)
 						i++;
 					continue;
 				}
@@ -238,7 +238,7 @@ namespace Decompiler
 			{
 				if (!var.Is_Used)
 				{
-					if (!Program.shouldShiftVariables)
+					if (!Program.ShouldShiftVariables)
 					{
 						i++;
 					}

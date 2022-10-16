@@ -63,6 +63,16 @@ namespace Decompiler.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] CrossmapFile {
+            get {
+                object obj = ResourceManager.GetObject("CrossmapFile", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] Entities {
             get {
                 object obj = ResourceManager.GetObject("Entities", resourceCulture);
@@ -96,16 +106,6 @@ namespace Decompiler.Properties {
         internal static byte[] native_db_json {
             get {
                 object obj = ResourceManager.GetObject("native_db_json", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] native_translation {
-            get {
-                object obj = ResourceManager.GetObject("native_translation", resourceCulture);
                 return ((byte[])(obj));
             }
         }

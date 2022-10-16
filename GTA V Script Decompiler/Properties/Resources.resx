@@ -118,6 +118,9 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="CrossmapFile" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\crossmap.txt;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="Entities" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Entities.dat;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -132,9 +135,6 @@
   </data>
   <data name="native_db_json" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\natives.json;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="native_translation" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\native_translation.dat;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="x64nativeinfo" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\x64nativeinfo.dat;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>

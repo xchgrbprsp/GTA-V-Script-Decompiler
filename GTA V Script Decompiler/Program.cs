@@ -6,15 +6,14 @@ namespace Decompiler
 {
 	internal static class Program
 	{
-		public static x64NativeFile x64nativefile;
-		public static object ThreadLock;
-		public static NativeDB nativeDB;
-		public static FunctionDB functionDB;
-		public static TextDB textDB;
-		public static GlobalTypeMgr globalTypeMgr;
+		public static Crossmap Crossmap;
+		public static NativeDB NativeDB;
+		public static FunctionDB FunctionDB;
+		public static TextDB TextDB;
+		public static GlobalTypeMgr GlobalTypeMgr;
 
-		public static bool shouldShiftVariables = Properties.Settings.Default.ShiftVariables;
-		public static bool shouldReverseHashes = Properties.Settings.Default.ReverseHashes;
+		public static bool ShouldShiftVariables = Properties.Settings.Default.ShiftVariables;
+		public static bool ShouldReverseHashes = Properties.Settings.Default.ReverseHashes;
 
 		/// <summary>
 		/// The main entry point for the application.
@@ -22,20 +21,18 @@ namespace Decompiler
 		[STAThread]
 		private static void Main(string[] args)
 		{
-			ThreadLock = new object();
-
-			x64nativefile = new x64NativeFile();
+			Crossmap = new Crossmap();
 
 			ScriptFile.HashBank = new Hashes();
 
-			nativeDB = new NativeDB();
-			nativeDB.LoadData();
+			NativeDB = new NativeDB();
+			NativeDB.LoadData();
 
-			functionDB = new FunctionDB();
+			FunctionDB = new FunctionDB();
 
-			textDB = new TextDB();
+			TextDB = new TextDB();
 
-			globalTypeMgr = new GlobalTypeMgr();
+			GlobalTypeMgr = new GlobalTypeMgr();
 
 			if (args.Length == 0)
 			{
@@ -58,8 +55,7 @@ namespace Decompiler
 				try
 				{
 					fileopen = new ScriptFile(File.OpenRead(args[0]));
-					var task = fileopen.Decompile();
-					task.Wait();
+					fileopen.Decompile().Wait();
 				}
 				catch (Exception ex)
 				{
@@ -69,7 +65,8 @@ namespace Decompiler
 
 				Console.WriteLine("Decompiled in " + (DateTime.Now - Start).ToString());
 				fileopen.Save(File.OpenWrite(args[0] + ".c"), true);
-				Console.WriteLine("Extracing native table...");
+
+				Console.WriteLine("Extracting native table...");
 				StreamWriter fw = new(File.OpenWrite(args[0] + " native table.txt"));
 				foreach (var nat in fileopen.X64NativeTable.NativeHashes)
 				{

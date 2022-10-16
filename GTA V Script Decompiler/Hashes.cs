@@ -71,7 +71,7 @@ namespace Decompiler
 
 		public string GetHash(uint value)
 		{
-			if (Program.shouldReverseHashes && value > 200)
+			if (Program.ShouldReverseHashes && value > 200)
 			{
 				var intvalue = (int)value;
 				if (hashes.TryGetValue(intvalue, out var val))

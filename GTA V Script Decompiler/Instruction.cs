@@ -196,12 +196,12 @@ namespace Decompiler
 
 		public bool IsJumpInstruction
 		{
-			get { return (int)OriginalOpcode is>84 and <93; }
+			get { return (int)OriginalOpcode is >84 and <93; }
 		}
 
 		public bool IsConditionJump
 		{
-			get { return (int)Opcode is>85 and <93; }
+			get { return (int)Opcode is >85 and <93; }
 		}
 
 		public bool IsWhileJump

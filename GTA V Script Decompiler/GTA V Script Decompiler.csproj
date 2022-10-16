@@ -33,6 +33,7 @@
   <PropertyGroup>
     <ApplicationIcon>GTA V Icon.ico</ApplicationIcon>
     <Nullable>annotations</Nullable>
+    <AnalysisLevel>preview-all</AnalysisLevel>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <OutputPath>bin\x64\Debug\</OutputPath>

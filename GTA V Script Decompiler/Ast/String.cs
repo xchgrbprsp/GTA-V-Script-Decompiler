@@ -35,7 +35,7 @@ namespace Decompiler.Ast
                 {
                     var hash = Utils.Joaat(function.ScriptFile.StringTable[(int)(Index as ConstantInt).GetValue()]);
 
-                    if (hash != 0x3acbce85 /*STRING*/ && Program.textDB.Strings.TryGetValue(hash, out var text))
+                    if (hash != 0x3acbce85 /*STRING*/ && Program.TextDB.Strings.TryGetValue(hash, out var text))
                     {
                         return Properties.Settings.Default.LocalizedTextType == 1
                             ? $"_(\"{text.Replace("\"", "\\\"")}\")"

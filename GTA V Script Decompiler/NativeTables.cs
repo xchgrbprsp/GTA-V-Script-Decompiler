@@ -4,12 +4,12 @@ using System.IO;
 
 namespace Decompiler
 {
-    public class X64NativeTable
+    public class NativeTable
     {
         public List<string> NativeNames;
         public List<ulong> NativeHashes;
 
-        public X64NativeTable(Stream scriptFile, int position, int length, int codeSize)
+        public NativeTable(Stream scriptFile, int position, int length, int codeSize)
         {
             IO.Reader reader = new(scriptFile);
             var count = 0;
@@ -24,9 +24,9 @@ namespace Decompiler
                 // or the earliest game version that native was introduced in.
                 // Just some of the steps Rockstar take to make reverse engineering harder
 
-                nat = Program.x64nativefile.TranslateHash(Rotl(reader.ReadUInt64(), codeSize + count));
+                nat = Program.Crossmap.TranslateHash(Rotl(reader.ReadUInt64(), codeSize + count));
                 NativeHashes.Add(nat);
-                var entry = Program.nativeDB.GetEntry(nat);
+                var entry = Program.NativeDB.GetEntry(nat);
 
                 if (entry != null)
                 {
@@ -78,6 +78,7 @@ namespace Decompiler
             rotate %= 64;
             return (hash << rotate) | (hash >> (64 - rotate));
         }
+
         public ulong GetNativeHashFromIndex(int index)
         {
             return index < 0

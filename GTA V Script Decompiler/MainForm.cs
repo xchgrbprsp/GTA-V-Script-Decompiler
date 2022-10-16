@@ -222,7 +222,7 @@ namespace Decompiler
 			{
 				string scriptToDecode;
 
-				lock (Program.ThreadLock)
+				lock (CompileList)
 				{
 					scriptToDecode = CompileList.Dequeue();
 				}
@@ -336,7 +336,7 @@ namespace Decompiler
 		{
 			reverseHashesToolStripMenuItem.Checked = !reverseHashesToolStripMenuItem.Checked;
 			Properties.Settings.Default.ReverseHashes = reverseHashesToolStripMenuItem.Checked;
-			Program.shouldReverseHashes = reverseHashesToolStripMenuItem.Checked;
+			Program.ShouldReverseHashes = reverseHashesToolStripMenuItem.Checked;
 			Properties.Settings.Default.Save();
 		}
 
@@ -351,7 +351,7 @@ namespace Decompiler
 		{
 			shiftVariablesToolStripMenuItem.Checked = !shiftVariablesToolStripMenuItem.Checked;
 			Properties.Settings.Default.ShiftVariables = shiftVariablesToolStripMenuItem.Checked;
-			Program.shouldShiftVariables = shiftVariablesToolStripMenuItem.Checked;
+			Program.ShouldShiftVariables = shiftVariablesToolStripMenuItem.Checked;
 			Properties.Settings.Default.Save();
 		}
 
@@ -370,19 +370,10 @@ namespace Decompiler
 			Properties.Settings.Default.Save();
 		}
 
-		private void RebuildNativeFiles()
-		{
-			if (Program.x64nativefile != null)
-			{
-				Program.x64nativefile = new x64NativeFile();
-			}
-		}
-
 		private void includeNativeNamespaceToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			includeNativeNamespaceToolStripMenuItem.Checked = !includeNativeNamespaceToolStripMenuItem.Checked;
 			Properties.Settings.Default.ShowNativeNamespace = includeNativeNamespaceToolStripMenuItem.Checked;
-			RebuildNativeFiles();
 			Properties.Settings.Default.Save();
 		}
 
@@ -418,7 +409,6 @@ namespace Decompiler
 		{
 			uppercaseNativesToolStripMenuItem.Checked = !uppercaseNativesToolStripMenuItem.Checked;
 			Properties.Settings.Default.UppercaseNatives = uppercaseNativesToolStripMenuItem.Checked;
-			RebuildNativeFiles();
 			Properties.Settings.Default.Save();
 		}
 
@@ -444,7 +434,7 @@ namespace Decompiler
 			if (e.Column == fpnColumnSorter.SortColumn)
 			{
 				// Reverse the current sort direction for this column.
-				fpnColumnSorter.Order =fpnColumnSorter.Order == SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
+				fpnColumnSorter.Order = fpnColumnSorter.Order == SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
 			}
 			else
 			{
@@ -461,7 +451,7 @@ namespace Decompiler
 		{
 			opening = !opening;
 
-			panel1.Size =!opening ? new Size(0, panel1.Size.Height) : new Size(240, panel1.Size.Height);
+			panel1.Size = !opening ? new Size(0, panel1.Size.Height) : new Size(240, panel1.Size.Height);
 
 			columnHeader1.Width = 80;
 			columnHeader2.Width = 76;
@@ -469,7 +459,7 @@ namespace Decompiler
 
 		#endregion
 
-		private void resetGlobalTypesToolStripMenuItem_Click(object sender, EventArgs e) => Program.globalTypeMgr.Reset();
+		private void resetGlobalTypesToolStripMenuItem_Click(object sender, EventArgs e) => Program.GlobalTypeMgr.Reset();
 
 		private void entitiesToolStripMenuItem_Click(object sender, EventArgs e) => ScriptFile.HashBank.Export_Entities();
 
@@ -506,9 +496,11 @@ namespace Decompiler
 
 			if (e.Button == MouseButtons.Right)
 			{
+				var pos = fctb1.PointToPosition(fctb1.PointToClient(Cursor.Position));
+
 				if (fctb1.SelectionLength == 0)
 				{
-					fctb1.SelectionStart = fctb1.PointToPosition(fctb1.PointToClient(Cursor.Position));
+					fctb1.SelectionStart = pos;
 				}
 
 				cmsText.Show();
@@ -552,7 +544,7 @@ namespace Decompiler
 				e.Cancel = true;
 		}
 
-		private bool islegalchar(char c) => char.IsLetterOrDigit(c) ||c == '_';
+		private bool islegalchar(char c) => char.IsLetterOrDigit(c) || c == '_';
 
 		private string GetWordAtCursor()
 		{

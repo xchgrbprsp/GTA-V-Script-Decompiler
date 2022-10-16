@@ -11,7 +11,7 @@ namespace Decompiler.Ast
         public NativeCall(Function func, List<AstToken> arguments, string name, ulong hash, int returnCount) : base(func, arguments)
         {
             Name = name;
-            Entry = Program.nativeDB.GetEntry(hash);
+            Entry = Program.NativeDB.GetEntry(hash);
             ReturnCount = returnCount;
 
             var i = 0;

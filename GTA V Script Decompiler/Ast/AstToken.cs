@@ -16,7 +16,7 @@
         public virtual ref TypeContainer GetTypeContainer()
         {
             if (CanGetGlobalIndex())
-                return ref Program.globalTypeMgr.GetGlobalType(GetGlobalIndex());
+                return ref Program.GlobalTypeMgr.GetGlobalType(GetGlobalIndex());
 
             dummyContainer = new();
             return ref dummyContainer;

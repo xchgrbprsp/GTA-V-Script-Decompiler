@@ -10,7 +10,7 @@ namespace Decompiler
     {
         public List<byte> CodeTable;
         public StringTable StringTable;
-        public X64NativeTable X64NativeTable;
+        public NativeTable X64NativeTable;
         private int offset = 0;
         public List<Function> Functions;
         public static Hashes HashBank;
@@ -27,7 +27,7 @@ namespace Decompiler
             file = scriptStream;
             Header = ScriptHeader.Generate(scriptStream);
             StringTable = new StringTable(scriptStream, Header.StringTableOffsets, Header.StringBlocks, Header.StringsSize);
-            X64NativeTable = new X64NativeTable(scriptStream, Header.NativesOffset + Header.RSC7Offset, Header.NativesCount, Header.CodeLength);
+            X64NativeTable = new NativeTable(scriptStream, Header.NativesOffset + Header.RSC7Offset, Header.NativesCount, Header.CodeLength);
 
             CodeTable = new List<byte>();
             for (var i = 0; i < Header.CodeBlocks; i++)
@@ -54,7 +54,7 @@ namespace Decompiler
             foreach (var func in Functions)
             {
                 func.BuildInstructions();
-                Program.functionDB.Visit(func);
+                Program.FunctionDB.Visit(func);
             }
 
             bar?.SetMax(Functions.Count + 1);

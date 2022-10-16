@@ -27,11 +27,14 @@ namespace Decompiler
 
         public ref TypeContainer GetGlobalType(int idx)
         {
-            if (GlobalTypes.TryGetValue(idx, out var type))
-                return ref type.GetContainer();
+            lock (GlobalTypes)
+            {
+                if (GlobalTypes.TryGetValue(idx, out var type))
+                    return ref type.GetContainer();
 
-            GlobalTypes[idx] = new();
-            return ref GlobalTypes[idx].GetContainer();
+                GlobalTypes[idx] = new();
+                return ref GlobalTypes[idx].GetContainer();
+            }
         }
 
         public void HintGlobalType(int idx, ref TypeContainer container)
