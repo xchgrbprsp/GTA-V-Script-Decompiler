@@ -148,21 +148,6 @@ namespace Decompiler
 			throw new Exception("Not A Switch Statement");
 		}
 
-		public string GetSwitchStringCase(int index)
-		{
-			if (Opcode == Opcode.SWITCH)
-			{
-				int cases = GetOperand(0);
-				return index >= cases
-					? throw new Exception("Out of range script case")
-					: Program.getIntType == Program.IntType._uint
-					? ScriptFile.HashBank.GetHash(BitConverter.ToUInt32(Operands, 1 + (index*6)))
-					: ScriptFile.HashBank.GetHash(BitConverter.ToUInt32(Operands, 1 + (index*6)));
-			}
-
-			throw new Exception("Not A Switch Statement");
-		}
-
 		public int GetSwitchOffset(int index)
 		{
 			if (Opcode == Opcode.SWITCH)

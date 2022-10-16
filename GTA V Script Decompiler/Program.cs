@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
-using System.Globalization;
 
 namespace Decompiler
 {
@@ -12,6 +12,7 @@ namespace Decompiler
 		public static FunctionDB FunctionDB;
 		public static TextDB TextDB;
 		public static GlobalTypeMgr GlobalTypeMgr;
+		public static Hashes Hashes;
 
 		public static bool ShouldShiftVariables = Properties.Settings.Default.ShiftVariables;
 		public static bool ShouldReverseHashes = Properties.Settings.Default.ReverseHashes;
@@ -27,7 +28,7 @@ namespace Decompiler
 
 			Crossmap = new Crossmap();
 
-			ScriptFile.HashBank = new Hashes();
+			Hashes = new Hashes();
 
 			NativeDB = new NativeDB();
 			NativeDB.LoadData();

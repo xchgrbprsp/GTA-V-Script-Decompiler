@@ -8,11 +8,7 @@ namespace Decompiler
     {
         public Dictionary<ulong, ulong> TranslationTable = new();
 
-        public ulong TranslateHash(ulong hash)
-        {
-            TranslationTable.TryGetValue(hash, out hash);
-            return hash;
-        }
+        public ulong TranslateHash(ulong hash) => TranslationTable.TryGetValue(hash, out var newHash) ? newHash : hash;
 
         public Crossmap()
             : base()

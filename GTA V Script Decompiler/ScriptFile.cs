@@ -13,7 +13,6 @@ namespace Decompiler
         public NativeTable X64NativeTable;
         private int offset = 0;
         public List<Function> Functions;
-        public static Hashes HashBank;
         private readonly Stream file;
         public ScriptHeader Header;
         internal VariableStorage Statics;
@@ -165,7 +164,7 @@ namespace Decompiler
             }
             else
             {
-                name =start1 == 0 ? "main" : "func_" + Functions.Count.ToString();
+                name = start1 == 0 ? "main" : "func_" + Functions.Count.ToString();
             }
 
             int pcount = CodeTable[offset + 1];

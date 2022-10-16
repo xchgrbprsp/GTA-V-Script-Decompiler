@@ -35,7 +35,7 @@
                     return enumVal;
             }
 
-            return ScriptFile.HashBank.GetHash((uint)Value);
+            return Program.Hashes.GetHash((uint)Value);
         }
     }
 }

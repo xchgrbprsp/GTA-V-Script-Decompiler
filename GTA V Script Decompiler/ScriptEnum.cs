@@ -52,7 +52,7 @@ namespace Decompiler
                     return false;
 
                 if (idx != 0)
-                    buf += " | " + val;
+                    buf += " | " + idx;
 
                 val = buf;
                 return true;

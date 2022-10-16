@@ -461,7 +461,7 @@ namespace Decompiler
 
 		private void resetGlobalTypesToolStripMenuItem_Click(object sender, EventArgs e) => Program.GlobalTypeMgr.Reset();
 
-		private void entitiesToolStripMenuItem_Click(object sender, EventArgs e) => ScriptFile.HashBank.Export_Entities();
+		private void entitiesToolStripMenuItem_Click(object sender, EventArgs e) => Program.Hashes.Export_Entities();
 
 		private void nativesToolStripMenuItem_Click(object sender, EventArgs e)
 		{
