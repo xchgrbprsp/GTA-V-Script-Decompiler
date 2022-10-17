@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
@@ -8,10 +8,13 @@ namespace Decompiler
 	public class Hashes
 	{
 		private readonly Dictionary<int, string> hashes;
+		private readonly Dictionary<int, List<string>> hashCollisions;
 
 		public Hashes()
 		{
 			hashes = new Dictionary<int, string>();
+			hashCollisions = new Dictionary<int, List<string>>();
+
 			var reader = File.Exists(Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location),
 					"entities.dat"))
 				? new StreamReader(
@@ -22,7 +25,19 @@ namespace Decompiler
 			while (!reader.EndOfStream)
 			{
 				var line = reader.ReadLine();
-				hashes[(int)Utils.Joaat(line)] = line;
+				var lineHash = (int)Utils.Joaat(line);
+
+				if (!hashes.TryAdd(lineHash, line))
+				{
+					if (hashCollisions.TryGetValue(lineHash, out var collisions))
+					{
+						collisions.Add(line);
+					}
+					else
+					{
+						hashCollisions[lineHash] = new List<string> { line };
+					}
+				}
 			}
 		}
 
@@ -46,8 +61,14 @@ namespace Decompiler
 			if (Program.ShouldReverseHashes && value > 200)
 			{
 				var intvalue = (int)value;
+
 				if (hashes.TryGetValue(intvalue, out var val))
-					return "joaat(\"" + val + "\")";
+				{
+					if (hashCollisions.TryGetValue(intvalue, out var collisions))
+						return $"joaat(\"{val}\") /* collision: {string.Join(", ", collisions)} */";
+
+					return $"joaat(\"{val}\")";
+				}
 			}
 
 			return Program.getIntType == Program.IntType._int
