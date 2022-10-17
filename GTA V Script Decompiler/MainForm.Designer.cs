@@ -90,6 +90,10 @@
             this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.timer3 = new System.Windows.Forms.Timer(this.components);
+            this.enumStyleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.disabledToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.substituteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.commentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.fctb1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -121,6 +125,7 @@
             this.fctb1.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.fctb1.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.fctb1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.fctb1.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.fctb1.IsReplaceMode = false;
             this.fctb1.Language = FastColoredTextBoxNS.Language.CSharp;
             this.fctb1.LeftBracket = '(';
@@ -174,14 +179,14 @@
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
             this.openToolStripMenuItem.Text = "Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
             // saveCFileToolStripMenuItem
             // 
             this.saveCFileToolStripMenuItem.Name = "saveCFileToolStripMenuItem";
-            this.saveCFileToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveCFileToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
             this.saveCFileToolStripMenuItem.Text = "Save";
             this.saveCFileToolStripMenuItem.TextAlign = System.Drawing.ContentAlignment.TopLeft;
             this.saveCFileToolStripMenuItem.Click += new System.EventHandler(this.saveCFileToolStripMenuItem_Click);
@@ -192,32 +197,32 @@
             this.fileToolStripMenuItem1,
             this.directoryToolStripMenuItem});
             this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
-            this.exportToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
             this.exportToolStripMenuItem.Text = "Export";
             // 
             // fileToolStripMenuItem1
             // 
             this.fileToolStripMenuItem1.Name = "fileToolStripMenuItem1";
-            this.fileToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.fileToolStripMenuItem1.Size = new System.Drawing.Size(127, 22);
             this.fileToolStripMenuItem1.Text = "Single File";
             this.fileToolStripMenuItem1.Click += new System.EventHandler(this.fileToolStripMenuItem1_Click);
             // 
             // directoryToolStripMenuItem
             // 
             this.directoryToolStripMenuItem.Name = "directoryToolStripMenuItem";
-            this.directoryToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.directoryToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
             this.directoryToolStripMenuItem.Text = "Directory";
             this.directoryToolStripMenuItem.Click += new System.EventHandler(this.directoryToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(105, 6);
             // 
             // closeToolStripMenuItem
             // 
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
-            this.closeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.closeToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
             this.closeToolStripMenuItem.Text = "Close";
             this.closeToolStripMenuItem.Click += new System.EventHandler(this.closeToolStripMenuItem_Click);
             // 
@@ -226,6 +231,7 @@
             this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.intStyleToolStripMenuItem,
             this.showLocalizedTextsToolStripMenuItem,
+            this.enumStyleToolStripMenuItem,
             this.toolStripSeparator5,
             this.showArraySizeToolStripMenuItem,
             this.reverseHashesToolStripMenuItem,
@@ -291,21 +297,21 @@
             // disabledToolStripMenuItem
             // 
             this.disabledToolStripMenuItem.Name = "disabledToolStripMenuItem";
-            this.disabledToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.disabledToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.disabledToolStripMenuItem.Text = "Disabled";
             this.disabledToolStripMenuItem.Click += new System.EventHandler(this.disabledToolStripMenuItem_Click);
             // 
             // gettextStyleToolStripMenuItem
             // 
             this.gettextStyleToolStripMenuItem.Name = "gettextStyleToolStripMenuItem";
-            this.gettextStyleToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.gettextStyleToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.gettextStyleToolStripMenuItem.Text = "Gettext Style";
             this.gettextStyleToolStripMenuItem.Click += new System.EventHandler(this.gettextStyleToolStripMenuItem_Click);
             // 
             // commentStyleToolStripMenuItem
             // 
             this.commentStyleToolStripMenuItem.Name = "commentStyleToolStripMenuItem";
-            this.commentStyleToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.commentStyleToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.commentStyleToolStripMenuItem.Text = "Comment Style";
             this.commentStyleToolStripMenuItem.Click += new System.EventHandler(this.commentStyleToolStripMenuItem_Click);
             // 
@@ -414,7 +420,7 @@
             // entitiesToolStripMenuItem
             // 
             this.entitiesToolStripMenuItem.Name = "entitiesToolStripMenuItem";
-            this.entitiesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.entitiesToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
             this.entitiesToolStripMenuItem.Text = "Entities";
             this.entitiesToolStripMenuItem.ToolTipText = "Export The entites file (entities_exp.dat) built into the program so you can edit" +
     " it.\r\nThe program will search for entities.dat in its directory and use that for" +
@@ -617,6 +623,41 @@
             // 
             this.timer3.Interval = 5000;
             // 
+            // enumStyleToolStripMenuItem
+            // 
+            this.enumStyleToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.disabledToolStripMenuItem1,
+            this.substituteToolStripMenuItem,
+            this.commentToolStripMenuItem});
+            this.enumStyleToolStripMenuItem.Name = "enumStyleToolStripMenuItem";
+            this.enumStyleToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
+            this.enumStyleToolStripMenuItem.Text = "Enum Style";
+            this.enumStyleToolStripMenuItem.ToolTipText = "Control how enums and flags are displayed";
+            // 
+            // disabledToolStripMenuItem1
+            // 
+            this.disabledToolStripMenuItem1.Name = "disabledToolStripMenuItem1";
+            this.disabledToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.disabledToolStripMenuItem1.Text = "Disabled";
+            this.disabledToolStripMenuItem1.ToolTipText = "Disable enums";
+            this.disabledToolStripMenuItem1.Click += new System.EventHandler(this.disabledToolStripMenuItem1_Click);
+            // 
+            // substituteToolStripMenuItem
+            // 
+            this.substituteToolStripMenuItem.Name = "substituteToolStripMenuItem";
+            this.substituteToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.substituteToolStripMenuItem.Text = "Substitute";
+            this.substituteToolStripMenuItem.ToolTipText = "Replace integers with enum members in-place";
+            this.substituteToolStripMenuItem.Click += new System.EventHandler(this.substituteToolStripMenuItem_Click);
+            // 
+            // commentToolStripMenuItem
+            // 
+            this.commentToolStripMenuItem.Name = "commentToolStripMenuItem";
+            this.commentToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.commentToolStripMenuItem.Text = "Comment";
+            this.commentToolStripMenuItem.ToolTipText = "Place enum members next to an integer as a comment";
+            this.commentToolStripMenuItem.Click += new System.EventHandler(this.commentToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -706,6 +747,10 @@
         private System.Windows.Forms.ToolStripMenuItem disabledToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem gettextStyleToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem commentStyleToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem enumStyleToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem disabledToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem substituteToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem commentToolStripMenuItem;
     }
 }
 

@@ -44,5 +44,8 @@
     <Setting Name="LocalizedTextType" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">2</Value>
     </Setting>
+    <Setting Name="EnumDisplayType" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

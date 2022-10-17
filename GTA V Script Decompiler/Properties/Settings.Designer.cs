@@ -190,5 +190,17 @@ namespace Decompiler.Properties {
                 this["LocalizedTextType"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int EnumDisplayType {
+            get {
+                return ((int)(this["EnumDisplayType"]));
+            }
+            set {
+                this["EnumDisplayType"] = value;
+            }
+        }
     }
 }

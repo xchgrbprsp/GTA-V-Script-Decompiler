@@ -72,6 +72,19 @@ namespace Decompiler
 					commentStyleToolStripMenuItem.Checked = true;
 					break;
 			}
+
+			switch (Properties.Settings.Default.EnumDisplayType)
+			{
+				case 0:
+					disabledToolStripMenuItem1.Checked = true;
+					break;
+				case 1:
+					substituteToolStripMenuItem.Checked = true;
+					break;
+				case 2:
+					commentToolStripMenuItem.Checked = true;
+					break;
+			}
 		}
 
 		private void UpdateStatus(string text)
@@ -281,33 +294,64 @@ namespace Decompiler
 
 		#region Config Options
 
-		private void ResetLocalizedTextStyleCheckboxes()
+		private void SetLocalizedTextStyle(int style)
 		{
 			foreach (ToolStripMenuItem t in showLocalizedTextsToolStripMenuItem.DropDownItems)
 			{
 				t.Checked = false;
 			}
+
+			Properties.Settings.Default.LocalizedTextType = style;
+			Properties.Settings.Default.Save();
 		}
 
 		private void disabledToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			ResetLocalizedTextStyleCheckboxes();
+			SetLocalizedTextStyle(0);
 			disabledToolStripMenuItem.Checked = true;
-			Properties.Settings.Default.LocalizedTextType = 0;
 		}
 
 		private void gettextStyleToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			ResetLocalizedTextStyleCheckboxes();
+			SetLocalizedTextStyle(1);
 			gettextStyleToolStripMenuItem.Checked = true;
-			Properties.Settings.Default.LocalizedTextType = 1;
 		}
 
 		private void commentStyleToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			ResetLocalizedTextStyleCheckboxes();
+			SetLocalizedTextStyle(2);
 			commentStyleToolStripMenuItem.Checked = true;
-			Properties.Settings.Default.LocalizedTextType = 2;
+		}
+
+		private void SetEnumDisplayStyle(int style)
+		{
+			foreach (ToolStripMenuItem t in enumStyleToolStripMenuItem.DropDownItems)
+			{
+				t.Checked = false;
+			}
+
+			Properties.Settings.Default.EnumDisplayType = style;
+			Properties.Settings.Default.Save();
+			Program.EnumDisplayTypeCache = style;
+
+		}
+
+		private void disabledToolStripMenuItem1_Click(object sender, EventArgs e)
+		{
+			SetEnumDisplayStyle(0);
+			disabledToolStripMenuItem1.Checked = true;
+		}
+
+		private void substituteToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			SetEnumDisplayStyle(1);
+			substituteToolStripMenuItem.Checked = true;
+		}
+
+		private void commentToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			SetEnumDisplayStyle(2);
+			commentToolStripMenuItem.Checked = true;
 		}
 
 		private void intstylechanged(object sender, EventArgs e)

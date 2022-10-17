@@ -16,6 +16,7 @@ namespace Decompiler
 
 		public static bool ShouldShiftVariables = Properties.Settings.Default.ShiftVariables;
 		public static bool ShouldReverseHashes = Properties.Settings.Default.ReverseHashes;
+		public static int EnumDisplayTypeCache = Properties.Settings.Default.EnumDisplayType;
 
 		/// <summary>
 		/// The main entry point for the application.

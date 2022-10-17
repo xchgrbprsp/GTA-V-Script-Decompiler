@@ -29,10 +29,12 @@
             }
 
             var info = Type.Type;
-            if (info.Enum != null)
+            if (Program.EnumDisplayTypeCache != 0 && info.Enum != null)
             {
                 if (info.Enum.TryGetValue((int)Value, out var enumVal))
-                    return enumVal;
+                {
+                    return Program.EnumDisplayTypeCache == 1 ? enumVal : $"{Program.Hashes.GetHash((uint)Value)} /*{enumVal}*/";
+                }
             }
 
             return Program.Hashes.GetHash((uint)Value);
