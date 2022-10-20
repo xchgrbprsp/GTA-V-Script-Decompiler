@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Decompiler.Hooks;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -52,6 +53,8 @@ namespace Decompiler
 		public uint Hash { get; private set; }
 		public uint Mk2Hash { get; private set; }
 
+		internal FunctionHook? Hook = null;
+
 		public Function(ScriptFile Owner, string name, int pcount, int vcount, int rcount, int location, int locmax = -1)
 		{
 			ScriptFile = Owner;
@@ -60,7 +63,7 @@ namespace Decompiler
 			NumLocals = vcount;
 			NumReturns = rcount;
 			Location = location;
-			MaxLocation =locmax != -1 ? locmax : Location;
+			MaxLocation = locmax != -1 ? locmax : Location;
 			Decoded = false;
 			Vars = new VariableStorage(VariableStorage.ListType.Vars, vcount - 2);
 			Params = new VariableStorage(VariableStorage.ListType.Params, pcount);
@@ -183,7 +186,7 @@ namespace Decompiler
 			{
 				if (ReturnType.Type == Types.STRING)
 				{
-					working.Append("char[" +(NumReturns * 4).ToString() + "] ");
+					working.Append("char[" + (NumReturns * 4).ToString() + "] ");
 				}
 				else
 				{
@@ -613,7 +616,7 @@ Start:
 						break;
 					case 98:
 						int temp = CodeBlock[Offset + 1];
-						AddInstruction(curoff, new Instruction(CodeBlock[Offset], GetArray((temp*6) + 1), curoff));
+						AddInstruction(curoff, new Instruction(CodeBlock[Offset], GetArray((temp * 6) + 1), curoff));
 						break;
 					case 101:
 					case 102:
@@ -939,28 +942,9 @@ Start:
 							if (!ScriptFile.FunctionAtLocation.TryGetValue(loc, out var function))
 								throw new InvalidOperationException("Cannot find function");
 
-							// The ternary operator is implemented as a function in RAGE
-							if (function.Hash == 0x3EE55A88)
-							{
-								var args = Stack.PopCount(function.NumParams);
-								Stack.Push(new Ast.TernaryOperator(this, args[0], args[1], args[2]));
-								break;
-							}
-							else if (function.Hash is StringObfuscation.GET_STRING_WITH_ROTATE_HASH or StringObfuscation.GET_STRING_WITH_ROTATE_2_HASH)
-							{
-								StringObfuscation.GetStringWithRotate(this, Stack.PopCount(function.NumParams).ToArray(), Stack);
-								break;
-							}
-							else if (function.Hash is StringObfuscation.REORDER_STRING_4_32_HASH or StringObfuscation.REORDER_STRING_4_64_HASH or StringObfuscation.REORDER_STRING_4_24_HASH)
-							{
-								StringObfuscation.ReorderString_4(this, Stack.PopCount(function.NumParams).ToArray(), Stack, function.Hash == StringObfuscation.REORDER_STRING_4_24_HASH ? 6 : 8);
-								break;
-							}
-							else if (function.Hash == StringObfuscation.REORDER_STRING_8_64_HASH)
-							{
-								StringObfuscation.ReorderString_8(this, Stack.PopCount(function.NumParams).ToArray(), Stack);
-								break;
-							}
+							if (function.Hook != null)
+								if (function.Hook.Hook(function, Stack.PopCount(function.NumParams), Stack))
+									break;
 
 							var call = new Ast.FunctionCall(this, Stack.PopCount(function.NumParams), function);
 							function.Decompile(); // this is a very bad idea that will break everything but can give better type inference??? TODO: find better way to propagate type info

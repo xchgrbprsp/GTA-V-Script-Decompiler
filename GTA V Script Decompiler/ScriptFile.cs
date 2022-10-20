@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Decompiler
@@ -54,6 +55,10 @@ namespace Decompiler
             {
                 func.BuildInstructions();
                 Program.FunctionDB.Visit(func);
+
+                foreach (var hook in Program.FunctionHooks)
+                    if (hook.Hashes.Contains(func.Hash))
+                        func.Hook = hook;
             }
 
             bar?.SetMax(Functions.Count + 1);

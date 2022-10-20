@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Decompiler.Hooks;
+using System;
 using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
@@ -13,6 +14,8 @@ namespace Decompiler
 		public static TextDB TextDB;
 		public static GlobalTypeMgr GlobalTypeMgr;
 		public static Hashes Hashes;
+
+		public static FunctionHook[] FunctionHooks = FunctionHook.GetHooks();
 
 		public static bool ShouldShiftVariables = Properties.Settings.Default.ShiftVariables;
 		public static bool ShouldReverseHashes = Properties.Settings.Default.ReverseHashes;
