@@ -25,9 +25,9 @@ namespace Decompiler.Ast
                     arg.HintType(ref type.GetContainer());
 
                     if (arg is LocalLoad && (Entry?.GetParam(i)?.AutoName ?? false))
-                        function.SetFrameVarAutoName((arg as LocalLoad).Index, new NativeParameterAutoName(Entry.Value.GetParam(i).name));
+                        function.SetFrameVarAutoName((arg as LocalLoad).Index, new NativeParameterAutoName(Entry.GetParam(i).name));
                     else if (arg is Local && (Entry?.GetParam(i)?.AutoName ?? false))
-                        function.SetFrameVarAutoName((arg as Local).Index, new NativeParameterAutoName(Entry.Value.GetParam(i).name));
+                        function.SetFrameVarAutoName((arg as Local).Index, new NativeParameterAutoName(Entry.GetParam(i).name));
                 }
                 else if (arg.GetStackCount() == 3)
                 {

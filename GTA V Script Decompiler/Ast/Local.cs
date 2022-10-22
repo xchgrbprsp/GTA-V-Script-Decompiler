@@ -61,8 +61,8 @@
                 var entry = (value as NativeCall).Entry;
                 if (entry != null)
                 {
-                    if (NativeReturnAutoName.CanApply(entry.Value))
-                        function.SetFrameVarAutoName(index, new NativeReturnAutoName(entry.Value));
+                    if (NativeReturnAutoName.CanApply(entry))
+                        function.SetFrameVarAutoName(index, new NativeReturnAutoName(entry));
                 }
             }
         }

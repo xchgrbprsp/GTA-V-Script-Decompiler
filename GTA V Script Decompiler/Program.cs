@@ -16,6 +16,7 @@ namespace Decompiler
 		public static Hashes Hashes;
 
 		public static FunctionHook[] FunctionHooks = FunctionHook.GetHooks();
+		public static NativeHook[] NativeHooks = NativeHook.GetHooks();
 
 		public static bool ShouldShiftVariables = Properties.Settings.Default.ShiftVariables;
 		public static bool ShouldReverseHashes = Properties.Settings.Default.ReverseHashes;

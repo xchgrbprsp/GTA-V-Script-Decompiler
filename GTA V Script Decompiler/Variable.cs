@@ -52,6 +52,12 @@
             IsStruct = true;
         }
 
+        public void SetStruct(int imm)
+        {
+            SetStruct();
+            ImmediateSize = imm;
+        }
+
         public void SetNotUsed() => Is_Used = false;
 
         internal void SetAutoName(AutoName autoName)

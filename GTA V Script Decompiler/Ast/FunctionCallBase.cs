@@ -5,7 +5,7 @@ namespace Decompiler.Ast
 {
     internal abstract class FunctionCallBase : AstToken
     {
-        private readonly List<AstToken> Arguments;
+        public readonly List<AstToken> Arguments;
         public int DroppedReturns { get; private set; } = 0;
 
         public abstract string GetName();

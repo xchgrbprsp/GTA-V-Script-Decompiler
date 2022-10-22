@@ -196,6 +196,8 @@ namespace Decompiler
 			else
 				throw new DecompilingException("Unexpected return count");
 
+			Params.checkvars();
+
 			working.Append(Name);
 			working.Append("(" + Params.GetPDec() + ")");
 			if (Properties.Settings.Default.IncludeFunctionPosition || Properties.Settings.Default.IncludeFunctionHash)
@@ -833,6 +835,10 @@ Start:
 					case Opcode.NATIVE:
 						var native = new Ast.NativeCall(this, Stack.PopCount(Instructions[tree.Offset].GetNativeParams), ScriptFile.X64NativeTable.GetNativeFromIndex(Instructions[tree.Offset].GetNativeIndex),
 							ScriptFile.X64NativeTable.GetNativeHashFromIndex(Instructions[tree.Offset].GetNativeIndex), Instructions[tree.Offset].GetNativeReturns);
+
+						if (native.Entry != null && native.Entry.NativeHook != null && native.Entry.NativeHook.Hook(this, native.Arguments, Stack))
+							break;
+
 						if (native.IsStatement())
 							tree.Statements.Add(native);
 						else

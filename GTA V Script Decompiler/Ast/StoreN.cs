@@ -21,8 +21,8 @@ namespace Decompiler.Ast
                 var entry = (values[0] as NativeCall).Entry;
                 if (entry != null)
                 {
-                    if (NativeReturnAutoName.CanApply(entry.Value))
-                        function.SetFrameVarAutoName((pointer as Local).Index, new NativeReturnAutoName(entry.Value));
+                    if (NativeReturnAutoName.CanApply(entry))
+                        function.SetFrameVarAutoName((pointer as Local).Index, new NativeReturnAutoName(entry));
                 }
             }
 

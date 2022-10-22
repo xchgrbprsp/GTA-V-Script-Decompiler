@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Decompiler.Hooks;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 
 namespace Decompiler
@@ -14,7 +16,7 @@ namespace Decompiler
         public Types.TypeInfo TypeInfo;
     }
 
-    internal struct NativeDBEntry
+    internal class NativeDBEntry
     {
         public string name { get; set; }
         public string jhash { get; set; }
@@ -28,6 +30,8 @@ namespace Decompiler
         public string @namespace;
 
         public Types.TypeInfo ReturnTypeInfo;
+
+        public NativeHook? NativeHook = null;
 
         public NativeDBParam? GetParam(int index) => index >= @params.Count ? null : @params[index];
 
@@ -81,7 +85,7 @@ namespace Decompiler
             var file = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location),
                 "natives.json");
 
-            data =File.Exists(file)
+            data = File.Exists(file)
                 ? JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, NativeDBEntry>>>(File.ReadAllText(file))
                 : JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, NativeDBEntry>>>(Properties.Resources.native_db_json);
 
@@ -107,6 +111,16 @@ namespace Decompiler
 
                     entries[Convert.ToUInt64(native.Key, 16)] = entry;
                 }
+            }
+
+            foreach (var hook in Program.NativeHooks)
+            {
+                var matching = entries.Where(p => p.Value.name == hook.Native);
+
+                if (!matching.Any())
+                    continue;
+
+                matching.Single().Value.NativeHook = hook;
             }
         }
 
