@@ -211,6 +211,15 @@ namespace Decompiler
             Overrides.Add(new("IS_SHOCKING_EVENT_IN_SPHERE", 0, Types.EEVENTTYPE));
             Overrides.Add(new("SUPPRESS_SHOCKING_EVENT_TYPE_NEXT_FRAME", 0, Types.EEVENTTYPE));
             Overrides.Add(new("GET_EVENT_AT_INDEX", -1, Types.EEVENTTYPE));
+
+            // CAM view mode
+
+            Overrides.Add(new("GET_FOLLOW_PED_CAM_VIEW_MODE", -1, Types.EVIEWMODE));
+            Overrides.Add(new("SET_FOLLOW_PED_CAM_VIEW_MODE", 0, Types.EVIEWMODE));
+            Overrides.Add(new("GET_FOLLOW_VEHICLE_CAM_VIEW_MODE", -1, Types.EVIEWMODE));
+            Overrides.Add(new("SET_FOLLOW_VEHICLE_CAM_VIEW_MODE", 0, Types.EVIEWMODE));
+            Overrides.Add(new("GET_CAM_VIEW_MODE_FOR_CONTEXT", -1, Types.EVIEWMODE));
+            Overrides.Add(new("SET_CAM_VIEW_MODE_FOR_CONTEXT", 1, Types.EVIEWMODE));
         }
 
         public static void Visit(ref NativeDBEntry entry)
