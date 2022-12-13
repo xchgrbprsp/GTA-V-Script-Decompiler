@@ -614,23 +614,26 @@ Start:
 					case 95:
 					case 96:
 					case 97:
+					case 98:
+					case 99:
+					case 100:
 						AddInstruction(curoff, new Instruction(CodeBlock[Offset], GetArray(3), curoff));
 						break;
-					case 98:
+					case 101:
 						int temp = CodeBlock[Offset + 1];
 						AddInstruction(curoff, new Instruction(CodeBlock[Offset], GetArray((temp * 6) + 1), curoff));
 						break;
-					case 101:
-					case 102:
-					case 103:
 					case 104:
+					case 105:
+					case 106:
+					case 107:
 						AddInstruction(curoff, new Instruction(CodeBlock[Offset], GetArray(1), curoff));
 						break;
-					case 127:
+					case 130:
 						AddInstruction(curoff, new Instruction(CodeBlock[Offset], curoff));
 						break;
 					default:
-						if (CodeBlock[Offset] <= 126)
+						if (CodeBlock[Offset] <= 129)
 							AddInstruction(curoff, new Instruction(CodeBlock[Offset], curoff));
 						else
 							throw new Exception("Unexpected Opcode");
@@ -1023,6 +1026,15 @@ Start:
 					case Opcode.IS_BIT_SET:
 						Stack.Push(new Ast.BitTest(this, Stack.Pop(), Stack.Pop()));
 						break;
+					case Opcode.STACK:
+						Stack.Push(new Ast.AstToken(this));
+						break;
+					case Opcode.STACK_LOAD:
+						Stack.Push(new Ast.AstToken(this));
+						break;
+					case Opcode.STACK_STORE:
+						Stack.Pop();
+						break;
 					case Opcode.SWITCH:
 						HandleSwitch(tree);
 						break;
@@ -1175,7 +1187,7 @@ DONE:
 DONE_COND:
 						break;
 					default:
-						throw new InvalidOperationException("Opcode not handled");
+						throw new InvalidOperationException("Opcode not handled: " + Instructions[tree.Offset].Opcode);
 				}
 
 				if (tree == treeStack.Peek())

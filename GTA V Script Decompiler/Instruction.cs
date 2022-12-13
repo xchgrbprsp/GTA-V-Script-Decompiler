@@ -166,7 +166,7 @@ namespace Decompiler
 			get
 			{
 				var _instruction = (int)Opcode;
-				return _instruction is>=109 and <=117 ? _instruction - 110 : throw new Exception("Not An Immediate Int Push");
+				return _instruction is>=(int)Opcode.PUSH_CONST_M1 and <=(int)Opcode.PUSH_CONST_7 ? _instruction - ((int)Opcode.PUSH_CONST_M1 + 1) : throw new Exception("Not An Immediate Int Push");
 			}
 		}
 
@@ -175,7 +175,7 @@ namespace Decompiler
 			get
 			{
 				var _instruction = (int)Opcode;
-				return _instruction is>=118 and <=126 ? _instruction - 119 : throw new Exception("Not An Immediate Float Push");
+				return _instruction is>=(int)Opcode.PUSH_CONST_FM1 and <=(int)Opcode.PUSH_CONST_F7 ? _instruction - ((int)Opcode.PUSH_CONST_FM1 + 1) : throw new Exception("Not An Immediate Float Push");
 			}
 		}
 
@@ -294,6 +294,11 @@ namespace Decompiler
 		ILT_JZ,
 		ILE_JZ,
 		CALL,
+
+		STACK,
+		STACK_LOAD,
+		STACK_STORE,
+
 		GLOBAL_U24,
 		GLOBAL_U24_LOAD,
 		GLOBAL_U24_STORE,

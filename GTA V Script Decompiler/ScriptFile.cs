@@ -237,12 +237,15 @@ namespace Decompiler
                     case 94:
                     case 95:
                     case 96:
+                    case 98:
+                    case 99:
+                    case 100:
                     case 97: temp += 3; break;
-                    case 98: temp += 1 + (CodeTable[temp + 1] * 6); break;
-                    case 101:
-                    case 102:
-                    case 103:
-                    case 104: temp += 1; break;
+                    case 101: temp += 1 + (CodeTable[temp + 1] * 6); break;
+                    case 104:
+                    case 105:
+                    case 106:
+                    case 107: temp += 1; break;
                 }
 
                 temp += 1;
@@ -323,12 +326,15 @@ namespace Decompiler
                     case 94:
                     case 95:
                     case 96:
+                    case 98:
+                    case 99:
+                    case 100:
                     case 97: advpos(3); break;
-                    case 98: advpos(1 + (CodeTable[offset + 1] * 6)); break;
-                    case 101:
-                    case 102:
-                    case 103:
-                    case 104: advpos(1); break;
+                    case 101: advpos(1 + (CodeTable[offset + 1] * 6)); break;
+                    case 104:
+                    case 105:
+                    case 106:
+                    case 107: advpos(1); break;
                 }
 
                 advpos(1);
