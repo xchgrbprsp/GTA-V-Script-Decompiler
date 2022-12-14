@@ -886,14 +886,17 @@ Start:
 						break;
 					case Opcode.LOCAL_U8:
 					case Opcode.LOCAL_U16:
+					case Opcode.LOCAL_U24:
 						Stack.Push(new Ast.Local(this, Instructions[tree.Offset].GetOperandsAsUInt));
 						break;
 					case Opcode.LOCAL_U8_LOAD:
 					case Opcode.LOCAL_U16_LOAD:
+					case Opcode.LOCAL_U24_LOAD:
 						Stack.Push(new Ast.LocalLoad(this, Instructions[tree.Offset].GetOperandsAsUInt));
 						break;
 					case Opcode.LOCAL_U8_STORE:
 					case Opcode.LOCAL_U16_STORE:
+					case Opcode.LOCAL_U24_STORE:
 						tree.Statements.Add(new Ast.LocalStore(this, Instructions[tree.Offset].GetOperandsAsUInt, Stack.Pop()));
 						break;
 					case Opcode.STATIC_U8:
@@ -1025,15 +1028,6 @@ Start:
 						break;
 					case Opcode.IS_BIT_SET:
 						Stack.Push(new Ast.BitTest(this, Stack.Pop(), Stack.Pop()));
-						break;
-					case Opcode.STACK:
-						Stack.Push(new Ast.AstToken(this));
-						break;
-					case Opcode.STACK_LOAD:
-						Stack.Push(new Ast.AstToken(this));
-						break;
-					case Opcode.STACK_STORE:
-						Stack.Pop();
 						break;
 					case Opcode.SWITCH:
 						HandleSwitch(tree);
