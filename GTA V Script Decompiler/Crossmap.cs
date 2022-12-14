@@ -34,7 +34,7 @@ namespace Decompiler
                     {
                         if (ulong.TryParse(nat.Trim(), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var older))
                         {
-                            TranslationTable.Add(newer, older);
+                            TranslationTable[older] = newer;
                         }
                     }
                 }
