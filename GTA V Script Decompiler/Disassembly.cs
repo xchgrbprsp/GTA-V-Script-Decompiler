@@ -105,6 +105,9 @@ namespace Decompiler
             new[]{"ILT_JZ", "R"},
             new[]{"ILE_JZ", "R"},
             new[]{"CALL", "a"},
+            new[]{"LOCAL_U24", "a"},
+            new[]{"LOCAL_U24_LOAD", "a"},
+            new[]{"LOCAL_U24_STORE", "a"},
             new[]{"GLOBAL_U24", "a"},
             new[]{"GLOBAL_U24_LOAD", "a"},
             new[]{"GLOBAL_U24_STORE", "a"},
@@ -140,8 +143,8 @@ namespace Decompiler
             new[]{"PUSH_CONST_F7", ""},
             new[]{"IS_BIT_SET", ""}
         };
-        readonly Function Function;
-        readonly Patch[] patches;
+        private readonly Function Function;
+        private readonly Patch[] patches;
 
         public Disassembly(Function func)
         {
@@ -153,7 +156,7 @@ namespace Decompiler
         }
 
         // TODO: Rewrite this
-        string DisassembleInstruction(Instruction instruction)
+        private string DisassembleInstruction(Instruction instruction)
         {
             var bytes = "";
 
@@ -218,7 +221,7 @@ namespace Decompiler
             return bytes;
         }
 
-        string? CreatePatternAtLocation(int offset)
+        private string? CreatePatternAtLocation(int offset)
         {
             var pattern = "";
 
@@ -256,7 +259,7 @@ namespace Decompiler
             return null;
         }
 
-        void GeneratePatch(int offset, byte[] bytes)
+        private void GeneratePatch(int offset, byte[] bytes)
         {
             var off = 0;
 
@@ -309,7 +312,7 @@ namespace Decompiler
                 Clipboard.SetText($"\"{pattern}\", {off}, {patch}");
         }
 
-        string DisassembleFunction()
+        private string DisassembleFunction()
         {
             StringBuilder sb = new();
 
@@ -321,7 +324,7 @@ namespace Decompiler
             return sb.ToString();
         }
 
-        int GetNumPatternResults(string pat)
+        private int GetNumPatternResults(string pat)
         {
             pat = pat.Trim();
 
@@ -345,7 +348,7 @@ namespace Decompiler
                     if (compiled[j] == -1)
                         continue;
 
-                    if (compiled[j] != Function.ScriptFile.CodeTable[i+j])
+                    if (compiled[j] != Function.ScriptFile.CodeTable[i + j])
                         goto fail;
                 }
 
@@ -404,7 +407,7 @@ fail:
             }
         }
 
-        void OnPatchClick(Patch patch)
+        private void OnPatchClick(Patch patch)
         {
             var start = Math.Min(fctb1.Selection.Start.iLine, fctb1.Selection.End.iLine);
             var end = Math.Max(fctb1.Selection.Start.iLine, fctb1.Selection.End.iLine) + 1;

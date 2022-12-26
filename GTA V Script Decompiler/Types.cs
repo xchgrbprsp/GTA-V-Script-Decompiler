@@ -29,7 +29,7 @@ namespace Decompiler
         public static readonly TypeInfo OBJECT = new(5, "Object", "object", "ob");
         public static readonly TypeInfo PED = new(5, "Ped", "ped", "ped");
         public static readonly TypeInfo PICKUP = new(5, "Pickup", "pickup", "pk");
-        public static readonly TypeInfo PLAYER = new(4, "Player", "player", "pl");
+        public static readonly TypeInfo PLAYER = new(5, "Player", "player", "pl");
         public static readonly TypeInfo SCRHANDLE = new(4, "ScrHandle", "handle", "sh");
         public static readonly TypeInfo VEHICLE = new(5, "Vehicle", "vehicle", "ve");
         public static readonly TypeInfo FUNCTION = new(5, "function", "func", "func");
@@ -47,7 +47,7 @@ namespace Decompiler
         public static readonly TypeInfo EKNOCKOFFVEHICLE = new(6, "eKnockOffVehicle", "knockOffState", "eknv", new(typeof(Enums.KnockOffVehicle)));
         public static readonly TypeInfo ECOMBATMOVEMENT = new(6, "eCombatMovement", "movement", "ecm", new(typeof(Enums.CombatMovement)));
         public static readonly TypeInfo ECOMBATATTRIBUTE = new(6, "eCombatAttribute", "attribute", "ecat", new(typeof(Enums.CombatAttribute)));
-        public static readonly TypeInfo ECHARACTER = new(6, "eCharacter", "character", "ech", new(typeof(Enums.Character)));
+        public static readonly TypeInfo ECHARACTER = new(4, "eCharacter", "character", "ech", new(typeof(Enums.Character)));
         public static readonly TypeInfo ETRANSITIONSTATE = new(6, "eTransitionState", "state", "ets", new(typeof(Enums.TransitionState)));
         public static readonly TypeInfo EDISPATCHTYPE = new(6, "eDispatchType", "type", "edt", new(typeof(Enums.DispatchType)));
         public static readonly TypeInfo ELEVELINDEX = new(6, "eLevelIndex", "index", "eli", new(typeof(Enums.LevelIndex)));

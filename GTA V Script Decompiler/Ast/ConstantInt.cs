@@ -20,7 +20,7 @@
                 else if (Value == 1)
                     return "true";
             }
-            else if (Type.Type == Types.FUNCTION && Properties.Settings.Default.ShowFunctionPointers)
+            else if ((Type.Type == Types.FUNCTION || (int)Value > 350) && Properties.Settings.Default.ShowFunctionPointers)
             {
                 var func = function.ScriptFile.Functions.Find(f => f.Location == (int)Value);
 
