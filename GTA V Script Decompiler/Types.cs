@@ -35,7 +35,7 @@ namespace Decompiler
         public static readonly TypeInfo FUNCTION = new(5, "function", "func", "func");
 
         public static readonly TypeInfo ECONTROLTYPE = new(6, "eControlType", "control", "ect", new(typeof(Enums.PadControlType)));
-        public static readonly TypeInfo ECONTROLACTION = new(6, "eControlAction", "action", "eca", new(typeof(Enums.PadControlAction)));
+        public static readonly TypeInfo ECONTROLACTION = new(4, "eControlAction", "action", "eca", new(typeof(Enums.PadControlAction)));
         public static readonly TypeInfo EHUDCOMPONENT = new(6, "eHudComponent", "component", "ehc", new(typeof(Enums.HudComponent)));
         public static readonly TypeInfo EPEDTYPE = new(6, "ePedType", "type", "ept", new(typeof(Enums.PedType)));
         public static readonly TypeInfo EPEDCOMPONENTTYPE = new(6, "ePedComponentType", "type", "epct", new(typeof(Enums.PedComponentType)));
