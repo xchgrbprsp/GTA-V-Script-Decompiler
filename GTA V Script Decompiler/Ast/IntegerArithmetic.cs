@@ -15,7 +15,7 @@
 
         public override ref TypeContainer GetTypeContainer() => ref Types.INT.GetContainer();
 
-        public bool IsComplexOperand(AstToken operand) => operand is IntegerArithmetic &&GetType() != operand.GetType();
+        public bool IsComplexOperand(AstToken operand) => operand is IntegerArithmetic && GetType() != operand.GetType();
 
         public override string ToString()
         {
@@ -96,6 +96,6 @@
 
         public override ref TypeContainer GetTypeContainer() => ref Types.BOOL.GetContainer();
 
-        public override string ToString() => value is IntegerAnd or IntegerOr ? $"!({value})" : $"!{value}";
+        public override string ToString() => value is IntegerAnd or IntegerOr or IntegerCompare or FloatCompare ? $"!({value})" : $"!{value}";
     }
 }
