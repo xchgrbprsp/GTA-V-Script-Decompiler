@@ -9,6 +9,8 @@ namespace Decompiler
         public List<string> NativeNames;
         public List<ulong> NativeHashes;
 
+        private bool alwaysUseHash = false;
+
         public NativeTable(Stream scriptFile, int position, int length, int codeSize)
         {
             IO.Reader reader = new(scriptFile);
@@ -19,37 +21,51 @@ namespace Decompiler
             NativeHashes = new List<ulong>();
             while (count < length)
             {
-                // GTA V PC natives arent stored sequentially in the table. Each native needs a bitwise rotate depending on its position and codetable size
-                // Then the natives needs to go back through translation tables to get to their hash as defined in the vanilla game version
-                // or the earliest game version that native was introduced in.
-                // Just some of the steps Rockstar take to make reverse engineering harder
-
-                nat = Program.Crossmap.TranslateHash(Rotl(reader.ReadUInt64(), codeSize + count));
-                NativeHashes.Add(nat);
-                var entry = Program.NativeDB.GetEntry(nat);
-
-                if (entry != null)
+                if (alwaysUseHash)
                 {
-                    var nativeName = "";
-                    if (Properties.Settings.Default.ShowNativeNamespace)
-                        nativeName += entry?.@namespace + "::";
-
-                    nativeName += entry?.name;
-
-                    if (!Properties.Settings.Default.UppercaseNatives)
-                        nativeName = nativeName.ToLower();
-
-                    NativeNames.Add(nativeName);
+                    nat = Rotl(reader.ReadUInt64(), codeSize + count);
+                    NativeHashes.Add(nat);
+                    NativeNames.Add(String.Format("unk_0x{0:X16}", nat));
+                    count++;
                 }
                 else
                 {
-                    var temps = nat.ToString("X");
-                    while (temps.Length < 16)
-                        temps = "0" + temps;
-                    NativeNames.Add("unk_0x" + temps);
-                }
+                    // GTA V PC natives arent stored sequentially in the table. Each native needs a bitwise rotate depending on its position and codetable size
+                    // Then the natives needs to go back through translation tables to get to their hash as defined in the vanilla game version
+                    // or the earliest game version that native was introduced in.
+                    // Just some of the steps Rockstar take to make reverse engineering harder
 
-                count++;
+                    nat = Program.Crossmap.TranslateHash(Rotl(reader.ReadUInt64(), codeSize + count));
+                    NativeHashes.Add(nat);
+                    var entry = Program.NativeDB.GetEntry(nat);
+
+                    if (entry != null)
+                    {
+                        var nativeName = "";
+                        if (Properties.Settings.Default.ShowNativeNamespace)
+                            nativeName += entry?.@namespace + "::";
+
+                        if (entry.name.Length != 0)
+                        {
+                            nativeName += entry.name;
+                        }
+                        else
+                        {
+                            nativeName += String.Format("_0x{0:X16}", nat);
+                        }
+
+                        if (!Properties.Settings.Default.UppercaseNatives)
+                            nativeName = nativeName.ToLower();
+
+                        NativeNames.Add(nativeName);
+                    }
+                    else
+                    {
+                        NativeNames.Add(String.Format("unk_0x{0:X16}", nat));
+                    }
+
+                    count++;
+                }
             }
         }
         public string[] GetNativeTable()

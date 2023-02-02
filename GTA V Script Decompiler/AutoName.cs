@@ -94,9 +94,9 @@ namespace Decompiler
 
     internal class LoopIndexAutoName : AutoName
     {
-        public override string GetName() => "i";
+        public override string GetName() => "k";    // i
 
-        public override NameCollisionBehavior GetNameCollisionBehavior() => NameCollisionBehavior.IncrementCharacter;
+        public override NameCollisionBehavior GetNameCollisionBehavior() => NameCollisionBehavior.AddNumberSuffix;  // IncrementCharacter
 
         public override int GetPrecedence() => 3;
     }
