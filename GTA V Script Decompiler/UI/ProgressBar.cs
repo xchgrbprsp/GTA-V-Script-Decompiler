@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿#if OS_WINDOWS
+using System.Windows.Forms;
 
 namespace Decompiler
 {
@@ -53,3 +54,4 @@ namespace Decompiler
         }
     }
 }
+#endif // OS_WINDOWS

@@ -1,4 +1,5 @@
-﻿using Decompiler.UI;
+﻿#if OS_WINDOWS
+using Decompiler.UI;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using System;
 using System.Collections.Generic;
@@ -699,3 +700,4 @@ namespace Decompiler
 		}
 	}
 }
+#endif // OS_WINDOWS

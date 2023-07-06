@@ -711,7 +711,7 @@
 		"0xC5EF963405593646": {
 			"name": "ADD_LINE_TO_CONVERSATION",
 			"jhash": "0x96CD0513",
-			"comment": "NOTE: ones that are -1, 0 - 35 are determined by a function where it gets a TextLabel from a global then runs,\n_GET_TEXT_SUBSTRING and depending on what the result is it goes in check order of 0 - 9 then A - Z then z (lowercase). So it will then return 0 - 35 or -1 if it's 'z'. The func to handle that ^^ is func_67 in dialog_handler.c atleast in TU27 Xbox360 scripts.\n\np0 is -1, 0 - 35\np1 is a char or string (whatever you wanna call it)\np2 is Global 10597 + i * 6. 'i' is a while(i < 70) loop\np3 is again -1, 0 - 35 \np4 is again -1, 0 - 35 \np5 is either 0 or 1 (bool ?)\np6 is either 0 or 1 (The func to determine this is bool)\np7 is either 0 or 1 (The func to determine this is bool)\np8 is either 0 or 1 (The func to determine this is bool)\np9 is 0 - 3 (Determined by func_60 in dialogue_handler.c)\np10 is either 0 or 1 (The func to determine this is bool)\np11 is either 0 or 1 (The func to determine this is bool)\np12 is unknown as in TU27 X360 scripts it only goes to p11.",
+			"comment": "NOTE: ones that are -1, 0 - 35 are determined by a function where it gets a TextLabel from a global then runs,\nGET_CHARACTER_FROM_AUDIO_CONVERSATION_FILENAME and depending on what the result is it goes in check order of 0 - 9 then A - Z then z (lowercase). So it will then return 0 - 35 or -1 if it's 'z'. The func to handle that ^^ is func_67 in dialog_handler.c atleast in TU27 Xbox360 scripts.\n\np0 is -1, 0 - 35\np1 is a char or string (whatever you wanna call it)\np2 is Global 10597 + i * 6. 'i' is a while(i < 70) loop\np3 is again -1, 0 - 35 \np4 is again -1, 0 - 35 \np5 is either 0 or 1 (bool ?)\np6 is either 0 or 1 (The func to determine this is bool)\np7 is either 0 or 1 (The func to determine this is bool)\np8 is either 0 or 1 (The func to determine this is bool)\np9 is 0 - 3 (Determined by func_60 in dialogue_handler.c)\np10 is either 0 or 1 (The func to determine this is bool)\np11 is either 0 or 1 (The func to determine this is bool)\np12 is unknown as in TU27 X360 scripts it only goes to p11.",
 			"params": [
 				{
 					"type": "int",
@@ -1165,11 +1165,11 @@
 		"0x7345BDD95E62E0F2": {
 			"name": "REQUEST_MISSION_AUDIO_BANK",
 			"jhash": "0x916E37CA",
-			"comment": "All occurrences and usages found in b617d: https://pastebin.com/NzZZ2Tmm\nFull list of mission audio bank names by DurtyFree https://github.com/DurtyFree/gta-v-data-dumps/blob/master/missionAudioBankNames.json",
+			"comment": "All occurrences and usages found in b617d: https://pastebin.com/NzZZ2Tmm\nFull list of mission audio bank names by DurtyFree https://github.com/DurtyFree/gta-v-data-dumps/blob/master/missionAudioBankNames.json\np2 is always -1",
 			"params": [
 				{
 					"type": "const char*",
-					"name": "p0"
+					"name": "audioBank"
 				},
 				{
 					"type": "BOOL",
@@ -1186,11 +1186,11 @@
 		"0xFE02FFBED8CA9D99": {
 			"name": "REQUEST_AMBIENT_AUDIO_BANK",
 			"jhash": "0x23C88BC7",
-			"comment": "All occurrences and usages found in b617d, sorted alphabetically and identical lines removed: https://pastebin.com/XZ1tmGEz\nFull list of ambient audio bank names by DurtyFree https://github.com/DurtyFree/gta-v-data-dumps/blob/master/ambientAudioBankNames.json",
+			"comment": "All occurrences and usages found in b617d, sorted alphabetically and identical lines removed: https://pastebin.com/XZ1tmGEz\nFull list of ambient audio bank names by DurtyFree https://github.com/DurtyFree/gta-v-data-dumps/blob/master/ambientAudioBankNames.json\np2 is always -1",
 			"params": [
 				{
 					"type": "const char*",
-					"name": "p0"
+					"name": "audioBank"
 				},
 				{
 					"type": "BOOL",
@@ -1207,18 +1207,18 @@
 		"0x2F844A8B08D76685": {
 			"name": "REQUEST_SCRIPT_AUDIO_BANK",
 			"jhash": "0x21322887",
-			"comment": "All occurrences and usages found in b617d, sorted alphabetically and identical lines removed: https://pastebin.com/AkmDAVn6\nFull list of script audio bank names by DurtyFree https://github.com/DurtyFree/gta-v-data-dumps/blob/master/scriptAudioBankNames.json",
+			"comment": "All occurrences and usages found in b617d, sorted alphabetically and identical lines removed: https://pastebin.com/AkmDAVn6\nFull list of script audio bank names by DurtyFree https://github.com/DurtyFree/gta-v-data-dumps/blob/master/scriptAudioBankNames.json\np2 is always -1",
 			"params": [
 				{
 					"type": "const char*",
-					"name": "p0"
+					"name": "audioBank"
 				},
 				{
 					"type": "BOOL",
 					"name": "p1"
 				},
 				{
-					"type": "int",
+					"type": "Any",
 					"name": "p2"
 				}
 			],
@@ -1228,14 +1228,14 @@
 		"0x40763EA7B9B783E7": {
 			"name": "HINT_MISSION_AUDIO_BANK",
 			"jhash": "",
-			"comment": "",
+			"comment": "p2 is always -1",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "const char*",
+					"name": "audioBank"
 				},
 				{
-					"type": "Any",
+					"type": "BOOL",
 					"name": "p1"
 				},
 				{
@@ -1249,14 +1249,14 @@
 		"0x8F8C0E370AE62F5C": {
 			"name": "HINT_AMBIENT_AUDIO_BANK",
 			"jhash": "0xF1850DDC",
-			"comment": "",
+			"comment": "p2 is always -1",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "const char*",
+					"name": "audioBank"
 				},
 				{
-					"type": "Any",
+					"type": "BOOL",
 					"name": "p1"
 				},
 				{
@@ -1270,14 +1270,14 @@
 		"0xFB380A29641EC31A": {
 			"name": "HINT_SCRIPT_AUDIO_BANK",
 			"jhash": "0x41FA0E51",
-			"comment": "",
+			"comment": "p2 is always -1",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "const char*",
+					"name": "audioBank"
 				},
 				{
-					"type": "Any",
+					"type": "BOOL",
 					"name": "p1"
 				},
 				{
@@ -1347,8 +1347,8 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "const char*",
+					"name": "audioBank"
 				}
 			],
 			"return_type": "void",
@@ -1486,23 +1486,23 @@
 		"0x5B9853296731E88D": {
 			"name": "PLAY_SOUND_FROM_ENTITY_HASH",
 			"jhash": "",
-			"comment": "",
+			"comment": "Only used with \"formation_flying_blips_soundset\" and \"biker_formation_blips_soundset\".\np1 is always the model of p2",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "int",
+					"name": "soundId"
 				},
 				{
-					"type": "Any",
-					"name": "p1"
+					"type": "Hash",
+					"name": "model"
 				},
 				{
-					"type": "Any",
-					"name": "p2"
+					"type": "Entity",
+					"name": "entity"
 				},
 				{
-					"type": "Any",
-					"name": "p3"
+					"type": "Hash",
+					"name": "soundSetHash"
 				},
 				{
 					"type": "Any",
@@ -1567,20 +1567,20 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "int",
+					"name": "soundId"
 				},
 				{
-					"type": "Any",
-					"name": "p1"
+					"type": "float",
+					"name": "x"
 				},
 				{
-					"type": "Any",
-					"name": "p2"
+					"type": "float",
+					"name": "y"
 				},
 				{
-					"type": "Any",
-					"name": "p3"
+					"type": "float",
+					"name": "z"
 				}
 			],
 			"return_type": "void",
@@ -1635,8 +1635,8 @@
 					"name": "soundId"
 				},
 				{
-					"type": "Any*",
-					"name": "p1"
+					"type": "const char*",
+					"name": "variable"
 				},
 				{
 					"type": "float",
@@ -1653,7 +1653,7 @@
 			"params": [
 				{
 					"type": "const char*",
-					"name": "p0"
+					"name": "variable"
 				},
 				{
 					"type": "float",
@@ -1669,7 +1669,7 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any*",
+					"type": "const char*",
 					"name": "p0"
 				},
 				{
@@ -1908,11 +1908,11 @@
 		"0xD01005D2BA2EB778": {
 			"name": "ACTIVATE_AUDIO_SLOWMO_MODE",
 			"jhash": "0x59A3A17D",
-			"comment": "",
+			"comment": "mode can be any of these: \nSLOWMO_T1_TRAILER_SMASH\nSLOWMO_T1_RAYFIRE_EXPLOSION\nSLOWMO_PROLOGUE_VAULT\nNIGEL_02_SLOWMO_SETTING\nJSH_EXIT_TUNNEL_SLOWMO\nSLOWMO_BIG_SCORE_JUMP\nSLOWMO_FIB4_TRUCK_SMASH\nSLOWMO_EXTREME_04\nSLOW_MO_METH_HOUSE_RAYFIRE\nBARRY_02_SLOWMO\nBARRY_01_SLOWMO",
 			"params": [
 				{
 					"type": "const char*",
-					"name": "p0"
+					"name": "mode"
 				}
 			],
 			"return_type": "void",
@@ -1921,11 +1921,11 @@
 		"0xDDC635D5B3262C56": {
 			"name": "DEACTIVATE_AUDIO_SLOWMO_MODE",
 			"jhash": "0x0E387BFE",
-			"comment": "",
+			"comment": "see ACTIVATE_AUDIO_SLOWMO_MODE for modes",
 			"params": [
 				{
 					"type": "const char*",
-					"name": "p0"
+					"name": "mode"
 				}
 			],
 			"return_type": "void",
@@ -2010,12 +2010,12 @@
 					"name": "ped"
 				},
 				{
-					"type": "Any",
+					"type": "int",
 					"name": "p1"
 				},
 				{
-					"type": "Any",
-					"name": "p2"
+					"type": "Hash",
+					"name": "voiceGroup"
 				}
 			],
 			"return_type": "void",
@@ -2024,7 +2024,7 @@
 		"0x7CDC8C3B89F661B3": {
 			"name": "SET_PED_VOICE_GROUP",
 			"jhash": "",
-			"comment": "From the scripts:\n\nAUDIO::_SET_PED_VOICE_GROUP(PLAYER::PLAYER_PED_ID(), MISC::GET_HASH_KEY(\"PAIGE_PVG\"));\nAUDIO::_SET_PED_VOICE_GROUP(PLAYER::PLAYER_PED_ID(), MISC::GET_HASH_KEY(\"TALINA_PVG\"));\nAUDIO::_SET_PED_VOICE_GROUP(PLAYER::PLAYER_PED_ID(), MISC::GET_HASH_KEY(\"FEMALE_LOST_BLACK_PVG\"));\nAUDIO::_SET_PED_VOICE_GROUP(PLAYER::PLAYER_PED_ID(), MISC::GET_HASH_KEY(\"FEMALE_LOST_WHITE_PVG\"));",
+			"comment": "From the scripts:\n\nAUDIO::SET_PED_VOICE_GROUP(PLAYER::PLAYER_PED_ID(), MISC::GET_HASH_KEY(\"PAIGE_PVG\"));\nAUDIO::SET_PED_VOICE_GROUP(PLAYER::PLAYER_PED_ID(), MISC::GET_HASH_KEY(\"TALINA_PVG\"));\nAUDIO::SET_PED_VOICE_GROUP(PLAYER::PLAYER_PED_ID(), MISC::GET_HASH_KEY(\"FEMALE_LOST_BLACK_PVG\"));\nAUDIO::SET_PED_VOICE_GROUP(PLAYER::PLAYER_PED_ID(), MISC::GET_HASH_KEY(\"FEMALE_LOST_WHITE_PVG\"));",
 			"params": [
 				{
 					"type": "Ped",
@@ -2129,7 +2129,7 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
+					"type": "Ped",
 					"name": "p0"
 				}
 			],
@@ -2160,7 +2160,7 @@
 		"0x49B99BF3FDA89A7A": {
 			"name": "DOES_CONTEXT_EXIST_FOR_THIS_PED",
 			"jhash": "0x8BD5F11E",
-			"comment": "Checks if the ped can play the speech or has the speech file, last parameter is usually false.",
+			"comment": "Checks if the ped can play the speech or has the speech file, p2 is usually false.",
 			"params": [
 				{
 					"type": "Ped",
@@ -2172,7 +2172,7 @@
 				},
 				{
 					"type": "BOOL",
-					"name": "unk"
+					"name": "p2"
 				}
 			],
 			"return_type": "BOOL",
@@ -2302,7 +2302,7 @@
 		"0xB28ECA15046CA8B9": {
 			"name": "GET_RADIO_STATION_NAME",
 			"jhash": "0x3DF493BC",
-			"comment": "Converts radio station index to string. Use HUD::_GET_LABEL_TEXT to get the user-readable text.",
+			"comment": "Converts radio station index to string. Use HUD::GET_FILENAME_FOR_AUDIO_CONVERSATION to get the user-readable text.",
 			"params": [
 				{
 					"type": "int",
@@ -2439,6 +2439,10 @@
 				{
 					"type": "const char*",
 					"name": "radioStation"
+				},
+				{
+					"type": "Any",
+					"name": "p2"
 				}
 			],
 			"return_type": "void",
@@ -2677,19 +2681,19 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "const char*",
+					"name": "radioName"
 				},
 				{
-					"type": "Any",
-					"name": "p1"
+					"type": "const char*",
+					"name": "radioTrack"
 				},
 				{
-					"type": "Any",
+					"type": "const char*",
 					"name": "p2"
 				},
 				{
-					"type": "Any",
+					"type": "const char*",
 					"name": "p3"
 				}
 			],
@@ -2996,15 +3000,15 @@
 			"params": [
 				{
 					"type": "float*",
-					"name": "p0"
+					"name": "out1"
 				},
 				{
 					"type": "float*",
-					"name": "p1"
+					"name": "out2"
 				},
 				{
 					"type": "int*",
-					"name": "p2"
+					"name": "out3"
 				}
 			],
 			"return_type": "BOOL",
@@ -3127,8 +3131,8 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any*",
-					"name": "p0"
+					"type": "const char*",
+					"name": "ambientZone"
 				},
 				{
 					"type": "BOOL",
@@ -3148,8 +3152,8 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any*",
-					"name": "p0"
+					"type": "const char*",
+					"name": "ambientZone"
 				},
 				{
 					"type": "BOOL",
@@ -3381,15 +3385,15 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
+					"type": "BOOL",
 					"name": "p0"
 				},
 				{
-					"type": "Any",
+					"type": "BOOL",
 					"name": "p1"
 				},
 				{
-					"type": "Any",
+					"type": "BOOL",
 					"name": "p2"
 				}
 			],
@@ -3573,11 +3577,11 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "Ped",
+					"name": "ped"
 				},
 				{
-					"type": "Any",
+					"type": "BOOL",
 					"name": "p1"
 				}
 			],
@@ -4704,11 +4708,11 @@
 		"0xC7ABCACA4985A766": {
 			"name": "PREPARE_SYNCHRONIZED_AUDIO_EVENT",
 			"jhash": "0xE1D91FD0",
-			"comment": "",
+			"comment": "p1 is always 0 in the scripts",
 			"params": [
 				{
 					"type": "const char*",
-					"name": "p0"
+					"name": "audioEvent"
 				},
 				{
 					"type": "Any",
@@ -4724,12 +4728,12 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "int",
+					"name": "sceneID"
 				},
 				{
-					"type": "Any*",
-					"name": "p1"
+					"type": "const char*",
+					"name": "audioEvent"
 				}
 			],
 			"return_type": "BOOL",
@@ -4741,8 +4745,8 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "int",
+					"name": "sceneID"
 				}
 			],
 			"return_type": "BOOL",
@@ -4754,8 +4758,8 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "int",
+					"name": "sceneID"
 				}
 			],
 			"return_type": "BOOL",
@@ -4767,8 +4771,8 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any*",
-					"name": "p0"
+					"type": "const char*",
+					"name": "audioEvent"
 				},
 				{
 					"type": "float",
@@ -4793,11 +4797,11 @@
 			"params": [
 				{
 					"type": "const char*",
-					"name": "p0"
+					"name": "audioEvent"
 				},
 				{
 					"type": "Entity",
-					"name": "p1"
+					"name": "entity"
 				}
 			],
 			"return_type": "void",
@@ -5712,11 +5716,11 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "Cam",
+					"name": "cam"
 				},
 				{
-					"type": "Any",
+					"type": "float",
 					"name": "p1"
 				}
 			],
@@ -5989,6 +5993,23 @@
 			"old_names": [
 				"_SET_CAM_DOF_MAX_NEAR_IN_FOCUS_DISTANCE_BLEND_LEVEL"
 			]
+		},
+		"0x7CF3AF51DCFE4108": {
+			"name": "SET_CAM_DOF_SHOULD_KEEP_LOOK_AT_TARGET_IN_FOCUS",
+			"jhash": "",
+			"comment": "This native has a name defined inside its code",
+			"params": [
+				{
+					"type": "Cam",
+					"name": "camera"
+				},
+				{
+					"type": "BOOL",
+					"name": "state"
+				}
+			],
+			"return_type": "void",
+			"build": "2944"
 		},
 		"0xFEDB7D269E8C60E3": {
 			"name": "ATTACH_CAM_TO_ENTITY",
@@ -7857,7 +7878,7 @@
 		"0xDF2E1F7742402E81": {
 			"name": "SET_THIRD_PERSON_CAM_ORBIT_DISTANCE_LIMITS_THIS_UPDATE",
 			"jhash": "0x77340650",
-			"comment": "Seems to animate the gameplay camera zoom.\n\nEg. SET_THIRD_PERSON_CAM_ORBIT_DISTANCE_LIMITS_THIS_UPDATE(1f, 1000f);\nwill animate the camera zooming in from 1000 meters away.\n\nGame scripts use it like this:\n\n// Setting this to 1 prevents V key from changing zoom\nPLAYER::SET_PLAYER_FORCED_ZOOM(PLAYER::PLAYER_ID(), 1);\n\n// These restrict how far you can move cam up/down left/right\nCAM::SET_THIRD_PERSON_CAM_RELATIVE_HEADING_LIMITS_THIS_UPDATE(-20f, 50f);\nCAM::_CLAMP_GAMEPLAY_CAM_PITCH(-60f, 0f);\n\nCAM::_ANIMATE_GAMEPLAY_CAM_ZOOM(1f, 1f);",
+			"comment": "Seems to animate the gameplay camera zoom.\n\nEg. SET_THIRD_PERSON_CAM_ORBIT_DISTANCE_LIMITS_THIS_UPDATE(1f, 1000f);\nwill animate the camera zooming in from 1000 meters away.\n\nGame scripts use it like this:\n\n// Setting this to 1 prevents V key from changing zoom\nPLAYER::SET_PLAYER_FORCED_ZOOM(PLAYER::PLAYER_ID(), 1);\n\n// These restrict how far you can move cam up/down left/right\nCAM::SET_THIRD_PERSON_CAM_RELATIVE_HEADING_LIMITS_THIS_UPDATE(-20f, 50f);\nCAM::SET_THIRD_PERSON_CAM_RELATIVE_PITCH_LIMITS_THIS_UPDATE(-60f, 0f);\n\nCAM::SET_THIRD_PERSON_CAM_ORBIT_DISTANCE_LIMITS_THIS_UPDATE(1f, 1f);",
 			"params": [
 				{
 					"type": "float",
@@ -7929,7 +7950,7 @@
 		"0x8D4D46230B2C353A": {
 			"name": "GET_FOLLOW_PED_CAM_VIEW_MODE",
 			"jhash": "0xA65FF946",
-			"comment": "Returns\n0 - Third Person Close\n1 - Third Person Mid\n2 - Third Person Far\n4 - First Person",
+			"comment": "See viewmode enum in CAM.GET_FOLLOW_VEHICLE_CAM_VIEW_MODE for return value",
 			"params": [],
 			"return_type": "int",
 			"build": "323"
@@ -8025,7 +8046,7 @@
 		"0xA4FF579AC0E3AAAE": {
 			"name": "GET_FOLLOW_VEHICLE_CAM_VIEW_MODE",
 			"jhash": "0xA4B4DB03",
-			"comment": "Returns the type of camera:\n\n0 - Third Person Close\n1 - Third Person Mid\n2 - Third Person Far\n4 - First Person",
+			"comment": "Returns the type of camera:\n\nenum _viewmode //0xA11D7CA8\n{\n\tTHIRD_PERSON_NEAR = 0,\n\tTHIRD_PERSON_MEDIUM = 1,\n\tTHIRD_PERSON_FAR = 2,\n\tCINEMATIC = 3,\n\tFIRST_PERSON = 4\n};",
 			"params": [],
 			"return_type": "int",
 			"build": "323"
@@ -8033,7 +8054,7 @@
 		"0xAC253D7842768F48": {
 			"name": "SET_FOLLOW_VEHICLE_CAM_VIEW_MODE",
 			"jhash": "0xC4FBBBD3",
-			"comment": "Sets the type of Player camera in vehicles:\n\n0 - Third Person Close\n1 - Third Person Mid\n2 - Third Person Far\n4 - First Person",
+			"comment": "Sets the type of Player camera in vehicles:\nviewmode: see CAM.GET_FOLLOW_VEHICLE_CAM_VIEW_MODE",
 			"params": [
 				{
 					"type": "int",
@@ -8059,7 +8080,7 @@
 		"0x2A2173E46DAECD12": {
 			"name": "SET_CAM_VIEW_MODE_FOR_CONTEXT",
 			"jhash": "0x1DEBCB45",
-			"comment": "context: see _GET_CAM_ACTIVE_VIEW_MODE_CONTEXT",
+			"comment": "context: see _GET_CAM_ACTIVE_VIEW_MODE_CONTEXT, viewmode: see CAM.GET_FOLLOW_VEHICLE_CAM_VIEW_MODE",
 			"params": [
 				{
 					"type": "int",
@@ -8458,7 +8479,7 @@
 				},
 				{
 					"type": "int",
-					"name": "unk"
+					"name": "p6"
 				}
 			],
 			"return_type": "void",
@@ -8809,11 +8830,11 @@
 			"params": [
 				{
 					"type": "const char*",
-					"name": "p0"
+					"name": "shakeType"
 				},
 				{
 					"type": "float",
-					"name": "p1"
+					"name": "amount"
 				}
 			],
 			"return_type": "void",
@@ -8913,18 +8934,18 @@
 		"0x741B0129D4560F31": {
 			"name": "CREATE_CINEMATIC_SHOT",
 			"jhash": "0xAC494E35",
-			"comment": "",
+			"comment": "hash is always JOAAT(\"CAMERA_MAN_SHOT\") in decompiled scripts",
 			"params": [
 				{
-					"type": "Any",
+					"type": "Hash",
 					"name": "p0"
 				},
 				{
 					"type": "int",
-					"name": "p1"
+					"name": "time"
 				},
 				{
-					"type": "Any",
+					"type": "BOOL",
 					"name": "p2"
 				},
 				{
@@ -8938,10 +8959,10 @@
 		"0xCC9F3371A7C28BC9": {
 			"name": "IS_CINEMATIC_SHOT_ACTIVE",
 			"jhash": "0xA4049042",
-			"comment": "",
+			"comment": "Hash is always JOAAT(\"CAMERA_MAN_SHOT\") in decompiled scripts",
 			"params": [
 				{
-					"type": "Any",
+					"type": "Hash",
 					"name": "p0"
 				}
 			],
@@ -8968,7 +8989,7 @@
 			"params": [
 				{
 					"type": "BOOL",
-					"name": "p0"
+					"name": "toggle"
 				}
 			],
 			"return_type": "void",
@@ -9813,6 +9834,14 @@
 			"return_type": "int",
 			"build": "1734"
 		},
+		"0x5D583F71C901F2A3": {
+			"name": "GET_CUTSCENE_PLAY_DURATION",
+			"jhash": "",
+			"comment": "",
+			"params": [],
+			"return_type": "int",
+			"build": "2802"
+		},
 		"0x40C8656EDAEDD569": {
 			"name": "WAS_CUTSCENE_SKIPPED",
 			"jhash": "0xC9B6949D",
@@ -9897,8 +9926,8 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "int",
+					"name": "cutsceneHandle"
 				}
 			],
 			"return_type": "int",
@@ -10196,15 +10225,15 @@
 				},
 				{
 					"type": "int",
-					"name": "p1"
+					"name": "componentId"
 				},
 				{
 					"type": "int",
-					"name": "p2"
+					"name": "drawableId"
 				},
 				{
 					"type": "int",
-					"name": "p3"
+					"name": "textureId"
 				},
 				{
 					"type": "Hash",
@@ -10263,15 +10292,15 @@
 				},
 				{
 					"type": "int",
-					"name": "p1"
+					"name": "componentId"
 				},
 				{
 					"type": "int",
-					"name": "p2"
+					"name": "drawableId"
 				},
 				{
 					"type": "int",
-					"name": "p3"
+					"name": "textureId"
 				},
 				{
 					"type": "Hash",
@@ -10297,11 +10326,11 @@
 		"0xAD6875BBC0FC899C": {
 			"name": "DATAFILE_WATCH_REQUEST_ID",
 			"jhash": "0x621388FF",
-			"comment": "Adds the given request ID to the watch list.",
+			"comment": "Adds the given requestID to the watch list.",
 			"params": [
 				{
 					"type": "int",
-					"name": "id"
+					"name": "requestId"
 				}
 			],
 			"return_type": "void",
@@ -10334,8 +10363,8 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "int",
+					"name": "requestId"
 				}
 			],
 			"return_type": "BOOL",
@@ -10347,8 +10376,8 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "int",
+					"name": "requestId"
 				}
 			],
 			"return_type": "BOOL",
@@ -10360,8 +10389,8 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "int",
+					"name": "requestId"
 				},
 				{
 					"type": "Any",
@@ -10377,8 +10406,8 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "int",
+					"name": "requestId"
 				}
 			],
 			"return_type": "BOOL",
@@ -11983,6 +12012,19 @@
 			"return_type": "BOOL",
 			"build": "323"
 		},
+		"0xA75EE4F689B85391": {
+			"name": "_GET_LAST_ENTITY_HIT_BY_ENTITY",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Entity",
+					"name": "entity"
+				}
+			],
+			"return_type": "Entity",
+			"build": "2802"
+		},
 		"0x5C3D0A935F535C4C": {
 			"name": "GET_LAST_MATERIAL_HIT_BY_ENTITY",
 			"jhash": "0xC0E3AA47",
@@ -12606,6 +12648,19 @@
 			],
 			"return_type": "Player",
 			"build": "323"
+		},
+		"0xFFBD7052D65BE0FF": {
+			"name": "GET_NEAREST_PARTICIPANT_TO_ENTITY",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Entity",
+					"name": "entity"
+				}
+			],
+			"return_type": "int",
+			"build": "2944"
 		},
 		"0x8ACD366038D14505": {
 			"name": "GET_ENTITY_TYPE",
@@ -13585,6 +13640,99 @@
 			"return_type": "void",
 			"build": "323"
 		},
+		"0x168A09D1B25B0BA4": {
+			"name": "ATTACH_ENTITY_TO_ENTITY_PHYSICALLY_OVERRIDE_INVERSE_MASS",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Entity",
+					"name": "firstEntityIndex"
+				},
+				{
+					"type": "Entity",
+					"name": "secondEntityIndex"
+				},
+				{
+					"type": "int",
+					"name": "firstEntityBoneIndex"
+				},
+				{
+					"type": "int",
+					"name": "secondEntityBoneIndex"
+				},
+				{
+					"type": "float",
+					"name": "secondEntityOffsetX"
+				},
+				{
+					"type": "float",
+					"name": "secondEntityOffsetY"
+				},
+				{
+					"type": "float",
+					"name": "secondEntityOffsetZ"
+				},
+				{
+					"type": "float",
+					"name": "firstEntityOffsetX"
+				},
+				{
+					"type": "float",
+					"name": "firstEntityOffsetY"
+				},
+				{
+					"type": "float",
+					"name": "firstEntityOffsetZ"
+				},
+				{
+					"type": "float",
+					"name": "vecRotationX"
+				},
+				{
+					"type": "float",
+					"name": "vecRotationY"
+				},
+				{
+					"type": "float",
+					"name": "vecRotationZ"
+				},
+				{
+					"type": "float",
+					"name": "physicalStrength"
+				},
+				{
+					"type": "BOOL",
+					"name": "constrainRotation"
+				},
+				{
+					"type": "BOOL",
+					"name": "doInitialWarp"
+				},
+				{
+					"type": "BOOL",
+					"name": "collideWithEntity"
+				},
+				{
+					"type": "BOOL",
+					"name": "addInitialSeperation"
+				},
+				{
+					"type": "int",
+					"name": "rotOrder"
+				},
+				{
+					"type": "float",
+					"name": "invMassScaleA"
+				},
+				{
+					"type": "float",
+					"name": "invMassScaleB"
+				}
+			],
+			"return_type": "void",
+			"build": "2944"
+		},
 		"0xF4080490ADC51C6F": {
 			"name": "PROCESS_ENTITY_ATTACHMENTS",
 			"jhash": "0x6909BA59",
@@ -13790,38 +13938,38 @@
 		"0xB9C54555ED30FBC4": {
 			"name": "PLAY_SYNCHRONIZED_MAP_ENTITY_ANIM",
 			"jhash": "0xEB4CBA74",
-			"comment": "Full list of animation dictionaries and anims by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/animDictsCompact.json",
+			"comment": "p6,p7 probably animname and animdict\n\nFull list of animation dictionaries and anims by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/animDictsCompact.json",
 			"params": [
 				{
 					"type": "float",
-					"name": "p0"
+					"name": "x1"
 				},
 				{
 					"type": "float",
-					"name": "p1"
+					"name": "y1"
 				},
 				{
 					"type": "float",
-					"name": "p2"
+					"name": "z1"
 				},
 				{
 					"type": "float",
-					"name": "p3"
+					"name": "x2"
 				},
 				{
 					"type": "Any",
-					"name": "p4"
+					"name": "y2"
 				},
 				{
-					"type": "Any",
-					"name": "p5"
+					"type": "float",
+					"name": "z2"
 				},
 				{
-					"type": "Any*",
+					"type": "const char*",
 					"name": "p6"
 				},
 				{
-					"type": "Any*",
+					"type": "const char*",
 					"name": "p7"
 				},
 				{
@@ -13851,27 +13999,27 @@
 			"params": [
 				{
 					"type": "float",
-					"name": "p0"
+					"name": "x1"
 				},
 				{
 					"type": "float",
-					"name": "p1"
+					"name": "y1"
 				},
 				{
 					"type": "float",
-					"name": "p2"
+					"name": "z1"
 				},
 				{
 					"type": "float",
-					"name": "p3"
+					"name": "x2"
 				},
 				{
 					"type": "Any",
-					"name": "p4"
+					"name": "y2"
 				},
 				{
 					"type": "float",
-					"name": "p5"
+					"name": "z2"
 				}
 			],
 			"return_type": "BOOL",
@@ -14152,12 +14300,12 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "Entity",
+					"name": "entity"
 				},
 				{
-					"type": "Any",
-					"name": "p1"
+					"type": "BOOL",
+					"name": "toggle"
 				}
 			],
 			"return_type": "void",
@@ -14565,7 +14713,7 @@
 		"0xFAEE099C6F890BB8": {
 			"name": "SET_ENTITY_PROOFS",
 			"jhash": "0x7E9EAB66",
-			"comment": "Enable / disable each type of damage.\n\nCan't get drownProof to work.\n--------------\np7 is to to '1' in am_mp_property_ext/int: entity::set_entity_proofs(uParam0->f_19, true, true, true, true, true, true, 1, true);\n",
+			"comment": "Enable / disable each type of damage.\n\nwaterProof is damage related to water not drowning\n--------------\np7 is to to '1' in am_mp_property_ext/int: ENTITY::SET_ENTITY_PROOFS(uParam0->f_19, true, true, true, true, true, true, 1, true);\n",
 			"params": [
 				{
 					"type": "Entity",
@@ -14593,7 +14741,7 @@
 				},
 				{
 					"type": "BOOL",
-					"name": "p6"
+					"name": "steamProof"
 				},
 				{
 					"type": "BOOL",
@@ -14601,7 +14749,7 @@
 				},
 				{
 					"type": "BOOL",
-					"name": "drownProof"
+					"name": "waterProof"
 				}
 			],
 			"return_type": "void",
@@ -14737,7 +14885,7 @@
 		"0xEA1C610A04DB6BBB": {
 			"name": "SET_ENTITY_VISIBLE",
 			"jhash": "0xD043E8E1",
-			"comment": "unk was always 0.",
+			"comment": "p2 is always 0.",
 			"params": [
 				{
 					"type": "Entity",
@@ -14749,7 +14897,7 @@
 				},
 				{
 					"type": "BOOL",
-					"name": "unk"
+					"name": "p2"
 				}
 			],
 			"return_type": "void",
@@ -15469,6 +15617,23 @@
 			"old_names": [
 				"_GET_ENTITY_BONE_ROTATION_LOCAL"
 			]
+		},
+		"0xCF1247CC86961FD6": {
+			"name": "GET_ENTITY_BONE_OBJECT_POSTION",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Entity",
+					"name": "entity"
+				},
+				{
+					"type": "int",
+					"name": "boneIndex"
+				}
+			],
+			"return_type": "Vector3",
+			"build": "2802"
 		},
 		"0xB328DCC3A3AA401B": {
 			"name": "GET_ENTITY_BONE_COUNT",
@@ -16524,7 +16689,7 @@
 		"0x79923CD21BECE14E": {
 			"name": "GET_DLC_WEAPON_DATA",
 			"jhash": "0xD88EC8EA",
-			"comment": "\ndlcWeaponIndex takes a number from 0 - GET_NUM_DLC_WEAPONS() - 1.\nstruct DlcWeaponData\n{\nint emptyCheck; //use DLC1::_IS_DLC_DATA_EMPTY on this\nint padding1;\nint weaponHash;\nint padding2;\nint unk;\nint padding3;\nint weaponCost;\nint padding4;\nint ammoCost;\nint padding5;\nint ammoType;\nint padding6;\nint defaultClipSize;\nint padding7;\nchar nameLabel[64];\nchar descLabel[64];\nchar desc2Label[64]; // usually \"the\" + name\nchar upperCaseNameLabel[64];\n};",
+			"comment": "\ndlcWeaponIndex takes a number from 0 - GET_NUM_DLC_WEAPONS() - 1.\nstruct DlcWeaponData\n{\nint emptyCheck; //use DLC1::IS_CONTENT_ITEM_LOCKED on this\nint padding1;\nint weaponHash;\nint padding2;\nint unk;\nint padding3;\nint weaponCost;\nint padding4;\nint ammoCost;\nint padding5;\nint ammoType;\nint padding6;\nint defaultClipSize;\nint padding7;\nchar nameLabel[64];\nchar descLabel[64];\nchar desc2Label[64]; // usually \"the\" + name\nchar upperCaseNameLabel[64];\n};",
 			"params": [
 				{
 					"type": "int",
@@ -16678,7 +16843,7 @@
 		"0x6BEDF5769AC2DC07": {
 			"name": "EXECUTE_CONTENT_CHANGESET_GROUP_FOR_ALL",
 			"jhash": "",
-			"comment": "From fm_deathmatch_creator and fm_race_creator:\n\nFILES::_UNLOAD_CONTENT_CHANGE_SET_GROUP(joaat(\"GROUP_MAP_SP\"));\nFILES::_LOAD_CONTENT_CHANGE_SET_GROUP(joaat(\"GROUP_MAP\"));",
+			"comment": "From fm_deathmatch_creator and fm_race_creator:\n\nFILES::REVERT_CONTENT_CHANGESET_GROUP_FOR_ALL(joaat(\"GROUP_MAP_SP\"));\nFILES::EXECUTE_CONTENT_CHANGESET_GROUP_FOR_ALL(joaat(\"GROUP_MAP\"));",
 			"params": [
 				{
 					"type": "Hash",
@@ -16694,7 +16859,7 @@
 		"0x3C1978285B036B25": {
 			"name": "REVERT_CONTENT_CHANGESET_GROUP_FOR_ALL",
 			"jhash": "",
-			"comment": "From fm_deathmatch_creator and fm_race_creator:\n\nFILES::_UNLOAD_CONTENT_CHANGE_SET_GROUP(joaat(\"GROUP_MAP_SP\"));\nFILES::_LOAD_CONTENT_CHANGE_SET_GROUP(joaat(\"GROUP_MAP\"));",
+			"comment": "From fm_deathmatch_creator and fm_race_creator:\n\nFILES::REVERT_CONTENT_CHANGESET_GROUP_FOR_ALL(joaat(\"GROUP_MAP_SP\"));\nFILES::EXECUTE_CONTENT_CHANGESET_GROUP_FOR_ALL(joaat(\"GROUP_MAP\"));",
 			"params": [
 				{
 					"type": "Hash",
@@ -17261,44 +17426,44 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "float",
+					"name": "x1"
 				},
 				{
-					"type": "Any",
-					"name": "p1"
+					"type": "float",
+					"name": "y1"
 				},
 				{
-					"type": "Any",
-					"name": "p2"
+					"type": "float",
+					"name": "z1"
 				},
 				{
-					"type": "Any",
-					"name": "p3"
+					"type": "float",
+					"name": "x2"
 				},
 				{
-					"type": "Any",
-					"name": "p4"
+					"type": "float",
+					"name": "y2"
 				},
 				{
-					"type": "Any",
-					"name": "p5"
+					"type": "float",
+					"name": "z2"
 				},
 				{
-					"type": "Any",
-					"name": "p6"
+					"type": "int",
+					"name": "r"
 				},
 				{
-					"type": "Any",
-					"name": "p7"
+					"type": "int",
+					"name": "g"
 				},
 				{
-					"type": "Any",
-					"name": "p8"
+					"type": "int",
+					"name": "b"
 				},
 				{
-					"type": "Any",
-					"name": "p9"
+					"type": "int",
+					"name": "alpha"
 				}
 			],
 			"return_type": "void",
@@ -17416,44 +17581,44 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "float",
+					"name": "x1"
 				},
 				{
-					"type": "Any",
-					"name": "p1"
+					"type": "float",
+					"name": "y1"
 				},
 				{
-					"type": "Any",
-					"name": "p2"
+					"type": "float",
+					"name": "z1"
 				},
 				{
-					"type": "Any",
-					"name": "p3"
+					"type": "float",
+					"name": "x2"
 				},
 				{
-					"type": "Any",
-					"name": "p4"
+					"type": "float",
+					"name": "y2"
 				},
 				{
-					"type": "Any",
-					"name": "p5"
+					"type": "float",
+					"name": "z2"
 				},
 				{
-					"type": "Any",
-					"name": "p6"
+					"type": "int",
+					"name": "r"
 				},
 				{
-					"type": "Any",
-					"name": "p7"
+					"type": "int",
+					"name": "g"
 				},
 				{
-					"type": "Any",
-					"name": "p8"
+					"type": "int",
+					"name": "b"
 				},
 				{
-					"type": "Any",
-					"name": "p9"
+					"type": "int",
+					"name": "alpha"
 				}
 			],
 			"return_type": "void",
@@ -18008,8 +18173,8 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "BOOL",
+					"name": "toggle"
 				}
 			],
 			"return_type": "void",
@@ -18132,7 +18297,7 @@
 			"params": [
 				{
 					"type": "BOOL",
-					"name": "p0"
+					"name": "toggle"
 				}
 			],
 			"return_type": "void",
@@ -18148,7 +18313,7 @@
 					"name": "p0"
 				},
 				{
-					"type": "Any",
+					"type": "int",
 					"name": "p1"
 				}
 			],
@@ -18964,7 +19129,7 @@
 				},
 				{
 					"type": "float",
-					"name": "p0"
+					"name": "scale"
 				}
 			],
 			"return_type": "void",
@@ -19772,7 +19937,7 @@
 					"name": "z"
 				},
 				{
-					"type": "Any",
+					"type": "BOOL",
 					"name": "p3"
 				}
 			],
@@ -20194,7 +20359,7 @@
 			"params": [
 				{
 					"type": "BOOL",
-					"name": "p0"
+					"name": "toggle"
 				}
 			],
 			"return_type": "void",
@@ -20206,8 +20371,8 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "BOOL",
+					"name": "toggle"
 				}
 			],
 			"return_type": "void",
@@ -20219,7 +20384,7 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
+					"type": "float",
 					"name": "p0"
 				}
 			],
@@ -20484,19 +20649,19 @@
 			"comment": "This function is hard-coded to always return 0.",
 			"params": [
 				{
-					"type": "Any",
+					"type": "float",
 					"name": "p0"
 				},
 				{
-					"type": "Any",
+					"type": "float",
 					"name": "p1"
 				},
 				{
-					"type": "Any",
+					"type": "float",
 					"name": "p2"
 				},
 				{
-					"type": "Any",
+					"type": "float",
 					"name": "p3"
 				}
 			],
@@ -20509,8 +20674,8 @@
 			"comment": "This native does absolutely nothing, just a nullsub",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "int",
+					"name": "handle"
 				}
 			],
 			"return_type": "void",
@@ -20523,23 +20688,23 @@
 			"params": [
 				{
 					"type": "int",
-					"name": "p0"
+					"name": "handle"
 				},
 				{
 					"type": "float",
-					"name": "p1"
+					"name": "x"
 				},
 				{
 					"type": "float",
-					"name": "p2"
+					"name": "y"
 				},
 				{
 					"type": "float",
-					"name": "p3"
+					"name": "z"
 				},
 				{
 					"type": "float",
-					"name": "p4"
+					"name": "scale"
 				}
 			],
 			"return_type": "void",
@@ -20551,8 +20716,8 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "int",
+					"name": "handle"
 				}
 			],
 			"return_type": "void",
@@ -20564,8 +20729,8 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "int",
+					"name": "handle"
 				}
 			],
 			"return_type": "BOOL",
@@ -20609,36 +20774,36 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "float",
+					"name": "x"
 				},
 				{
-					"type": "Any",
-					"name": "p1"
+					"type": "float",
+					"name": "y"
 				},
 				{
-					"type": "Any",
-					"name": "p2"
+					"type": "float",
+					"name": "z"
 				},
 				{
 					"type": "Any",
 					"name": "p3"
 				},
 				{
-					"type": "Any",
+					"type": "float",
 					"name": "p4"
 				},
 				{
-					"type": "Any",
+					"type": "float",
 					"name": "p5"
 				},
 				{
-					"type": "Any",
+					"type": "float",
 					"name": "p6"
 				},
 				{
-					"type": "Any",
-					"name": "p7"
+					"type": "float",
+					"name": "scale"
 				}
 			],
 			"return_type": "void",
@@ -21437,11 +21602,11 @@
 		"0xE3E2C1B4C59DBC77": {
 			"name": "RESET_ADAPTATION",
 			"jhash": "0xD8CC7221",
-			"comment": "Sets an unknown value related to timecycles.",
+			"comment": "Sets an value related to timecycles.",
 			"params": [
 				{
 					"type": "int",
-					"name": "unk"
+					"name": "p0"
 				}
 			],
 			"return_type": "void",
@@ -21553,7 +21718,7 @@
 		"0xBA3D65906822BED5": {
 			"name": "SET_HIDOF_OVERRIDE",
 			"jhash": "0x513D444B",
-			"comment": "Every p2 - p5 occurrence was 0f.",
+			"comment": "",
 			"params": [
 				{
 					"type": "BOOL",
@@ -21592,7 +21757,7 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
+					"type": "BOOL",
 					"name": "p0"
 				}
 			],
@@ -21878,7 +22043,7 @@
 		"0x0D53A3B8DA0809D2": {
 			"name": "START_PARTICLE_FX_NON_LOOPED_ON_ENTITY",
 			"jhash": "0x9604DAD4",
-			"comment": "Starts a particle effect on an entity for example your player.\n\nFull list of particle effect dictionaries and effects by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/particleEffectsCompact.json\n\nExample:\nC#:\nFunction.Call(Hash.REQUEST_NAMED_PTFX_ASSET, \"scr_rcbarry2\");                     Function.Call(Hash._SET_PTFX_ASSET_NEXT_CALL, \"scr_rcbarry2\");                             Function.Call(Hash.START_PARTICLE_FX_NON_LOOPED_ON_ENTITY, \"scr_clown_appears\", Game.Player.Character, 0.0, 0.0, -0.5, 0.0, 0.0, 0.0, 1.0, false, false, false);\n\nInternally this calls the same function as GRAPHICS::START_PARTICLE_FX_NON_LOOPED_ON_PED_BONE\nhowever it uses -1 for the specified bone index, so it should be possible to start a non looped fx on an entity bone using that native\n\n-can confirm START_PARTICLE_FX_NON_LOOPED_ON_PED_BONE does NOT work on vehicle bones.",
+			"comment": "Starts a particle effect on an entity for example your player.\n\nFull list of particle effect dictionaries and effects by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/particleEffectsCompact.json\n\nExample:\nC#:\nFunction.Call(Hash.REQUEST_NAMED_PTFX_ASSET, \"scr_rcbarry2\");                     Function.Call(Hash.USE_PARTICLE_FX_ASSET, \"scr_rcbarry2\");                             Function.Call(Hash.START_PARTICLE_FX_NON_LOOPED_ON_ENTITY, \"scr_clown_appears\", Game.Player.Character, 0.0, 0.0, -0.5, 0.0, 0.0, 0.0, 1.0, false, false, false);\n\nInternally this calls the same function as GRAPHICS::START_PARTICLE_FX_NON_LOOPED_ON_PED_BONE\nhowever it uses -1 for the specified bone index, so it should be possible to start a non looped fx on an entity bone using that native\n\n-can confirm START_PARTICLE_FX_NON_LOOPED_ON_PED_BONE does NOT work on vehicle bones.",
 			"params": [
 				{
 					"type": "const char*",
@@ -22089,6 +22254,19 @@
 			],
 			"return_type": "void",
 			"build": "323"
+		},
+		"0xB7EF5850C39FABCA": {
+			"name": "SET_PARTICLE_FX_NON_LOOPED_SCALE",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "float",
+					"name": "scale"
+				}
+			],
+			"return_type": "void",
+			"build": "2802"
 		},
 		"0x1E2E01C00837D26E": {
 			"name": "SET_PARTICLE_FX_NON_LOOPED_EMITTER_SIZE",
@@ -22865,8 +23043,8 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "float",
+					"name": "scale"
 				}
 			],
 			"return_type": "void",
@@ -23005,6 +23183,31 @@
 			"return_type": "void",
 			"build": "2545"
 		},
+		"0x170911F37F646F29": {
+			"name": "REGISTER_POSTFX_BULLET_IMPACT",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "float",
+					"name": "weaponWorldPosX"
+				},
+				{
+					"type": "float",
+					"name": "weaponWorldPosY"
+				},
+				{
+					"type": "float",
+					"name": "weaponWorldPosZ"
+				},
+				{
+					"type": "float",
+					"name": "intensity"
+				}
+			],
+			"return_type": "void",
+			"build": "2802"
+		},
 		"0x9B079E5221D984D3": {
 			"name": "FORCE_POSTFX_BULLET_IMPACTS_AFTER_HUD",
 			"jhash": "",
@@ -23021,7 +23224,7 @@
 		"0x6C38AF3693A69A91": {
 			"name": "USE_PARTICLE_FX_ASSET",
 			"jhash": "0x9C720B61",
-			"comment": "From the b678d decompiled scripts:\n\n GRAPHICS::_SET_PTFX_ASSET_NEXT_CALL(\"FM_Mission_Controler\");\n GRAPHICS::_SET_PTFX_ASSET_NEXT_CALL(\"scr_apartment_mp\");\n GRAPHICS::_SET_PTFX_ASSET_NEXT_CALL(\"scr_indep_fireworks\");\n GRAPHICS::_SET_PTFX_ASSET_NEXT_CALL(\"scr_mp_cig_plane\");\n GRAPHICS::_SET_PTFX_ASSET_NEXT_CALL(\"scr_mp_creator\");\n GRAPHICS::_SET_PTFX_ASSET_NEXT_CALL(\"scr_ornate_heist\");\n GRAPHICS::_SET_PTFX_ASSET_NEXT_CALL(\"scr_prison_break_heist_station\");\n\nFull list of particle effect dictionaries and effects by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/particleEffectsCompact.json",
+			"comment": "From the b678d decompiled scripts:\n\n GRAPHICS::USE_PARTICLE_FX_ASSET(\"FM_Mission_Controler\");\n GRAPHICS::USE_PARTICLE_FX_ASSET(\"scr_apartment_mp\");\n GRAPHICS::USE_PARTICLE_FX_ASSET(\"scr_indep_fireworks\");\n GRAPHICS::USE_PARTICLE_FX_ASSET(\"scr_mp_cig_plane\");\n GRAPHICS::USE_PARTICLE_FX_ASSET(\"scr_mp_creator\");\n GRAPHICS::USE_PARTICLE_FX_ASSET(\"scr_ornate_heist\");\n GRAPHICS::USE_PARTICLE_FX_ASSET(\"scr_prison_break_heist_station\");\n\nFull list of particle effect dictionaries and effects by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/particleEffectsCompact.json",
 			"params": [
 				{
 					"type": "const char*",
@@ -23104,23 +23307,23 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "float",
+					"name": "x"
 				},
 				{
-					"type": "Any",
-					"name": "p1"
+					"type": "float",
+					"name": "y"
 				},
 				{
-					"type": "Any",
-					"name": "p2"
+					"type": "float",
+					"name": "z"
 				},
 				{
-					"type": "Any",
-					"name": "p3"
+					"type": "float",
+					"name": "range"
 				},
 				{
-					"type": "Any",
+					"type": "float",
 					"name": "p4"
 				}
 			],
@@ -23150,23 +23353,23 @@
 			"comment": "Fades nearby decals within the range specified",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "float",
+					"name": "x"
 				},
 				{
-					"type": "Any",
-					"name": "p1"
+					"type": "float",
+					"name": "y"
 				},
 				{
-					"type": "Any",
-					"name": "p2"
+					"type": "float",
+					"name": "z"
 				},
 				{
-					"type": "Any",
+					"type": "float",
 					"name": "p3"
 				},
 				{
-					"type": "Any",
+					"type": "float",
 					"name": "p4"
 				}
 			],
@@ -23678,7 +23881,7 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
+					"type": "int*",
 					"name": "p0"
 				}
 			],
@@ -24330,12 +24533,12 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "int",
+					"name": "scaleformHandle"
 				},
 				{
-					"type": "Any",
-					"name": "p1"
+					"type": "BOOL",
+					"name": "toggle"
 				}
 			],
 			"return_type": "void",
@@ -24404,7 +24607,7 @@
 				},
 				{
 					"type": "int",
-					"name": "unk"
+					"name": "p9"
 				}
 			],
 			"return_type": "void",
@@ -24437,7 +24640,7 @@
 				},
 				{
 					"type": "int",
-					"name": "unk"
+					"name": "p5"
 				}
 			],
 			"return_type": "void",
@@ -24712,7 +24915,7 @@
 		"0xEF662D8D57E290B1": {
 			"name": "CALL_SCALEFORM_MOVIE_METHOD_WITH_NUMBER_AND_STRING",
 			"jhash": "0x6EAF56DE",
-			"comment": "Calls the Scaleform function and passes both float and string parameters (in their respective order).\n\nThe number of parameters passed to the function varies, so the end of the float parameters is represented by -1.0, and the end of the string parameters is represented by 0 (NULL).\n\nNOTE: The order of parameters in the function prototype is important! All float parameters must come first, followed by the string parameters.\n\nExamples:\n// function MY_FUNCTION(floatParam1, floatParam2, stringParam)\nGRAPHICS::_CALL_SCALEFORM_MOVIE_FUNCTION_MIXED_PARAMS(scaleform, \"MY_FUNCTION\", 10.0, 20.0, -1.0, -1.0, -1.0, \"String param\", 0, 0, 0, 0);\n\n// function MY_FUNCTION_2(floatParam, stringParam1, stringParam2)\nGRAPHICS::_CALL_SCALEFORM_MOVIE_FUNCTION_MIXED_PARAMS(scaleform, \"MY_FUNCTION_2\", 10.0, -1.0, -1.0, -1.0, -1.0, \"String param #1\", \"String param #2\", 0, 0, 0);",
+			"comment": "Calls the Scaleform function and passes both float and string parameters (in their respective order).\n\nThe number of parameters passed to the function varies, so the end of the float parameters is represented by -1.0, and the end of the string parameters is represented by 0 (NULL).\n\nNOTE: The order of parameters in the function prototype is important! All float parameters must come first, followed by the string parameters.\n\nExamples:\n// function MY_FUNCTION(floatParam1, floatParam2, stringParam)\nGRAPHICS::CALL_SCALEFORM_MOVIE_METHOD_WITH_NUMBER_AND_STRING(scaleform, \"MY_FUNCTION\", 10.0, 20.0, -1.0, -1.0, -1.0, \"String param\", 0, 0, 0, 0);\n\n// function MY_FUNCTION_2(floatParam, stringParam1, stringParam2)\nGRAPHICS::CALL_SCALEFORM_MOVIE_METHOD_WITH_NUMBER_AND_STRING(scaleform, \"MY_FUNCTION_2\", 10.0, -1.0, -1.0, -1.0, -1.0, \"String param #1\", \"String param #2\", 0, 0, 0);",
 			"params": [
 				{
 					"type": "int",
@@ -25422,7 +25625,7 @@
 				},
 				{
 					"type": "int",
-					"name": "p2"
+					"name": "slot"
 				},
 				{
 					"type": "float",
@@ -26684,16 +26887,16 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "const char*",
+					"name": "gxtLabel1"
 				},
 				{
-					"type": "Any",
+					"type": "int",
 					"name": "p1"
 				},
 				{
-					"type": "Any",
-					"name": "p2"
+					"type": "const char*",
+					"name": "gxtLabel2"
 				}
 			],
 			"return_type": "int",
@@ -26705,19 +26908,19 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "const char*",
+					"name": "gxtLabel1"
 				},
 				{
-					"type": "Any",
+					"type": "int",
 					"name": "p1"
 				},
 				{
-					"type": "Any",
-					"name": "p2"
+					"type": "const char*",
+					"name": "gxtLabel2"
 				},
 				{
-					"type": "Any",
+					"type": "int",
 					"name": "p3"
 				}
 			],
@@ -27446,7 +27649,7 @@
 		"0x169BD9382084C8C0": {
 			"name": "GET_CHARACTER_FROM_AUDIO_CONVERSATION_FILENAME",
 			"jhash": "0x34A396EE",
-			"comment": "Returns a substring of a specified length starting at a specified position.\n\nExample:\n// Get \"STRING\" text from \"MY_STRING\"\nsubStr = HUD::_GET_TEXT_SUBSTRING(\"MY_STRING\", 3, 6);",
+			"comment": "Returns a substring of a specified length starting at a specified position.\n\nExample:\n// Get \"STRING\" text from \"MY_STRING\"\nsubStr = HUD::GET_CHARACTER_FROM_AUDIO_CONVERSATION_FILENAME(\"MY_STRING\", 3, 6);",
 			"params": [
 				{
 					"type": "const char*",
@@ -27470,7 +27673,7 @@
 		"0xB2798643312205C5": {
 			"name": "GET_CHARACTER_FROM_AUDIO_CONVERSATION_FILENAME_WITH_BYTE_LIMIT",
 			"jhash": "0x0183A66C",
-			"comment": "Returns a substring of a specified length starting at a specified position. The result is guaranteed not to exceed the specified max length.\n\nNOTE: The 'maxLength' parameter might actually be the size of the buffer that is returned. More research is needed. -CL69\n\nExample:\n// Condensed example of how Rockstar uses this function\nstrLen = HUD::GET_LENGTH_OF_LITERAL_STRING(MISC::GET_ONSCREEN_KEYBOARD_RESULT());\nsubStr = HUD::_GET_TEXT_SUBSTRING_SAFE(MISC::GET_ONSCREEN_KEYBOARD_RESULT(), 0, strLen, 63);\n\n--\n\n\"fm_race_creator.ysc\", line 85115:\n// parameters modified for clarity\nBOOL sub_8e5aa(char *text, int length) {\n    for (i = 0; i <= (length - 2); i += 1) {\n        if (!MISC::ARE_STRINGS_EQUAL(HUD::_GET_TEXT_SUBSTRING_SAFE(text, i, i + 1, 1), \" \")) {\n            return FALSE;\n        }\n    }\n    return TRUE;\n}",
+			"comment": "Returns a substring of a specified length starting at a specified position. The result is guaranteed not to exceed the specified max length.\n\nNOTE: The 'maxLength' parameter might actually be the size of the buffer that is returned. More research is needed. -CL69\n\nExample:\n// Condensed example of how Rockstar uses this function\nstrLen = HUD::GET_LENGTH_OF_LITERAL_STRING(MISC::GET_ONSCREEN_KEYBOARD_RESULT());\nsubStr = HUD::GET_CHARACTER_FROM_AUDIO_CONVERSATION_FILENAME_WITH_BYTE_LIMIT(MISC::GET_ONSCREEN_KEYBOARD_RESULT(), 0, strLen, 63);\n\n--\n\n\"fm_race_creator.ysc\", line 85115:\n// parameters modified for clarity\nBOOL sub_8e5aa(char *text, int length) {\n    for (i = 0; i <= (length - 2); i += 1) {\n        if (!MISC::ARE_STRINGS_EQUAL(HUD::GET_CHARACTER_FROM_AUDIO_CONVERSATION_FILENAME_WITH_BYTE_LIMIT(text, i, i + 1, 1), \" \")) {\n            return FALSE;\n        }\n    }\n    return TRUE;\n}",
 			"params": [
 				{
 					"type": "const char*",
@@ -27498,7 +27701,7 @@
 		"0xCE94AEBA5D82908A": {
 			"name": "GET_CHARACTER_FROM_AUDIO_CONVERSATION_FILENAME_BYTES",
 			"jhash": "0xFA6373BB",
-			"comment": "Returns a substring that is between two specified positions. The length of the string will be calculated using (endPosition - startPosition).\n\nExample:\n// Get \"STRING\" text from \"MY_STRING\"\nsubStr = HUD::_GET_TEXT_SUBSTRING_SLICE(\"MY_STRING\", 3, 9);\n// Overflows are possibly replaced with underscores (needs verification)\nsubStr = HUD::_GET_TEXT_SUBSTRING_SLICE(\"MY_STRING\", 3, 10); // \"STRING_\"?",
+			"comment": "Returns a substring that is between two specified positions. The length of the string will be calculated using (endPosition - startPosition).\n\nExample:\n// Get \"STRING\" text from \"MY_STRING\"\nsubStr = HUD::GET_CHARACTER_FROM_AUDIO_CONVERSATION_FILENAME_BYTES(\"MY_STRING\", 3, 9);\n// Overflows are possibly replaced with underscores (needs verification)\nsubStr = HUD::GET_CHARACTER_FROM_AUDIO_CONVERSATION_FILENAME_BYTES(\"MY_STRING\", 3, 10); // \"STRING_\"?",
 			"params": [
 				{
 					"type": "const char*",
@@ -29366,7 +29569,7 @@
 		"0x14892474891E09EB": {
 			"name": "SET_BLIP_SECONDARY_COLOUR",
 			"jhash": "0xC6384D32",
-			"comment": "",
+			"comment": "Can be used to give blips any RGB colour with SET_BLIP_COLOUR(blip, 84).",
 			"params": [
 				{
 					"type": "Blip",
@@ -29877,6 +30080,23 @@
 				"_SHOW_HAS_COMPLETED_INDICATOR_ON_BLIP"
 			]
 		},
+		"0x19BD6E3C0E16A8FA": {
+			"name": "SHOW_FOR_SALE_ICON_ON_BLIP",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Blip",
+					"name": "blip"
+				},
+				{
+					"type": "BOOL",
+					"name": "toggle"
+				}
+			],
+			"return_type": "void",
+			"build": "2802"
+		},
 		"0x5FBCA48327B914DF": {
 			"name": "SHOW_HEADING_INDICATOR_ON_BLIP",
 			"jhash": "0xD1C3D71B",
@@ -30167,31 +30387,31 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "Blip",
+					"name": "blip"
 				},
 				{
-					"type": "Any",
+					"type": "float",
 					"name": "p1"
 				},
 				{
-					"type": "Any",
+					"type": "float",
 					"name": "p2"
 				},
 				{
-					"type": "Any",
+					"type": "float",
 					"name": "p3"
 				},
 				{
-					"type": "Any",
+					"type": "float",
 					"name": "p4"
 				},
 				{
-					"type": "Any",
+					"type": "float",
 					"name": "p5"
 				},
 				{
-					"type": "Any",
+					"type": "float",
 					"name": "p6"
 				},
 				{
@@ -30199,7 +30419,7 @@
 					"name": "p7"
 				},
 				{
-					"type": "Any",
+					"type": "int",
 					"name": "p8"
 				}
 			],
@@ -30396,15 +30616,15 @@
 		"0xA17784FCA9548D15": {
 			"name": "SET_FAKE_GPS_PLAYER_POSITION_THIS_FRAME",
 			"jhash": "",
-			"comment": "",
+			"comment": "p2 maybe z float?",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "float",
+					"name": "x"
 				},
 				{
-					"type": "Any",
-					"name": "p1"
+					"type": "float",
+					"name": "y"
 				},
 				{
 					"type": "Any",
@@ -30460,6 +30680,14 @@
 				"_SET_TOGGLE_MINIMAP_HEIST_ISLAND"
 			]
 		},
+		"0x35CCE12EAECB4A51": {
+			"name": "_SET_PAUSE_EXTERIOR_RENDERING_WHILE_IN_INTERIOR",
+			"jhash": "",
+			"comment": "",
+			"params": [],
+			"return_type": "void",
+			"build": "b2944"
+		},
 		"0x6D14BFDC33B34F55": {
 			"name": "DONT_TILT_MINIMAP_THIS_FRAME",
 			"jhash": "0x334EFD46",
@@ -30470,6 +30698,14 @@
 			"old_names": [
 				"_CENTER_PLAYER_ON_RADAR_THIS_FRAME"
 			]
+		},
+		"0x89DA85D949CE57A0": {
+			"name": "DONT_ZOOM_MINIMAP_WHEN_RUNNING_THIS_FRAME",
+			"jhash": "",
+			"comment": "",
+			"params": [],
+			"return_type": "void",
+			"build": "2802"
 		},
 		"0x55F5A5F07134DE60": {
 			"name": "DONT_ZOOM_MINIMAP_WHEN_SNIPING_THIS_FRAME",
@@ -30521,7 +30757,7 @@
 		"0x170F541E1CADD1DE": {
 			"name": "USE_FAKE_MP_CASH",
 			"jhash": "0x6253B9D7",
-			"comment": "Related to displaying cash on the HUD\nAlways called before HUD::_SET_SINGLEPLAYER_HUD_CASH in decompiled scripts",
+			"comment": "Related to displaying cash on the HUD\nAlways called before HUD::CHANGE_FAKE_MP_CASH in decompiled scripts",
 			"params": [
 				{
 					"type": "BOOL",
@@ -30638,7 +30874,7 @@
 					"name": "p0"
 				},
 				{
-					"type": "int",
+					"type": "BOOL",
 					"name": "p1"
 				}
 			],
@@ -33238,18 +33474,18 @@
 			"params": [
 				{
 					"type": "Hash",
-					"name": "p0"
+					"name": "statHash"
 				},
 				{
-					"type": "Any*",
-					"name": "p1"
-				},
-				{
-					"type": "Any",
-					"name": "p2"
+					"type": "int*",
+					"name": "outValue"
 				},
 				{
 					"type": "int",
+					"name": "mask"
+				},
+				{
+					"type": "BOOL",
 					"name": "p3"
 				}
 			],
@@ -33262,23 +33498,23 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "Hash",
+					"name": "statHash"
 				},
 				{
 					"type": "Any*",
-					"name": "p1"
+					"name": "outValue"
 				},
 				{
-					"type": "Any",
+					"type": "int",
 					"name": "p2"
 				},
 				{
-					"type": "Any",
-					"name": "p3"
+					"type": "int",
+					"name": "mask"
 				},
 				{
-					"type": "Any",
+					"type": "BOOL",
 					"name": "p4"
 				}
 			],
@@ -33291,12 +33527,12 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "Hash",
+					"name": "statHash"
 				},
 				{
 					"type": "float*",
-					"name": "p1"
+					"name": "outValue"
 				}
 			],
 			"return_type": "BOOL",
@@ -33308,15 +33544,15 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "float",
+					"name": "statHash"
 				},
 				{
-					"type": "Any*",
-					"name": "p1"
+					"type": "float*",
+					"name": "outValue"
 				},
 				{
-					"type": "Any",
+					"type": "BOOL",
 					"name": "p2"
 				}
 			],
@@ -33330,11 +33566,11 @@
 			"params": [
 				{
 					"type": "Hash",
-					"name": "p0"
+					"name": "statHash"
 				},
 				{
-					"type": "Any*",
-					"name": "p1"
+					"type": "BOOL*",
+					"name": "outValue"
 				}
 			],
 			"return_type": "BOOL",
@@ -33421,8 +33657,13 @@
 		"0x75D3691713C3B05A": {
 			"name": "OPEN_SOCIAL_CLUB_MENU",
 			"jhash": "0x57218529",
-			"comment": "Uses the `SOCIAL_CLUB2` scaleform.",
-			"params": [],
+			"comment": "Uses the `SOCIAL_CLUB2` scaleform.\nmenu: GALLERY, MISSIONS, CREWS, MIGRATE, PLAYLISTS, JOBS",
+			"params": [
+				{
+					"type": "Hash",
+					"name": "menu"
+				}
+			],
 			"return_type": "void",
 			"build": "323"
 		},
@@ -34350,8 +34591,8 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "BOOL",
+					"name": "toggle"
 				}
 			],
 			"return_type": "void",
@@ -37052,6 +37293,14 @@
 			"return_type": "BOOL",
 			"build": "323"
 		},
+		"0xD19C0826DC20CF1C": {
+			"name": "ARE_CREDITS_RUNNING",
+			"jhash": "",
+			"comment": "",
+			"params": [],
+			"return_type": "BOOL",
+			"build": "2802"
+		},
 		"0x9DC711BC69C548DF": {
 			"name": "TERMINATE_ALL_SCRIPTS_WITH_THIS_NAME",
 			"jhash": "0x9F861FD4",
@@ -37290,26 +37539,26 @@
 		"0xC0714D0A7EEECA54": {
 			"name": "REGISTER_SAVE_HOUSE",
 			"jhash": "0x39C1849A",
-			"comment": "",
+			"comment": "returns savehouseHandle",
 			"params": [
 				{
 					"type": "float",
-					"name": "p0"
+					"name": "x"
 				},
 				{
 					"type": "float",
-					"name": "p1"
+					"name": "y"
 				},
 				{
 					"type": "float",
-					"name": "p2"
+					"name": "z"
 				},
 				{
 					"type": "float",
 					"name": "p3"
 				},
 				{
-					"type": "Any*",
+					"type": "const char*",
 					"name": "p4"
 				},
 				{
@@ -37330,8 +37579,8 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "int",
+					"name": "savehouseHandle"
 				},
 				{
 					"type": "BOOL",
@@ -38247,6 +38496,55 @@
 			"old_names": [
 				"_GET_IS_PROJECTILE_TYPE_IN_AREA"
 			]
+		},
+		"0x3DA8C28346B62CED": {
+			"name": "GET_COORDS_OF_PROJECTILE_TYPE_IN_ANGLED_AREA",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "float",
+					"name": "vecAngledAreaPoint1X"
+				},
+				{
+					"type": "float",
+					"name": "vecAngledAreaPoint1Y"
+				},
+				{
+					"type": "float",
+					"name": "vecAngledAreaPoint1Z"
+				},
+				{
+					"type": "float",
+					"name": "vecAngledAreaPoint2X"
+				},
+				{
+					"type": "float",
+					"name": "vecAngledAreaPoint2Y"
+				},
+				{
+					"type": "float",
+					"name": "vecAngledAreaPoint2Z"
+				},
+				{
+					"type": "float",
+					"name": "distanceOfOppositeFace"
+				},
+				{
+					"type": "Hash",
+					"name": "weaponType"
+				},
+				{
+					"type": "Vector3*",
+					"name": "positionOut"
+				},
+				{
+					"type": "BOOL",
+					"name": "bIsPlayer"
+				}
+			],
+			"return_type": "BOOL",
+			"build": "2802"
 		},
 		"0xDFB4138EEFED7B81": {
 			"name": "GET_COORDS_OF_PROJECTILE_TYPE_WITHIN_DISTANCE",
@@ -40039,7 +40337,7 @@
 			"params": [
 				{
 					"type": "float",
-					"name": "p0"
+					"name": "distance"
 				}
 			],
 			"return_type": "void",
@@ -40573,11 +40871,11 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
+					"type": "int",
 					"name": "p0"
 				},
 				{
-					"type": "Any",
+					"type": "int",
 					"name": "p1"
 				},
 				{
@@ -40606,8 +40904,8 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "Player",
+					"name": "player"
 				},
 				{
 					"type": "Any",
@@ -41162,7 +41460,7 @@
 			"params": [
 				{
 					"type": "float",
-					"name": "p0"
+					"name": "horizontalPan"
 				}
 			],
 			"return_type": "void",
@@ -41175,7 +41473,7 @@
 			"params": [
 				{
 					"type": "float",
-					"name": "p0"
+					"name": "vertPan"
 				}
 			],
 			"return_type": "void",
@@ -41188,7 +41486,7 @@
 			"params": [
 				{
 					"type": "float",
-					"name": "p0"
+					"name": "roll"
 				}
 			],
 			"return_type": "void",
@@ -41201,7 +41499,7 @@
 			"params": [
 				{
 					"type": "float",
-					"name": "p0"
+					"name": "distanceScaling"
 				}
 			],
 			"return_type": "void",
@@ -41214,7 +41512,7 @@
 			"params": [
 				{
 					"type": "float",
-					"name": "p0"
+					"name": "yaw"
 				}
 			],
 			"return_type": "void",
@@ -41227,7 +41525,7 @@
 			"params": [
 				{
 					"type": "float",
-					"name": "p0"
+					"name": "roll"
 				}
 			],
 			"return_type": "void",
@@ -41240,7 +41538,7 @@
 			"params": [
 				{
 					"type": "float",
-					"name": "p0"
+					"name": "pitch"
 				}
 			],
 			"return_type": "void",
@@ -41414,7 +41712,7 @@
 				},
 				{
 					"type": "BOOL",
-					"name": "unk"
+					"name": "p3"
 				}
 			],
 			"return_type": "void",
@@ -41930,19 +42228,6 @@
 			"return_type": "void",
 			"build": "323"
 		},
-		"0x02CE1D6AC0FC73EA": {
-			"name": "NETWORK_EARN_FROM_ROCKSTAR",
-			"jhash": "0x5A3733CC",
-			"comment": "",
-			"params": [
-				{
-					"type": "int",
-					"name": "amount"
-				}
-			],
-			"return_type": "void",
-			"build": "323"
-		},
 		"0xB539BD8A4C1EECF8": {
 			"name": "NETWORK_EARN_FROM_VEHICLE",
 			"jhash": "0xF803589D",
@@ -42032,19 +42317,19 @@
 		"0x6EA318C91C1A8786": {
 			"name": "NETWORK_EARN_FROM_DAILY_OBJECTIVES",
 			"jhash": "0xAB6BD72F",
-			"comment": "",
+			"comment": "type either Monthly,Weekly,Daily",
 			"params": [
 				{
 					"type": "int",
-					"name": "p0"
+					"name": "amount"
 				},
 				{
 					"type": "const char*",
-					"name": "p1"
+					"name": "type"
 				},
 				{
 					"type": "int",
-					"name": "p2"
+					"name": "characterSlot"
 				}
 			],
 			"return_type": "void",
@@ -42295,6 +42580,14 @@
 				{
 					"type": "Any",
 					"name": "p0"
+				},
+				{
+					"type": "Any",
+					"name": "p1"
+				},
+				{
+					"type": "Any",
+					"name": "p2"
 				}
 			],
 			"return_type": "void",
@@ -42327,6 +42620,10 @@
 				{
 					"type": "Any",
 					"name": "p4"
+				},
+				{
+					"type": "Any",
+					"name": "p5"
 				}
 			],
 			"return_type": "void",
@@ -42721,6 +43018,10 @@
 				{
 					"type": "Any",
 					"name": "p3"
+				},
+				{
+					"type": "Any",
+					"name": "p4"
 				}
 			],
 			"return_type": "void",
@@ -43960,6 +44261,10 @@
 				{
 					"type": "Any",
 					"name": "p2"
+				},
+				{
+					"type": "Any",
+					"name": "p3"
 				}
 			],
 			"return_type": "void",
@@ -44184,6 +44489,10 @@
 				{
 					"type": "Any",
 					"name": "p3"
+				},
+				{
+					"type": "Any",
+					"name": "p4"
 				}
 			],
 			"return_type": "void",
@@ -44212,6 +44521,10 @@
 				{
 					"type": "Any",
 					"name": "p3"
+				},
+				{
+					"type": "Any",
+					"name": "p4"
 				}
 			],
 			"return_type": "void",
@@ -45465,7 +45778,7 @@
 				},
 				{
 					"type": "const char*",
-					"name": "unk"
+					"name": "p1"
 				},
 				{
 					"type": "Any",
@@ -45489,7 +45802,7 @@
 				},
 				{
 					"type": "const char*",
-					"name": "unk"
+					"name": "p1"
 				},
 				{
 					"type": "int",
@@ -45599,7 +45912,7 @@
 				},
 				{
 					"type": "const char*",
-					"name": "unk"
+					"name": "p1"
 				}
 			],
 			"return_type": "void",
@@ -45619,7 +45932,7 @@
 				},
 				{
 					"type": "const char*",
-					"name": "unk"
+					"name": "p1"
 				}
 			],
 			"return_type": "void",
@@ -45901,14 +46214,6 @@
 				{
 					"type": "Any",
 					"name": "p3"
-				},
-				{
-					"type": "Any",
-					"name": "p4"
-				},
-				{
-					"type": "Any",
-					"name": "p5"
 				}
 			],
 			"return_type": "void",
@@ -46206,15 +46511,15 @@
 		"0x7049BF858601DC0F": {
 			"name": "NETWORK_SPEND_ARENA_SPECTATOR_BOX",
 			"jhash": "",
-			"comment": "",
+			"comment": "type either, 1 for cam spectate, 2 for drone",
 			"params": [
 				{
 					"type": "int",
 					"name": "amount"
 				},
 				{
-					"type": "Any",
-					"name": "p1"
+					"type": "int",
+					"name": "type"
 				},
 				{
 					"type": "BOOL",
@@ -47174,15 +47479,15 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "int",
+					"name": "amount1"
 				},
 				{
 					"type": "Any",
 					"name": "p1"
 				},
 				{
-					"type": "Any",
+					"type": "BOOL",
 					"name": "p2"
 				},
 				{
@@ -47190,20 +47495,20 @@
 					"name": "p3"
 				},
 				{
-					"type": "Any",
+					"type": "int",
 					"name": "p4"
 				},
 				{
-					"type": "Any",
+					"type": "int",
 					"name": "p5"
 				},
 				{
-					"type": "Any",
+					"type": "int",
 					"name": "p6"
 				},
 				{
-					"type": "Any",
-					"name": "p7"
+					"type": "int",
+					"name": "amount2"
 				},
 				{
 					"type": "Any",
@@ -47306,8 +47611,8 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "int",
+					"name": "amount1"
 				},
 				{
 					"type": "Any",
@@ -47322,11 +47627,11 @@
 					"name": "p3"
 				},
 				{
-					"type": "Any",
-					"name": "p4"
+					"type": "int",
+					"name": "amount2"
 				},
 				{
-					"type": "Any",
+					"type": "int",
 					"name": "p5"
 				}
 			],
@@ -47387,8 +47692,8 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "int",
+					"name": "amount1"
 				},
 				{
 					"type": "Any",
@@ -47399,8 +47704,8 @@
 					"name": "p2"
 				},
 				{
-					"type": "Any",
-					"name": "p3"
+					"type": "int",
+					"name": "amount2"
 				},
 				{
 					"type": "Any",
@@ -47570,6 +47875,10 @@
 				{
 					"type": "Any",
 					"name": "p1"
+				},
+				{
+					"type": "Any",
+					"name": "p2"
 				}
 			],
 			"return_type": "void",
@@ -48502,6 +48811,750 @@
 			"old_names": [
 				"_NETWORK_EARN_FROM_BUSINESS_HUB_SOURCE"
 			]
+		},
+		"0xA2ED36DCF0FCA413": {
+			"name": "_NETWORK_SPEND_BUY_MFGARAGE",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Any",
+					"name": "p0"
+				},
+				{
+					"type": "Any",
+					"name": "p1"
+				},
+				{
+					"type": "Any",
+					"name": "p2"
+				},
+				{
+					"type": "Any",
+					"name": "p3"
+				}
+			],
+			"return_type": "void",
+			"build": "2802"
+		},
+		"0xCF8F346DDDC66643": {
+			"name": "_NETWORK_SPEND_UPGRADE_MFGARAGE",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Any",
+					"name": "p0"
+				},
+				{
+					"type": "Any",
+					"name": "p1"
+				},
+				{
+					"type": "Any",
+					"name": "p2"
+				},
+				{
+					"type": "Any",
+					"name": "p3"
+				}
+			],
+			"return_type": "void",
+			"build": "2802"
+		},
+		"0xB48185C0CA67B16B": {
+			"name": "_NETWORK_SPEND_BUY_SUPPLIES",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "int",
+					"name": "p0"
+				},
+				{
+					"type": "BOOL",
+					"name": "p1"
+				},
+				{
+					"type": "BOOL",
+					"name": "p2"
+				},
+				{
+					"type": "int",
+					"name": "p3"
+				}
+			],
+			"return_type": "void",
+			"build": "2802",
+			"unused": true
+		},
+		"0xF1E26A7924327152": {
+			"name": "_NETWORK_SPEND_BUY_ACID_LAB",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Any",
+					"name": "p0"
+				},
+				{
+					"type": "Any",
+					"name": "p1"
+				},
+				{
+					"type": "Any",
+					"name": "p2"
+				},
+				{
+					"type": "Any",
+					"name": "p3"
+				}
+			],
+			"return_type": "void",
+			"build": "2802"
+		},
+		"0x110EE9D486C23126": {
+			"name": "_NETWORK_SPEND_UPGRADE_ACID_LAB_EQUIPMENT",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Any",
+					"name": "p0"
+				},
+				{
+					"type": "Any",
+					"name": "p1"
+				},
+				{
+					"type": "Any",
+					"name": "p2"
+				},
+				{
+					"type": "Any",
+					"name": "p3"
+				}
+			],
+			"return_type": "void",
+			"build": "2802"
+		},
+		"0xA7D541C9ACD63133": {
+			"name": "_NETWORK_SPEND_UPGRADE_ACID_LAB_ARMOR",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "int",
+					"name": "p0"
+				},
+				{
+					"type": "BOOL",
+					"name": "p1"
+				},
+				{
+					"type": "BOOL",
+					"name": "p2"
+				},
+				{
+					"type": "int",
+					"name": "p3"
+				}
+			],
+			"return_type": "void",
+			"build": "2802",
+			"unused": true
+		},
+		"0x2940558E05BCC2EC": {
+			"name": "_NETWORK_SPEND_UPGRADE_ACID_LAB_SCOOP",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "int",
+					"name": "p0"
+				},
+				{
+					"type": "BOOL",
+					"name": "p1"
+				},
+				{
+					"type": "BOOL",
+					"name": "p2"
+				},
+				{
+					"type": "int",
+					"name": "p3"
+				}
+			],
+			"return_type": "void",
+			"build": "2802",
+			"unused": true
+		},
+		"0x4B99AB08C92C54E4": {
+			"name": "_NETWORK_SPEND_UPGRADE_ACID_LAB_MINES",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "int",
+					"name": "p0"
+				},
+				{
+					"type": "BOOL",
+					"name": "p1"
+				},
+				{
+					"type": "BOOL",
+					"name": "p2"
+				},
+				{
+					"type": "int",
+					"name": "p3"
+				}
+			],
+			"return_type": "void",
+			"build": "2802",
+			"unused": true
+		},
+		"0x842B1C5AF61ACDE9": {
+			"name": "_NETWORK_SPEND_RENAME_ACID_LAB",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Any",
+					"name": "p0"
+				},
+				{
+					"type": "Any",
+					"name": "p1"
+				},
+				{
+					"type": "Any",
+					"name": "p2"
+				},
+				{
+					"type": "Any",
+					"name": "p3"
+				}
+			],
+			"return_type": "void",
+			"build": "2802"
+		},
+		"0x446798F7495DD7D8": {
+			"name": "_NETWORK_SPEND_RENAME_ACID_PRODUCT",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Any",
+					"name": "p0"
+				},
+				{
+					"type": "Any",
+					"name": "p1"
+				},
+				{
+					"type": "Any",
+					"name": "p2"
+				},
+				{
+					"type": "Any",
+					"name": "p3"
+				}
+			],
+			"return_type": "void",
+			"build": "2802"
+		},
+		"0xDDF047577F1A02A7": {
+			"name": "_NETWORK_EARN_AWARD_JUGGALO_MISSION",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Any",
+					"name": "p0"
+				},
+				{
+					"type": "Any",
+					"name": "p1"
+				}
+			],
+			"return_type": "void",
+			"build": "2802"
+		},
+		"0xD1A8165767AD2D23": {
+			"name": "_NETWORK_EARN_AWARD_ACID_LAB",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Any",
+					"name": "p0"
+				},
+				{
+					"type": "Any",
+					"name": "p1"
+				}
+			],
+			"return_type": "void",
+			"build": "2802"
+		},
+		"0xC30650FA74A19D02": {
+			"name": "_NETWORK_EARN_AWARD_DAILY_STASH",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Any",
+					"name": "p0"
+				},
+				{
+					"type": "Any",
+					"name": "p1"
+				}
+			],
+			"return_type": "void",
+			"build": "2802"
+		},
+		"0xD01EBAEA1F905EF6": {
+			"name": "_NETWORK_EARN_AWARD_DEAD_DROP",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Any",
+					"name": "p0"
+				},
+				{
+					"type": "Any",
+					"name": "p1"
+				}
+			],
+			"return_type": "void",
+			"build": "2802"
+		},
+		"0xBEAFBB1B98B7EF55": {
+			"name": "_NETWORK_EARN_AWARD_RANDOM_EVENT",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Any",
+					"name": "p0"
+				},
+				{
+					"type": "Any",
+					"name": "p1"
+				}
+			],
+			"return_type": "void",
+			"build": "2802"
+		},
+		"0xA914768AD35CD3A5": {
+			"name": "_NETWORK_EARN_AWARD_TAXI",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Any",
+					"name": "p0"
+				},
+				{
+					"type": "Any",
+					"name": "p1"
+				}
+			],
+			"return_type": "void",
+			"build": "2802"
+		},
+		"0xA81017EE1324FDFE": {
+			"name": "_NETWORK_EARN_STREET_DEALER",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Any",
+					"name": "p0"
+				},
+				{
+					"type": "Any",
+					"name": "p1"
+				}
+			],
+			"return_type": "void",
+			"build": "2802"
+		},
+		"0x79B656937DF6DF5D": {
+			"name": "_NETWORK_EARN_SELL_ACID",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Any",
+					"name": "p0"
+				},
+				{
+					"type": "Any",
+					"name": "p1"
+				}
+			],
+			"return_type": "void",
+			"build": "2802"
+		},
+		"0xE3942D59E8A7F70D": {
+			"name": "_NETWORK_EARN_SETUP_PARTICIPATION_ACID_LAB",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Any",
+					"name": "p0"
+				},
+				{
+					"type": "Any",
+					"name": "p1"
+				}
+			],
+			"return_type": "void",
+			"build": "2802"
+		},
+		"0x136F11B5DF1B304D": {
+			"name": "_NETWORK_EARN_SOURCE_PARTICIPATION_ACID_LAB",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Any",
+					"name": "p0"
+				},
+				{
+					"type": "Any",
+					"name": "p1"
+				}
+			],
+			"return_type": "void",
+			"build": "2802"
+		},
+		"0xCA3EF9B09A8D76B4": {
+			"name": "_NETWORK_EARN_SELL_PARTICIPATION_ACID_LAB",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Any",
+					"name": "p0"
+				},
+				{
+					"type": "Any",
+					"name": "p1"
+				}
+			],
+			"return_type": "void",
+			"build": "2802"
+		},
+		"0xE01D10BA8CD53621": {
+			"name": "_NETWORK_EARN_JUGGALO_STORY_MISSION",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Any",
+					"name": "p0"
+				},
+				{
+					"type": "Any",
+					"name": "p1"
+				}
+			],
+			"return_type": "void",
+			"build": "2802"
+		},
+		"0x40FF6CCCC476185C": {
+			"name": "_NETWORK_EARN_JUGGALO_STORY_MISSION_PARTICIPATION",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Any",
+					"name": "p0"
+				},
+				{
+					"type": "Any",
+					"name": "p1"
+				}
+			],
+			"return_type": "void",
+			"build": "2802"
+		},
+		"0xCE4452AE85F5E252": {
+			"name": "_NETWORK_EARN_FOOLIGAN_JOB",
+			"jhash": "",
+			"comment": "JUGGALO_PHONE_MISSION...",
+			"params": [
+				{
+					"type": "Any",
+					"name": "p0"
+				},
+				{
+					"type": "Any",
+					"name": "p1"
+				}
+			],
+			"return_type": "void",
+			"build": "2802"
+		},
+		"0xC376B92D0E060970": {
+			"name": "_NETWORK_EARN_FOOLIGAN_JOB_PARTICIPATION",
+			"jhash": "",
+			"comment": "JUGGALO_PHONE_MISSION_PARTICIPATION...",
+			"params": [
+				{
+					"type": "Any",
+					"name": "p0"
+				},
+				{
+					"type": "Any",
+					"name": "p1"
+				}
+			],
+			"return_type": "void",
+			"build": "2802"
+		},
+		"0x991E1588FAD9019D": {
+			"name": "_NETWORK_EARN_TAXI_JOB",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Any",
+					"name": "p0"
+				},
+				{
+					"type": "Any",
+					"name": "p1"
+				}
+			],
+			"return_type": "void",
+			"build": "2802"
+		},
+		"0xCABC9874AFA70D6D": {
+			"name": "_NETWORK_EARN_DAILY_STASH_HOUSE_COMPLETED",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Any",
+					"name": "p0"
+				},
+				{
+					"type": "Any",
+					"name": "p1"
+				}
+			],
+			"return_type": "void",
+			"build": "2802"
+		},
+		"0x9C0C6BD0F94CE391": {
+			"name": "_NETWORK_EARN_DAILY_STASH_HOUSE_PARTICIPATION",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Any",
+					"name": "p0"
+				},
+				{
+					"type": "Any",
+					"name": "p1"
+				}
+			],
+			"return_type": "void",
+			"build": "2802"
+		},
+		"0x55F006B9D4A46C1D": {
+			"name": "_NETWORK_EARN_AVENGER",
+			"jhash": "",
+			"comment": "Used for SERVICE_EARN_AVENGER_OPERATIONS & SERVICE_EARN_AVENGER_OPS_BONUS",
+			"params": [
+				{
+					"type": "int",
+					"name": "amount"
+				},
+				{
+					"type": "int",
+					"name": "p1"
+				}
+			],
+			"return_type": "void",
+			"build": "2944"
+		},
+		"0xDEA273D5F8A9661A": {
+			"name": "_NETWORK_EARN_SMUGGLER_OPS",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Any",
+					"name": "p0"
+				},
+				{
+					"type": "Any",
+					"name": "p1"
+				},
+				{
+					"type": "Any",
+					"name": "p2"
+				}
+			],
+			"return_type": "void",
+			"build": "2944"
+		},
+		"0xDCEF983C24191997": {
+			"name": "_NETWORK_EARN_BONUS_OBJECTIVE",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "int",
+					"name": "amount"
+				},
+				{
+					"type": "Any",
+					"name": "p1"
+				},
+				{
+					"type": "Any",
+					"name": "p2"
+				}
+			],
+			"return_type": "void",
+			"build": "2944"
+		},
+		"0xF8332B06F0EECC9C": {
+			"name": "_NETWORK_EARN_PROGRESS_HUB",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Any",
+					"name": "p0"
+				},
+				{
+					"type": "Any",
+					"name": "p1"
+				}
+			],
+			"return_type": "void",
+			"build": "2944"
+		},
+		"0x8C7E8D6F96C9E948": {
+			"name": "_NETWORK_SPENT_AIR_FREIGHT",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "int",
+					"name": "hangarCargoSourcingPrice"
+				},
+				{
+					"type": "BOOL",
+					"name": "fromBank"
+				},
+				{
+					"type": "BOOL",
+					"name": "fromBankAndWallet"
+				},
+				{
+					"type": "int",
+					"name": "cost"
+				},
+				{
+					"type": "int",
+					"name": "warehouseId"
+				},
+				{
+					"type": "int",
+					"name": "warehouseSlot"
+				}
+			],
+			"return_type": "void",
+			"build": "2944"
+		},
+		"0xED1B407BADA42CEC": {
+			"name": "_NETWORK_SPENT_SKIP_CARGO_SOURCE_SETUP",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "int",
+					"name": "amount"
+				},
+				{
+					"type": "BOOL",
+					"name": "fromBank"
+				},
+				{
+					"type": "BOOL",
+					"name": "fromBankAndWallet"
+				},
+				{
+					"type": "int",
+					"name": "cost"
+				}
+			],
+			"return_type": "void",
+			"build": "2944"
+		},
+		"0x95CE79A6939C537A": {
+			"name": "_NETWORK_SPENT_STEALTH_MODULE",
+			"jhash": "",
+			"comment": "Hash p3 = STEALTH_MODULE",
+			"params": [
+				{
+					"type": "int",
+					"name": "amount"
+				},
+				{
+					"type": "BOOL",
+					"name": "fromBank"
+				},
+				{
+					"type": "BOOL",
+					"name": "fromBankAndWallet"
+				},
+				{
+					"type": "Hash",
+					"name": "p3"
+				}
+			],
+			"return_type": "void",
+			"build": "2944"
+		},
+		"0xD687100F616163F4": {
+			"name": "_NETWORK_SPENT_MISSILE_JAMMER",
+			"jhash": "",
+			"comment": "Hash p3 = MISSILE_JAMMER",
+			"params": [
+				{
+					"type": "int",
+					"name": "amount"
+				},
+				{
+					"type": "BOOL",
+					"name": "fromBank"
+				},
+				{
+					"type": "BOOL",
+					"name": "fromBankAndWallet"
+				},
+				{
+					"type": "Hash",
+					"name": "p3"
+				}
+			],
+			"return_type": "void",
+			"build": "2944"
 		},
 		"0x76EF28DA05EA395A": {
 			"name": "NETWORK_GET_VC_BANK_BALANCE",
@@ -49908,7 +50961,7 @@
 		"0x330ED4D05491934F": {
 			"name": "NETWORK_SESSION_DO_FREEROAM_QUICKMATCH",
 			"jhash": "",
-			"comment": "unknown params\n\np0 = 0, 2, or 999 (The global is 999 by default.)\np1 = 0 (Always in every script it's found in atleast.)\np2 = 0, 3, or 4 (Based on a var that is determined by a function.)\np3 = maxPlayers (It's obvious in x360 scripts it's always 18)\np4 = 0 (Always in every script it's found in atleast.)\np5 = 0 or 1. (1 if network_can_enter_multiplayer, but set to 0 if other checks after that are passed.)\np5 is reset to 0 if,\nGlobal_1315318 = 0 or Global_1315323 = 9 or 12 or (Global_1312629 = 0 && Global_1312631 = true/1) those are passed.",
+			"comment": "",
 			"params": [
 				{
 					"type": "Any",
@@ -49925,21 +50978,10 @@
 				{
 					"type": "int",
 					"name": "maxPlayers"
-				},
-				{
-					"type": "Any",
-					"name": "p4"
-				},
-				{
-					"type": "Any",
-					"name": "p5"
 				}
 			],
 			"return_type": "BOOL",
-			"build": "323",
-			"old_names": [
-				"NETWORK_SESSION_ENTER"
-			]
+			"build": "323"
 		},
 		"0x2CFC76E0D087C994": {
 			"name": "NETWORK_SESSION_DO_FRIEND_MATCHMAKING",
@@ -49957,10 +50999,6 @@
 				{
 					"type": "int",
 					"name": "maxPlayers"
-				},
-				{
-					"type": "BOOL",
-					"name": "p3"
 				}
 			],
 			"return_type": "BOOL",
@@ -49989,10 +51027,6 @@
 				{
 					"type": "int",
 					"name": "maxPlayers"
-				},
-				{
-					"type": "BOOL",
-					"name": "p4"
 				}
 			],
 			"return_type": "BOOL",
@@ -50350,10 +51384,10 @@
 		"0xF1EEA2DDA9FFA69D": {
 			"name": "NETWORK_SESSION_SET_MATCHMAKING_MENTAL_STATE",
 			"jhash": "0x6CC062FC",
-			"comment": "",
+			"comment": "p0 in the decompiled scripts is always the stat mesh_texblend * 0.07 to int",
 			"params": [
 				{
-					"type": "Any",
+					"type": "int",
 					"name": "p0"
 				}
 			],
@@ -50366,8 +51400,8 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "int",
+					"name": "num"
 				}
 			],
 			"return_type": "void",
@@ -50938,11 +51972,11 @@
 		"0xB4AB419E0D86ACAE": {
 			"name": "NETWORK_SESSION_CHANGE_SLOTS",
 			"jhash": "0x6BB93227",
-			"comment": "",
+			"comment": "num player slots allowed in session, seems to work? 32 max",
 			"params": [
 				{
 					"type": "int",
-					"name": "p0"
+					"name": "slots"
 				},
 				{
 					"type": "BOOL",
@@ -51900,7 +52934,7 @@
 					"name": "p0"
 				},
 				{
-					"type": "Any",
+					"type": "BOOL",
 					"name": "p1"
 				}
 			],
@@ -52028,11 +53062,11 @@
 					"name": "p1"
 				},
 				{
-					"type": "Any",
-					"name": "p2"
+					"type": "int",
+					"name": "dataCount"
 				},
 				{
-					"type": "Any",
+					"type": "int",
 					"name": "p3"
 				}
 			],
@@ -52056,11 +53090,11 @@
 					"name": "p1"
 				},
 				{
-					"type": "Any",
-					"name": "p2"
+					"type": "int",
+					"name": "dataCount"
 				},
 				{
-					"type": "Any",
+					"type": "int",
 					"name": "p3"
 				}
 			],
@@ -52084,11 +53118,11 @@
 					"name": "p1"
 				},
 				{
-					"type": "Any",
-					"name": "p2"
+					"type": "int",
+					"name": "dataCount"
 				},
 				{
-					"type": "Any",
+					"type": "int",
 					"name": "p3"
 				}
 			],
@@ -52104,7 +53138,7 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
+					"type": "int",
 					"name": "p0"
 				}
 			],
@@ -52125,7 +53159,7 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
+					"type": "int",
 					"name": "p0"
 				}
 			],
@@ -52138,7 +53172,7 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
+					"type": "int",
 					"name": "p0"
 				}
 			],
@@ -52151,7 +53185,7 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
+					"type": "int",
 					"name": "p0"
 				}
 			],
@@ -52164,7 +53198,7 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
+					"type": "int",
 					"name": "p0"
 				}
 			],
@@ -52207,7 +53241,7 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
+					"type": "int",
 					"name": "p0"
 				}
 			],
@@ -52220,7 +53254,7 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
+					"type": "int",
 					"name": "p0"
 				}
 			],
@@ -52233,7 +53267,7 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
+					"type": "int",
 					"name": "p0"
 				}
 			],
@@ -52246,7 +53280,7 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
+					"type": "int",
 					"name": "p0"
 				}
 			],
@@ -52345,7 +53379,7 @@
 					"name": "p2"
 				},
 				{
-					"type": "Any*",
+					"type": "Any",
 					"name": "p3"
 				}
 			],
@@ -52439,12 +53473,12 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
+					"type": "int",
 					"name": "p0"
 				},
 				{
 					"type": "Any*",
-					"name": "p1"
+					"name": "gamerHandle"
 				}
 			],
 			"return_type": "BOOL",
@@ -52460,8 +53494,8 @@
 					"name": "p0"
 				},
 				{
-					"type": "Any",
-					"name": "p1"
+					"type": "Any*",
+					"name": "gamerHandle"
 				}
 			],
 			"return_type": "BOOL",
@@ -52700,6 +53734,23 @@
 				"_NETWORK_GET_RANDOM_INT_IN_RANGE"
 			]
 		},
+		"0x04BD27B5ACB67067": {
+			"name": "_NETWORK_GET_RANDOM_FLOAT_RANGED",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "float",
+					"name": "rangeStart"
+				},
+				{
+					"type": "float",
+					"name": "rangeEnd"
+				}
+			],
+			"return_type": "float",
+			"build": "2802"
+		},
 		"0x655B91F1495A9090": {
 			"name": "NETWORK_PLAYER_IS_CHEATER",
 			"jhash": "0xA51DC214",
@@ -52726,71 +53777,6 @@
 			"params": [],
 			"return_type": "BOOL",
 			"build": "323"
-		},
-		"0x46FB3ED415C7641C": {
-			"name": "TRIGGER_PLAYER_CRC_HACKER_CHECK",
-			"jhash": "0xF9A51B92",
-			"comment": "p1 = 6",
-			"params": [
-				{
-					"type": "Player",
-					"name": "player"
-				},
-				{
-					"type": "int",
-					"name": "p1"
-				},
-				{
-					"type": "Hash",
-					"name": "scriptHash"
-				}
-			],
-			"return_type": "BOOL",
-			"build": "323",
-			"old_names": [
-				"_NETWORK_IS_PLAYER_IN_SCRIPT",
-				"_TRIGGER_SCRIPT_CRC_CHECK_ON_PLAYER"
-			]
-		},
-		"0xA12D3A5A3753CC23": {
-			"name": "TRIGGER_TUNING_CRC_HACKER_CHECK",
-			"jhash": "",
-			"comment": "",
-			"params": [
-				{
-					"type": "Player",
-					"name": "player"
-				},
-				{
-					"type": "const char*",
-					"name": "p1"
-				},
-				{
-					"type": "const char*",
-					"name": "p2"
-				}
-			],
-			"return_type": "BOOL",
-			"build": "1103",
-			"unused": true
-		},
-		"0xF287F506767CC8A9": {
-			"name": "TRIGGER_FILE_CRC_HACKER_CHECK",
-			"jhash": "",
-			"comment": "",
-			"params": [
-				{
-					"type": "Player",
-					"name": "player"
-				},
-				{
-					"type": "const char*",
-					"name": "p1"
-				}
-			],
-			"return_type": "BOOL",
-			"build": "1103",
-			"unused": true
 		},
 		"0x472841A026D26D8B": {
 			"name": "REMOTE_CHEATER_PLAYER_DETECTED",
@@ -53532,6 +54518,19 @@
 				"_NETWORK_SET_CURRENT_MISSION_ID"
 			]
 		},
+		"0x3DAD00265FBF356B": {
+			"name": "NETWORK_SET_CURRENT_CHAT_OPTION",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "int",
+					"name": "newChatOption"
+				}
+			],
+			"return_type": "void",
+			"build": "2802"
+		},
 		"0xAA6D5451DC3448B6": {
 			"name": "NETWORK_SET_CURRENT_SPAWN_LOCATION_OPTION",
 			"jhash": "",
@@ -53564,6 +54563,19 @@
 				"_NETWORK_SET_VEHICLE_TEST_DRIVE"
 			]
 		},
+		"0xA0CE91E47531D3BB": {
+			"name": "NETWORK_SET_VEHICLE_DRIVEN_LOCATION",
+			"jhash": "",
+			"comment": "Sets 'loc' variable used in MetricVEHICLE_DIST_DRIVEN",
+			"params": [
+				{
+					"type": "Hash",
+					"name": "location"
+				}
+			],
+			"return_type": "void",
+			"build": "b2944"
+		},
 		"0xEA23C49EAA83ACFB": {
 			"name": "NETWORK_RESURRECT_LOCAL_PLAYER",
 			"jhash": "0xF1F9D4B4",
@@ -53587,7 +54599,7 @@
 				},
 				{
 					"type": "BOOL",
-					"name": "unk"
+					"name": "p4"
 				},
 				{
 					"type": "BOOL",
@@ -54616,6 +55628,19 @@
 			"params": [],
 			"return_type": "void",
 			"build": "372"
+		},
+		"0xAD4326FCA30D62F8": {
+			"name": "NETWORK_IS_PLAYER_ON_BLOCKLIST",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Any*",
+					"name": "gamerHandle"
+				}
+			],
+			"return_type": "BOOL",
+			"build": "2802"
 		},
 		"0xB309EBEA797E001F": {
 			"name": "NETWORK_SET_SCRIPT_AUTOMUTED",
@@ -56218,6 +57243,23 @@
 				"_NETWORK_CAN_NETWORK_ID_BE_SEEN"
 			]
 		},
+		"0x96320E6549DAE7B4": {
+			"name": "SET_REMOTE_PLAYER_VISIBLE_IN_CUTSCENE",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Player",
+					"name": "player"
+				},
+				{
+					"type": "BOOL",
+					"name": "locallyVisible"
+				}
+			],
+			"return_type": "void",
+			"build": "2802"
+		},
 		"0xD1065D68947E7B6E": {
 			"name": "SET_LOCAL_PLAYER_VISIBLE_IN_CUTSCENE",
 			"jhash": "0x59F3479B",
@@ -56242,7 +57284,7 @@
 			"params": [
 				{
 					"type": "BOOL",
-					"name": "p0"
+					"name": "bIncludePlayersVehicle"
 				}
 			],
 			"return_type": "void",
@@ -56255,7 +57297,7 @@
 			"params": [
 				{
 					"type": "BOOL",
-					"name": "p0"
+					"name": "bIncludePlayersVehicle"
 				}
 			],
 			"return_type": "void",
@@ -56272,7 +57314,7 @@
 				},
 				{
 					"type": "BOOL",
-					"name": "toggle"
+					"name": "bIncludePlayersVehicle"
 				}
 			],
 			"return_type": "void",
@@ -56289,7 +57331,7 @@
 				},
 				{
 					"type": "BOOL",
-					"name": "toggle"
+					"name": "bIncludePlayersVehicle"
 				}
 			],
 			"return_type": "void",
@@ -56832,32 +57874,32 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "float",
+					"name": "x"
 				},
 				{
-					"type": "Any",
-					"name": "p1"
+					"type": "float",
+					"name": "y"
 				},
 				{
-					"type": "Any",
-					"name": "p2"
+					"type": "float",
+					"name": "z"
 				},
 				{
 					"type": "Any",
 					"name": "p3"
 				},
 				{
-					"type": "Any",
-					"name": "p4"
+					"type": "Any*",
+					"name": "out1"
 				},
 				{
-					"type": "Any",
-					"name": "p5"
+					"type": "Any*",
+					"name": "out2"
 				},
 				{
-					"type": "Any",
-					"name": "p6"
+					"type": "Any*",
+					"name": "out3"
 				}
 			],
 			"return_type": "void",
@@ -57271,6 +58313,19 @@
 			"return_type": "void",
 			"build": "323"
 		},
+		"0xDD7CEF5B3A4DA8A6": {
+			"name": "IS_NETWORK_VEHICLE_RUNNING_RESPOT_TIMER",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "int",
+					"name": "networkID"
+				}
+			],
+			"return_type": "BOOL",
+			"build": "2802"
+		},
 		"0x6274C4712850841E": {
 			"name": "SET_NETWORK_VEHICLE_AS_GHOST",
 			"jhash": "0xEA235081",
@@ -57439,7 +58494,7 @@
 				},
 				{
 					"type": "BOOL",
-					"name": "p1"
+					"name": "toggle"
 				}
 			],
 			"return_type": "void",
@@ -58249,27 +59304,27 @@
 			"params": [
 				{
 					"type": "float",
-					"name": "p0"
+					"name": "x1"
 				},
 				{
 					"type": "float",
-					"name": "p1"
+					"name": "y1"
 				},
 				{
 					"type": "float",
-					"name": "p2"
+					"name": "z1"
 				},
 				{
 					"type": "float",
-					"name": "p3"
+					"name": "x2"
 				},
 				{
 					"type": "float",
-					"name": "p4"
+					"name": "y2"
 				},
 				{
 					"type": "float",
-					"name": "p5"
+					"name": "z2"
 				}
 			],
 			"return_type": "int",
@@ -58322,27 +59377,27 @@
 			"params": [
 				{
 					"type": "float",
-					"name": "p0"
+					"name": "x1"
 				},
 				{
 					"type": "float",
-					"name": "p1"
+					"name": "y1"
 				},
 				{
 					"type": "float",
-					"name": "p2"
+					"name": "z1"
 				},
 				{
 					"type": "float",
-					"name": "p3"
+					"name": "x2"
 				},
 				{
 					"type": "float",
-					"name": "p4"
+					"name": "y2"
 				},
 				{
 					"type": "float",
-					"name": "p5"
+					"name": "z2"
 				}
 			],
 			"return_type": "int",
@@ -58357,32 +59412,32 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "float",
+					"name": "x1"
 				},
 				{
-					"type": "Any",
-					"name": "p1"
+					"type": "float",
+					"name": "y1"
 				},
 				{
-					"type": "Any",
-					"name": "p2"
+					"type": "float",
+					"name": "z1"
 				},
 				{
-					"type": "Any",
-					"name": "p3"
+					"type": "float",
+					"name": "x2"
 				},
 				{
-					"type": "Any",
-					"name": "p4"
+					"type": "float",
+					"name": "y2"
 				},
 				{
-					"type": "Any",
-					"name": "p5"
+					"type": "float",
+					"name": "z2"
 				},
 				{
-					"type": "Any",
-					"name": "p6"
+					"type": "float",
+					"name": "radius"
 				}
 			],
 			"return_type": "int",
@@ -58394,8 +59449,8 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "int",
+					"name": "areaHandle"
 				}
 			],
 			"return_type": "BOOL",
@@ -58466,8 +59521,8 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "int",
+					"name": "netId"
 				}
 			],
 			"return_type": "void",
@@ -58479,12 +59534,12 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "int",
+					"name": "netId"
 				},
 				{
-					"type": "Any",
-					"name": "p1"
+					"type": "BOOL",
+					"name": "toggle"
 				}
 			],
 			"return_type": "void",
@@ -58860,8 +59915,8 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "int",
+					"name": "boneIndex"
 				}
 			],
 			"return_type": "BOOL",
@@ -58924,15 +59979,15 @@
 		"0x3FC795691834481D": {
 			"name": "NETWORK_SET_NO_LONGER_NEEDED",
 			"jhash": "",
-			"comment": "nullsub, doesn't do anything",
+			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "Entity",
+					"name": "entity"
 				},
 				{
-					"type": "Any",
-					"name": "p1"
+					"type": "BOOL",
+					"name": "toggle"
 				}
 			],
 			"return_type": "void",
@@ -59036,12 +60091,12 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "int",
+					"name": "netId"
 				},
 				{
-					"type": "Any",
-					"name": "p1"
+					"type": "BOOL",
+					"name": "toggle"
 				}
 			],
 			"return_type": "void",
@@ -59084,7 +60139,7 @@
 		"0x367EF5E2F439B4C6": {
 			"name": "NETWORK_SET_PLAYER_MENTAL_STATE",
 			"jhash": "0x53C9563C",
-			"comment": "",
+			"comment": "p0 in the decompiled scripts is always the stat mesh_texblend * 0.07 to int",
 			"params": [
 				{
 					"type": "int",
@@ -59419,7 +60474,7 @@
 			"params": [
 				{
 					"type": "int",
-					"name": "handle"
+					"name": "requestId"
 				}
 			],
 			"return_type": "BOOL",
@@ -59432,7 +60487,7 @@
 			"params": [
 				{
 					"type": "int",
-					"name": "handle"
+					"name": "requestId"
 				}
 			],
 			"return_type": "BOOL",
@@ -65517,7 +66572,7 @@
 		"0xE1615EC03B3BB4FD": {
 			"name": "IS_MOUSE_LOOK_INVERTED",
 			"jhash": "",
-			"comment": "Used with IS_LOOK_INVERTED() and negates its affect.\n\n--\n\nNot sure how the person above got that description, but here's an actual example:\n\nif (PAD::_GET_LAST_INPUT_METHOD(2)) {\n    if (a_5) {\n        if (PAD::IS_LOOK_INVERTED()) {\n            a_3 *= -1;\n        }\n        if (PAD::IS_MOUSE_LOOK_INVERTED()) {\n            a_3 *= -1;\n        }\n    }\n}",
+			"comment": "Used with IS_LOOK_INVERTED() and negates its affect.\n\n--\n\nNot sure how the person above got that description, but here's an actual example:\n\nif (PAD::IS_USING_KEYBOARD_AND_MOUSE(2)) {\n    if (a_5) {\n        if (PAD::IS_LOOK_INVERTED()) {\n            a_3 *= -1;\n        }\n        if (PAD::IS_MOUSE_LOOK_INVERTED()) {\n            a_3 *= -1;\n        }\n    }\n}",
 			"params": [],
 			"return_type": "BOOL",
 			"build": "323"
@@ -65525,7 +66580,7 @@
 		"0xBB41AFBBBC0A0287": {
 			"name": "GET_LOCAL_PLAYER_AIM_STATE",
 			"jhash": "0x81802053",
-			"comment": "Returns the local player's targeting mode. See PLAYER::SET_PLAYER_TARGETING_MODE.",
+			"comment": "Hard-coded to return 3 if using KBM, otherwise same behavior as GET_LOCAL_PLAYER_GAMEPAD_AIM_STATE.",
 			"params": [],
 			"return_type": "int",
 			"build": "323"
@@ -65533,7 +66588,7 @@
 		"0x59B9A7AF4C95133C": {
 			"name": "GET_LOCAL_PLAYER_GAMEPAD_AIM_STATE",
 			"jhash": "",
-			"comment": "Same behavior as GET_LOCAL_PLAYER_AIM_STATE but only used on the PC version.",
+			"comment": "Returns the local player's targeting mode. See PLAYER::SET_PLAYER_TARGETING_MODE.",
 			"params": [],
 			"return_type": "int",
 			"build": "323",
@@ -65845,7 +66900,7 @@
 				},
 				{
 					"type": "BOOL",
-					"name": "unknown"
+					"name": "p6"
 				},
 				{
 					"type": "Any",
@@ -66372,6 +67427,19 @@
 			"return_type": "BOOL",
 			"build": "323"
 		},
+		"0xC2AB6BFE34E92F8B": {
+			"name": "LOAD_ALL_PATH_NODES",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "BOOL",
+					"name": "set"
+				}
+			],
+			"return_type": "BOOL",
+			"build": "2802"
+		},
 		"0x228E5C6AD4D74BFD": {
 			"name": "SET_ALLOW_STREAM_PROLOGUE_NODES",
 			"jhash": "0xD6A3B458",
@@ -66669,6 +67737,39 @@
 			],
 			"return_type": "BOOL",
 			"build": "323"
+		},
+		"0x809549AFC7AEC597": {
+			"name": "GET_SPAWN_COORDS_FOR_VEHICLE_NODE",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "int",
+					"name": "nodeAddress"
+				},
+				{
+					"type": "float",
+					"name": "towardsCoorsX"
+				},
+				{
+					"type": "float",
+					"name": "towardsCoorsY"
+				},
+				{
+					"type": "float",
+					"name": "towardsCoorsZ"
+				},
+				{
+					"type": "Vector3*",
+					"name": "centrePoint"
+				},
+				{
+					"type": "float*",
+					"name": "heading"
+				}
+			],
+			"return_type": "Vector3",
+			"build": "2944"
 		},
 		"0x2EB41072B4C1E4C0": {
 			"name": "GET_STREET_NAME_AT_COORD",
@@ -68123,7 +69224,7 @@
 			"params": [
 				{
 					"type": "BOOL",
-					"name": "unk"
+					"name": "p0"
 				}
 			],
 			"return_type": "BOOL",
@@ -68255,7 +69356,7 @@
 		"0x9A9112A0FE9A4713": {
 			"name": "GET_VEHICLE_PED_IS_IN",
 			"jhash": "0xAFE92319",
-			"comment": "Gets the vehicle the specified Ped is in. Returns 0 if the ped is/was not in a vehicle.\nIf the Ped is not in a vehicle and includeLastVehicle is true, the vehicle they were last in is returned.",
+			"comment": "Gets the vehicle the specified Ped is in. Returns 0 if the ped is/was not in a vehicle.",
 			"params": [
 				{
 					"type": "Ped",
@@ -68263,7 +69364,7 @@
 				},
 				{
 					"type": "BOOL",
-					"name": "includeLastVehicle"
+					"name": "includeEntering"
 				}
 			],
 			"return_type": "Vehicle",
@@ -69378,7 +70479,7 @@
 				},
 				{
 					"type": "float",
-					"name": "unk"
+					"name": "p1"
 				}
 			],
 			"return_type": "void",
@@ -70493,7 +71594,7 @@
 				},
 				{
 					"type": "Any*",
-					"name": "unknown"
+					"name": "p1"
 				},
 				{
 					"type": "int*",
@@ -72285,7 +73386,7 @@
 		"0xCF1CE768BB43480E": {
 			"name": "GET_PED_HEAD_OVERLAY_NUM",
 			"jhash": "0xFF43C18D",
-			"comment": "Used with freemode (online) characters.",
+			"comment": "",
 			"params": [
 				{
 					"type": "int",
@@ -72301,7 +73402,7 @@
 		"0x497BF74A7B9CB952": {
 			"name": "SET_PED_HEAD_OVERLAY_TINT",
 			"jhash": "",
-			"comment": "Used for freemode (online) characters.\n\nColorType is 1 for eyebrows, beards, and chest hair; 2 for blush and lipstick; and 0 otherwise, though not called in those cases.\n\nCalled after SET_PED_HEAD_OVERLAY().",
+			"comment": "\n\nColorType is 1 for eyebrows, beards, and chest hair; 2 for blush and lipstick; and 0 otherwise, though not called in those cases.\n\nCalled after SET_PED_HEAD_OVERLAY().",
 			"params": [
 				{
 					"type": "Ped",
@@ -72333,7 +73434,7 @@
 		"0x4CFFC65454C93A49": {
 			"name": "SET_PED_HAIR_TINT",
 			"jhash": "",
-			"comment": "Used for freemode (online) characters.",
+			"comment": "",
 			"params": [
 				{
 					"type": "Ped",
@@ -72357,7 +73458,7 @@
 		"0xE5C0CF872C2AD150": {
 			"name": "GET_NUM_PED_HAIR_TINTS",
 			"jhash": "",
-			"comment": "Used for freemode (online) characters.",
+			"comment": "",
 			"params": [],
 			"return_type": "int",
 			"build": "323",
@@ -72851,6 +73952,10 @@
 				{
 					"type": "int",
 					"name": "componentId"
+				},
+				{
+					"type": "Any",
+					"name": "p2"
 				}
 			],
 			"return_type": "int",
@@ -72880,6 +73985,10 @@
 				{
 					"type": "BOOL",
 					"name": "attach"
+				},
+				{
+					"type": "Any",
+					"name": "p5"
 				}
 			],
 			"return_type": "void",
@@ -72926,6 +74035,10 @@
 				{
 					"type": "int",
 					"name": "propId"
+				},
+				{
+					"type": "Any",
+					"name": "p2"
 				}
 			],
 			"return_type": "void",
@@ -72939,6 +74052,10 @@
 				{
 					"type": "Ped",
 					"name": "ped"
+				},
+				{
+					"type": "Any",
+					"name": "p1"
 				}
 			],
 			"return_type": "void",
@@ -73068,15 +74185,15 @@
 				},
 				{
 					"type": "float",
-					"name": "p3"
+					"name": "x"
 				},
 				{
 					"type": "float",
-					"name": "p4"
+					"name": "y"
 				},
 				{
 					"type": "float",
-					"name": "p5"
+					"name": "z"
 				}
 			],
 			"return_type": "void",
@@ -73364,7 +74481,7 @@
 		"0xD76632D99E4966C8": {
 			"name": "SET_PED_TO_RAGDOLL_WITH_FALL",
 			"jhash": "0xFA12E286",
-			"comment": "Return variable is never used in R*'s scripts.\n\nNot sure what p2 does. It seems like it would be a time judging by it's usage in R*'s scripts, but didn't seem to affect anything in my testings.\n\nx, y, and z are coordinates, most likely to where the ped will fall.\n\np7 is probably the force of the fall, but untested, so I left the variable name the same.\n\np8 to p13 are always 0f in R*'s scripts.\n\n(Simplified) Example of the usage of the function from R*'s scripts:\nped::set_ped_to_ragdoll_with_fall(ped, 1500, 2000, 1, -entity::get_entity_forward_vector(ped), 1f, 0f, 0f, 0f, 0f, 0f, 0f);\n",
+			"comment": "Return variable is never used in R*'s scripts.\n\nNot sure what p2 does. It seems like it would be a time judging by it's usage in R*'s scripts, but didn't seem to affect anything in my testings.\n\nenum eRagdollType\n{\n RD_MALE=0,\n RD_FEMALE = 1,\n RD_MALE_LARGE = 2,\n RD_CUSTOM = 3,\n}\n\nx, y, and z are coordinates, most likely to where the ped will fall.\n\np8 to p13 are always 0f in R*'s scripts.\n\n(Simplified) Example of the usage of the function from R*'s scripts:\nped::set_ped_to_ragdoll_with_fall(ped, 1500, 2000, 1, -entity::get_entity_forward_vector(ped), 1f, 0f, 0f, 0f, 0f, 0f, 0f);\n",
 			"params": [
 				{
 					"type": "Ped",
@@ -73396,7 +74513,7 @@
 				},
 				{
 					"type": "float",
-					"name": "p7"
+					"name": "velocity"
 				},
 				{
 					"type": "float",
@@ -73554,7 +74671,7 @@
 		"0x26695EC767728D84": {
 			"name": "SET_RAGDOLL_BLOCKING_FLAGS",
 			"jhash": "0x9C8F830D",
-			"comment": "Works for both player and peds, but some flags don't seem to work for the player (1, for example)\n\n1 - Blocks ragdolling when shot.\n2 - Blocks ragdolling when hit by a vehicle. The ped still might play a falling animation.\n4 - Blocks ragdolling when set on fire.\n\n-----------------------------------------------------------------------\n\nThere seem to be 26 flags",
+			"comment": "Works for both player and peds,\n\nenum eRagdollBlockingFlags\n{\n RBF_BULLET_IMPACT = 0,\n RBF_VEHICLE_IMPACT = 1,\n RBF_FIRE = 2,\n RBF_ELECTROCUTION = 3,\n RBF_PLAYER_IMPACT = 4,\n RBF_EXPLOSION = 5,0\n RBF_IMPACT_OBJECT = 6,\n RBF_MELEE = 7,\n RBF_RUBBER_BULLET = 8,\n RBF_FALLING = 9,\n RBF_WATER_JET = 10,\n RBF_DROWNING = 11,\n _0x9F52E2C4 = 12,\n RBF_PLAYER_BUMP = 13,\n RBF_PLAYER_RAGDOLL_BUMP = 14,\n RBF_PED_RAGDOLL_BUMP = 15,\n RBF_VEHICLE_GRAB = 16,\n RBF_SMOKE_GRENADE = 17,\n};\n\n",
 			"params": [
 				{
 					"type": "Ped",
@@ -73562,7 +74679,7 @@
 				},
 				{
 					"type": "int",
-					"name": "flags"
+					"name": "blockingFlag"
 				}
 			],
 			"return_type": "void",
@@ -73574,7 +74691,7 @@
 		"0xD86D101FCFD00A4B": {
 			"name": "CLEAR_RAGDOLL_BLOCKING_FLAGS",
 			"jhash": "0x77CBA290",
-			"comment": "There seem to be 26 flags",
+			"comment": "See SET_RAGDOLL_BLOCKING_FLAGS for flags",
 			"params": [
 				{
 					"type": "Ped",
@@ -73582,7 +74699,7 @@
 				},
 				{
 					"type": "int",
-					"name": "flags"
+					"name": "blockingFlag"
 				}
 			],
 			"return_type": "void",
@@ -74393,6 +75510,23 @@
 			"return_type": "void",
 			"build": "323"
 		},
+		"0xAC0BB4D87777CAE2": {
+			"name": "SET_PED_WETNESS",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Ped",
+					"name": "ped"
+				},
+				{
+					"type": "float",
+					"name": "wetLevel"
+				}
+			],
+			"return_type": "void",
+			"build": "2802"
+		},
 		"0x6585D955A68452A5": {
 			"name": "CLEAR_PED_ENV_DIRT",
 			"jhash": "0xA993915F",
@@ -74975,6 +76109,19 @@
 			"return_type": "BOOL",
 			"build": "1868"
 		},
+		"0x007FDE5A7897E426": {
+			"name": "RESET_FACIAL_IDLE_ANIM",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Ped",
+					"name": "ped"
+				}
+			],
+			"return_type": "void",
+			"build": "2802"
+		},
 		"0xE1E65CA8AC9C00ED": {
 			"name": "PLAY_FACIAL_ANIM",
 			"jhash": "0x1F6CCDDE",
@@ -75385,7 +76532,7 @@
 		"0x1913FE4CBF41C463": {
 			"name": "SET_PED_CONFIG_FLAG",
 			"jhash": "0x9CFBE10D",
-			"comment": "enum ePedConfigFlags\n{\n\t_CPED_CONFIG_FLAG_0x67D1A445 = 0,\n\t_CPED_CONFIG_FLAG_0xC63DE95E = 1,\n\tCPED_CONFIG_FLAG_NoCriticalHits = 2,\n\tCPED_CONFIG_FLAG_DrownsInWater = 3,\n\tCPED_CONFIG_FLAG_DisableReticuleFixedLockon = 4,\n\t_CPED_CONFIG_FLAG_0x37D196F4 = 5,\n\t_CPED_CONFIG_FLAG_0xE2462399 = 6,\n\tCPED_CONFIG_FLAG_UpperBodyDamageAnimsOnly = 7,\n\t_CPED_CONFIG_FLAG_0xEDDEB838 = 8,\n\t_CPED_CONFIG_FLAG_0xB398B6FD = 9,\n\t_CPED_CONFIG_FLAG_0xF6664E68 = 10,\n\t_CPED_CONFIG_FLAG_0xA05E7CA3 = 11,\n\t_CPED_CONFIG_FLAG_0xCE394045 = 12,\n\tCPED_CONFIG_FLAG_NeverLeavesGroup = 13,\n\t_CPED_CONFIG_FLAG_0xCD8D1411 = 14,\n\t_CPED_CONFIG_FLAG_0xB031F1A9 = 15,\n\t_CPED_CONFIG_FLAG_0xFE65BEE3 = 16,\n\tCPED_CONFIG_FLAG_BlockNonTemporaryEvents = 17,\n\t_CPED_CONFIG_FLAG_0x380165BD = 18,\n\t_CPED_CONFIG_FLAG_0x07C045C7 = 19,\n\t_CPED_CONFIG_FLAG_0x583B5E2D = 20,\n\t_CPED_CONFIG_FLAG_0x475EDA58 = 21,\n\t_CPED_CONFIG_FLAG_0x8629D05B = 22,\n\t_CPED_CONFIG_FLAG_0x1522968B = 23,\n\tCPED_CONFIG_FLAG_IgnoreSeenMelee = 24,\n\t_CPED_CONFIG_FLAG_0x4CC09C4B = 25,\n\t_CPED_CONFIG_FLAG_0x034F3053 = 26,\n\t_CPED_CONFIG_FLAG_0xD91BA7CC = 27,\n\t_CPED_CONFIG_FLAG_0x5C8DC66E = 28,\n\t_CPED_CONFIG_FLAG_0x8902EAA0 = 29,\n\t_CPED_CONFIG_FLAG_0x6580B9D2 = 30,\n\t_CPED_CONFIG_FLAG_0x0EF7A297 = 31,\n\t_CPED_CONFIG_FLAG_CanFlyThruWindscreen = 32, // 0x6BF86E5B\n\tCPED_CONFIG_FLAG_DieWhenRagdoll = 33,\n\tCPED_CONFIG_FLAG_HasHelmet = 34,\n\tCPED_CONFIG_FLAG_UseHelmet = 35,\n\t_CPED_CONFIG_FLAG_0xEEB3D630 = 36,\n\t_CPED_CONFIG_FLAG_0xB130D17B = 37,\n\t_CPED_CONFIG_FLAG_0x5F071200 = 38,\n\tCPED_CONFIG_FLAG_DisableEvasiveDives = 39,\n\t_CPED_CONFIG_FLAG_0xC287AAFF = 40,\n\t_CPED_CONFIG_FLAG_0x203328CC = 41,\n\tCPED_CONFIG_FLAG_DontInfluenceWantedLevel = 42,\n\tCPED_CONFIG_FLAG_DisablePlayerLockon = 43,\n\tCPED_CONFIG_FLAG_DisableLockonToRandomPeds = 44,\n\t_CPED_CONFIG_FLAG_0xEC4A8ACF = 45,\n\t_CPED_CONFIG_FLAG_0xDB115BFA = 46,\n\tCPED_CONFIG_FLAG_PedBeingDeleted = 47,\n\tCPED_CONFIG_FLAG_BlockWeaponSwitching = 48,\n\t_CPED_CONFIG_FLAG_0xF8E99565 = 49,\n\t_CPED_CONFIG_FLAG_0xDD17FEE6 = 50,\n\t_CPED_CONFIG_FLAG_0x7ED9B2C9 = 51,\n\t_CPED_CONFIG_FLAG_NoCollison = 52, // 0x655E8618\n\t_CPED_CONFIG_FLAG_0x5A6C1F6E = 53,\n\t_CPED_CONFIG_FLAG_0xD749FC41 = 54,\n\t_CPED_CONFIG_FLAG_0x357F63F3 = 55,\n\t_CPED_CONFIG_FLAG_0xC5E60961 = 56,\n\t_CPED_CONFIG_FLAG_0x29275C3E = 57,\n\tCPED_CONFIG_FLAG_IsFiring = 58,\n\tCPED_CONFIG_FLAG_WasFiring = 59,\n\tCPED_CONFIG_FLAG_IsStanding = 60,\n\tCPED_CONFIG_FLAG_WasStanding = 61,\n\tCPED_CONFIG_FLAG_InVehicle = 62,\n\tCPED_CONFIG_FLAG_OnMount = 63,\n\tCPED_CONFIG_FLAG_AttachedToVehicle = 64,\n\tCPED_CONFIG_FLAG_IsSwimming = 65,\n\tCPED_CONFIG_FLAG_WasSwimming = 66,\n\tCPED_CONFIG_FLAG_IsSkiing = 67,\n\tCPED_CONFIG_FLAG_IsSitting = 68,\n\tCPED_CONFIG_FLAG_KilledByStealth = 69,\n\tCPED_CONFIG_FLAG_KilledByTakedown = 70,\n\tCPED_CONFIG_FLAG_Knockedout = 71,\n\t_CPED_CONFIG_FLAG_0x3E3C4560 = 72,\n\t_CPED_CONFIG_FLAG_0x2994C7B7 = 73,\n\t_CPED_CONFIG_FLAG_0x6D59D275 = 74,\n\tCPED_CONFIG_FLAG_UsingCoverPoint = 75,\n\tCPED_CONFIG_FLAG_IsInTheAir = 76,\n\t_CPED_CONFIG_FLAG_0x2D493FB7 = 77,\n\tCPED_CONFIG_FLAG_IsAimingGun = 78,\n\t_CPED_CONFIG_FLAG_0x14D69875 = 79,\n\t_CPED_CONFIG_FLAG_0x40B05311 = 80,\n\t_CPED_CONFIG_FLAG_0x8B230BC5 = 81,\n\t_CPED_CONFIG_FLAG_0xC74E5842 = 82,\n\t_CPED_CONFIG_FLAG_0x9EA86147 = 83,\n\t_CPED_CONFIG_FLAG_0x674C746C = 84,\n\t_CPED_CONFIG_FLAG_0x3E56A8C2 = 85,\n\t_CPED_CONFIG_FLAG_0xC144A1EF = 86,\n\t_CPED_CONFIG_FLAG_0x0548512D = 87,\n\t_CPED_CONFIG_FLAG_0x31C93909 = 88,\n\t_CPED_CONFIG_FLAG_0xA0269315 = 89,\n\t_CPED_CONFIG_FLAG_0xD4D59D4D = 90,\n\t_CPED_CONFIG_FLAG_0x411D4420 = 91,\n\t_CPED_CONFIG_FLAG_0xDF4AEF0D = 92,\n\tCPED_CONFIG_FLAG_ForcePedLoadCover = 93,\n\t_CPED_CONFIG_FLAG_0x300E4CD3 = 94,\n\t_CPED_CONFIG_FLAG_0xF1C5BF04 = 95,\n\t_CPED_CONFIG_FLAG_0x89C2EF13 = 96,\n\tCPED_CONFIG_FLAG_VaultFromCover = 97,\n\t_CPED_CONFIG_FLAG_0x02A852C8 = 98,\n\t_CPED_CONFIG_FLAG_0x3D9407F1 = 99,\n\t_CPED_CONFIG_FLAG_IsDrunk = 100, // 0x319B4558\n\tCPED_CONFIG_FLAG_ForcedAim = 101,\n\t_CPED_CONFIG_FLAG_0xB942D71A = 102,\n\t_CPED_CONFIG_FLAG_0xD26C55A8 = 103,\n\t_CPED_CONFIG_FLAG_0xB89E703B = 104,\n\tCPED_CONFIG_FLAG_ForceReload = 105,\n\t_CPED_CONFIG_FLAG_0xD9E73DA2 = 106,\n\t_CPED_CONFIG_FLAG_0xFF71DC2C = 107,\n\t_CPED_CONFIG_FLAG_0x1E27E8D8 = 108,\n\t_CPED_CONFIG_FLAG_0xF2C53966 = 109,\n\t_CPED_CONFIG_FLAG_0xC4DBE247 = 110,\n\t_CPED_CONFIG_FLAG_0x83C0A4BF = 111,\n\t_CPED_CONFIG_FLAG_0x0E0FAF8C = 112,\n\t_CPED_CONFIG_FLAG_0x26616660 = 113,\n\t_CPED_CONFIG_FLAG_0x43B80B79 = 114,\n\t_CPED_CONFIG_FLAG_0x0D2A9309 = 115,\n\t_CPED_CONFIG_FLAG_0x12C1C983 = 116,\n\tCPED_CONFIG_FLAG_BumpedByPlayer = 117,\n\t_CPED_CONFIG_FLAG_0xE586D504 = 118,\n\t_CPED_CONFIG_FLAG_0x52374204 = 119,\n\tCPED_CONFIG_FLAG_IsHandCuffed = 120,\n\tCPED_CONFIG_FLAG_IsAnkleCuffed = 121,\n\tCPED_CONFIG_FLAG_DisableMelee = 122,\n\t_CPED_CONFIG_FLAG_0xFE714397 = 123,\n\t_CPED_CONFIG_FLAG_0xB3E660BD = 124,\n\t_CPED_CONFIG_FLAG_0x5FED6BFD = 125,\n\t_CPED_CONFIG_FLAG_0xC9D6F66F = 126,\n\t_CPED_CONFIG_FLAG_0x519BC986 = 127,\n\tCPED_CONFIG_FLAG_CanBeAgitated = 128,\n\t_CPED_CONFIG_FLAG_0x9A4B617C = 129,\n\t_CPED_CONFIG_FLAG_0xDAB70E9F = 130,\n\t_CPED_CONFIG_FLAG_0xE569438A = 131,\n\t_CPED_CONFIG_FLAG_0xBBC77D6D = 132,\n\t_CPED_CONFIG_FLAG_0xCB59EF0F = 133,\n\t_CPED_CONFIG_FLAG_0x8C5EA971 = 134,\n\tCPED_CONFIG_FLAG_IsScuba = 135,\n\tCPED_CONFIG_FLAG_WillArrestRatherThanJack = 136,\n\t_CPED_CONFIG_FLAG_0xDCE59B58 = 137,\n\tCPED_CONFIG_FLAG_RidingTrain = 138,\n\tCPED_CONFIG_FLAG_ArrestResult = 139,\n\tCPED_CONFIG_FLAG_CanAttackFriendly = 140,\n\t_CPED_CONFIG_FLAG_0x98A4BE43 = 141,\n\t_CPED_CONFIG_FLAG_0x6901E731 = 142,\n\t_CPED_CONFIG_FLAG_0x9EC9BF6C = 143,\n\t_CPED_CONFIG_FLAG_0x42841A8F = 144,\n\tCPED_CONFIG_FLAG_ShootingAnimFlag = 145,\n\tCPED_CONFIG_FLAG_DisableLadderClimbing = 146,\n\tCPED_CONFIG_FLAG_StairsDetected = 147,\n\tCPED_CONFIG_FLAG_SlopeDetected = 148,\n\t_CPED_CONFIG_FLAG_0x1A15670B = 149,\n\t_CPED_CONFIG_FLAG_0x61786EE5 = 150,\n\t_CPED_CONFIG_FLAG_0xCB9186BD = 151,\n\t_CPED_CONFIG_FLAG_0xF0710152 = 152,\n\t_CPED_CONFIG_FLAG_0x43DFE310 = 153,\n\t_CPED_CONFIG_FLAG_0xC43C624E = 154,\n\tCPED_CONFIG_FLAG_CanPerformArrest = 155,\n\tCPED_CONFIG_FLAG_CanPerformUncuff = 156,\n\tCPED_CONFIG_FLAG_CanBeArrested = 157,\n\t_CPED_CONFIG_FLAG_0xF7960FF5 = 158,\n\t_CPED_CONFIG_FLAG_0x59564113 = 159,\n\t_CPED_CONFIG_FLAG_0x0C6C3099 = 160,\n\t_CPED_CONFIG_FLAG_0x645F927A = 161,\n\t_CPED_CONFIG_FLAG_0xA86549B9 = 162,\n\t_CPED_CONFIG_FLAG_0x8AAF337A = 163,\n\t_CPED_CONFIG_FLAG_0x13BAA6E7 = 164,\n\t_CPED_CONFIG_FLAG_0x5FB9D1F5 = 165,\n\tCPED_CONFIG_FLAG_IsInjured = 166,\n\t_CPED_CONFIG_FLAG_0x6398A20B = 167,\n\t_CPED_CONFIG_FLAG_0xD8072639 = 168,\n\t_CPED_CONFIG_FLAG_0xA05B1845 = 169,\n\t_CPED_CONFIG_FLAG_0x83F6D220 = 170,\n\t_CPED_CONFIG_FLAG_0xD8430331 = 171,\n\t_CPED_CONFIG_FLAG_0x4B547520 = 172,\n\t_CPED_CONFIG_FLAG_0xE66E1406 = 173,\n\t_CPED_CONFIG_FLAG_0x1C4BFE0C = 174,\n\t_CPED_CONFIG_FLAG_0x90008BFA = 175,\n\t_CPED_CONFIG_FLAG_0x07C7A910 = 176,\n\t_CPED_CONFIG_FLAG_0xF15F8191 = 177,\n\t_CPED_CONFIG_FLAG_0xCE4E8BE2 = 178,\n\t_CPED_CONFIG_FLAG_0x1D46E4F2 = 179,\n\tCPED_CONFIG_FLAG_IsInCustody = 180,\n\t_CPED_CONFIG_FLAG_0xE4FD9B3A = 181,\n\t_CPED_CONFIG_FLAG_0x67AE0812 = 182,\n\tCPED_CONFIG_FLAG_IsAgitated = 183,\n\tCPED_CONFIG_FLAG_PreventAutoShuffleToDriversSeat = 184,\n\t_CPED_CONFIG_FLAG_0x7B2D325E = 185,\n\tCPED_CONFIG_FLAG_EnableWeaponBlocking = 186,\n\tCPED_CONFIG_FLAG_HasHurtStarted = 187,\n\tCPED_CONFIG_FLAG_DisableHurt = 188,\n\tCPED_CONFIG_FLAG_PlayerIsWeird = 189,\n\t_CPED_CONFIG_FLAG_0x32FC208B = 190,\n\t_CPED_CONFIG_FLAG_0x0C296E5A = 191,\n\t_CPED_CONFIG_FLAG_0xE63B73EC = 192,\n\t_CPED_CONFIG_FLAG_0x04E9CC80 = 193,\n\tCPED_CONFIG_FLAG_UsingScenario = 194,\n\tCPED_CONFIG_FLAG_VisibleOnScreen = 195,\n\t_CPED_CONFIG_FLAG_0xD88C58A1 = 196,\n\t_CPED_CONFIG_FLAG_0x5A3DCF43 = 197,\n\t_CPED_CONFIG_FLAG_0xEA02B420 = 198,\n\t_CPED_CONFIG_FLAG_0x3F559CFF = 199,\n\t_CPED_CONFIG_FLAG_0x8C55D029 = 200,\n\t_CPED_CONFIG_FLAG_0x5E6466F6 = 201,\n\t_CPED_CONFIG_FLAG_0xEB5AD706 = 202,\n\t_CPED_CONFIG_FLAG_0x0EDDDDE7 = 203,\n\t_CPED_CONFIG_FLAG_0xA64F7B1D = 204,\n\t_CPED_CONFIG_FLAG_0x48532CBA = 205,\n\t_CPED_CONFIG_FLAG_0xAA25A9E7 = 206,\n\t_CPED_CONFIG_FLAG_0x415B26B9 = 207,\n\tCPED_CONFIG_FLAG_DisableExplosionReactions = 208,\n\tCPED_CONFIG_FLAG_DodgedPlayer = 209,\n\t_CPED_CONFIG_FLAG_0x67405504 = 210,\n\t_CPED_CONFIG_FLAG_0x75DDD68C = 211,\n\t_CPED_CONFIG_FLAG_0x2AD879B4 = 212,\n\t_CPED_CONFIG_FLAG_0x51486F91 = 213,\n\t_CPED_CONFIG_FLAG_0x32F79E21 = 214,\n\t_CPED_CONFIG_FLAG_0xBF099213 = 215,\n\t_CPED_CONFIG_FLAG_0x054AC8E2 = 216,\n\t_CPED_CONFIG_FLAG_0x14E495CC = 217,\n\t_CPED_CONFIG_FLAG_0x3C7DF9DF = 218,\n\t_CPED_CONFIG_FLAG_0x848FFEF2 = 219,\n\tCPED_CONFIG_FLAG_DontEnterLeadersVehicle = 220,\n\t_CPED_CONFIG_FLAG_0x2618E1CF = 221,\n\t_CPED_CONFIG_FLAG_0x84F722FA = 222,\n\t_CPED_CONFIG_FLAG_Shrink = 223, // 0xD1B87B1F\n\t_CPED_CONFIG_FLAG_0x728AA918 = 224,\n\tCPED_CONFIG_FLAG_DisablePotentialToBeWalkedIntoResponse = 225,\n\tCPED_CONFIG_FLAG_DisablePedAvoidance = 226,\n\t_CPED_CONFIG_FLAG_0x59E91185 = 227,\n\t_CPED_CONFIG_FLAG_0x1EA7225F = 228,\n\tCPED_CONFIG_FLAG_DisablePanicInVehicle = 229,\n\t_CPED_CONFIG_FLAG_0x6DCA7D88 = 230,\n\t_CPED_CONFIG_FLAG_0xFC3E572D = 231,\n\t_CPED_CONFIG_FLAG_0x08E9F9CF = 232,\n\t_CPED_CONFIG_FLAG_0x2D3BA52D = 233,\n\t_CPED_CONFIG_FLAG_0xFD2F53EA = 234,\n\t_CPED_CONFIG_FLAG_0x31A1B03B = 235,\n\tCPED_CONFIG_FLAG_IsHoldingProp = 236,\n\tCPED_CONFIG_FLAG_BlocksPathingWhenDead = 237,\n\t_CPED_CONFIG_FLAG_0xCE57C9A3 = 238,\n\t_CPED_CONFIG_FLAG_0x26149198 = 239,\n\t_CPED_CONFIG_FLAG_0x1B33B598 = 240,\n\t_CPED_CONFIG_FLAG_0x719B6E87 = 241,\n\t_CPED_CONFIG_FLAG_0x13E8E8E8 = 242,\n\t_CPED_CONFIG_FLAG_0xF29739AE = 243,\n\t_CPED_CONFIG_FLAG_0xABEA8A74 = 244,\n\t_CPED_CONFIG_FLAG_0xB60EA2BA = 245,\n\t_CPED_CONFIG_FLAG_0x536B0950 = 246,\n\t_CPED_CONFIG_FLAG_0x0C754ACA = 247,\n\tCPED_CONFIG_FLAG_CanPlayInCarIdles = 248,\n\t_CPED_CONFIG_FLAG_0x12659168 = 249,\n\t_CPED_CONFIG_FLAG_0x1BDF2F04 = 250,\n\t_CPED_CONFIG_FLAG_0x7728FAA3 = 251,\n\t_CPED_CONFIG_FLAG_0x6A807ED8 = 252,\n\tCPED_CONFIG_FLAG_OnStairs = 253,\n\t_CPED_CONFIG_FLAG_0xE1A2F73F = 254,\n\t_CPED_CONFIG_FLAG_0x5B3697C8 = 255,\n\t_CPED_CONFIG_FLAG_0xF1EB20A9 = 256,\n\t_CPED_CONFIG_FLAG_0x8B7DF407 = 257,\n\t_CPED_CONFIG_FLAG_0x329DCF1A = 258,\n\t_CPED_CONFIG_FLAG_0x8D90DD1B = 259,\n\t_CPED_CONFIG_FLAG_0xB8A292B7 = 260,\n\t_CPED_CONFIG_FLAG_0x8374B087 = 261,\n\t_CPED_CONFIG_FLAG_0x2AF558F0 = 262,\n\t_CPED_CONFIG_FLAG_0x82251455 = 263,\n\t_CPED_CONFIG_FLAG_0x30CF498B = 264,\n\t_CPED_CONFIG_FLAG_0xE1CD50AF = 265,\n\t_CPED_CONFIG_FLAG_0x72E4AE48 = 266,\n\t_CPED_CONFIG_FLAG_0xC2657EA1 = 267,\n\t_CPED_CONFIG_FLAG_0x29FF6030 = 268,\n\t_CPED_CONFIG_FLAG_0x8248A5EC = 269,\n\tCPED_CONFIG_FLAG_OnStairSlope = 270,\n\t_CPED_CONFIG_FLAG_0xA0897933 = 271,\n\tCPED_CONFIG_FLAG_DontBlipCop = 272,\n\tCPED_CONFIG_FLAG_ClimbedShiftedFence = 273,\n\t_CPED_CONFIG_FLAG_0xF7823618 = 274,\n\t_CPED_CONFIG_FLAG_0xDC305CCE = 275,\n\tCPED_CONFIG_FLAG_EdgeDetected = 276,\n\t_CPED_CONFIG_FLAG_0x92B67896 = 277,\n\t_CPED_CONFIG_FLAG_0xCAD677C9 = 278,\n\tCPED_CONFIG_FLAG_AvoidTearGas = 279,\n\t_CPED_CONFIG_FLAG_0x5276AC7B = 280,\n\t_CPED_CONFIG_FLAG_NoWrithe = 281, // 0x1032692A\n\t_CPED_CONFIG_FLAG_0xDA23E7F1 = 282,\n\t_CPED_CONFIG_FLAG_0x9139724D = 283,\n\t_CPED_CONFIG_FLAG_0xA1457461 = 284,\n\t_CPED_CONFIG_FLAG_0x4186E095 = 285,\n\t_CPED_CONFIG_FLAG_0xAC68E2EB = 286,\n\tCPED_CONFIG_FLAG_RagdollingOnBoat = 287,\n\tCPED_CONFIG_FLAG_HasBrandishedWeapon = 288,\n\t_CPED_CONFIG_FLAG_0x1B9EE8A1 = 289,\n\t_CPED_CONFIG_FLAG_0xF3F5758C = 290,\n\t_CPED_CONFIG_FLAG_0x2A9307F1 = 291,\n\t_CPED_CONFIG_FLAG_FreezePosition = 292, // 0x7403D216\n\t_CPED_CONFIG_FLAG_0xA06A3C6C = 293,\n\tCPED_CONFIG_FLAG_DisableShockingEvents = 294,\n\t_CPED_CONFIG_FLAG_0xF8DA25A5 = 295,\n\t_CPED_CONFIG_FLAG_0x7EF55802 = 296,\n\t_CPED_CONFIG_FLAG_0xB31F1187 = 297,\n\t_CPED_CONFIG_FLAG_0x84315402 = 298,\n\t_CPED_CONFIG_FLAG_0x0FD69867 = 299,\n\t_CPED_CONFIG_FLAG_0xC7829B67 = 300,\n\tCPED_CONFIG_FLAG_DisablePedConstraints = 301,\n\t_CPED_CONFIG_FLAG_0x6D23CF25 = 302,\n\t_CPED_CONFIG_FLAG_0x2ADA871B = 303,\n\t_CPED_CONFIG_FLAG_0x47BC8A58 = 304,\n\t_CPED_CONFIG_FLAG_0xEB692FA5 = 305,\n\t_CPED_CONFIG_FLAG_0x4A133C50 = 306,\n\t_CPED_CONFIG_FLAG_0xC58099C3 = 307,\n\t_CPED_CONFIG_FLAG_0xF3D76D41 = 308,\n\t_CPED_CONFIG_FLAG_0xB0EEE9F2 = 309,\n\tCPED_CONFIG_FLAG_IsInCluster = 310,\n\t_CPED_CONFIG_FLAG_0x0FA153EF = 311,\n\t_CPED_CONFIG_FLAG_0xD73F5CD3 = 312,\n\t_CPED_CONFIG_FLAG_0xD4136C22 = 313,\n\t_CPED_CONFIG_FLAG_0xE404CA6B = 314,\n\t_CPED_CONFIG_FLAG_0xB9597446 = 315,\n\t_CPED_CONFIG_FLAG_0xD5C98277 = 316,\n\t_CPED_CONFIG_FLAG_0xD5060A9C = 317,\n\t_CPED_CONFIG_FLAG_0x3E5F1CBB = 318,\n\t_CPED_CONFIG_FLAG_0xD8BE1D54 = 319,\n\t_CPED_CONFIG_FLAG_0x0B1F191F = 320,\n\t_CPED_CONFIG_FLAG_0xC995167A = 321,\n\tCPED_CONFIG_FLAG_HasHighHeels = 322,\n\t_CPED_CONFIG_FLAG_0x86B01E54 = 323,\n\t_CPED_CONFIG_FLAG_0x3A56FE15 = 324,\n\t_CPED_CONFIG_FLAG_0xC03B736C = 325, // SpawnedAtScenario?\n\t_CPED_CONFIG_FLAG_0xBBF47729 = 326,\n\t_CPED_CONFIG_FLAG_0x22B668A8 = 327,\n\t_CPED_CONFIG_FLAG_0x2624D4D4 = 328,\n\tCPED_CONFIG_FLAG_DisableTalkTo = 329,\n\tCPED_CONFIG_FLAG_DontBlip = 330,\n\tCPED_CONFIG_FLAG_IsSwitchingWeapon = 331,\n\t_CPED_CONFIG_FLAG_0x630F55F3 = 332,\n\t_CPED_CONFIG_FLAG_0x150468FD = 333,\n\t_CPED_CONFIG_FLAG_0x914EBD6B = 334,\n\t_CPED_CONFIG_FLAG_0x79AF3B6D = 335,\n\t_CPED_CONFIG_FLAG_0x75C7A632 = 336,\n\t_CPED_CONFIG_FLAG_0x52D530E2 = 337,\n\t_CPED_CONFIG_FLAG_0xDB2A90E0 = 338,\n\t_CPED_CONFIG_FLAG_0x5922763D = 339,\n\t_CPED_CONFIG_FLAG_0x12ADB567 = 340,\n\t_CPED_CONFIG_FLAG_0x105C8518 = 341,\n\t_CPED_CONFIG_FLAG_0x106F703D = 342,\n\t_CPED_CONFIG_FLAG_0xED152C3E = 343,\n\t_CPED_CONFIG_FLAG_0xA0EFE6A8 = 344,\n\t_CPED_CONFIG_FLAG_0xBF348C82 = 345,\n\t_CPED_CONFIG_FLAG_0xCDDFE830 = 346,\n\t_CPED_CONFIG_FLAG_0x7B59BD9B = 347,\n\t_CPED_CONFIG_FLAG_0x0124C788 = 348,\n\tCPED_CONFIG_FLAG_EquipJetpack = 349,\n\t_CPED_CONFIG_FLAG_0x08D361A5 = 350,\n\t_CPED_CONFIG_FLAG_0xE13D1F7C = 351,\n\t_CPED_CONFIG_FLAG_0x40E25FB9 = 352,\n\t_CPED_CONFIG_FLAG_0x930629D9 = 353,\n\t_CPED_CONFIG_FLAG_0xECCF0C7F = 354,\n\t_CPED_CONFIG_FLAG_0xB6E9613B = 355,\n\t_CPED_CONFIG_FLAG_0x490C0478 = 356,\n\t_CPED_CONFIG_FLAG_0xE8865BEA = 357,\n\t_CPED_CONFIG_FLAG_0xF3C34A29 = 358,\n\tCPED_CONFIG_FLAG_IsDuckingInVehicle = 359,\n\t_CPED_CONFIG_FLAG_0xF660E115 = 360,\n\t_CPED_CONFIG_FLAG_0xAB0E6DED = 361,\n\tCPED_CONFIG_FLAG_HasReserveParachute = 362,\n\tCPED_CONFIG_FLAG_UseReserveParachute = 363,\n\t_CPED_CONFIG_FLAG_0x5C5D9CD3 = 364,\n\t_CPED_CONFIG_FLAG_0x8F7701F3 = 365,\n\t_CPED_CONFIG_FLAG_0xBC4436AD = 366,\n\t_CPED_CONFIG_FLAG_0xD7E07D37 = 367,\n\t_CPED_CONFIG_FLAG_0x03C4FD24 = 368,\n\t_CPED_CONFIG_FLAG_0x7675789A = 369,\n\t_CPED_CONFIG_FLAG_0xB7288A88 = 370,\n\t_CPED_CONFIG_FLAG_0xC06B6291 = 371,\n\t_CPED_CONFIG_FLAG_0x95A4A805 = 372,\n\t_CPED_CONFIG_FLAG_0xA8E9A042 = 373,\n\tCPED_CONFIG_FLAG_NeverLeaveTrain = 374,\n\t_CPED_CONFIG_FLAG_0xBAC674B3 = 375,\n\t_CPED_CONFIG_FLAG_0x147F1FFB = 376,\n\t_CPED_CONFIG_FLAG_0x4376DD79 = 377,\n\t_CPED_CONFIG_FLAG_0xCD3DB518 = 378,\n\t_CPED_CONFIG_FLAG_0xFE4BA4B6 = 379,\n\t_CPED_CONFIG_FLAG_0x5DF03A55 = 380,\n\t_CPED_CONFIG_FLAG_0xBCD816CD = 381,\n\t_CPED_CONFIG_FLAG_0xCF02DD69 = 382,\n\t_CPED_CONFIG_FLAG_0xF73AFA2E = 383,\n\t_CPED_CONFIG_FLAG_0x80B9A9D0 = 384,\n\t_CPED_CONFIG_FLAG_0xF601F7EE = 385,\n\t_CPED_CONFIG_FLAG_0xA91350FC = 386,\n\t_CPED_CONFIG_FLAG_0x3AB23B96 = 387,\n\tCPED_CONFIG_FLAG_IsClimbingLadder = 388,\n\tCPED_CONFIG_FLAG_HasBareFeet = 389,\n\t_CPED_CONFIG_FLAG_0xB4B1CD4C = 390,\n\t_CPED_CONFIG_FLAG_0x5459AFB8 = 391,\n\t_CPED_CONFIG_FLAG_0x54F27667 = 392,\n\t_CPED_CONFIG_FLAG_0xC11D3E8F = 393,\n\t_CPED_CONFIG_FLAG_0x5419EB3E = 394,\n\t_CPED_CONFIG_FLAG_0x82D8DBB4 = 395,\n\t_CPED_CONFIG_FLAG_0x33B02D2F = 396,\n\t_CPED_CONFIG_FLAG_0xAE66176D = 397,\n\t_CPED_CONFIG_FLAG_0xA2692593 = 398,\n\t_CPED_CONFIG_FLAG_0x714C7E31 = 399,\n\t_CPED_CONFIG_FLAG_0xEC488AC7 = 400,\n\t_CPED_CONFIG_FLAG_0xAE398504 = 401,\n\t_CPED_CONFIG_FLAG_0xABC58D72 = 402,\n\t_CPED_CONFIG_FLAG_0x5E5B9591 = 403,\n\t_CPED_CONFIG_FLAG_0x6BA1091E = 404,\n\t_CPED_CONFIG_FLAG_0x77840177 = 405,\n\t_CPED_CONFIG_FLAG_0x1C7ACAC4 = 406,\n\t_CPED_CONFIG_FLAG_0x124420E9 = 407,\n\t_CPED_CONFIG_FLAG_0x75A65587 = 408,\n\t_CPED_CONFIG_FLAG_0xDFD2D55B = 409,\n\t_CPED_CONFIG_FLAG_0xBDD39919 = 410,\n\t_CPED_CONFIG_FLAG_0x43DEC267 = 411,\n\t_CPED_CONFIG_FLAG_0xE42B7797 = 412,\n\tCPED_CONFIG_FLAG_IsHolsteringWeapon = 413,\n\t_CPED_CONFIG_FLAG_0x4F8149F5 = 414,\n\t_CPED_CONFIG_FLAG_0xDD9ECA7A = 415,\n\t_CPED_CONFIG_FLAG_0x9E7EF9D2 = 416,\n\t_CPED_CONFIG_FLAG_0x2C6ED942 = 417,\n\tCPED_CONFIG_FLAG_IsSwitchingHelmetVisor = 418,\n\t_CPED_CONFIG_FLAG_0xA488727D = 419,\n\t_CPED_CONFIG_FLAG_0xCFF5F6DE = 420,\n\t_CPED_CONFIG_FLAG_0x6D614599 = 421,\n\tCPED_CONFIG_FLAG_DisableVehicleCombat = 422,\n\t_CPED_CONFIG_FLAG_0xFE401D26 = 423,\n\tCPED_CONFIG_FLAG_FallsLikeAircraft = 424,\n\t_CPED_CONFIG_FLAG_0x2B42AE82 = 425,\n\t_CPED_CONFIG_FLAG_0x7A95734F = 426,\n\t_CPED_CONFIG_FLAG_0xDF4D8617 = 427,\n\t_CPED_CONFIG_FLAG_0x578F1F14 = 428,\n\tCPED_CONFIG_FLAG_DisableStartEngine = 429,\n\tCPED_CONFIG_FLAG_IgnoreBeingOnFire = 430,\n\t_CPED_CONFIG_FLAG_0x153C9500 = 431,\n\t_CPED_CONFIG_FLAG_0xCB7A632E = 432,\n\t_CPED_CONFIG_FLAG_0xDE727981 = 433,\n\tCPED_CONFIG_FLAG_DisableHomingMissileLockon = 434,\n\t_CPED_CONFIG_FLAG_0x12BBB935 = 435,\n\t_CPED_CONFIG_FLAG_0xAD0A1277 = 436,\n\t_CPED_CONFIG_FLAG_0xEA6AA46A = 437,\n\tCPED_CONFIG_FLAG_DisableHelmetArmor = 438,\n\t_CPED_CONFIG_FLAG_0xCB7F3A1E = 439,\n\t_CPED_CONFIG_FLAG_0x50178878 = 440,\n\t_CPED_CONFIG_FLAG_0x051B4F0D = 441,\n\t_CPED_CONFIG_FLAG_0x2FC3DECC = 442,\n\t_CPED_CONFIG_FLAG_0xC0030B0B = 443,\n\t_CPED_CONFIG_FLAG_0xBBDAF1E9 = 444,\n\t_CPED_CONFIG_FLAG_0x944FE59C = 445,\n\t_CPED_CONFIG_FLAG_0x506FBA39 = 446,\n\t_CPED_CONFIG_FLAG_0xDD45FE84 = 447,\n\t_CPED_CONFIG_FLAG_0xE698AE75 = 448,\n\t_CPED_CONFIG_FLAG_0x199633F8 = 449,\n\tCPED_CONFIG_FLAG_PedIsArresting = 450,\n\tCPED_CONFIG_FLAG_IsDecoyPed = 451,\n\t_CPED_CONFIG_FLAG_0x3A251D83 = 452,\n\t_CPED_CONFIG_FLAG_0xA56F6986 = 453,\n\t_CPED_CONFIG_FLAG_0x1D19C622 = 454,\n\t_CPED_CONFIG_FLAG_0xB68D3EAB = 455,\n\tCPED_CONFIG_FLAG_CanBeIncapacitated = 456,\n\t_CPED_CONFIG_FLAG_0x4BD5EBAD = 457,\n\t_CPED_CONFIG_FLAG_0xFCC5EBC5 = 458\n};",
+			"comment": "enum ePedConfigFlags\n{\n\t_CPED_CONFIG_FLAG_0xC63DE95E = 1,\n\tCPED_CONFIG_FLAG_NoCriticalHits = 2,\n\tCPED_CONFIG_FLAG_DrownsInWater = 3,\n\tCPED_CONFIG_FLAG_DisableReticuleFixedLockon = 4,\n\t_CPED_CONFIG_FLAG_0x37D196F4 = 5,\n\t_CPED_CONFIG_FLAG_0xE2462399 = 6,\n\tCPED_CONFIG_FLAG_UpperBodyDamageAnimsOnly = 7,\n\t_CPED_CONFIG_FLAG_0xEDDEB838 = 8,\n\t_CPED_CONFIG_FLAG_0xB398B6FD = 9,\n\t_CPED_CONFIG_FLAG_0xF6664E68 = 10,\n\t_CPED_CONFIG_FLAG_0xA05E7CA3 = 11,\n\t_CPED_CONFIG_FLAG_0xCE394045 = 12,\n\tCPED_CONFIG_FLAG_NeverLeavesGroup = 13,\n\t_CPED_CONFIG_FLAG_0xCD8D1411 = 14,\n\t_CPED_CONFIG_FLAG_0xB031F1A9 = 15,\n\t_CPED_CONFIG_FLAG_0xFE65BEE3 = 16,\n\tCPED_CONFIG_FLAG_BlockNonTemporaryEvents = 17,\n\t_CPED_CONFIG_FLAG_0x380165BD = 18,\n\t_CPED_CONFIG_FLAG_0x07C045C7 = 19,\n\t_CPED_CONFIG_FLAG_0x583B5E2D = 20,\n\t_CPED_CONFIG_FLAG_0x475EDA58 = 21,\n\t_CPED_CONFIG_FLAG_0x8629D05B = 22,\n\t_CPED_CONFIG_FLAG_0x1522968B = 23,\n\tCPED_CONFIG_FLAG_IgnoreSeenMelee = 24,\n\t_CPED_CONFIG_FLAG_0x4CC09C4B = 25,\n\t_CPED_CONFIG_FLAG_0x034F3053 = 26,\n\t_CPED_CONFIG_FLAG_0xD91BA7CC = 27,\n\t_CPED_CONFIG_FLAG_0x5C8DC66E = 28,\n\tCPED_CONFIG_FLAG_GetOutUndriveableVehicle = 29,\n\t_CPED_CONFIG_FLAG_0x6580B9D2 = 30,\n\t_CPED_CONFIG_FLAG_0x0EF7A297 = 31,\n\tCPED_CONFIG_FLAG_WillFlyThruWindscreen = 32,\n\tCPED_CONFIG_FLAG_DieWhenRagdoll = 33,\n\tCPED_CONFIG_FLAG_HasHelmet = 34,\n\tCPED_CONFIG_FLAG_UseHelmet = 35,\n\tCPED_CONFIG_FLAG_DontTakeOffHelmet = 36,\n\t_CPED_CONFIG_FLAG_0xB130D17B = 37,\n\t_CPED_CONFIG_FLAG_0x5F071200 = 38,\n\tCPED_CONFIG_FLAG_DisableEvasiveDives = 39,\n\t_CPED_CONFIG_FLAG_0xC287AAFF = 40,\n\t_CPED_CONFIG_FLAG_0x203328CC = 41,\n\tCPED_CONFIG_FLAG_DontInfluenceWantedLevel = 42,\n\tCPED_CONFIG_FLAG_DisablePlayerLockon = 43,\n\tCPED_CONFIG_FLAG_DisableLockonToRandomPeds = 44,\n\tCPED_CONFIG_FLAG_AllowLockonToFriendlyPlayers = 45,\n\t_CPED_CONFIG_FLAG_0xDB115BFA = 46,\n\tCPED_CONFIG_FLAG_PedBeingDeleted = 47,\n\tCPED_CONFIG_FLAG_BlockWeaponSwitching = 48,\n\t_CPED_CONFIG_FLAG_0xF8E99565 = 49,\n\t_CPED_CONFIG_FLAG_0xDD17FEE6 = 50,\n\t_CPED_CONFIG_FLAG_0x7ED9B2C9 = 51,\n\t_CPED_CONFIG_FLAG_NoCollison = 52,\n\t_CPED_CONFIG_FLAG_0x5A6C1F6E = 53,\n\t_CPED_CONFIG_FLAG_0xD749FC41 = 54,\n\t_CPED_CONFIG_FLAG_0x357F63F3 = 55,\n\t_CPED_CONFIG_FLAG_0xC5E60961 = 56,\n\t_CPED_CONFIG_FLAG_0x29275C3E = 57,\n\tCPED_CONFIG_FLAG_IsFiring = 58,\n\tCPED_CONFIG_FLAG_WasFiring = 59,\n\tCPED_CONFIG_FLAG_IsStanding = 60,\n\tCPED_CONFIG_FLAG_WasStanding = 61,\n\tCPED_CONFIG_FLAG_InVehicle = 62,\n\tCPED_CONFIG_FLAG_OnMount = 63,\n\tCPED_CONFIG_FLAG_AttachedToVehicle = 64,\n\tCPED_CONFIG_FLAG_IsSwimming = 65,\n\tCPED_CONFIG_FLAG_WasSwimming = 66,\n\tCPED_CONFIG_FLAG_IsSkiing = 67,\n\tCPED_CONFIG_FLAG_IsSitting = 68,\n\tCPED_CONFIG_FLAG_KilledByStealth = 69,\n\tCPED_CONFIG_FLAG_KilledByTakedown = 70,\n\tCPED_CONFIG_FLAG_Knockedout = 71,\n\t_CPED_CONFIG_FLAG_0x3E3C4560 = 72,\n\t_CPED_CONFIG_FLAG_0x2994C7B7 = 73,\n\t_CPED_CONFIG_FLAG_0x6D59D275 = 74,\n\tCPED_CONFIG_FLAG_UsingCoverPoint = 75,\n\tCPED_CONFIG_FLAG_IsInTheAir = 76,\n\t_CPED_CONFIG_FLAG_0x2D493FB7 = 77,\n\tCPED_CONFIG_FLAG_IsAimingGun = 78,\n\t_CPED_CONFIG_FLAG_0x14D69875 = 79,\n\t_CPED_CONFIG_FLAG_0x40B05311 = 80,\n\t_CPED_CONFIG_FLAG_0x8B230BC5 = 81,\n\t_CPED_CONFIG_FLAG_0xC74E5842 = 82,\n\t_CPED_CONFIG_FLAG_0x9EA86147 = 83,\n\t_CPED_CONFIG_FLAG_0x674C746C = 84,\n\t_CPED_CONFIG_FLAG_0x3E56A8C2 = 85,\n\t_CPED_CONFIG_FLAG_0xC144A1EF = 86,\n\t_CPED_CONFIG_FLAG_0x0548512D = 87,\n\t_CPED_CONFIG_FLAG_0x31C93909 = 88,\n\t_CPED_CONFIG_FLAG_0xA0269315 = 89,\n\t_CPED_CONFIG_FLAG_0xD4D59D4D = 90,\n\t_CPED_CONFIG_FLAG_0x411D4420 = 91,\n\t_CPED_CONFIG_FLAG_0xDF4AEF0D = 92,\n\tCPED_CONFIG_FLAG_ForcePedLoadCover = 93,\n\t_CPED_CONFIG_FLAG_0x300E4CD3 = 94,\n\t_CPED_CONFIG_FLAG_0xF1C5BF04 = 95,\n\t_CPED_CONFIG_FLAG_0x89C2EF13 = 96,\n\tCPED_CONFIG_FLAG_VaultFromCover = 97,\n\t_CPED_CONFIG_FLAG_0x02A852C8 = 98,\n\t_CPED_CONFIG_FLAG_0x3D9407F1 = 99,\n\t_CPED_CONFIG_FLAG_IsDrunk = 100, // 0x319B4558\n\tCPED_CONFIG_FLAG_ForcedAim = 101,\n\t_CPED_CONFIG_FLAG_0xB942D71A = 102,\n\t_CPED_CONFIG_FLAG_0xD26C55A8 = 103,\n\tCPED_CONFIG_FLAG_OpenDoorArmIK = 104,\n\tCPED_CONFIG_FLAG_ForceReload = 105,\n\tCPED_CONFIG_FLAG_DontActivateRagdollFromVehicleImpact = 106,\n\tCPED_CONFIG_FLAG_DontActivateRagdollFromBulletImpact = 107,\n\tCPED_CONFIG_FLAG_DontActivateRagdollFromExplosions = 108,\n\tCPED_CONFIG_FLAG_DontActivateRagdollFromFire = 109,\n\tCPED_CONFIG_FLAG_DontActivateRagdollFromElectrocution = 110,\n\t_CPED_CONFIG_FLAG_0x83C0A4BF = 111,\n\t_CPED_CONFIG_FLAG_0x0E0FAF8C = 112,\n\tCPED_CONFIG_FLAG_KeepWeaponHolsteredUnlessFired = 113,\n\t_CPED_CONFIG_FLAG_0x43B80B79 = 114,\n\t_CPED_CONFIG_FLAG_0x0D2A9309 = 115,\n\tCPED_CONFIG_FLAG_GetOutBurningVehicle = 116,\n\tCPED_CONFIG_FLAG_BumpedByPlayer = 117,\n\tCPED_CONFIG_FLAG_RunFromFiresAndExplosions = 118,\n\tCPED_CONFIG_FLAG_TreatAsPlayerDuringTargeting = 119,\n\tCPED_CONFIG_FLAG_IsHandCuffed = 120,\n\tCPED_CONFIG_FLAG_IsAnkleCuffed = 121,\n\tCPED_CONFIG_FLAG_DisableMelee = 122,\n\tCPED_CONFIG_FLAG_DisableUnarmedDrivebys = 123,\n\tCPED_CONFIG_FLAG_JustGetsPulledOutWhenElectrocuted = 124,\n\t_CPED_CONFIG_FLAG_0x5FED6BFD = 125,\n\tCPED_CONFIG_FLAG_WillNotHotwireLawEnforcementVehicle = 126,\n\tCPED_CONFIG_FLAG_WillCommandeerRatherThanJack = 127,\n\tCPED_CONFIG_FLAG_CanBeAgitated = 128,\n\tCPED_CONFIG_FLAG_ForcePedToFaceLeftInCover = 129,\n\tCPED_CONFIG_FLAG_ForcePedToFaceRightInCover = 130,\n\tCPED_CONFIG_FLAG_BlockPedFromTurningInCover = 131,\n\tCPED_CONFIG_FLAG_KeepRelationshipGroupAfterCleanUp = 132,\n\tCPED_CONFIG_FLAG_ForcePedToBeDragged = 133,\n\tCPED_CONFIG_FLAG_PreventPedFromReactingToBeingJacked = 134,\n\tCPED_CONFIG_FLAG_IsScuba = 135,\n\tCPED_CONFIG_FLAG_WillArrestRatherThanJack = 136,\n\tCPED_CONFIG_FLAG_RemoveDeadExtraFarAway = 137,\n\tCPED_CONFIG_FLAG_RidingTrain = 138,\n\tCPED_CONFIG_FLAG_ArrestResult = 139,\n\tCPED_CONFIG_FLAG_CanAttackFriendly = 140,\n\tCPED_CONFIG_FLAG_WillJackAnyPlayer = 141,\n\t_CPED_CONFIG_FLAG_0x6901E731 = 142,\n\t_CPED_CONFIG_FLAG_0x9EC9BF6C = 143,\n\tCPED_CONFIG_FLAG_WillJackWantedPlayersRatherThanStealCar = 144,\n\tCPED_CONFIG_FLAG_ShootingAnimFlag = 145,\n\tCPED_CONFIG_FLAG_DisableLadderClimbing = 146,\n\tCPED_CONFIG_FLAG_StairsDetected = 147,\n\tCPED_CONFIG_FLAG_SlopeDetected = 148,\n\t_CPED_CONFIG_FLAG_0x1A15670B = 149,\n\tCPED_CONFIG_FLAG_CowerInsteadOfFlee = 150,\n\tCPED_CONFIG_FLAG_CanActivateRagdollWhenVehicleUpsideDown = 151,\n\tCPED_CONFIG_FLAG_AlwaysRespondToCriesForHelp = 152,\n\tCPED_CONFIG_FLAG_DisableBloodPoolCreation = 153,\n\tCPED_CONFIG_FLAG_ShouldFixIfNoCollision = 154,\n\tCPED_CONFIG_FLAG_CanPerformArrest = 155,\n\tCPED_CONFIG_FLAG_CanPerformUncuff = 156,\n\tCPED_CONFIG_FLAG_CanBeArrested = 157,\n\t_CPED_CONFIG_FLAG_0xF7960FF5 = 158,\n\tCPED_CONFIG_FLAG_PlayerPreferFrontSeatMP = 159,\n\t_CPED_CONFIG_FLAG_0x0C6C3099 = 160,\n\t_CPED_CONFIG_FLAG_0x645F927A = 161,\n\t_CPED_CONFIG_FLAG_0xA86549B9 = 162,\n\t_CPED_CONFIG_FLAG_0x8AAF337A = 163,\n\t_CPED_CONFIG_FLAG_0x13BAA6E7 = 164,\n\t_CPED_CONFIG_FLAG_0x5FB9D1F5 = 165,\n\tCPED_CONFIG_FLAG_IsInjured = 166,\n\tCPED_CONFIG_FLAG_DontEnterVehiclesInPlayersGroup = 167,\n\t_CPED_CONFIG_FLAG_0xD8072639 = 168,\n\tCPED_CONFIG_FLAG_PreventAllMeleeTaunts = 169,\n\tCPED_CONFIG_FLAG_ForceDirectEntry = 170,\n\tCPED_CONFIG_FLAG_AlwaysSeeApproachingVehicles = 171,\n\tCPED_CONFIG_FLAG_CanDiveAwayFromApproachingVehicles = 172,\n\tCPED_CONFIG_FLAG_AllowPlayerToInterruptVehicleEntryExit = 173,\n\tCPED_CONFIG_FLAG_OnlyAttackLawIfPlayerIsWanted = 174,\n\t_CPED_CONFIG_FLAG_0x90008BFA = 175,\n\t_CPED_CONFIG_FLAG_0x07C7A910 = 176,\n\tCPED_CONFIG_FLAG_PedsJackingMeDontGetIn = 177,\n\t_CPED_CONFIG_FLAG_0xCE4E8BE2 = 178,\n\tCPED_CONFIG_FLAG_PedIgnoresAnimInterruptEvents = 179,\n\tCPED_CONFIG_FLAG_IsInCustody = 180,\n\tCPED_CONFIG_FLAG_ForceStandardBumpReactionThresholds = 181,\n\tCPED_CONFIG_FLAG_LawWillOnlyAttackIfPlayerIsWanted = 182,\n\tCPED_CONFIG_FLAG_IsAgitated = 183,\n\tCPED_CONFIG_FLAG_PreventAutoShuffleToDriversSeat = 184,\n\tCPED_CONFIG_FLAG_UseKinematicModeWhenStationary = 185,\n\tCPED_CONFIG_FLAG_EnableWeaponBlocking = 186,\n\tCPED_CONFIG_FLAG_HasHurtStarted = 187,\n\tCPED_CONFIG_FLAG_DisableHurt = 188,\n\tCPED_CONFIG_FLAG_PlayerIsWeird = 189,\n\t_CPED_CONFIG_FLAG_0x32FC208B = 190,\n\t_CPED_CONFIG_FLAG_0x0C296E5A = 191,\n\t_CPED_CONFIG_FLAG_0xE63B73EC = 192,\n\tCPED_CONFIG_FLAG_DoNothingWhenOnFootByDefault = 193,\n\tCPED_CONFIG_FLAG_UsingScenario = 194,\n\tCPED_CONFIG_FLAG_VisibleOnScreen = 195,\n\t_CPED_CONFIG_FLAG_0xD88C58A1 = 196,\n\t_CPED_CONFIG_FLAG_0x5A3DCF43 = 197,\n\t_CPED_CONFIG_FLAG_0xEA02B420 = 198,\n\tCPED_CONFIG_FLAG_DontActivateRagdollOnVehicleCollisionWhenDead = 199,\n\tCPED_CONFIG_FLAG_HasBeenInArmedCombat = 200,\n\t_CPED_CONFIG_FLAG_0x5E6466F6 = 201,\n\tCPED_CONFIG_FLAG_Avoidance_Ignore_All = 202,\n\tCPED_CONFIG_FLAG_Avoidance_Ignored_by_All = 203,\n\tCPED_CONFIG_FLAG_Avoidance_Ignore_Group1 = 204,\n\tCPED_CONFIG_FLAG_Avoidance_Member_of_Group1 = 205,\n\tCPED_CONFIG_FLAG_ForcedToUseSpecificGroupSeatIndex = 206,\n\t_CPED_CONFIG_FLAG_0x415B26B9 = 207,\n\tCPED_CONFIG_FLAG_DisableExplosionReactions = 208,\n\tCPED_CONFIG_FLAG_DodgedPlayer = 209,\n\tCPED_CONFIG_FLAG_WaitingForPlayerControlInterrupt = 210,\n\tCPED_CONFIG_FLAG_ForcedToStayInCover = 211,\n\tCPED_CONFIG_FLAG_GeneratesSoundEvents = 212,\n\tCPED_CONFIG_FLAG_ListensToSoundEvents = 213,\n\tCPED_CONFIG_FLAG_AllowToBeTargetedInAVehicle = 214,\n\tCPED_CONFIG_FLAG_WaitForDirectEntryPointToBeFreeWhenExiting = 215,\n\tCPED_CONFIG_FLAG_OnlyRequireOnePressToExitVehicle = 216,\n\tCPED_CONFIG_FLAG_ForceExitToSkyDive = 217,\n\t_CPED_CONFIG_FLAG_0x3C7DF9DF = 218,\n\t_CPED_CONFIG_FLAG_0x848FFEF2 = 219,\n\tCPED_CONFIG_FLAG_DontEnterLeadersVehicle = 220,\n\tCPED_CONFIG_FLAG_DisableExitToSkyDive = 221,\n\t_CPED_CONFIG_FLAG_0x84F722FA = 222,\n\t_CPED_CONFIG_FLAG_Shrink = 223, // 0xD1B87B1F\n\t_CPED_CONFIG_FLAG_0x728AA918 = 224,\n\tCPED_CONFIG_FLAG_DisablePotentialToBeWalkedIntoResponse = 225,\n\tCPED_CONFIG_FLAG_DisablePedAvoidance = 226,\n\tCPED_CONFIG_FLAG_ForceRagdollUponDeath = 227,\n\t_CPED_CONFIG_FLAG_0x1EA7225F = 228,\n\tCPED_CONFIG_FLAG_DisablePanicInVehicle = 229,\n\tCPED_CONFIG_FLAG_AllowedToDetachTrailer = 230,\n\t_CPED_CONFIG_FLAG_0xFC3E572D = 231,\n\t_CPED_CONFIG_FLAG_0x08E9F9CF = 232,\n\t_CPED_CONFIG_FLAG_0x2D3BA52D = 233,\n\t_CPED_CONFIG_FLAG_0xFD2F53EA = 234,\n\t_CPED_CONFIG_FLAG_0x31A1B03B = 235,\n\tCPED_CONFIG_FLAG_IsHoldingProp = 236,\n\tCPED_CONFIG_FLAG_BlocksPathingWhenDead = 237,\n\t_CPED_CONFIG_FLAG_0xCE57C9A3 = 238,\n\t_CPED_CONFIG_FLAG_0x26149198 = 239,\n\tCPED_CONFIG_FLAG_ForceSkinCharacterCloth = 240,\n\tCPED_CONFIG_FLAG_LeaveEngineOnWhenExitingVehicles = 241,\n\tCPED_CONFIG_FLAG_PhoneDisableTextingAnimations = 242,\n\tCPED_CONFIG_FLAG_PhoneDisableTalkingAnimations = 243,\n\tCPED_CONFIG_FLAG_PhoneDisableCameraAnimations = 244,\n\tCPED_CONFIG_FLAG_DisableBlindFiringInShotReactions = 245,\n\tCPED_CONFIG_FLAG_AllowNearbyCoverUsage = 246,\n\t_CPED_CONFIG_FLAG_0x0C754ACA = 247,\n\tCPED_CONFIG_FLAG_CanPlayInCarIdles = 248,\n\tCPED_CONFIG_FLAG_CanAttackNonWantedPlayerAsLaw = 249,\n\tCPED_CONFIG_FLAG_WillTakeDamageWhenVehicleCrashes = 250,\n\tCPED_CONFIG_FLAG_AICanDrivePlayerAsRearPassenger = 251,\n\tCPED_CONFIG_FLAG_PlayerCanJackFriendlyPlayers = 252,\n\tCPED_CONFIG_FLAG_OnStairs = 253,\n\t_CPED_CONFIG_FLAG_0xE1A2F73F = 254,\n\tCPED_CONFIG_FLAG_AIDriverAllowFriendlyPassengerSeatEntry = 255,\n\t_CPED_CONFIG_FLAG_0xF1EB20A9 = 256,\n\tCPED_CONFIG_FLAG_AllowMissionPedToUseInjuredMovement = 257,\n\t_CPED_CONFIG_FLAG_0x329DCF1A = 258,\n\t_CPED_CONFIG_FLAG_0x8D90DD1B = 259,\n\t_CPED_CONFIG_FLAG_0xB8A292B7 = 260,\n\tCPED_CONFIG_FLAG_PreventUsingLowerPrioritySeats = 261,\n\t_CPED_CONFIG_FLAG_0x2AF558F0 = 262,\n\t_CPED_CONFIG_FLAG_0x82251455 = 263,\n\t_CPED_CONFIG_FLAG_0x30CF498B = 264,\n\t_CPED_CONFIG_FLAG_0xE1CD50AF = 265,\n\t_CPED_CONFIG_FLAG_0x72E4AE48 = 266,\n\t_CPED_CONFIG_FLAG_0xC2657EA1 = 267,\n\tCPED_CONFIG_FLAG_TeleportToLeaderVehicle = 268,\n\tCPED_CONFIG_FLAG_Avoidance_Ignore_WeirdPedBuffer = 269,\n\tCPED_CONFIG_FLAG_OnStairSlope = 270,\n\t_CPED_CONFIG_FLAG_0xA0897933 = 271,\n\tCPED_CONFIG_FLAG_DontBlipCop = 272,\n\tCPED_CONFIG_FLAG_ClimbedShiftedFence = 273,\n\t_CPED_CONFIG_FLAG_0xF7823618 = 274,\n\tCPED_CONFIG_FLAG_KillWhenTrapped = 275,\n\tCPED_CONFIG_FLAG_EdgeDetected = 276,\n\t_CPED_CONFIG_FLAG_0x92B67896 = 277,\n\t_CPED_CONFIG_FLAG_0xCAD677C9 = 278,\n\tCPED_CONFIG_FLAG_AvoidTearGas = 279,\n\t_CPED_CONFIG_FLAG_0x5276AC7B = 280,\n\tCPED_CONFIG_FLAG_DisableGoToWritheWhenInjured = 281,\n\tCPED_CONFIG_FLAG_OnlyUseForcedSeatWhenEnteringHeliInGroup = 282,\n\t_CPED_CONFIG_FLAG_0x9139724D = 283,\n\t_CPED_CONFIG_FLAG_0xA1457461 = 284,\n\tCPED_CONFIG_FLAG_DisableWeirdPedEvents = 285,\n\tCPED_CONFIG_FLAG_ShouldChargeNow = 286,\n\tCPED_CONFIG_FLAG_RagdollingOnBoat = 287,\n\tCPED_CONFIG_FLAG_HasBrandishedWeapon = 288,\n\t_CPED_CONFIG_FLAG_0x1B9EE8A1 = 289,\n\t_CPED_CONFIG_FLAG_0xF3F5758C = 290,\n\t_CPED_CONFIG_FLAG_0x2A9307F1 = 291,\n\t_CPED_CONFIG_FLAG_FreezePosition = 292, // 0x7403D216\n\t_CPED_CONFIG_FLAG_0xA06A3C6C = 293,\n\tCPED_CONFIG_FLAG_DisableShockingEvents = 294,\n\t_CPED_CONFIG_FLAG_0xF8DA25A5 = 295,\n\tCPED_CONFIG_FLAG_NeverReactToPedOnRoof = 296,\n\t_CPED_CONFIG_FLAG_0xB31F1187 = 297,\n\t_CPED_CONFIG_FLAG_0x84315402 = 298,\n\tCPED_CONFIG_FLAG_DisableShockingDrivingOnPavementEvents = 299,\n\t_CPED_CONFIG_FLAG_0xC7829B67 = 300,\n\tCPED_CONFIG_FLAG_DisablePedConstraints = 301,\n\tCPED_CONFIG_FLAG_ForceInitialPeekInCover = 302,\n\t_CPED_CONFIG_FLAG_0x2ADA871B = 303,\n\t_CPED_CONFIG_FLAG_0x47BC8A58 = 304,\n\tCPED_CONFIG_FLAG_DisableJumpingFromVehiclesAfterLeader = 305,\n\t_CPED_CONFIG_FLAG_0x4A133C50 = 306,\n\t_CPED_CONFIG_FLAG_0xC58099C3 = 307,\n\t_CPED_CONFIG_FLAG_0xF3D76D41 = 308,\n\t_CPED_CONFIG_FLAG_0xB0EEE9F2 = 309,\n\tCPED_CONFIG_FLAG_IsInCluster = 310,\n\tCPED_CONFIG_FLAG_ShoutToGroupOnPlayerMelee = 311,\n\tCPED_CONFIG_FLAG_IgnoredByAutoOpenDoors = 312,\n\t_CPED_CONFIG_FLAG_0xD4136C22 = 313,\n\tCPED_CONFIG_FLAG_ForceIgnoreMeleeActiveCombatant = 314,\n\tCPED_CONFIG_FLAG_CheckLoSForSoundEvents = 315,\n\t_CPED_CONFIG_FLAG_0xD5C98277 = 316,\n\tCPED_CONFIG_FLAG_CanSayFollowedByPlayerAudio = 317,\n\tCPED_CONFIG_FLAG_ActivateRagdollFromMinorPlayerContact = 318,\n\t_CPED_CONFIG_FLAG_0xD8BE1D54 = 319,\n\tCPED_CONFIG_FLAG_ForcePoseCharacterCloth = 320,\n\tCPED_CONFIG_FLAG_HasClothCollisionBounds = 321,\n\tCPED_CONFIG_FLAG_HasHighHeels = 322,\n\t_CPED_CONFIG_FLAG_0x86B01E54 = 323,\n\tCPED_CONFIG_FLAG_DontBehaveLikeLaw = 324,\n\t_CPED_CONFIG_FLAG_0xC03B736C = 325, // SpawnedAtScenario?\n\tCPED_CONFIG_FLAG_DisablePoliceInvestigatingBody = 326,\n\tCPED_CONFIG_FLAG_DisableWritheShootFromGround = 327,\n\tCPED_CONFIG_FLAG_LowerPriorityOfWarpSeats = 328,\n\tCPED_CONFIG_FLAG_DisableTalkTo = 329,\n\tCPED_CONFIG_FLAG_DontBlip = 330,\n\tCPED_CONFIG_FLAG_IsSwitchingWeapon = 331,\n\tCPED_CONFIG_FLAG_IgnoreLegIkRestrictions = 332,\n\t_CPED_CONFIG_FLAG_0x150468FD = 333,\n\t_CPED_CONFIG_FLAG_0x914EBD6B = 334,\n\t_CPED_CONFIG_FLAG_0x79AF3B6D = 335,\n\t_CPED_CONFIG_FLAG_0x75C7A632 = 336,\n\t_CPED_CONFIG_FLAG_0x52D530E2 = 337,\n\t_CPED_CONFIG_FLAG_0xDB2A90E0 = 338,\n\tCPED_CONFIG_FLAG_AllowTaskDoNothingTimeslicing = 339,\n\t_CPED_CONFIG_FLAG_0x12ADB567 = 340,\n\t_CPED_CONFIG_FLAG_0x105C8518 = 341,\n\tCPED_CONFIG_FLAG_NotAllowedToJackAnyPlayers = 342,\n\t_CPED_CONFIG_FLAG_0xED152C3E = 343,\n\t_CPED_CONFIG_FLAG_0xA0EFE6A8 = 344,\n\tCPED_CONFIG_FLAG_AlwaysLeaveTrainUponArrival = 345,\n\t_CPED_CONFIG_FLAG_0xCDDFE830 = 346,\n\tCPED_CONFIG_FLAG_OnlyWritheFromWeaponDamage = 347,\n\tCPED_CONFIG_FLAG_UseSloMoBloodVfx = 348,\n\tCPED_CONFIG_FLAG_EquipJetpack = 349,\n\tCPED_CONFIG_FLAG_PreventDraggedOutOfCarThreatResponse = 350,\n\t_CPED_CONFIG_FLAG_0xE13D1F7C = 351,\n\t_CPED_CONFIG_FLAG_0x40E25FB9 = 352,\n\t_CPED_CONFIG_FLAG_0x930629D9 = 353,\n\t_CPED_CONFIG_FLAG_0xECCF0C7F = 354,\n\t_CPED_CONFIG_FLAG_0xB6E9613B = 355,\n\tCPED_CONFIG_FLAG_ForceDeepSurfaceCheck = 356,\n\tCPED_CONFIG_FLAG_DisableDeepSurfaceAnims = 357,\n\tCPED_CONFIG_FLAG_DontBlipNotSynced = 358,\n\tCPED_CONFIG_FLAG_IsDuckingInVehicle = 359,\n\tCPED_CONFIG_FLAG_PreventAutoShuffleToTurretSeat = 360,\n\tCPED_CONFIG_FLAG_DisableEventInteriorStatusCheck = 361,\n\tCPED_CONFIG_FLAG_HasReserveParachute = 362,\n\tCPED_CONFIG_FLAG_UseReserveParachute = 363,\n\tCPED_CONFIG_FLAG_TreatDislikeAsHateWhenInCombat = 364,\n\tCPED_CONFIG_FLAG_OnlyUpdateTargetWantedIfSeen = 365,\n\tCPED_CONFIG_FLAG_AllowAutoShuffleToDriversSeat = 366,\n\t_CPED_CONFIG_FLAG_0xD7E07D37 = 367,\n\t_CPED_CONFIG_FLAG_0x03C4FD24 = 368,\n\t_CPED_CONFIG_FLAG_0x7675789A = 369,\n\t_CPED_CONFIG_FLAG_0xB7288A88 = 370,\n\t_CPED_CONFIG_FLAG_0xC06B6291 = 371,\n\tCPED_CONFIG_FLAG_PreventReactingToSilencedCloneBullets = 372,\n\tCPED_CONFIG_FLAG_DisableInjuredCryForHelpEvents = 373,\n\tCPED_CONFIG_FLAG_NeverLeaveTrain = 374,\n\tCPED_CONFIG_FLAG_DontDropJetpackOnDeath = 375,\n\t_CPED_CONFIG_FLAG_0x147F1FFB = 376,\n\t_CPED_CONFIG_FLAG_0x4376DD79 = 377,\n\t_CPED_CONFIG_FLAG_0xCD3DB518 = 378,\n\t_CPED_CONFIG_FLAG_0xFE4BA4B6 = 379,\n\tCPED_CONFIG_FLAG_DisableAutoEquipHelmetsInBikes = 380,\n\t_CPED_CONFIG_FLAG_0xBCD816CD = 381,\n\t_CPED_CONFIG_FLAG_0xCF02DD69 = 382,\n\t_CPED_CONFIG_FLAG_0xF73AFA2E = 383,\n\t_CPED_CONFIG_FLAG_0x80B9A9D0 = 384,\n\t_CPED_CONFIG_FLAG_0xF601F7EE = 385,\n\t_CPED_CONFIG_FLAG_0xA91350FC = 386,\n\t_CPED_CONFIG_FLAG_0x3AB23B96 = 387,\n\tCPED_CONFIG_FLAG_IsClimbingLadder = 388,\n\tCPED_CONFIG_FLAG_HasBareFeet = 389,\n\tCPED_CONFIG_FLAG_UNUSED_REPLACE_ME_2 = 390,\n\tCPED_CONFIG_FLAG_GoOnWithoutVehicleIfItIsUnableToGetBackToRoad = 391,\n\tCPED_CONFIG_FLAG_BlockDroppingHealthSnacksOnDeath = 392,\n\t_CPED_CONFIG_FLAG_0xC11D3E8F = 393,\n\tCPED_CONFIG_FLAG_ForceThreatResponseToNonFriendToFriendMeleeActions = 394,\n\tCPED_CONFIG_FLAG_DontRespondToRandomPedsDamage = 395,\n\tCPED_CONFIG_FLAG_AllowContinuousThreatResponseWantedLevelUpdates = 396,\n\tCPED_CONFIG_FLAG_KeepTargetLossResponseOnCleanup = 397,\n\tCPED_CONFIG_FLAG_PlayersDontDragMeOutOfCar = 398,\n\tCPED_CONFIG_FLAG_BroadcastRepondedToThreatWhenGoingToPointShooting = 399,\n\tCPED_CONFIG_FLAG_IgnorePedTypeForIsFriendlyWith = 400,\n\tCPED_CONFIG_FLAG_TreatNonFriendlyAsHateWhenInCombat = 401,\n\tCPED_CONFIG_FLAG_DontLeaveVehicleIfLeaderNotInVehicle = 402,\n\t_CPED_CONFIG_FLAG_0x5E5B9591 = 403,\n\tCPED_CONFIG_FLAG_AllowMeleeReactionIfMeleeProofIsOn = 404,\n\t_CPED_CONFIG_FLAG_0x77840177 = 405,\n\t_CPED_CONFIG_FLAG_0x1C7ACAC4 = 406,\n\tCPED_CONFIG_FLAG_UseNormalExplosionDamageWhenBlownUpInVehicle = 407,\n\tCPED_CONFIG_FLAG_DisableHomingMissileLockForVehiclePedInside = 408,\n\tCPED_CONFIG_FLAG_DisableTakeOffScubaGear = 409,\n\tCPED_CONFIG_FLAG_IgnoreMeleeFistWeaponDamageMult = 410,\n\tCPED_CONFIG_FLAG_LawPedsCanFleeFromNonWantedPlayer = 411,\n\tCPED_CONFIG_FLAG_ForceBlipSecurityPedsIfPlayerIsWanted = 412,\n\tCPED_CONFIG_FLAG_IsHolsteringWeapon = 413,\n\tCPED_CONFIG_FLAG_UseGoToPointForScenarioNavigation = 414,\n\tCPED_CONFIG_FLAG_DontClearLocalPassengersWantedLevel = 415,\n\tCPED_CONFIG_FLAG_BlockAutoSwapOnWeaponPickups = 416,\n\tCPED_CONFIG_FLAG_ThisPedIsATargetPriorityForAI = 417,\n\tCPED_CONFIG_FLAG_IsSwitchingHelmetVisor = 418,\n\tCPED_CONFIG_FLAG_ForceHelmetVisorSwitch = 419,\n\t_CPED_CONFIG_FLAG_0xCFF5F6DE = 420,\n\tCPED_CONFIG_FLAG_UseOverrideFootstepPtFx = 421,\n\tCPED_CONFIG_FLAG_DisableVehicleCombat = 422,\n\t_CPED_CONFIG_FLAG_0xFE401D26 = 423,\n\tCPED_CONFIG_FLAG_FallsLikeAircraft = 424,\n\t_CPED_CONFIG_FLAG_0x2B42AE82 = 425,\n\tCPED_CONFIG_FLAG_UseLockpickVehicleEntryAnimations = 426,\n\tCPED_CONFIG_FLAG_IgnoreInteriorCheckForSprinting = 427,\n\tCPED_CONFIG_FLAG_SwatHeliSpawnWithinLastSpottedLocation = 428,\n\tCPED_CONFIG_FLAG_DisableStartEngine = 429,\n\tCPED_CONFIG_FLAG_IgnoreBeingOnFire = 430,\n\tCPED_CONFIG_FLAG_DisableTurretOrRearSeatPreference = 431,\n\tCPED_CONFIG_FLAG_DisableWantedHelicopterSpawning = 432,\n\tCPED_CONFIG_FLAG_UseTargetPerceptionForCreatingAimedAtEvents = 433,\n\tCPED_CONFIG_FLAG_DisableHomingMissileLockon = 434,\n\tCPED_CONFIG_FLAG_ForceIgnoreMaxMeleeActiveSupportCombatants = 435,\n\tCPED_CONFIG_FLAG_StayInDefensiveAreaWhenInVehicle = 436,\n\tCPED_CONFIG_FLAG_DontShoutTargetPosition = 437,\n\tCPED_CONFIG_FLAG_DisableHelmetArmor = 438,\n\t_CPED_CONFIG_FLAG_0xCB7F3A1E = 439,\n\t_CPED_CONFIG_FLAG_0x50178878 = 440,\n\tCPED_CONFIG_FLAG_PreventVehExitDueToInvalidWeapon = 441,\n\tCPED_CONFIG_FLAG_IgnoreNetSessionFriendlyFireCheckForAllowDamage = 442,\n\tCPED_CONFIG_FLAG_DontLeaveCombatIfTargetPlayerIsAttackedByPolice = 443,\n\tCPED_CONFIG_FLAG_CheckLockedBeforeWarp = 444,\n\tCPED_CONFIG_FLAG_DontShuffleInVehicleToMakeRoom = 445,\n\tCPED_CONFIG_FLAG_GiveWeaponOnGetup = 446,\n\tCPED_CONFIG_FLAG_DontHitVehicleWithProjectiles = 447,\n\tCPED_CONFIG_FLAG_DisableForcedEntryForOpenVehiclesFromTryLockedDoor = 448,\n\tCPED_CONFIG_FLAG_FiresDummyRockets = 449,\n\tCPED_CONFIG_FLAG_PedIsArresting = 450,\n\tCPED_CONFIG_FLAG_IsDecoyPed = 451,\n\tCPED_CONFIG_FLAG_HasEstablishedDecoy = 452,\n\tCPED_CONFIG_FLAG_BlockDispatchedHelicoptersFromLanding = 453,\n\tCPED_CONFIG_FLAG_DontCryForHelpOnStun = 454,\n\t_CPED_CONFIG_FLAG_0xB68D3EAB = 455,\n\tCPED_CONFIG_FLAG_CanBeIncapacitated = 456,\n\t_CPED_CONFIG_FLAG_0x4BD5EBAD = 457,\n\tCPED_CONFIG_FLAG_DontChangeTargetFromMelee = 458,\n};",
 			"params": [
 				{
 					"type": "Ped",
@@ -77366,11 +78513,11 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "Ped",
+					"name": "ped"
 				},
 				{
-					"type": "Any",
+					"type": "float",
 					"name": "p1"
 				}
 			],
@@ -77380,7 +78527,7 @@
 		"0x46B05BCAE43856B0": {
 			"name": "PED_HAS_SEXINESS_FLAG_SET",
 			"jhash": "0x79543043",
-			"comment": "Checks if the specified unknown flag is set in the ped's model.\nThe engine itself seems to exclusively check for flags 1 and 4 (Might be inlined code of the check that checks for other flags).\nGame scripts exclusively check for flags 1 and 4.",
+			"comment": "Checks if the specified sexiness flag is set\n\nenum eSexinessFlags\n{\n SF_JEER_AT_HOT_PED = 0,\n SF_HURRIEDFEMALES_SEXY = 1,\n SF_HOT_PERSON = 2,\n };",
 			"params": [
 				{
 					"type": "Ped",
@@ -77388,7 +78535,7 @@
 				},
 				{
 					"type": "int",
-					"name": "flag"
+					"name": "sexinessFlag"
 				}
 			],
 			"return_type": "BOOL",
@@ -80940,7 +82087,7 @@
 			"params": [
 				{
 					"type": "BOOL",
-					"name": "unk"
+					"name": "p0"
 				}
 			],
 			"return_type": "void",
@@ -82030,6 +83177,19 @@
 				"_SET_PLAYER_HEALTH_RECHARGE_LIMIT"
 			]
 		},
+		"0xBCB06442F7E52666": {
+			"name": "DISABLE_PLAYER_HEALTH_RECHARGE",
+			"jhash": "",
+			"comment": "Needs to be called every frame.",
+			"params": [
+				{
+					"type": "Player",
+					"name": "player"
+				}
+			],
+			"return_type": "void",
+			"build": "2802"
+		},
 		"0xEFD79FA81DFBA9CB": {
 			"name": "SET_PLAYER_FALL_DISTANCE_TO_TRIGGER_RAGDOLL_OVERRIDE",
 			"jhash": "",
@@ -82521,6 +83681,10 @@
 				{
 					"type": "BOOL",
 					"name": "p5"
+				},
+				{
+					"type": "Any",
+					"name": "p6"
 				}
 			],
 			"return_type": "void",
@@ -83126,12 +84290,12 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "Player",
+					"name": "player"
 				},
 				{
-					"type": "Any",
-					"name": "p1"
+					"type": "int",
+					"name": "hudColor"
 				}
 			],
 			"return_type": "void",
@@ -84158,7 +85322,10 @@
 				}
 			],
 			"return_type": "void",
-			"build": "1103"
+			"build": "1103",
+			"old_names": [
+				"_TRIGGER_SCRIPT_EVENT_2"
+			]
 		}
 	},
 	"SECURITY": {
@@ -84341,15 +85508,15 @@
 				},
 				{
 					"type": "float",
-					"name": "x1"
+					"name": "dimX"
 				},
 				{
 					"type": "float",
-					"name": "y2"
+					"name": "dimY"
 				},
 				{
 					"type": "float",
-					"name": "z2"
+					"name": "dimZ"
 				},
 				{
 					"type": "float",
@@ -85917,7 +87084,7 @@
 			"params": [
 				{
 					"type": "int",
-					"name": "p0"
+					"name": "statSlot"
 				}
 			],
 			"return_type": "BOOL",
@@ -85941,7 +87108,7 @@
 					"name": "p2"
 				},
 				{
-					"type": "Any",
+					"type": "BOOL",
 					"name": "p3"
 				}
 			],
@@ -85967,8 +87134,8 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "int",
+					"name": "statSlot"
 				}
 			],
 			"return_type": "BOOL",
@@ -86010,7 +87177,7 @@
 			"params": [
 				{
 					"type": "int",
-					"name": "p0"
+					"name": "statSlot"
 				}
 			],
 			"return_type": "BOOL",
@@ -86112,6 +87279,27 @@
 			"params": [],
 			"return_type": "BOOL",
 			"build": "323"
+		},
+		"0xD69CE161FE614531": {
+			"name": "_GET_STAT_HASH_FOR_CHARACTER_STAT",
+			"jhash": "",
+			"comment": "Returns stat hash based on dataType, statIndex/statId and characterSlot. Related to CStatsMpCharacterMappingData",
+			"params": [
+				{
+					"type": "int",
+					"name": "dataType"
+				},
+				{
+					"type": "int",
+					"name": "statIndex"
+				},
+				{
+					"type": "int",
+					"name": "charSlot"
+				}
+			],
+			"return_type": "Hash",
+			"build": "2944"
 		},
 		"0xB3271D7AB655B441": {
 			"name": "STAT_SET_INT",
@@ -86282,11 +87470,11 @@
 					"name": "statName"
 				},
 				{
-					"type": "Any",
+					"type": "int",
 					"name": "p1"
 				},
 				{
-					"type": "Any",
+					"type": "int",
 					"name": "p2"
 				},
 				{
@@ -86405,7 +87593,7 @@
 		"0x8B0FACEFC36C824B": {
 			"name": "STAT_GET_DATE",
 			"jhash": "0xD762D16C",
-			"comment": "",
+			"comment": "p3 is probably characterSlot or BOOL save, always -1",
 			"params": [
 				{
 					"type": "Hash",
@@ -86413,11 +87601,11 @@
 				},
 				{
 					"type": "Any*",
-					"name": "p1"
+					"name": "outValue"
 				},
 				{
-					"type": "Any",
-					"name": "p2"
+					"type": "int",
+					"name": "numFields"
 				},
 				{
 					"type": "Any",
@@ -86447,23 +87635,23 @@
 		"0x350F82CCB186AA1B": {
 			"name": "STAT_GET_POS",
 			"jhash": "0xC846ECCE",
-			"comment": "",
+			"comment": "p3 is probably characterSlot or BOOL save, always -1",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "Hash",
+					"name": "statName"
 				},
 				{
-					"type": "Any*",
-					"name": "p1"
+					"type": "float*",
+					"name": "outX"
 				},
 				{
-					"type": "Any*",
-					"name": "p2"
+					"type": "float*",
+					"name": "outY"
 				},
 				{
-					"type": "Any*",
-					"name": "p3"
+					"type": "float*",
+					"name": "outZ"
 				},
 				{
 					"type": "Any",
@@ -86476,22 +87664,22 @@
 		"0x655185A06D9EEAAB": {
 			"name": "STAT_GET_MASKED_INT",
 			"jhash": "0xE9D9B70F",
-			"comment": "",
+			"comment": "p4 is probably characterSlot or BOOL save",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "Hash",
+					"name": "statHash"
 				},
 				{
-					"type": "Any*",
-					"name": "p1"
+					"type": "int*",
+					"name": "outValue"
 				},
 				{
-					"type": "Any",
+					"type": "int",
 					"name": "p2"
 				},
 				{
-					"type": "Any",
+					"type": "int",
 					"name": "p3"
 				},
 				{
@@ -86505,11 +87693,11 @@
 		"0x2365C388E393BBE2": {
 			"name": "STAT_GET_USER_ID",
 			"jhash": "0xE2E8B6BA",
-			"comment": "Needs more research. Seems to return \"STAT_UNKNOWN\" if no such user id exists.",
+			"comment": "Returns the rockstar ID (user id) value of a given stat. Returns \"STAT_UNKNOWN\" if the statHash is invalid or the stat has no userId",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "Hash",
+					"name": "statHash"
 				}
 			],
 			"return_type": "const char*",
@@ -86920,13 +88108,46 @@
 			"return_type": "void",
 			"build": "323"
 		},
+		"0xE6A27CDA42887F93": {
+			"name": "_PLAYSTATS_FLOW_LOW",
+			"jhash": "",
+			"comment": "p3: VehicleConversion, SCAdminCashGift\np4: 0",
+			"params": [
+				{
+					"type": "float",
+					"name": "posX"
+				},
+				{
+					"type": "float",
+					"name": "posY"
+				},
+				{
+					"type": "float",
+					"name": "posZ"
+				},
+				{
+					"type": "const char*",
+					"name": "p3"
+				},
+				{
+					"type": "Any",
+					"name": "p4"
+				},
+				{
+					"type": "int",
+					"name": "amount"
+				}
+			],
+			"return_type": "void",
+			"build": "2944"
+		},
 		"0x93054C88E6AA7C44": {
 			"name": "PLAYSTATS_NPC_INVITE",
 			"jhash": "0x598C06F3",
 			"comment": "",
 			"params": [
 				{
-					"type": "Any*",
+					"type": "const char*",
 					"name": "p0"
 				}
 			],
@@ -86981,12 +88202,12 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
+					"type": "int",
 					"name": "p0"
 				},
 				{
-					"type": "Any",
-					"name": "p1"
+					"type": "int",
+					"name": "activityId"
 				}
 			],
 			"return_type": "void",
@@ -87027,7 +88248,7 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any*",
+					"type": "const char*",
 					"name": "p0"
 				},
 				{
@@ -87052,7 +88273,7 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any*",
+					"type": "const char*",
 					"name": "p0"
 				},
 				{
@@ -87085,7 +88306,7 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any*",
+					"type": "const char*",
 					"name": "p0"
 				},
 				{
@@ -87160,7 +88381,7 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
+					"type": "Vehicle",
 					"name": "p0"
 				},
 				{
@@ -87168,11 +88389,11 @@
 					"name": "p1"
 				},
 				{
-					"type": "Any",
+					"type": "int",
 					"name": "p2"
 				},
 				{
-					"type": "Any",
+					"type": "int",
 					"name": "p3"
 				},
 				{
@@ -87381,7 +88602,7 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
+					"type": "int",
 					"name": "p0"
 				},
 				{
@@ -87439,11 +88660,11 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
+					"type": "int",
 					"name": "p0"
 				},
 				{
-					"type": "Any",
+					"type": "BOOL",
 					"name": "p1"
 				}
 			],
@@ -87456,15 +88677,15 @@
 			"comment": "This native does absolutely nothing, just a nullsub",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "int",
+					"name": "totalTimeMs"
 				},
 				{
-					"type": "Any",
+					"type": "int",
 					"name": "p1"
 				},
 				{
-					"type": "Any",
+					"type": "BOOL",
 					"name": "p2"
 				}
 			],
@@ -87477,19 +88698,19 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
+					"type": "Ped",
 					"name": "p0"
 				},
 				{
-					"type": "Any",
+					"type": "int",
 					"name": "p1"
 				},
 				{
-					"type": "Any",
+					"type": "int",
 					"name": "p2"
 				},
 				{
-					"type": "Any",
+					"type": "int",
 					"name": "p3"
 				}
 			],
@@ -87502,7 +88723,7 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
+					"type": "Ped",
 					"name": "p0"
 				},
 				{
@@ -87683,7 +88904,7 @@
 			"params": [
 				{
 					"type": "int",
-					"name": "time"
+					"name": "msStoodIdle"
 				}
 			],
 			"return_type": "void",
@@ -87769,6 +88990,27 @@
 			"old_names": [
 				"_PLAYSTATS_PEGASAIRCRAFT"
 			]
+		},
+		"0xF96E9EA876D9DC92": {
+			"name": "_PLAYSTATS_SHOPMENU_NAV",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Any",
+					"name": "p0"
+				},
+				{
+					"type": "Any",
+					"name": "p1"
+				},
+				{
+					"type": "Any",
+					"name": "p2"
+				}
+			],
+			"return_type": "void",
+			"build": "2802"
 		},
 		"0x6A60E43998228229": {
 			"name": "PLAYSTATS_FM_EVENT_CHALLENGES",
@@ -88000,7 +89242,7 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
+					"type": "int",
 					"name": "p0"
 				},
 				{
@@ -88017,15 +89259,15 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
+					"type": "int",
 					"name": "p0"
 				},
 				{
-					"type": "Any",
+					"type": "int",
 					"name": "p1"
 				},
 				{
-					"type": "Any",
+					"type": "int",
 					"name": "p2"
 				}
 			],
@@ -88038,7 +89280,7 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
+					"type": "int",
 					"name": "p0"
 				},
 				{
@@ -88738,8 +89980,8 @@
 					"name": "p0"
 				},
 				{
-					"type": "Any",
-					"name": "p1"
+					"type": "int",
+					"name": "characterSlot"
 				}
 			],
 			"return_type": "void",
@@ -88755,8 +89997,8 @@
 					"name": "p0"
 				},
 				{
-					"type": "Any",
-					"name": "p1"
+					"type": "int",
+					"name": "characterSlot"
 				}
 			],
 			"return_type": "void",
@@ -88883,7 +90125,7 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
+					"type": "int",
 					"name": "p0"
 				}
 			],
@@ -88896,7 +90138,7 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
+					"type": "int",
 					"name": "p0"
 				},
 				{
@@ -89256,8 +90498,8 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "int",
+					"name": "characterSlot"
 				},
 				{
 					"type": "Any",
@@ -89647,6 +90889,10 @@
 				{
 					"type": "Any",
 					"name": "p0"
+				},
+				{
+					"type": "Any",
+					"name": "p1"
 				}
 			],
 			"return_type": "void",
@@ -89691,6 +90937,10 @@
 				{
 					"type": "Any",
 					"name": "p1"
+				},
+				{
+					"type": "Any",
+					"name": "p2"
 				}
 			],
 			"return_type": "void",
@@ -89947,11 +91197,11 @@
 					"name": "p3"
 				},
 				{
-					"type": "Any",
-					"name": "p4"
+					"type": "int",
+					"name": "role"
 				},
 				{
-					"type": "Any",
+					"type": "int",
 					"name": "p5"
 				},
 				{
@@ -90233,6 +91483,10 @@
 				{
 					"type": "Any",
 					"name": "p6"
+				},
+				{
+					"type": "Any",
+					"name": "p7"
 				}
 			],
 			"return_type": "void",
@@ -90731,12 +91985,12 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
+					"type": "int",
 					"name": "p0"
 				},
 				{
-					"type": "Any",
-					"name": "p1"
+					"type": "Hash",
+					"name": "objectHash"
 				},
 				{
 					"type": "Any",
@@ -91149,6 +92403,34 @@
 				{
 					"type": "Any",
 					"name": "p5"
+				},
+				{
+					"type": "Any",
+					"name": "p6"
+				},
+				{
+					"type": "Any",
+					"name": "p7"
+				},
+				{
+					"type": "Any",
+					"name": "p8"
+				},
+				{
+					"type": "Any",
+					"name": "p9"
+				},
+				{
+					"type": "Any",
+					"name": "p10"
+				},
+				{
+					"type": "Any",
+					"name": "p11"
+				},
+				{
+					"type": "Any",
+					"name": "p12"
 				}
 			],
 			"return_type": "void",
@@ -91461,6 +92743,14 @@
 				{
 					"type": "Any",
 					"name": "p8"
+				},
+				{
+					"type": "Any",
+					"name": "p9"
+				},
+				{
+					"type": "Any",
+					"name": "p10"
 				}
 			],
 			"return_type": "void",
@@ -91625,6 +92915,14 @@
 				{
 					"type": "Any",
 					"name": "p1"
+				},
+				{
+					"type": "Any",
+					"name": "p2"
+				},
+				{
+					"type": "Any",
+					"name": "p3"
 				}
 			],
 			"return_type": "void",
@@ -91665,6 +92963,35 @@
 				"_PLAYSTATS_HUB_EXIT"
 			]
 		},
+		"0x10A691F5756416D0": {
+			"name": "PLAYSTATS_VEH_DEL",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "int",
+					"name": "bossId1"
+				},
+				{
+					"type": "int",
+					"name": "bossId2"
+				},
+				{
+					"type": "int",
+					"name": "bossType"
+				},
+				{
+					"type": "int",
+					"name": "vehicleID"
+				},
+				{
+					"type": "int",
+					"name": "reason"
+				}
+			],
+			"return_type": "void",
+			"build": "2944"
+		},
 		"0x887DAD63CF5B7908": {
 			"name": "PLAYSTATS_INVENTORY",
 			"jhash": "",
@@ -91680,6 +93007,126 @@
 			"old_names": [
 				"_PLAYSTATS_INVENTORY"
 			]
+		},
+		"0x8A23D1324F6B2BAC": {
+			"name": "_PLAYSTATS_ACID_MISSION_END",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Any",
+					"name": "p0"
+				}
+			],
+			"return_type": "void",
+			"build": "2802"
+		},
+		"0xCEACCF0550FDC5BA": {
+			"name": "_PLAYSTATS_ACID_RND",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Any",
+					"name": "p0"
+				}
+			],
+			"return_type": "void",
+			"build": "2802"
+		},
+		"0xEC9553A178E8F1D1": {
+			"name": "_PLAYSTATS_IDLE",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Any",
+					"name": "p0"
+				},
+				{
+					"type": "Any",
+					"name": "p1"
+				},
+				{
+					"type": "Any",
+					"name": "p2"
+				}
+			],
+			"return_type": "void",
+			"build": "2802"
+		},
+		"0x48FAC5DC7AC6EA99": {
+			"name": "_PLAYSTATS_PLAYER_STYLE",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Any",
+					"name": "p0"
+				}
+			],
+			"return_type": "void",
+			"build": "2802"
+		},
+		"0x7EA06F970F999394": {
+			"name": "_PLAYSTATS_RANDOM_EVENT",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Any",
+					"name": "p0"
+				}
+			],
+			"return_type": "void",
+			"build": "2944"
+		},
+		"0xBD642335A732F1A8": {
+			"name": "_PLAYSTATS_ATTRITION_STAGE_END",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Any",
+					"name": "p0"
+				}
+			],
+			"return_type": "void",
+			"build": "2944"
+		},
+		"0x961D4157B9B428DB": {
+			"name": "_PLAYSTATS_SHOWROOM_NAV",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Any",
+					"name": "p0"
+				},
+				{
+					"type": "Any",
+					"name": "p1"
+				},
+				{
+					"type": "Hash",
+					"name": "entity"
+				}
+			],
+			"return_type": "void",
+			"build": "2944"
+		},
+		"0x151D6C04C9E2742F": {
+			"name": "_PLAYSTATS_SHOWROOM_OVERVIEW",
+			"jhash": "",
+			"comment": "Data struct contains various tunables related to test drives at Simeons Showroom or Luxury Showcase.",
+			"params": [
+				{
+					"type": "Any*",
+					"name": "data"
+				}
+			],
+			"return_type": "void",
+			"build": "2944"
 		}
 	},
 	"STREAMING": {
@@ -96702,7 +98149,7 @@
 		"0x15C86013127CE63F": {
 			"name": "TASK_BOAT_MISSION",
 			"jhash": "0x5865B031",
-			"comment": "You need to call PED::SET_BLOCKING_OF_NON_TEMPORARY_EVENTS after TASK_BOAT_MISSION in order for the task to execute.\n\nWorking example\nfloat vehicleMaxSpeed = VEHICLE::_GET_VEHICLE_MAX_SPEED(ENTITY::GET_ENTITY_MODEL(pedVehicle));\nTASK::TASK_BOAT_MISSION(pedDriver, pedVehicle, 0, 0, waypointCoord.x, waypointCoord.y, waypointCoord.z, 4, vehicleMaxSpeed, 786469, -1.0, 7);\nPED::SET_BLOCKING_OF_NON_TEMPORARY_EVENTS(pedDriver, 1);\n\nP8 appears to be driving style flag - see gtaforums.com/topic/822314-guide-driving-styles/ for documentation",
+			"comment": "You need to call PED::SET_BLOCKING_OF_NON_TEMPORARY_EVENTS after TASK_BOAT_MISSION in order for the task to execute.\n\nWorking example\nfloat vehicleMaxSpeed = VEHICLE::GET_VEHICLE_ESTIMATED_MAX_SPEED(ENTITY::GET_ENTITY_MODEL(pedVehicle));\nTASK::TASK_BOAT_MISSION(pedDriver, pedVehicle, 0, 0, waypointCoord.x, waypointCoord.y, waypointCoord.z, 4, vehicleMaxSpeed, 786469, -1.0, 7);\nPED::SET_BLOCKING_OF_NON_TEMPORARY_EVENTS(pedDriver, 1);\n\nP8 appears to be driving style flag - see gtaforums.com/topic/822314-guide-driving-styles/ for documentation",
 			"params": [
 				{
 					"type": "Ped",
@@ -99694,23 +101141,23 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "Ped",
+					"name": "ped"
 				},
 				{
-					"type": "Any",
-					"name": "p1"
+					"type": "const char*",
+					"name": "name"
 				},
 				{
-					"type": "Any",
+					"type": "int",
 					"name": "p2"
 				},
 				{
-					"type": "Any",
+					"type": "int",
 					"name": "p3"
 				},
 				{
-					"type": "Any",
+					"type": "int",
 					"name": "p4"
 				}
 			],
@@ -99723,8 +101170,8 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "Ped",
+					"name": "ped"
 				}
 			],
 			"return_type": "BOOL",
@@ -99762,20 +101209,20 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "Ped",
+					"name": "ped"
 				},
 				{
-					"type": "Any",
-					"name": "p1"
+					"type": "float",
+					"name": "x"
 				},
 				{
-					"type": "Any",
-					"name": "p2"
+					"type": "float",
+					"name": "y"
 				},
 				{
-					"type": "Any",
-					"name": "p3"
+					"type": "float",
+					"name": "z"
 				}
 			],
 			"return_type": "BOOL",
@@ -99788,11 +101235,11 @@
 			"params": [
 				{
 					"type": "const char*",
-					"name": "p0"
+					"name": "name"
 				},
 				{
 					"type": "int",
-					"name": "p1"
+					"name": "point"
 				}
 			],
 			"return_type": "float",
@@ -99922,12 +101369,12 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "Ped",
+					"name": "ped"
 				},
 				{
-					"type": "Any",
-					"name": "p1"
+					"type": "Ped",
+					"name": "target"
 				},
 				{
 					"type": "BOOL",
@@ -99943,20 +101390,20 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "Ped",
+					"name": "ped"
 				},
 				{
 					"type": "float",
-					"name": "p1"
+					"name": "x"
 				},
 				{
 					"type": "float",
-					"name": "p2"
+					"name": "y"
 				},
 				{
 					"type": "float",
-					"name": "p3"
+					"name": "z"
 				},
 				{
 					"type": "BOOL",
@@ -99972,19 +101419,19 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "Ped",
+					"name": "ped"
 				},
 				{
-					"type": "Any",
-					"name": "p1"
+					"type": "Ped",
+					"name": "ped2"
 				},
 				{
 					"type": "BOOL",
 					"name": "p2"
 				},
 				{
-					"type": "Any",
+					"type": "BOOL",
 					"name": "p3"
 				}
 			],
@@ -99997,28 +101444,28 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "Ped",
+					"name": "ped"
 				},
 				{
 					"type": "float",
-					"name": "p1"
+					"name": "x"
 				},
 				{
 					"type": "float",
-					"name": "p2"
+					"name": "y"
 				},
 				{
 					"type": "float",
-					"name": "p3"
+					"name": "z"
 				},
 				{
 					"type": "BOOL",
 					"name": "p4"
 				},
 				{
-					"type": "Any",
-					"name": "p5"
+					"type": "Hash",
+					"name": "firingPattern"
 				}
 			],
 			"return_type": "void",
@@ -100030,8 +101477,8 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "Ped",
+					"name": "ped"
 				}
 			],
 			"return_type": "void",
@@ -100109,7 +101556,7 @@
 		"0x3123FAA6DB1CF7ED": {
 			"name": "TASK_VEHICLE_FOLLOW_WAYPOINT_RECORDING",
 			"jhash": "0x959818B6",
-			"comment": "task_vehicle_follow_waypoint_recording(Ped p0, Vehicle p1, string p2, int p3, int p4, int p5, int p6, float.x p7, float.Y p8, float.Z p9, bool p10, int p11)\n\np2 = Waypoint recording string (found in update\\update.rpf\\x64\\levels\\gta5\\waypointrec.rpf\np3 = 786468\np4 = 0\np5 = 16\np6 = -1 (angle?)\np7/8/9 = usually v3.zero\np10 = bool (repeat?)\np11 = 1073741824\n\nFull list of waypoint recordings by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/waypointRecordings.json",
+			"comment": "\n\np2 = Waypoint recording string (found in update\\update.rpf\\x64\\levels\\gta5\\waypointrec.rpf\np3 = 786468\np4 = 0\np5 = 16\np6 = -1 (angle?)\np7/8/9 = usually v3.zero\np10 = bool (repeat?)\np11 = 1073741824\n\nFull list of waypoint recordings by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/waypointRecordings.json",
 			"params": [
 				{
 					"type": "Ped",
@@ -101239,7 +102686,7 @@
 				},
 				{
 					"type": "BOOL",
-					"name": "unk"
+					"name": "p2"
 				}
 			],
 			"return_type": "void",
@@ -102129,6 +103576,19 @@
 				"_REQUEST_VEHICLE_PHONE_EXPLOSION"
 			]
 		},
+		"0x6B407F2525E93644": {
+			"name": "HAVE_VEHICLE_REAR_DOORS_BEEN_BLOWN_OPEN_BY_STICKYBOMB",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Vehicle",
+					"name": "vehicle"
+				}
+			],
+			"return_type": "BOOL",
+			"build": "2944"
+		},
 		"0x598803E85E8448D9": {
 			"name": "SET_TAXI_LIGHTS",
 			"jhash": "0x68639D85",
@@ -102588,6 +104048,23 @@
 			"return_type": "void",
 			"build": "944"
 		},
+		"0x85FC953F6C6CBDE1": {
+			"name": "_SET_BOUNDS_AFFECT_WATER_PROBES",
+			"jhash": "",
+			"comment": "Use the vehicle bounds (instead of viewport) when deciding if a vehicle is sufficiently above the water (waterheight.dat), bypassing wave simulation checks",
+			"params": [
+				{
+					"type": "Vehicle",
+					"name": "vehicle"
+				},
+				{
+					"type": "BOOL",
+					"name": "toggle"
+				}
+			],
+			"return_type": "void",
+			"build": "2802"
+		},
 		"0x75DBEC174AEEAD10": {
 			"name": "SET_BOAT_ANCHOR",
 			"jhash": "0xA3906284",
@@ -103001,7 +104478,7 @@
 				},
 				{
 					"type": "BOOL",
-					"name": "unknown"
+					"name": "p3"
 				}
 			],
 			"return_type": "void",
@@ -103092,6 +104569,19 @@
 			"old_names": [
 				"_IS_VEHICLE_BEING_HALTED"
 			]
+		},
+		"0x923A293361DF44E5": {
+			"name": "LOWER_FORKLIFT_FORKS",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Vehicle",
+					"name": "forklift"
+				}
+			],
+			"return_type": "void",
+			"build": "2802"
 		},
 		"0x37EBBF3117BD6A25": {
 			"name": "SET_FORKLIFT_FORK_HEIGHT",
@@ -104698,20 +106188,20 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "Vehicle",
+					"name": "vehicle"
 				},
 				{
 					"type": "float",
-					"name": "p1"
+					"name": "x"
 				},
 				{
 					"type": "float",
-					"name": "p2"
+					"name": "y"
 				},
 				{
 					"type": "float",
-					"name": "p3"
+					"name": "z"
 				}
 			],
 			"return_type": "void",
@@ -104723,20 +106213,20 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "Vehicle",
+					"name": "vehicle"
 				},
 				{
 					"type": "float",
-					"name": "p1"
+					"name": "x"
 				},
 				{
 					"type": "float",
-					"name": "p2"
+					"name": "y"
 				},
 				{
 					"type": "float",
-					"name": "p3"
+					"name": "z"
 				}
 			],
 			"return_type": "void",
@@ -104816,7 +106306,7 @@
 		"0x0FC2D89AC25A5814": {
 			"name": "SET_VEHICLE_MODEL_IS_SUPPRESSED",
 			"jhash": "0x42A08C9B",
-			"comment": "seems to make the vehicle stop spawning naturally in traffic. Here's an essential example:\n\nVEHICLE::SET_VEHICLE_MODEL_IS_SUPPRESSED(MISC::GET_HASH_KEY(\"taco\"), true);\n\ngod I hate taco vans\n\nConfirmed to work? Needs to be looped? Can not get it to work.\nFull list of vehicles by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/vehicles.json",
+			"comment": "Makes the vehicle stop spawning naturally in traffic. Here's an essential example:\n\nVEHICLE::SET_VEHICLE_MODEL_IS_SUPPRESSED(MISC::GET_HASH_KEY(\"taco\"), true);\n\nFull list of vehicles by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/vehicles.json",
 			"params": [
 				{
 					"type": "Hash",
@@ -105370,7 +106860,7 @@
 		"0x8F17BC8BA08DA62B": {
 			"name": "GET_VEHICLE_DIRT_LEVEL",
 			"jhash": "0xFD15C065",
-			"comment": "Dirt level 0..15",
+			"comment": "Dirt level does not become greater than 15.0",
 			"params": [
 				{
 					"type": "Vehicle",
@@ -106462,7 +107952,7 @@
 				},
 				{
 					"type": "Any",
-					"name": "unk"
+					"name": "p6"
 				}
 			],
 			"return_type": "void",
@@ -106505,7 +107995,7 @@
 		"0x7EE3A3C5E4A40CC9": {
 			"name": "SET_VEHICLE_EXTRA",
 			"jhash": "0x642D065C",
-			"comment": "Note: only some vehicle have extras\nextra ids are from 1 - 9 depending on the vehicle\n\n-------------------------------------------------\n\n^ not sure if outdated or simply wrong. Max extra ID for b944 is 14\n\n-------------------------------------------------\np2 is not a on/off toggle. mostly 0 means on and 1 means off.\nnot sure if it really should be a BOOL.",
+			"comment": "Available extraIds are 1-14, however none of the vehicles have extras above 12.",
 			"params": [
 				{
 					"type": "Vehicle",
@@ -106755,12 +108245,12 @@
 			"comment": "",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "Vehicle",
+					"name": "vehicle"
 				},
 				{
-					"type": "Any",
-					"name": "p1"
+					"type": "BOOL",
+					"name": "toggle"
 				}
 			],
 			"return_type": "void",
@@ -107131,7 +108621,7 @@
 		"0xA6D3A8750DC73270": {
 			"name": "SET_VEHICLE_LIVERY2",
 			"jhash": "",
-			"comment": "Used to set the tornado custom (convertible) rooftop livery.\n\nLivery value that works for tornado custom is between 0 and 9 from what i can tell. Maybe 0-8 even.\n\nMight work on other custom vehicles but im not sure what those might be, only confirmed it working with the tornado custom.",
+			"comment": "Used to set the secondary livery (the roof on Tornado Custom being one such example.)\n\nLivery value is dependent on the amount of liveries present in the vehicle's texture dictionary, for Tornado Custom this would be 0-6.",
 			"params": [
 				{
 					"type": "Vehicle",
@@ -107151,7 +108641,7 @@
 		"0x60190048C0764A26": {
 			"name": "GET_VEHICLE_LIVERY2",
 			"jhash": "",
-			"comment": "Returns index of the current vehicle's rooftop livery. A getter for _SET_VEHICLE_ROOF_LIVERY.",
+			"comment": "Returns index of the current vehicle's secondary livery. A getter for SET_VEHICLE_LIVERY2.",
 			"params": [
 				{
 					"type": "Vehicle",
@@ -107167,7 +108657,7 @@
 		"0x5ECB40269053C0D4": {
 			"name": "GET_VEHICLE_LIVERY2_COUNT",
 			"jhash": "",
-			"comment": "Returns a number of available rooftop liveries, or -1 if vehicle has no rooftop liveries available.",
+			"comment": "Returns a number of available secondary liveries, or -1 if vehicle has no secondary liveries available.",
 			"params": [
 				{
 					"type": "Vehicle",
@@ -107485,7 +108975,7 @@
 		"0xCFC8BE9A5E1FE575": {
 			"name": "CONTROL_LANDING_GEAR",
 			"jhash": "0x24F873FB",
-			"comment": "Works for vehicles with a retractable landing gear\n\nlanding gear states:\n\n0: Deployed\n1: Closing\n2: Opening\n3: Retracted\n\nwhat can I use to make the hydra thing forward?",
+			"comment": "Works for vehicles with a retractable landing gear\n\nLanding gear states:\n\n0: Deployed\n1: Closing\n2: Opening\n3: Retracted",
 			"params": [
 				{
 					"type": "Vehicle",
@@ -107505,7 +108995,7 @@
 		"0x9B0F3DCA3DB0F4CD": {
 			"name": "GET_LANDING_GEAR_STATE",
 			"jhash": "0xA6F02670",
-			"comment": "Landing gear states:\n\n0: Deployed\n1: Closing (Retracting)\n2:(Landing gear state 2 is never used.)\n3: Opening (Deploying)\n4: Retracted\n\nReturns the current state of the vehicles landing gear.",
+			"comment": "Landing gear states:\n\n0: Deployed\n1: Closing (Retracting)\n2: (Landing gear state 2 is never used.)\n3: Opening (Deploying)\n4: Retracted\n\nReturns the current state of the vehicles landing gear.",
 			"params": [
 				{
 					"type": "Vehicle",
@@ -107812,23 +109302,23 @@
 					"name": "vehicle"
 				},
 				{
-					"type": "Any",
+					"type": "BOOL",
 					"name": "p1"
 				},
 				{
-					"type": "Any",
-					"name": "p2"
+					"type": "float",
+					"name": "x"
 				},
 				{
-					"type": "Any",
-					"name": "p3"
+					"type": "float",
+					"name": "y"
 				},
 				{
-					"type": "Any",
-					"name": "p4"
+					"type": "float",
+					"name": "z"
 				},
 				{
-					"type": "Any",
+					"type": "BOOL",
 					"name": "p5"
 				}
 			],
@@ -108117,6 +109607,23 @@
 			"return_type": "void",
 			"build": "323"
 		},
+		"0x5815BD2763178DF4": {
+			"name": "SET_VEHICLE_TAIL_LIGHTS",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Vehicle",
+					"name": "vehicle"
+				},
+				{
+					"type": "BOOL",
+					"name": "toggle"
+				}
+			],
+			"return_type": "void",
+			"build": "2802"
+		},
 		"0x684785568EF26A22": {
 			"name": "SET_VEHICLE_HANDBRAKE",
 			"jhash": "0xBA729A25",
@@ -108212,6 +109719,19 @@
 			],
 			"return_type": "BOOL",
 			"build": "323"
+		},
+		"0x80D9D32636369C92": {
+			"name": "_GET_VEHICLE_TRAILER_PARENT_VEHICLE",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Vehicle",
+					"name": "trailer"
+				}
+			],
+			"return_type": "Vehicle",
+			"build": "2802"
 		},
 		"0xCAC66558B944DA67": {
 			"name": "SET_VEHICLE_USES_LARGE_REAR_RAMP",
@@ -109161,7 +110681,7 @@
 		"0xB4C7A93837C91A1F": {
 			"name": "GET_LIVERY_NAME",
 			"jhash": "0xED80B5BE",
-			"comment": "Second Param = LiveryIndex\n\nexample \n\nint count = VEHICLE::GET_VEHICLE_LIVERY_COUNT(veh);\nfor (int i = 0; i < count; i++)  \n  {\n     const char* LiveryName = VEHICLE::GET_LIVERY_NAME(veh, i);\n  }\n\n\nthis example will work fine to fetch all names \nfor example for Sanchez we get \n\nSANC_LV1\nSANC_LV2\nSANC_LV3\nSANC_LV4\nSANC_LV5\n\n\nUse GET_FILENAME_FOR_AUDIO_CONVERSATION, to get the localized livery name.\n\nFull list of vehicle mod kits and mods by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/vehicleModKits.json",
+			"comment": "Returns the text label of the vehicle's liveryIndex, as specified by the liveryNames section of the vehicle's modkit data in the carcols file.\n\nexample \n\nint count = VEHICLE::GET_VEHICLE_LIVERY_COUNT(veh);\nfor (int i = 0; i < count; i++)  \n  {\n     const char* LiveryName = VEHICLE::GET_LIVERY_NAME(veh, i);\n  }\n\n\nthis example will work fine to fetch all names \nfor example for Sanchez we get \n\nSANC_LV1\nSANC_LV2\nSANC_LV3\nSANC_LV4\nSANC_LV5\n\n\nUse GET_FILENAME_FOR_AUDIO_CONVERSATION, to get the localized livery name.\n\nFull list of vehicle mod kits and mods by DurtyFree: https://github.com/DurtyFree/gta-v-data-dumps/blob/master/vehicleModKits.json",
 			"params": [
 				{
 					"type": "Vehicle",
@@ -109270,7 +110790,7 @@
 		"0xB5BA80F839791C0F": {
 			"name": "SET_VEHICLE_TYRE_SMOKE_COLOR",
 			"jhash": "0x3EDEC0DB",
-			"comment": "Sets the tire smoke's color of this vehicle.\n\nvehicle: The vehicle that is the target of this method.\nr: The red level in the RGB color code.\ng: The green level in the RGB color code.\nb: The blue level in the RGB color code.\n\nNote:\nsetting r,g,b to 0 will give the car independance day tyre smoke",
+			"comment": "Sets the tire smoke's color of this vehicle.\n\nvehicle: The vehicle that is the target of this method.\nr: The red level in the RGB color code.\ng: The green level in the RGB color code.\nb: The blue level in the RGB color code.\n\nNote: setting r,g,b to 0 will give the car the \"Patriot\" tire smoke.",
 			"params": [
 				{
 					"type": "Vehicle",
@@ -111229,7 +112749,7 @@
 		"0x29439776AAA00A62": {
 			"name": "GET_VEHICLE_CLASS",
 			"jhash": "0xC025338E",
-			"comment": "Returns an int\n\nVehicle Classes:\n0: Compacts\n1: Sedans\n2: SUVs\n3: Coupes\n4: Muscle\n5: Sports Classics\n6: Sports\n7: Super\n8: Motorcycles\n9: Off-road\n10: Industrial\n11: Utility\n12: Vans\n13: Cycles\n14: Boats\n15: Helicopters\n16: Planes\n17: Service\n18: Emergency\n19: Military\n20: Commercial\n21: Trains\n\nchar buffer[128];\nstd::sprintf(buffer, \"VEH_CLASS_%i\", VEHICLE::GET_VEHICLE_CLASS(vehicle));\n\nconst char* className = HUD::_GET_LABEL_TEXT(buffer);",
+			"comment": "Returns an int\n\nVehicle Classes:\n0: Compacts\n1: Sedans\n2: SUVs\n3: Coupes\n4: Muscle\n5: Sports Classics\n6: Sports\n7: Super\n8: Motorcycles\n9: Off-road\n10: Industrial\n11: Utility\n12: Vans\n13: Cycles\n14: Boats\n15: Helicopters\n16: Planes\n17: Service\n18: Emergency\n19: Military\n20: Commercial\n21: Trains\n\nchar buffer[128];\nstd::sprintf(buffer, \"VEH_CLASS_%i\", VEHICLE::GET_VEHICLE_CLASS(vehicle));\n\nconst char* className = HUD::GET_FILENAME_FOR_AUDIO_CONVERSATION(buffer);",
 			"params": [
 				{
 					"type": "Vehicle",
@@ -112074,7 +113594,7 @@
 		"0xB8EF61207C2393A9": {
 			"name": "GET_VEHICLE_HEALTH_PERCENTAGE",
 			"jhash": "0x196BA503",
-			"comment": "0 min 100 max\nstarts at 100\nSeams to have health zones\nFront of vehicle when damaged goes from 100-50 and stops at 50.\nRear can be damaged from 100-0\nOnly tested with two cars.\n\nany idea how this differs from the first one?\n\n--\nMay return the vehicle health on a scale of 0.0 - 100.0 (needs to be confirmed)\n\nexample:\n\nv_F = ENTITY::GET_ENTITY_MODEL(v_3);\nif (((v_F == ${tanker}) || (v_F == ${armytanker})) || (v_F == ${tanker2})) {\n    if (VEHICLE::_GET_VEHICLE_BODY_HEALTH_2(v_3) <= 1.0) {\n        NETWORK::NETWORK_EXPLODE_VEHICLE(v_3, 1, 1, -1);\n    }\n}",
+			"comment": "0 min 100 max\nstarts at 100\nSeams to have health zones\nFront of vehicle when damaged goes from 100-50 and stops at 50.\nRear can be damaged from 100-0\nOnly tested with two cars.\n\nany idea how this differs from the first one?\n\n--\nMay return the vehicle health on a scale of 0.0 - 100.0 (needs to be confirmed)\n\nexample:\n\nv_F = ENTITY::GET_ENTITY_MODEL(v_3);\nif (((v_F == ${tanker}) || (v_F == ${armytanker})) || (v_F == ${tanker2})) {\n    if (VEHICLE::GET_VEHICLE_HEALTH_PERCENTAGE(v_3) <= 1.0) {\n        NETWORK::NETWORK_EXPLODE_VEHICLE(v_3, 1, 1, -1);\n    }\n}",
 			"params": [
 				{
 					"type": "Vehicle",
@@ -113793,6 +115313,36 @@
 				"_ARE_HELI_STUB_WINGS_DEPLOYED"
 			]
 		},
+		"0x0C02468829E4AA65": {
+			"name": "_SET_DEPLOY_MISSILE_BAYS",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Vehicle",
+					"name": "vehicle"
+				},
+				{
+					"type": "BOOL",
+					"name": "deploy"
+				}
+			],
+			"return_type": "void",
+			"build": "2944"
+		},
+		"0xEA4743874D515F13": {
+			"name": "_ARE_MISSILE_BAYS_DEPLOYED",
+			"jhash": "",
+			"comment": "",
+			"params": [
+				{
+					"type": "Vehicle",
+					"name": "vehicle"
+				}
+			],
+			"return_type": "BOOL",
+			"build": "2944"
+		},
 		"0xAA653AE61924B0A0": {
 			"name": "SET_DIP_STRAIGHT_DOWN_WHEN_CRASHING_PLANE",
 			"jhash": "",
@@ -114647,7 +116197,7 @@
 			"params": [
 				{
 					"type": "int",
-					"name": "p0"
+					"name": "calmingQuad"
 				}
 			],
 			"return_type": "void",
@@ -114692,7 +116242,7 @@
 			"params": [
 				{
 					"type": "float",
-					"name": "p0"
+					"name": "height"
 				}
 			],
 			"return_type": "void",
@@ -116014,7 +117564,7 @@
 		"0x33E179436C0B31DB": {
 			"name": "GIVE_WEAPON_COMPONENT_TO_WEAPON_OBJECT",
 			"jhash": "0xF7612A37",
-			"comment": "addonHash:\n(use WEAPON::GET_WEAPON_COMPONENT_TYPE_MODEL() to get hash value)\n${component_at_ar_flsh}, ${component_at_ar_supp}, ${component_at_pi_flsh}, ${component_at_scope_large}, ${component_at_ar_supp_02}",
+			"comment": "componentHash:\n(use WEAPON::GET_WEAPON_COMPONENT_TYPE_MODEL() to get hash value)\n${component_at_ar_flsh}, ${component_at_ar_supp}, ${component_at_pi_flsh}, ${component_at_scope_large}, ${component_at_ar_supp_02}",
 			"params": [
 				{
 					"type": "Object",
@@ -116022,7 +117572,7 @@
 				},
 				{
 					"type": "Hash",
-					"name": "addonHash"
+					"name": "componentHash"
 				}
 			],
 			"return_type": "void",
@@ -116031,15 +117581,15 @@
 		"0xF7D82B0D66777611": {
 			"name": "REMOVE_WEAPON_COMPONENT_FROM_WEAPON_OBJECT",
 			"jhash": "0xA6E7ED3C",
-			"comment": "",
+			"comment": "see DOES_WEAPON_TAKE_WEAPON_COMPONENT for full list of weapons & components",
 			"params": [
 				{
-					"type": "Any",
-					"name": "p0"
+					"type": "Object",
+					"name": "object"
 				},
 				{
-					"type": "Any",
-					"name": "p1"
+					"type": "Hash",
+					"name": "componentHash"
 				}
 			],
 			"return_type": "void",
@@ -116048,7 +117598,7 @@
 		"0x76A18844E743BF91": {
 			"name": "HAS_WEAPON_GOT_WEAPON_COMPONENT",
 			"jhash": "0x1D368510",
-			"comment": "",
+			"comment": "see DOES_WEAPON_TAKE_WEAPON_COMPONENT for full list of weapons & components",
 			"params": [
 				{
 					"type": "Object",
@@ -116056,7 +117606,7 @@
 				},
 				{
 					"type": "Hash",
-					"name": "addonHash"
+					"name": "componentHash"
 				}
 			],
 			"return_type": "BOOL",
@@ -116522,14 +118072,14 @@
 		"0xE6D2CEDD370FF98E": {
 			"name": "SET_WEAPON_EFFECT_DURATION_MODIFIER",
 			"jhash": "",
-			"comment": "",
+			"comment": "ex, WEAPON::SET_WEAPON_EFFECT_DURATION_MODIFIER(joaat(\"vehicle_weapon_mine_slick\"), 1.0);",
 			"params": [
 				{
-					"type": "Any",
+					"type": "Hash",
 					"name": "p0"
 				},
 				{
-					"type": "Any",
+					"type": "float",
 					"name": "p1"
 				}
 			],
@@ -116741,7 +118291,7 @@
 				},
 				{
 					"type": "float",
-					"name": "p9"
+					"name": "radius"
 				},
 				{
 					"type": "Hash",

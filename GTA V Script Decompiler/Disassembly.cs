@@ -1,4 +1,5 @@
-﻿using Decompiler.Patches;
+﻿#if OS_WINDOWS
+using Decompiler.Patches;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -450,3 +451,4 @@ fail:
         }
     }
 }
+#endif // OS_WINDOWS

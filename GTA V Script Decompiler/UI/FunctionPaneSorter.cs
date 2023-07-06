@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿#if OS_WINDOWS
+using System.Collections;
 using System.Windows.Forms;
 
 namespace Decompiler.UI
@@ -77,3 +78,4 @@ namespace Decompiler.UI
         public SortOrder Order { set; get; }
     }
 }
+#endif // OS_WINDOWS
