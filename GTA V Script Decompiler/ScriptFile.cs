@@ -145,7 +145,7 @@ namespace Decompiler
             Functions[^1].CodeBlock = CodeTable.GetRange(Functions[^1].MaxLocation, CodeTable.Count - Functions[^1].MaxLocation);
             foreach (var func in Functions)
             {
-                if (func.CodeBlock[0] != 45 && func.CodeBlock[^3] != 46)
+                if (Instruction.MapOpcode(func.CodeBlock[0]) != Opcode.ENTER && Instruction.MapOpcode(func.CodeBlock[^3]) != Opcode.LEAVE)
                     throw new Exception("Function has incorrect start/ends");
             }
         }
@@ -177,75 +177,88 @@ namespace Decompiler
             var vcount = (tmp2 << 0x8) | tmp1;
             if (vcount < 0)
             {
-                throw new Exception("Well this shouldnt have happened");
+                throw new Exception("Invalid local count");
             }
 
             var temp = start1 + 5 + namelen;
-            while (CodeTable[temp] != 46)
+            while (Instruction.MapOpcode(CodeTable[temp]) != Opcode.LEAVE)
             {
-                switch (CodeTable[temp])
+                switch (Instruction.MapOpcode(CodeTable[temp]))
                 {
-                    case 37: temp += 1; break;
-                    case 38: temp += 2; break;
-                    case 39: temp += 3; break;
-                    case 40:
-                    case 41: temp += 4; break;
-                    case 44: temp += 3; break;
-                    case 45: throw new Exception("Return Expected");
-                    case 46: throw new Exception("Return Expected");
-                    case 52:
-                    case 53:
-                    case 54:
-                    case 55:
-                    case 56:
-                    case 57:
-                    case 58:
-                    case 59:
-                    case 60:
-                    case 61:
-                    case 62:
-                    case 64:
-                    case 65:
-                    case 66: temp += 1; break;
-                    case 67:
-                    case 68:
-                    case 69:
-                    case 70:
-                    case 71:
-                    case 72:
-                    case 73:
-                    case 74:
-                    case 75:
-                    case 76:
-                    case 77:
-                    case 78:
-                    case 79:
-                    case 80:
-                    case 81:
-                    case 82:
-                    case 83:
-                    case 84:
-                    case 85:
-                    case 86:
-                    case 87:
-                    case 88:
-                    case 89:
-                    case 90:
-                    case 91:
-                    case 92: temp += 2; break;
-                    case 93:
-                    case 94:
-                    case 95:
-                    case 96:
-                    case 98:
-                    case 99:
-                    case 100:
-                    case 97: temp += 3; break;
-                    case 101: temp += 1 + (CodeTable[temp + 1] * 6); break;
-                    case 104:
-                    case 105:
-                    case 106:
-                    case 107: temp += 1; break;
+                    case Opcode.PUSH_CONST_U8: temp += 1; break;
+                    case Opcode.PUSH_CONST_U8_U8: temp += 2; break;
+                    case Opcode.PUSH_CONST_U8_U8_U8: temp += 3; break;
+                    case Opcode.PUSH_CONST_U32:
+                    case Opcode.PUSH_CONST_F: temp += 4; break;
+                    case Opcode.NATIVE: temp += 3; break;
+                    case Opcode.ENTER: throw new Exception("Return expected");
+                    case Opcode.LEAVE: throw new Exception("Return expected");
+                    case Opcode.ARRAY_U8:
+                    case Opcode.ARRAY_U8_LOAD:
+                    case Opcode.ARRAY_U8_STORE:
+                    case Opcode.LOCAL_U8:
+                    case Opcode.LOCAL_U8_LOAD:
+                    case Opcode.LOCAL_U8_STORE:
+                    case Opcode.STATIC_U8:
+                    case Opcode.STATIC_U8_LOAD:
+                    case Opcode.STATIC_U8_STORE:
+                    case Opcode.IADD_U8:
+                    case Opcode.IMUL_U8:
+                    case Opcode.IOFFSET_U8:
+                    case Opcode.IOFFSET_U8_LOAD:
+                    case Opcode.IOFFSET_U8_STORE: temp += 1; break;
+                    case Opcode.PUSH_CONST_S16:
+                    case Opcode.IADD_S16:
+                    case Opcode.IMUL_S16:
+                    case Opcode.IOFFSET_S16:
+                    case Opcode.IOFFSET_S16_LOAD:
+                    case Opcode.IOFFSET_S16_STORE:
+                    case Opcode.ARRAY_U16:
+                    case Opcode.ARRAY_U16_LOAD:
+                    case Opcode.ARRAY_U16_STORE:
+                    case Opcode.LOCAL_U16:
+                    case Opcode.LOCAL_U16_LOAD:
+                    case Opcode.LOCAL_U16_STORE:
+                    case Opcode.STATIC_U16:
+                    case Opcode.STATIC_U16_LOAD:
+                    case Opcode.STATIC_U16_STORE:
+                    case Opcode.GLOBAL_U16:
+                    case Opcode.GLOBAL_U16_LOAD:
+                    case Opcode.GLOBAL_U16_STORE:
+                    case Opcode.J:
+                    case Opcode.JZ:
+                    case Opcode.IEQ_JZ:
+                    case Opcode.INE_JZ:
+                    case Opcode.IGT_JZ:
+                    case Opcode.IGE_JZ:
+                    case Opcode.ILT_JZ:
+                    case Opcode.ILE_JZ: temp += 2; break;
+                    case Opcode.CALL:
+                    case Opcode.STATIC_U24:
+                    case Opcode.STATIC_U24_LOAD:
+                    case Opcode.STATIC_U24_STORE:
+                    case Opcode.LOCAL_U24:
+                    case Opcode.LOCAL_U24_LOAD:
+                    case Opcode.LOCAL_U24_STORE:
+                    case Opcode.GLOBAL_U24:
+                    case Opcode.GLOBAL_U24_LOAD:
+                    case Opcode.GLOBAL_U24_STORE:
+                    case Opcode.PUSH_CONST_U24: temp += 3; break;
+                    case Opcode.SWITCH:
+                        {
+                            if (Properties.Settings.Default.IsRDR2)
+                            {
+                                int length = (CodeTable[temp + 2] << 8) | CodeTable[temp + 1];
+                                temp += 2 + 6 * length;
+                            }
+                            else
+                                temp += 1 + 6 * CodeTable[temp + 1];
+                            break;
+                        }
+                    case Opcode.TEXT_LABEL_ASSIGN_STRING:
+                    case Opcode.TEXT_LABEL_ASSIGN_INT:
+                    case Opcode.TEXT_LABEL_APPEND_STRING:
+                    case Opcode.TEXT_LABEL_APPEND_INT: temp += 1; break;
                 }
 
                 temp += 1;
@@ -272,69 +285,82 @@ namespace Decompiler
             var returnpos = -3;
             while (offset < CodeTable.Count)
             {
-                switch (CodeTable[offset])
+                switch (Instruction.MapOpcode(CodeTable[offset]))
                 {
-                    case 37: advpos(1); break;
-                    case 38: advpos(2); break;
-                    case 39: advpos(3); break;
-                    case 40:
-                    case 41: advpos(4); break;
-                    case 44: advpos(3); break;
-                    case 45: AddFunction(offset, returnpos + 3); ; advpos(CodeTable[offset + 4] + 4); break;
-                    case 46: returnpos = offset; advpos(2); break;
-                    case 52:
-                    case 53:
-                    case 54:
-                    case 55:
-                    case 56:
-                    case 57:
-                    case 58:
-                    case 59:
-                    case 60:
-                    case 61:
-                    case 62:
-                    case 64:
-                    case 65:
-                    case 66: advpos(1); break;
-                    case 67:
-                    case 68:
-                    case 69:
-                    case 70:
-                    case 71:
-                    case 72:
-                    case 73:
-                    case 74:
-                    case 75:
-                    case 76:
-                    case 77:
-                    case 78:
-                    case 79:
-                    case 80:
-                    case 81:
-                    case 82:
-                    case 83:
-                    case 84:
-                    case 85:
-                    case 86:
-                    case 87:
-                    case 88:
-                    case 89:
-                    case 90:
-                    case 91:
-                    case 92: advpos(2); break;
-                    case 93:
-                    case 94:
-                    case 95:
-                    case 96:
-                    case 98:
-                    case 99:
-                    case 100:
-                    case 97: advpos(3); break;
-                    case 101: advpos(1 + (CodeTable[offset + 1] * 6)); break;
-                    case 104:
-                    case 105:
-                    case 106:
-                    case 107: advpos(1); break;
+                    case Opcode.PUSH_CONST_U8: advpos(1); break;
+                    case Opcode.PUSH_CONST_U8_U8: advpos(2); break;
+                    case Opcode.PUSH_CONST_U8_U8_U8: advpos(3); break;
+                    case Opcode.PUSH_CONST_U32:
+                    case Opcode.PUSH_CONST_F: advpos(4); break;
+                    case Opcode.NATIVE: advpos(3); break;
+                    case Opcode.ENTER: AddFunction(offset, returnpos + 3); ; advpos(CodeTable[offset + 4] + 4); break;
+                    case Opcode.LEAVE: returnpos = offset; advpos(2); break;
+                    case Opcode.ARRAY_U8:
+                    case Opcode.ARRAY_U8_LOAD:
+                    case Opcode.ARRAY_U8_STORE:
+                    case Opcode.LOCAL_U8:
+                    case Opcode.LOCAL_U8_LOAD:
+                    case Opcode.LOCAL_U8_STORE:
+                    case Opcode.STATIC_U8:
+                    case Opcode.STATIC_U8_LOAD:
+                    case Opcode.STATIC_U8_STORE:
+                    case Opcode.IADD_U8:
+                    case Opcode.IMUL_U8:
+                    case Opcode.IOFFSET_U8:
+                    case Opcode.IOFFSET_U8_LOAD:
+                    case Opcode.IOFFSET_U8_STORE: advpos(1); break;
+                    case Opcode.PUSH_CONST_S16:
+                    case Opcode.IADD_S16:
+                    case Opcode.IMUL_S16:
+                    case Opcode.IOFFSET_S16:
+                    case Opcode.IOFFSET_S16_LOAD:
+                    case Opcode.IOFFSET_S16_STORE:
+                    case Opcode.ARRAY_U16:
+                    case Opcode.ARRAY_U16_LOAD:
+                    case Opcode.ARRAY_U16_STORE:
+                    case Opcode.LOCAL_U16:
+                    case Opcode.LOCAL_U16_LOAD:
+                    case Opcode.LOCAL_U16_STORE:
+                    case Opcode.STATIC_U16:
+                    case Opcode.STATIC_U16_LOAD:
+                    case Opcode.STATIC_U16_STORE:
+                    case Opcode.GLOBAL_U16:
+                    case Opcode.GLOBAL_U16_LOAD:
+                    case Opcode.GLOBAL_U16_STORE:
+                    case Opcode.J:
+                    case Opcode.JZ:
+                    case Opcode.IEQ_JZ:
+                    case Opcode.INE_JZ:
+                    case Opcode.IGT_JZ:
+                    case Opcode.IGE_JZ:
+                    case Opcode.ILT_JZ:
+                    case Opcode.ILE_JZ: advpos(2); break;
+                    case Opcode.CALL:
+                    case Opcode.STATIC_U24:
+                    case Opcode.STATIC_U24_LOAD:
+                    case Opcode.STATIC_U24_STORE:
+                    case Opcode.LOCAL_U24:
+                    case Opcode.LOCAL_U24_LOAD:
+                    case Opcode.LOCAL_U24_STORE:
+                    case Opcode.GLOBAL_U24:
+                    case Opcode.GLOBAL_U24_LOAD:
+                    case Opcode.GLOBAL_U24_STORE:
+                    case Opcode.PUSH_CONST_U24: advpos(3); break;
+                    case Opcode.SWITCH:
+                        {
+                            if (Properties.Settings.Default.IsRDR2)
+                            {
+                                int length = (CodeTable[offset + 2] << 8) | CodeTable[offset + 1];
+                                advpos(2 + 6 * length);
+                            }
+                            else
+                                advpos(1 + 6 * CodeTable[offset + 1]);
+                            break;
+                        }
+                    case Opcode.TEXT_LABEL_ASSIGN_STRING:
+                    case Opcode.TEXT_LABEL_ASSIGN_INT:
+                    case Opcode.TEXT_LABEL_APPEND_STRING:
+                    case Opcode.TEXT_LABEL_APPEND_INT: advpos(1); break;
                 }
 
                 advpos(1);

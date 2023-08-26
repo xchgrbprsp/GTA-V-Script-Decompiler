@@ -71,6 +71,9 @@ namespace Decompiler
 
         public static bool CanBeUsedAsAutoName(string param)
         {
+            if (param == "...")
+                return false;
+
             if (param.StartsWith("p") && param.Length < 3)
                 return false;
 
@@ -97,12 +100,15 @@ namespace Decompiler
 
         public void LoadData()
         {
+            var native_file_path = Properties.Settings.Default.IsRDR2 ? "natives_rdr.json" : "natives.json";
+            var native_resource = Properties.Settings.Default.IsRDR2 ? Properties.Resources.native_db_json_rdr : Properties.Resources.native_db_json;
+
             string file = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location),
-                "natives.json");
+                native_file_path);
 
             data = File.Exists(file)
                 ? JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, NativeDBEntry>>>(File.ReadAllText(file))
-                : JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, NativeDBEntry>>>(Properties.Resources.native_db_json);
+                : JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, NativeDBEntry>>>(native_resource);
 
             entries = new();
 

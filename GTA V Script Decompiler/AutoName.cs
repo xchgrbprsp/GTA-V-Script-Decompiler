@@ -102,7 +102,8 @@ namespace Decompiler
                 return split.Length == 1 ? CamelCase(split[0].Split("_")) : CamelCase(split[1].Split("_"));
             }
 
-            throw new InvalidOperationException("Could not extract name from native");
+            return "UNK";
+            //throw new InvalidOperationException("Could not extract name from native");
         }
 
         private readonly string Name;

@@ -24,8 +24,8 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <Optimize>True</Optimize>
-    <DebugType>embedded</DebugType>
+    <Optimize>False</Optimize>
+    <DebugType>portable</DebugType>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
@@ -48,7 +48,8 @@
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DebugType>embedded</DebugType>
+    <DebugType>portable</DebugType>
+    <Optimize>False</Optimize>
   </PropertyGroup>
   <ItemGroup>
     <Content Include="GTA V Icon.ico" />

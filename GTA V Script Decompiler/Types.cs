@@ -34,6 +34,16 @@ namespace Decompiler
         public static readonly TypeInfo VEHICLE = new(5, "Vehicle", "vehicle", "ve");
         public static readonly TypeInfo FUNCTION = new(5, "function", "func", "func");
 
+        // RDR stuff
+
+        public static readonly TypeInfo VARIADIC = new(4, "", "", "");
+        public static readonly TypeInfo POPZONE = new(4, "PopZone", "zone", "pz");
+        public static readonly TypeInfo VOLUME = new(4, "Volume", "volume", "vol");
+        public static readonly TypeInfo PROPSET = new(4, "PropSet", "set", "prs");
+        public static readonly TypeInfo ANIMSCENE = new(4, "AnimScene", "scene", "ans");
+        public static readonly TypeInfo PERSCHAR = new(4, "PersChar", "char", "pch");
+        public static readonly TypeInfo PROMPT = new(4, "Prompt", "prompt", "pmt");
+
         public static readonly TypeInfo ECONTROLTYPE = new(6, "eControlType", "control", "ect", new(typeof(Enums.PadControlType)));
         public static readonly TypeInfo ECONTROLACTION = new(4, "eControlAction", "action", "eca", new(typeof(Enums.PadControlAction)));
         public static readonly TypeInfo EHUDCOMPONENT = new(6, "eHudComponent", "component", "ehc", new(typeof(Enums.HudComponent)));

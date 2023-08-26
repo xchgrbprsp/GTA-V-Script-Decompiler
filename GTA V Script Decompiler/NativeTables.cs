@@ -11,10 +11,30 @@ namespace Decompiler
 
         public NativeTable(Stream scriptFile, int position, int length, int codeSize)
         {
-            IO.Reader reader = new(scriptFile);
+            // from https://github.com/EROOTIIK/GTA-V-Script-Decompiler/blob/master/GTA%20V%20Script%20Decompiler/NativeTables.cs
+            scriptFile.Position = position;
+            Stream stream;
+            if (Properties.Settings.Default.IsRDR2)
+            {
+                stream = new MemoryStream();
+                byte carry = (byte)codeSize;
+                for (int i = 0; i < (length * 8); i++)
+                {
+                    byte b = (byte)scriptFile.ReadByte();
+                    byte xordeciphed = (byte)(carry ^ b);
+                    carry = b;
+                    stream.WriteByte(xordeciphed);
+                }
+                stream.Position = 0;
+            }
+            else
+            {
+                stream = scriptFile;
+            }
+
+            IO.Reader reader = new(stream);
             var count = 0;
             ulong nat;
-            reader.BaseStream.Position = position;
             NativeNames = new List<string>();
             NativeHashes = new List<ulong>();
             while (count < length)

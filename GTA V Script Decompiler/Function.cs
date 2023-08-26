@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -342,7 +343,7 @@ namespace Decompiler
 		private void IsJumpWithinFunctionBounds()
 		{
 			var cur = Offset;
-			Instruction temp = new(CodeBlock[Offset], GetArray(2), cur);
+			Instruction temp = new(Instruction.MapOpcode(CodeBlock[Offset]), GetArray(2), cur);
 			if (temp.GetJumpOffset > 0)
 			{
 				if (temp.GetJumpOffset < CodeBlock.Count)
@@ -367,20 +368,19 @@ namespace Decompiler
 			var off = 0;
 Start:
 			off += 1;
-			if (CodeBlock[Offset + off] == 0)
+			if (Instruction.MapOpcode(CodeBlock[Offset + off]) == Opcode.NOP)
 				goto Start;
-			if (CodeBlock[Offset + off] == 86)
+			if (Instruction.MapOpcode(CodeBlock[Offset + off]) == Opcode.JZ)
 			{
 				Offset = Offset + off + 2;
 				return;
 			}
-
-			if (CodeBlock[Offset + off] == 6)
+			if (Instruction.MapOpcode(CodeBlock[Offset + off]) == Opcode.INOT)
 			{
 				goto Start;
 			}
 
-			Instructions.Add(new Instruction(CodeBlock[Offset], Offset));
+			Instructions.Add(new Instruction(Instruction.MapOpcode(CodeBlock[Offset]), Offset));
 			return;
 		}
 
@@ -529,116 +529,123 @@ Start:
 			while (Offset < CodeBlock.Count)
 			{
 				curoff = Offset;
-				switch (CodeBlock[Offset])
+				switch (Instruction.MapOpcode(CodeBlock[Offset]))
 				{
-					case 37:
-						AddInstruction(curoff, new Instruction(CodeBlock[Offset], GetArray(1), curoff));
+                    case Opcode.PUSH_CONST_U8:
+                        AddInstruction(curoff, new Instruction(Instruction.MapOpcode(CodeBlock[Offset]), GetArray(1), curoff));
+                        break;
+                    case Opcode.PUSH_CONST_U8_U8:
+                        AddInstruction(curoff, new Instruction(Instruction.MapOpcode(CodeBlock[Offset]), GetArray(2), curoff));
+                        break;
+                    case Opcode.PUSH_CONST_U8_U8_U8:
+                        AddInstruction(curoff, new Instruction(Instruction.MapOpcode(CodeBlock[Offset]), GetArray(3), curoff));
+                        break;
+                    case Opcode.PUSH_CONST_U32:
+                    case Opcode.PUSH_CONST_F:
+                        AddInstruction(curoff, new Instruction(Instruction.MapOpcode(CodeBlock[Offset]), GetArray(4), curoff));
+                        break;
+                    case Opcode.DUP:
+                        // Because of how rockstar codes and/or conditionals, its neater to detect dups
+                        // and only add them if they are not used for conditionals
+                        CheckDupForInstruction();
+                        break;
+                    case Opcode.NATIVE:
+                        AddInstruction(curoff, new Instruction(Instruction.MapOpcode(CodeBlock[Offset]), GetArray(3), curoff));
+                        break;
+                    case Opcode.ENTER:
+                        var nameLen = CodeBlock[Offset + 4];
+                        var ins = new Instruction(Instruction.MapOpcode(CodeBlock[Offset]), GetArray(4 + nameLen), curoff);
+                        ins.NopInstruction();
+                        AddInstruction(curoff, ins);
 						break;
-					case 38:
-						AddInstruction(curoff, new Instruction(CodeBlock[Offset], GetArray(2), curoff));
-						break;
-					case 39:
-						AddInstruction(curoff, new Instruction(CodeBlock[Offset], GetArray(3), curoff));
-						break;
-					case 40:
-					case 41:
-						AddInstruction(curoff, new Instruction(CodeBlock[Offset], GetArray(4), curoff));
-						break;
-					case 42: //Because of how rockstar codes and/or conditionals, its neater to detect dups
-							 //and only add them if they are not used for conditionals
-						CheckDupForInstruction();
-						break;
-					case 44:
-						AddInstruction(curoff, new Instruction(CodeBlock[Offset], GetArray(3), curoff));
-						break;
-					case 45:
-						var nameLen = CodeBlock[Offset + 4];
-						var ins = new Instruction(CodeBlock[Offset], GetArray(4 + nameLen), curoff);
-						ins.NopInstruction();
-						AddInstruction(curoff, ins);
-						// throw new Exception("Function not exptected");
-						break;
-					case 46:
-						AddInstruction(curoff, new Instruction(CodeBlock[Offset], GetArray(2), curoff));
-						break;
-					case 52:
-					case 53:
-					case 54:
-					case 55:
-					case 56:
-					case 57:
-					case 58:
-					case 59:
-					case 60:
-					case 61:
-					case 62:
-					case 64:
-					case 65:
-					case 66:
-						AddInstruction(curoff, new Instruction(CodeBlock[Offset], GetArray(1), curoff));
-						break;
-					case 67:
-					case 68:
-					case 69:
-					case 70:
-					case 71:
-					case 72:
-					case 73:
-					case 74:
-					case 75:
-					case 76:
-					case 77:
-					case 78:
-					case 79:
-					case 80:
-					case 81:
-					case 82:
-					case 83:
-					case 84:
-						AddInstruction(curoff, new Instruction(CodeBlock[Offset], GetArray(2), curoff));
-						break;
-					case 85:
-						IsJumpWithinFunctionBounds();
-						break;
-					case 86:
-					case 87:
-					case 88:
-					case 89:
-					case 90:
-					case 91:
-					case 92:
-						AddInstruction(curoff, new Instruction(CodeBlock[Offset], GetArray(2), curoff));
-						break;
-					case 93:
-					case 94:
-					case 95:
-					case 96:
-					case 97:
-					case 98:
-					case 99:
-					case 100:
-						AddInstruction(curoff, new Instruction(CodeBlock[Offset], GetArray(3), curoff));
-						break;
-					case 101:
-						int temp = CodeBlock[Offset + 1];
-						AddInstruction(curoff, new Instruction(CodeBlock[Offset], GetArray((temp * 6) + 1), curoff));
-						break;
-					case 104:
-					case 105:
-					case 106:
-					case 107:
-						AddInstruction(curoff, new Instruction(CodeBlock[Offset], GetArray(1), curoff));
-						break;
-					case 130:
-						AddInstruction(curoff, new Instruction(CodeBlock[Offset], curoff));
-						break;
-					default:
-						if (CodeBlock[Offset] <= 129)
-							AddInstruction(curoff, new Instruction(CodeBlock[Offset], curoff));
-						else
-							throw new Exception("Unexpected Opcode");
-						break;
-				}
+                    case Opcode.LEAVE:
+                        AddInstruction(curoff, new Instruction(Instruction.MapOpcode(CodeBlock[Offset]), GetArray(2), curoff));
+                        break;
+                    case Opcode.ARRAY_U8:
+                    case Opcode.ARRAY_U8_LOAD:
+                    case Opcode.ARRAY_U8_STORE:
+                    case Opcode.LOCAL_U8:
+                    case Opcode.LOCAL_U8_LOAD:
+                    case Opcode.LOCAL_U8_STORE:
+                    case Opcode.STATIC_U8:
+                    case Opcode.STATIC_U8_LOAD:
+                    case Opcode.STATIC_U8_STORE:
+                    case Opcode.IADD_U8:
+                    case Opcode.IMUL_U8:
+                    case Opcode.IOFFSET_U8:
+                    case Opcode.IOFFSET_U8_LOAD:
+                    case Opcode.IOFFSET_U8_STORE:
+                        AddInstruction(curoff, new Instruction(Instruction.MapOpcode(CodeBlock[Offset]), GetArray(1), curoff));
+                        break;
+                    case Opcode.PUSH_CONST_S16:
+                    case Opcode.IADD_S16:
+                    case Opcode.IMUL_S16:
+                    case Opcode.IOFFSET_S16:
+                    case Opcode.IOFFSET_S16_LOAD:
+                    case Opcode.IOFFSET_S16_STORE:
+                    case Opcode.ARRAY_U16:
+                    case Opcode.ARRAY_U16_LOAD:
+                    case Opcode.ARRAY_U16_STORE:
+                    case Opcode.LOCAL_U16:
+                    case Opcode.LOCAL_U16_LOAD:
+                    case Opcode.LOCAL_U16_STORE:
+                    case Opcode.STATIC_U16:
+                    case Opcode.STATIC_U16_LOAD:
+                    case Opcode.STATIC_U16_STORE:
+                    case Opcode.GLOBAL_U16:
+                    case Opcode.GLOBAL_U16_LOAD:
+                    case Opcode.GLOBAL_U16_STORE:
+                        AddInstruction(curoff, new Instruction(Instruction.MapOpcode(CodeBlock[Offset]), GetArray(2), curoff));
+                        break;
+                    case Opcode.J:
+                        IsJumpWithinFunctionBounds();
+                        break;
+                    case Opcode.JZ:
+                    case Opcode.IEQ_JZ:
+                    case Opcode.INE_JZ:
+                    case Opcode.IGT_JZ:
+                    case Opcode.IGE_JZ:
+                    case Opcode.ILT_JZ:
+                    case Opcode.ILE_JZ:
+                        AddInstruction(curoff, new Instruction(Instruction.MapOpcode(CodeBlock[Offset]), GetArray(2), curoff));
+                        break;
+                    case Opcode.CALL:
+                    case Opcode.STATIC_U24:
+                    case Opcode.STATIC_U24_LOAD:
+                    case Opcode.STATIC_U24_STORE:
+					case Opcode.LOCAL_U24:
+					case Opcode.LOCAL_U24_LOAD:
+					case Opcode.LOCAL_U24_STORE:
+                    case Opcode.GLOBAL_U24:
+                    case Opcode.GLOBAL_U24_LOAD:
+                    case Opcode.GLOBAL_U24_STORE:
+                    case Opcode.PUSH_CONST_U24:
+                        AddInstruction(curoff, new Instruction(Instruction.MapOpcode(CodeBlock[Offset]), GetArray(3), curoff));
+                        break;
+                    case Opcode.SWITCH:
+                        {
+                            if (Properties.Settings.Default.IsRDR2)
+                            {
+                                int length = (CodeBlock[Offset + 2] << 8) | CodeBlock[Offset + 1];
+                                AddInstruction(curoff, new Instruction(Instruction.MapOpcode(CodeBlock[Offset]), GetArray(length * 6 + 2), curoff));
+                            }
+                            else
+                            {
+                                int temp = CodeBlock[Offset + 1];
+                                AddInstruction(curoff, new Instruction(Instruction.MapOpcode(CodeBlock[Offset]), GetArray(temp * 6 + 1), curoff));
+                            }
+                            break;
+                        }
+                    case Opcode.TEXT_LABEL_ASSIGN_STRING:
+                    case Opcode.TEXT_LABEL_ASSIGN_INT:
+                    case Opcode.TEXT_LABEL_APPEND_STRING:
+                    case Opcode.TEXT_LABEL_APPEND_INT:
+                        AddInstruction(curoff, new Instruction(Instruction.MapOpcode(CodeBlock[Offset]), GetArray(1), curoff));
+                        break;
+                    default:
+                        AddInstruction(curoff, new Instruction(Instruction.MapOpcode(CodeBlock[Offset]), curoff));
+                        break;
+                }
 
 				Offset++;
 			}
@@ -901,15 +908,18 @@ Start:
 						break;
 					case Opcode.STATIC_U8:
 					case Opcode.STATIC_U16:
-						Stack.Push(new Ast.Static(this, Instructions[tree.Offset].GetOperandsAsUInt));
+					case Opcode.STATIC_U24:
+                        Stack.Push(new Ast.Static(this, Instructions[tree.Offset].GetOperandsAsUInt));
 						break;
 					case Opcode.STATIC_U8_LOAD:
 					case Opcode.STATIC_U16_LOAD:
-						Stack.Push(new Ast.StaticLoad(this, Instructions[tree.Offset].GetOperandsAsUInt));
+					case Opcode.STATIC_U24_LOAD:
+                        Stack.Push(new Ast.StaticLoad(this, Instructions[tree.Offset].GetOperandsAsUInt));
 						break;
 					case Opcode.STATIC_U8_STORE:
 					case Opcode.STATIC_U16_STORE:
-						tree.Statements.Add(new Ast.StaticStore(this, Instructions[tree.Offset].GetOperandsAsUInt, Stack.Pop()));
+					case Opcode.STATIC_U24_STORE:
+                        tree.Statements.Add(new Ast.StaticStore(this, Instructions[tree.Offset].GetOperandsAsUInt, Stack.Pop()));
 						break;
 					case Opcode.IADD_U8:
 					case Opcode.IADD_S16:
@@ -1029,7 +1039,25 @@ Start:
 					case Opcode.IS_BIT_SET:
 						Stack.Push(new Ast.BitTest(this, Stack.Pop(), Stack.Pop()));
 						break;
-					case Opcode.SWITCH:
+					case Opcode.LOCAL_LOAD_S:
+                    case Opcode.STATIC_LOAD_S:
+                    case Opcode.GLOBAL_LOAD_S:
+                        Stack.Push(new Ast.SecureLoad(this, new Ast.Load(this, Stack.Pop())));
+						break;
+                    case Opcode.LOCAL_STORE_S:
+					case Opcode.LOCAL_STORE_SR:
+                    case Opcode.STATIC_STORE_S:
+                    case Opcode.STATIC_STORE_SR:
+                    case Opcode.GLOBAL_STORE_S:
+                    case Opcode.GLOBAL_STORE_SR:
+                        tree.Statements.Add(new Ast.SecureStore(this, new Ast.Load(this, Stack.Pop()), Stack.Pop()));
+						break;
+                    case Opcode.LOAD_N_S:
+                    case Opcode.STORE_N_S:
+                    case Opcode.STORE_N_SR:
+                        tree.Statements.Add(new Ast.Attribute(this, Instructions[tree.Offset].Opcode.ToString()));
+						break;
+                    case Opcode.SWITCH:
 						HandleSwitch(tree);
 						break;
 					case Opcode.J:
