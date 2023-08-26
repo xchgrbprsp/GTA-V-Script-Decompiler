@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+#if OS_WINDOWS
 using System.Windows.Forms;
+#endif // OS_WINDOWS
 
 namespace Decompiler.Patches
 {
@@ -49,6 +51,7 @@ namespace Decompiler.Patches
         {
             uint value = 0;
 
+#if OS_WINDOWS
             if (Function.Instructions[start].OriginalOpcode == Opcode.ENTER)
             {
                 MessageBox.Show("Cannot place function return directly on an ENTER, try placing it after the ENTER", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -70,6 +73,7 @@ namespace Decompiler.Patches
                     return false;
                 }
             }
+#endif // OS_WINDOWS
 
             ReturnValue = value;
 

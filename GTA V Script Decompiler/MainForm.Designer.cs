@@ -1,4 +1,5 @@
-﻿namespace Decompiler
+﻿#if OS_WINDOWS
+namespace Decompiler
 {
     partial class MainForm
     {
@@ -691,4 +692,4 @@
         private System.Windows.Forms.ToolStripMenuItem isRDR2ToolStripMenuItem;
     }
 }
-
+#endif // OS_WINDOWS

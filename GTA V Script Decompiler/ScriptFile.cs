@@ -17,7 +17,9 @@ namespace Decompiler
         private readonly Stream file;
         public ScriptHeader Header;
         internal VariableStorage Statics;
+#if OS_WINDOWS
         internal ProgressBar? ProgressBar = null;
+#endif // OS_WINDOWS
 
         public Dictionary<int, Function> FunctionAtLocation = new();
         public Dictionary<Function, int> FunctionLines = new();
@@ -40,9 +42,14 @@ namespace Decompiler
             }
         }
 
+#if OS_WINDOWS
         public async Task Decompile(ProgressBar bar = null)
         {
             ProgressBar = bar;
+#else
+        public async Task Decompile()
+        {
+#endif // OS_WINDOWS
 
             GetStaticInfo();
 
@@ -61,7 +68,9 @@ namespace Decompiler
                         func.Hook = hook;
             }
 
+#if OS_WINDOWS
             bar?.SetMax(Functions.Count + 1);
+#endif // OS_WINDOWS
 
             foreach (var func in Functions)
             {
@@ -384,8 +393,10 @@ namespace Decompiler
 
         public void NotifyFunctionDecompiled()
         {
+#if OS_WINDOWS
             if (!Debugger.IsAttached) // Cross-thread operation not valid: Control 'progressBar1' accessed from a thread other than the thread it was created on. ???
                 ProgressBar?.IncrementValue();
+#endif // OS_WINDOWS
         }
     }
 }

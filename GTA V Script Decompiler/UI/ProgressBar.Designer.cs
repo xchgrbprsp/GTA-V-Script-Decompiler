@@ -1,4 +1,5 @@
-﻿namespace Decompiler
+﻿#if OS_WINDOWS
+namespace Decompiler
 {
     partial class ProgressBar
     {
@@ -55,3 +56,4 @@
         private System.Windows.Forms.ProgressBar progressBar1;
     }
 }
+#endif // OS_WINDOWS

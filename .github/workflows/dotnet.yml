@@ -1,12 +1,10 @@
 name: .NET
 
-on:
-  workflow_dispatch:
-    # TODO
+on: [push]
 
 jobs:
-  build:
-
+  build_windows:
+    name: Windows
     runs-on: windows-latest
 
     steps:
@@ -29,6 +27,34 @@ jobs:
     - name: Upload artifact
       uses: actions/upload-artifact@v3
       with:
-        name: Release
-        path: "GTA V Script Decompiler\\bin\\Release\\net6.0-windows"
+        name: Release-Windows
+        path: "GTA V Script Decompiler/bin/Release/net6.0-windows"
+        if-no-files-found: error
+
+  build_linux:
+    name: Linux
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 6.0.x
+        
+    - name: Restore dependencies
+      run: dotnet restore
+      
+    - name: Build
+      run: dotnet build --no-restore -c Release
+      
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
+      
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: Release-Linux
+        path: "GTA V Script Decompiler/bin/Release/net6.0"
         if-no-files-found: error

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+#if OS_WINDOWS
 using System.Windows.Forms;
+#endif // OS_WINDOWS
 
 namespace Decompiler.Patches
 {
@@ -78,6 +80,7 @@ namespace Decompiler.Patches
             else if (op == Opcode.PUSH_CONST_U32)
                 constantType = ConstantType.U32;
 
+#if OS_WINDOWS
             InputBox box = new();
             box.Show("Enter value", $"Enter new value (range 0 - {(uint)constantType})\nPrefix with $ to hash string");
 
@@ -103,6 +106,8 @@ namespace Decompiler.Patches
             }
 
             Value = value;
+#endif // OS_WINDOWS
+
             return true;
         }
     }
