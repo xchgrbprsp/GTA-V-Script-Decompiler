@@ -16,6 +16,6 @@
             UnderlyingToken.HintType(ref container);
         }
 
-        public override string ToString() => $"SECURE_LOAD({UnderlyingToken})";
+        public override string ToString() => $"SECURE_LOAD(&{UnderlyingToken.ToPointerString()})";
     }
 }

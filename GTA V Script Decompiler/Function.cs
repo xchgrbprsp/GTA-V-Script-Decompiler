@@ -1042,7 +1042,7 @@ Start:
 					case Opcode.LOCAL_LOAD_S:
                     case Opcode.STATIC_LOAD_S:
                     case Opcode.GLOBAL_LOAD_S:
-                        Stack.Push(new Ast.SecureLoad(this, new Ast.Load(this, Stack.Pop())));
+                        Stack.Push(new Ast.SecureLoad(this, Stack.Pop()));
 						break;
                     case Opcode.LOCAL_STORE_S:
 					case Opcode.LOCAL_STORE_SR:
@@ -1050,11 +1050,13 @@ Start:
                     case Opcode.STATIC_STORE_SR:
                     case Opcode.GLOBAL_STORE_S:
                     case Opcode.GLOBAL_STORE_SR:
-                        tree.Statements.Add(new Ast.SecureStore(this, new Ast.Load(this, Stack.Pop()), Stack.Pop()));
-						break;
-                    case Opcode.LOAD_N_S:
+                        tree.Statements.Add(new Ast.SecureStore(this, Stack.Pop(), Stack.Pop()));
+                        break;
                     case Opcode.STORE_N_S:
                     case Opcode.STORE_N_SR:
+                        tree.Statements.Add(new Ast.SecureMemcpy(this, Stack.Pop(), Stack.Pop()));
+						break;
+                    case Opcode.LOAD_N_S: // unused
                         tree.Statements.Add(new Ast.Attribute(this, Instructions[tree.Offset].Opcode.ToString()));
 						break;
                     case Opcode.SWITCH:
@@ -1091,7 +1093,7 @@ Start:
 						// else
 						if (tree is Ast.StatementTree.If && Instructions[tree.Offset + 1].Offset == (tree as Ast.StatementTree.If).EndOffset && Instructions[tree.Offset].GetJumpOffset != Instructions[tree.Offset + 1].Offset)
 						{
-							var @else = new Ast.StatementTree.Else(this, tree, tree.Offset + 1, Instructions[tree.Offset].GetJumpOffset); // TODO should the parent be tree or tree.Parent?
+							var @else = new Ast.StatementTree.Else(this, tree, tree.Offset + 1, Instructions[tree.Offset].GetJumpOffset);
 							(tree as Ast.StatementTree.If).ElseTree = @else;
 							treeStack.Push(@else);
 

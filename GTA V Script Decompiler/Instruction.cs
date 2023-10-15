@@ -159,7 +159,7 @@ namespace Decompiler
     };
 
     internal class Instruction
-	{
+    {
         // from https://github.com/EROOTIIK/GTA-V-Script-Decompiler/blob/master/GTA%20V%20Script%20Decompiler/Instruction.cs#L829
         public static readonly Dictionary<int, Opcode> ShuffledOpcodes = new Dictionary<int, Opcode> {
             { 19, Opcode.NOP },
@@ -203,7 +203,7 @@ namespace Decompiler
             { 111, Opcode.PUSH_CONST_U8_U8 },
             { 123, Opcode.PUSH_CONST_U8_U8_U8 },
             { 55, Opcode.PUSH_CONST_U32 },
-            { 134, Opcode.PUSH_CONST_F }, 
+            { 134, Opcode.PUSH_CONST_F },
             { 106, Opcode.DUP },
             { 65, Opcode.DROP },
             { 3, Opcode.NATIVE },
@@ -272,7 +272,7 @@ namespace Decompiler
             { 85, Opcode.THROW },
             { 141, Opcode.CALLINDIRECT },
             { 8, Opcode.PUSH_CONST_M1 },
-            { 47, Opcode.PUSH_CONST_0 }, // Verify.
+            { 47, Opcode.PUSH_CONST_0 },
             { 9, Opcode.PUSH_CONST_1 },
             { 17, Opcode.PUSH_CONST_2 },
             { 29, Opcode.PUSH_CONST_3 },
@@ -281,7 +281,7 @@ namespace Decompiler
             { 77, Opcode.PUSH_CONST_6 },
             { 13, Opcode.PUSH_CONST_7 },
             { 76, Opcode.PUSH_CONST_FM1 },
-            { 115, Opcode.PUSH_CONST_F0 }, // Verify.
+            { 115, Opcode.PUSH_CONST_F0 },
             { 72, Opcode.PUSH_CONST_F1 },
             { 91, Opcode.PUSH_CONST_F2 },
             { 44, Opcode.PUSH_CONST_F3 },
@@ -309,41 +309,43 @@ namespace Decompiler
         };
 
         public static Opcode MapOpcode(byte opcode)
-		{
-			if (!Properties.Settings.Default.IsRDR2)
-				return (Opcode)opcode;
+        {
+            if (!Properties.Settings.Default.IsRDR2)
+                return (Opcode)opcode;
 
             if (ShuffledOpcodes.ContainsKey(opcode))
                 return (Opcode)ShuffledOpcodes[opcode];
 
 
             throw new InvalidOperationException("Invalid RDR2 opcode");
-		}
+        }
 
-		public Opcode Opcode { get; private set; }
-		public Opcode OriginalOpcode { get; private set; }
-		public byte[] Operands { get; private set; }
+        public Opcode Opcode { get; private set; }
+        public Opcode OriginalOpcode { get; private set; }
+        public byte[] Operands { get; private set; }
 
-		public Instruction(Opcode Instruction, IEnumerable<byte> Operands, int Offset)
-		{
-			Opcode = Instruction;
-			OriginalOpcode = Opcode;
-			this.Operands = Operands.ToArray();
-			this.Offset = Offset;
-		}
+        public Instruction(Opcode Instruction, IEnumerable<byte> Operands, int Offset)
+        {
+            Opcode = Instruction;
+            OriginalOpcode = Opcode;
+            this.Operands = Operands.ToArray();
+            this.Offset = Offset;
+        }
 
-		public Instruction(Opcode Instruction, int Offset)
-		{
-			Opcode = Instruction;
-			OriginalOpcode = Opcode;
-			Operands = new byte[0];
-			this.Offset = Offset;
-		}
+        public Instruction(Opcode Instruction, int Offset)
+        {
+            Opcode = Instruction;
+            OriginalOpcode = Opcode;
+            Operands = new byte[0];
+            this.Offset = Offset;
+        }
 
-		public void NopInstruction()
-		{
-			Opcode = Opcode.NOP;
-		}
+        public void NopInstruction()
+        {
+            Opcode = Opcode.NOP;
+        }
+
+        public int UnmappedOpcode { get { return ShuffledOpcodes.First(x => x.Value == Opcode).Key; } }
 
 		public int Offset { get; }
 

@@ -142,7 +142,22 @@ namespace Decompiler
             new[]{"PUSH_CONST_F5", ""},
             new[]{"PUSH_CONST_F6", ""},
             new[]{"PUSH_CONST_F7", ""},
-            new[]{"IS_BIT_SET", ""}
+            new[]{"IS_BIT_SET", ""},
+            new[]{"LOCAL_LOAD_S", ""},
+            new[]{"LOCAL_STORE_S", ""},
+            new[]{"LOCAL_STORE_SR", ""},
+            new[]{"STATIC_LOAD_S", ""},
+            new[]{"STATIC_STORE_S", ""},
+            new[]{"STATIC_STORE_SR", ""},
+            new[]{"LOAD_N_S", ""},
+            new[]{"STORE_N_S", ""},
+            new[]{"STORE_N_SR", ""},
+            new[]{"GLOBAL_LOAD_S", ""},
+            new[]{"GLOBAL_STORE_S", ""},
+            new[]{"GLOBAL_STORE_SR", ""},
+            new[]{"STATIC_U24", ""},
+            new[]{"STATIC_U24_LOAD", ""},
+            new[]{"STATIC_U24_STORE", ""}
         };
         private readonly Function Function;
         private readonly Patch[] patches;
@@ -161,7 +176,7 @@ namespace Decompiler
         {
             var bytes = "";
 
-            bytes += ((uint)instruction.OriginalOpcode).ToString("X").PadLeft(2, '0');
+            bytes += ((uint)instruction.UnmappedOpcode).ToString("X").PadLeft(2, '0');
 
             var i = 0;
             foreach (var op in instruction.Operands)
