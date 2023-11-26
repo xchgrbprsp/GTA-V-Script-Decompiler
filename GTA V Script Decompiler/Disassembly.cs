@@ -176,7 +176,10 @@ namespace Decompiler
         {
             var bytes = "";
 
-            bytes += ((uint)instruction.UnmappedOpcode).ToString("X").PadLeft(2, '0');
+            if (Properties.Settings.Default.IsRDR2)
+                bytes += ((uint)instruction.UnmappedOpcode).ToString("X").PadLeft(2, '0');
+            else
+                bytes += ((uint)instruction.OriginalOpcode).ToString("X").PadLeft(2, '0');
 
             var i = 0;
             foreach (var op in instruction.Operands)
