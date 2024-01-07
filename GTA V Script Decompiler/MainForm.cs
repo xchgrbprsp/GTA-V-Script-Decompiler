@@ -28,6 +28,7 @@ namespace Decompiler
             panel1.Size = new Size(0, panel1.Height);
 
             showArraySizeToolStripMenuItem.Checked = Properties.Settings.Default.ShowArraySize;
+            useHashAsNativeNameToolStripMenuItem.Checked = Properties.Settings.Default.UseHashAsNativeName;
             reverseHashesToolStripMenuItem.Checked = Properties.Settings.Default.ReverseHashes;
             declareVariablesToolStripMenuItem.Checked = Properties.Settings.Default.DeclareVariables;
             shiftVariablesToolStripMenuItem.Checked = Properties.Settings.Default.ShiftVariables;
@@ -375,6 +376,13 @@ namespace Decompiler
         {
             showArraySizeToolStripMenuItem.Checked = !showArraySizeToolStripMenuItem.Checked;
             Properties.Settings.Default.ShowArraySize = showArraySizeToolStripMenuItem.Checked;
+            Properties.Settings.Default.Save();
+        }
+
+        private void useHashAsNativeNameToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            useHashAsNativeNameToolStripMenuItem.Checked = !useHashAsNativeNameToolStripMenuItem.Checked;
+            Properties.Settings.Default.UseHashAsNativeName = useHashAsNativeNameToolStripMenuItem.Checked;
             Properties.Settings.Default.Save();
         }
 

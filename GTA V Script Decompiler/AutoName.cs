@@ -133,12 +133,12 @@ namespace Decompiler
     {
         public override string GetName()
         {
-            return "i";
+            return "k";
         }
 
         public override NameCollisionBehavior GetNameCollisionBehavior()
         {
-            return NameCollisionBehavior.IncrementCharacter;
+            return NameCollisionBehavior.AddNumberSuffix;
         }
 
         public override int GetPrecedence()

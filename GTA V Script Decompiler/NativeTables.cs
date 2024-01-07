@@ -34,7 +34,7 @@ namespace Decompiler
 
             IO.Reader reader = new(stream);
             var count = 0;
-            ulong nat;
+            ulong nat = 0;
             NativeNames = new List<string>();
             NativeHashes = new List<ulong>();
             while (count < length)
@@ -44,9 +44,18 @@ namespace Decompiler
                 // or the earliest game version that native was introduced in.
                 // Just some of the steps Rockstar take to make reverse engineering harder
 
-                nat = Program.Crossmap.TranslateHash(Rotl(reader.ReadUInt64(), codeSize + count));
-                NativeHashes.Add(nat);
-                var entry = Program.NativeDB.GetEntry(nat);
+                NativeDBEntry entry = null;
+                var newNatHash = Rotl(reader.ReadUInt64(), codeSize + count);
+                if (Properties.Settings.Default.UseHashAsNativeName)
+                {
+                    NativeHashes.Add(newNatHash);
+                }
+                else
+                {
+                    nat = Program.Crossmap.TranslateHash(newNatHash);
+                    NativeHashes.Add(nat);
+                    entry = Program.NativeDB.GetEntry(nat);
+                }
 
                 if (entry != null)
                 {
@@ -54,7 +63,7 @@ namespace Decompiler
                     if (Properties.Settings.Default.ShowNativeNamespace)
                         nativeName += entry?.@namespace + "::";
 
-                    nativeName += entry?.name;
+                    nativeName += entry.name.Length != 0 ? entry.name : String.Format("_0x{0:X16}", nat);
 
                     if (!Properties.Settings.Default.UppercaseNatives)
                         nativeName = nativeName.ToLower();
@@ -63,10 +72,7 @@ namespace Decompiler
                 }
                 else
                 {
-                    var temps = nat.ToString("X");
-                    while (temps.Length < 16)
-                        temps = "0" + temps;
-                    NativeNames.Add("unk_0x" + temps);
+                    NativeNames.Add(String.Format("unk_0x{0:X16}", newNatHash));
                 }
 
                 count++;
