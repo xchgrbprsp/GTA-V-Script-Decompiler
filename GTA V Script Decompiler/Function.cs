@@ -264,18 +264,18 @@ namespace Decompiler
 
 				if (setNames.ContainsKey(name))
 				{
-					if (local.AutoName.GetNameCollisionBehavior() == AutoName.NameCollisionBehavior.AddNumberSuffix)
-					{
-						setNames[name]++;
-						name += setNames[name];
-					}
-					else if (local.AutoName.GetNameCollisionBehavior() == AutoName.NameCollisionBehavior.IncrementCharacter)
+					if (local.AutoName.GetNameCollisionBehavior() == AutoName.NameCollisionBehavior.IncrementCharacter && (name[^1] + (setNames[name]-1)) < 'z')
 					{
 						setNames[name]++;
 						var chr = name[^1];
 						chr += (char)(setNames[name] - 1);
 						name = chr.ToString(); // TODO
 					}
+					else
+					{
+                        setNames[name]++;
+                        name += setNames[name];
+                    }
 				}
 				else
 				{
