@@ -19,13 +19,8 @@ namespace Decompiler
     internal class NativeDBEntry
     {
         public string name { get; set; }
-        public string jhash { get; set; }
-        public string comment { get; set; }
         public List<NativeDBParam> @params { get; set; }
-        public string return_type { get; set; }
-        public string build { get; set; }
-        public string[]? old_names { get; set; }
-        public bool? unused { get; set; }
+        public string results { get; set; }
 
         public string @namespace;
 
@@ -58,7 +53,7 @@ namespace Decompiler
 
         public void SetReturnType(Types.TypeInfo type)
         {
-            return_type = type.SingleName;
+            results = type.SingleName;
             ReturnTypeInfo = type;
         }
     }
@@ -128,7 +123,7 @@ namespace Decompiler
                         param.AutoName = CanBeUsedAsAutoName(param.name);
                     }
 
-                    entry.ReturnTypeInfo = Types.GetFromName(entry.return_type);
+                    entry.ReturnTypeInfo = Types.GetFromName(entry.results);
 
                     entries[Convert.ToUInt64(native.Key, 16)] = entry;
                 }

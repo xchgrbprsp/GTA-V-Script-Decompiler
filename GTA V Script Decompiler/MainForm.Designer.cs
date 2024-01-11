@@ -58,6 +58,7 @@ namespace Decompiler
             commentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             showArraySizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            useHashAsNativeNameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             reverseHashesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             includeNativeNamespaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             declareVariablesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -207,7 +208,7 @@ namespace Decompiler
             // 
             // optionsToolStripMenuItem
             // 
-            optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { intStyleToolStripMenuItem, showLocalizedTextsToolStripMenuItem, enumStyleToolStripMenuItem, toolStripSeparator5, isRDR2ToolStripMenuItem, showArraySizeToolStripMenuItem, reverseHashesToolStripMenuItem, includeNativeNamespaceToolStripMenuItem, declareVariablesToolStripMenuItem, shiftVariablesToolStripMenuItem, globalAndStructHexIndexingToolStripMenuItem, showFuncPointerToolStripMenuItem, useMultiThreadingToolStripMenuItem, includeFunctionPositionToolStripMenuItem, includeFunctionHashToolStripMenuItem, uppercaseNativesToolStripMenuItem, toolStripSeparator4, exportTablesToolStripMenuItem, resetGlobalTypesToolStripMenuItem });
+            optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { intStyleToolStripMenuItem, showLocalizedTextsToolStripMenuItem, enumStyleToolStripMenuItem, toolStripSeparator5, isRDR2ToolStripMenuItem, showArraySizeToolStripMenuItem, useHashAsNativeNameToolStripMenuItem, reverseHashesToolStripMenuItem, includeNativeNamespaceToolStripMenuItem, declareVariablesToolStripMenuItem, shiftVariablesToolStripMenuItem, globalAndStructHexIndexingToolStripMenuItem, showFuncPointerToolStripMenuItem, useMultiThreadingToolStripMenuItem, includeFunctionPositionToolStripMenuItem, includeFunctionHashToolStripMenuItem, uppercaseNativesToolStripMenuItem, toolStripSeparator4, exportTablesToolStripMenuItem, resetGlobalTypesToolStripMenuItem });
             optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             optionsToolStripMenuItem.Text = "Options";
@@ -314,6 +315,14 @@ namespace Decompiler
             showArraySizeToolStripMenuItem.Text = "Show Array Size";
             showArraySizeToolStripMenuItem.ToolTipText = "Shows the size of the items in an array \r\nuLocal_5[index <item_size>]\r\nan array of vector3s would look like this\r\nvStatic_1[0 <3>];";
             showArraySizeToolStripMenuItem.Click += showArraySizeToolStripMenuItem_Click;
+            // 
+            // useHashAsNativeNameToolStripMenuItem
+            // 
+            useHashAsNativeNameToolStripMenuItem.Name = "useHashAsNativeNameToolStripMenuItem";
+            useHashAsNativeNameToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
+            useHashAsNativeNameToolStripMenuItem.Text = "Use Hash as Native Name";
+            useHashAsNativeNameToolStripMenuItem.ToolTipText = "Name natives like unk_0x70350E94345B6F7B";
+            useHashAsNativeNameToolStripMenuItem.Click += useHashAsNativeNameToolStripMenuItem_Click;
             // 
             // reverseHashesToolStripMenuItem
             // 
@@ -639,6 +648,7 @@ namespace Decompiler
         private System.Windows.Forms.ToolStripMenuItem uintToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem hexToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showArraySizeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem useHashAsNativeNameToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem reverseHashesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem declareVariablesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem shiftVariablesToolStripMenuItem;
